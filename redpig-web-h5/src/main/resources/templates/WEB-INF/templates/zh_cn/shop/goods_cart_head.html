@@ -1,0 +1,66 @@
+<script>
+jQuery(document).ready(function(){
+//鼠标经过用户中心
+   jQuery("#top_user_sp").mouseover(function(){
+		if(jQuery("#top_user_hb").size()==0){
+			jQuery.ajax({type:'POST',url:'$!current_webPath/head_ajax_usercenter',data:'',
+						   beforeSend:function(){
+							     jQuery("#top_user_hid").html('<div class="top_user_hb" id="top_user_hb"><span class="top_user_loading"><img src="$!cdnServer/resources/style/system/front/default/images/loading.gif" /></span><b class="top_user_warning">加载中，请稍后...</b></div>');
+							     jQuery("#top_user_hid").show();
+							   },
+						  success:function(data){
+						     jQuery("#top_user_hid").empty();
+								 jQuery("#top_user_hid").html(data);
+							   }
+						});		
+		}else{
+			jQuery("#top_user_hid").show();
+			}
+	jQuery("#top_user_sp").addClass("top_user_sp_this");
+  	});
+   jQuery("#top_user").mouseleave(function(){
+    jQuery("#top_user_hid").hide();
+	jQuery("#top_user_sp").removeClass("top_user_sp_this");
+  });								
+								
+});
+</script>
+<div class="shopping_cart_top">
+  #if($!config.websiteLogo)
+    #set($img="$!imageWebServer/$!{config.websiteLogo.path}/$!{config.websiteLogo.name}")
+    #else
+    #set($img="$!cdnServer/resources/style/system/front/default/images/logo.png")
+    #end
+<div class="shopping_cart_logo"><a href="$!webPath/index"> <img src="$!img" border="0" /> </a></div>
+      <div class="shopping_cart_top_left">
+      #set($img="$!cdnServer/resources/style/system/front/default/images/shopping_top_l.png")
+       #if($!op=="order")
+        #set($img="$!cdnServer/resources/style/system/front/default/images/shopping_top_l2.png")
+       #end
+        #if($!op=="pay")
+        #set($img="$!cdnServer/resources/style/system/front/default/images/shopping_top_l3.png")
+       #end
+      <img src="$!{img}" />
+      </div>
+      <div class="shopping_cart_top_center">
+        <div class="shopping_cart_top_center_b">
+        #if($!op=="cart") 
+        <span><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c1.png" /></span>
+        <span style="display:none;"><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c2.png"  style="margin-left:-15px;"/></span>
+        <span style="display:none;"><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c3.png" style="margin-left:-15px;"/></span> 
+        #end 
+       #if($!op=="order")  
+        <span><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c1.png" /></span>
+        <span><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c2.png" style="margin-left:-15px;"/></span>
+        <span style="display:none;"><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c3.png" style="margin-left:-15px;"/></span> 
+       #end 
+        #if($!op=="pay")  
+         <span><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c1.png" /></span>
+        <span><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c2.png" style="margin-left:-15px;"/></span>
+        <span><img src="$!cdnServer/resources/style/system/front/default/images/shopping_top_c3.png" style="margin-left:-15px;"/></span>  
+        #end 
+       </div>
+      </div>
+      
+        <!--用户中心结束--> 
+      </div>    

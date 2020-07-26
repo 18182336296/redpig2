@@ -1,0 +1,1746 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>填写商品详细信息 - $!{config.poweredby}</title>
+    <link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="$!cdnServer/resources/editor/themes/default/default.css" />
+    <link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+    <link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+    <script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!cdnServer/resources/js/jquery.metadata.js"></script>
+    <script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+    <script src="$!cdnServer/resources/js/jquery.zh.cn.js"  charset="utf-8"></script>
+    <script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+    <script src="$!cdnServer/resources/js/jquery.shop.base.js"></script>
+    <script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+    <script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor.js"></script>
+    <script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+    <script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+    <script>
+        jQuery.validator.addMethod("profix", function(value, element) {
+            return /^[0-9a-zA-Z]{0,6}$/.test(value);
+        }, "前缀必须是6字之内字母数字的组合");
+        jQuery.validator.addMethod("f_code_profix",
+            function(value, element) {
+                if (jQuery(':radio[id=special_goods][value=1]').attr('checked')){
+                    if (jQuery('#f_code_profix').val() == '' && jQuery("#judge_goods_f_code").val()=='no'){
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }else{
+                    return true;
+                }}
+        );
+        jQuery.validator.addMethod("f_code_count",
+            function(value, element) {
+                if (jQuery(':radio[id=special_goods][value=1]').attr('checked')){
+                    if (jQuery('#f_code_count').val() == '' && jQuery("#judge_goods_f_code").val()=='no'){
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }else{
+                    return true;
+                }}
+        );
+        jQuery.validator.addMethod("transportId",
+            function(value, element) {
+                if (jQuery(':radio[id=goods_transfee][value=0]').attr('checked') && jQuery(':radio[id=transport_type][value=0]').attr('checked')){
+                    if (jQuery('#transport_id').val() == ''){
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }else{
+                    return true;
+                }}
+        );
+        //预售商品定金金额不能为空
+        #if(!$!ad_goods_edit)
+        jQuery.validator.addMethod("earnest_value",function(value,ele){
+            if (jQuery(':radio[id=special_goods][value=2]').attr('checked')){
+                if (jQuery('#earnest').val() == ''){
+                    return false;
+                }else{
+                    return true;
+                }
+            }else{
+                return true;
+            }
+        });
+        #end
+        //options为编辑配置属性pc
+        var options1 = {
+            cssPath : '$!cdnServer/resources/editor/plugins/code/prettify.css',
+            filterMode : true,
+            uploadJson:'$!webPath/upload',
+            width : '860px',
+            height:'400px',
+            resizeType : 1,
+            allowImageUpload : false,
+            allowFlashUpload : false,
+            allowMediaUpload : false,
+            allowFileManager : false,
+            syncType:"form",
+            afterCreate : function() {
+                var self = this;
+                self.sync();
+            },
+            afterChange : function() {
+                var self = this;
+                self.sync();
+            },
+            afterBlur : function() {
+                var self = this;
+                self.sync();
+            },
+            items:['source', '|', 'fullscreen', 'undo', 'redo', 'cut', 'copy', 'paste',
+                'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image','flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+        };
+        //options为编辑配置属性app
+        var options2 = {
+            cssPath : '$!cdnServer/resources/editor/plugins/code/prettify.css',
+            filterMode : true,
+            uploadJson:'$!webPath/upload',
+            width : '360px',
+            height:'400px',
+            minWidth:'360px',
+            resizeType : 1,
+            allowImageUpload : false,
+            allowFlashUpload : false,
+            allowMediaUpload : false,
+            allowFileManager : false,
+            syncType:"form",
+            afterCreate : function() {
+                var self = this;
+                self.sync();
+            },
+            afterChange : function() {
+                var self = this;
+                self.sync();
+            },
+            afterBlur : function() {
+                var self = this;
+                self.sync();
+            },
+            items:['source', '|', 'undo', 'redo', '|', 'justifyleft', 'justifycenter',  'insertorderedlist', 'insertunorderedlist', '|',
+                'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'hr', '|', 'about']
+        };
+        var user_goods_class_count=2;
+        jQuery(document).ready(function() {
+            loadeach();
+        #if($!{obj.goods_status}==2)
+            var str=jQuery("#publish_day").attr("mark");
+            var infos=str.split(" ");
+            jQuery("#publish_day").val(infos[0]);
+            var times=infos[1].split(":");
+            var hour=parseInt(times[0]);
+            var minute=parseInt(times[1]);
+            jQuery("#publish_hour").find("option[value='"+hour+"']").attr("selected",true);
+            jQuery("#publish_min").find("option[value='"+minute+"']").attr("selected",true);
+        #end
+            jQuery("#update_inventory").live("click",function(){
+                var status=jQuery(this).val();
+                if(status==1)
+                    jQuery("#storeHouse_tr").show();
+                else
+                    jQuery("#storeHouse_tr").hide();
+            });
+            jQuery(".upload_pictures_bottom ul").sortable({stop: function(event,ui){},start:function(event,ui){},revert: true});
+            jQuery(".upload_pictures_bottom ul").bind('sortstop',
+                function(event, ui){
+                    draw_goods_main_img();
+                    jQuery(ui.item).css("cursor","auto");
+                });
+            jQuery(".upload_pictures_bottom ul").bind('sortstart',
+                function(event, ui){
+                    jQuery(ui.item).css("cursor","move");
+                });
+            jQuery(".upload_pictures_bottom ul" ).disableSelection();
+            jQuery(":radio[id=goods_status]").click(function(){
+                if(jQuery(this).val()==2){
+                    jQuery("#publish_info").show();
+                }else{
+                    jQuery("#publish_info").hide();
+                }
+            });
+
+            //表单验证
+            jQuery("#theForm").validate({
+                ignore: "",
+                rules: {
+                    agreement_name: {required: true},
+                    agreement_type: {required: true},
+                    agreement_version: {required: true},
+                    agreement_state: {required: true},
+                    agreement: {required: true}
+                },
+                messages: {
+                    agreement_name:{required:"协议名称不能为空"},
+                    agreement_type:{required:"协议类型不能为空"},
+                    agreement_version:{required:"协议版本不能为空"},
+                    agreement_state:{required:"协议状态不能为空"},
+                    agreement:{required:"协议内容不能为空"}
+                }
+            });
+            //
+            jQuery(":input[id^=inventory_details_count_]").live("keyup",function(){
+                var goods_inventory=0;
+                jQuery(":input[id^=inventory_details_count_]").each(function(){
+                    var reg = new RegExp("^[0-9]*$");
+                    if(!reg.test(jQuery(this).val())){
+                        jQuery(this).val("0");
+                    }
+                    goods_inventory=parseInt(jQuery(this).val())+goods_inventory;
+                });
+                jQuery("#goods_inventory").val(goods_inventory);
+            });
+            //
+            jQuery(":input[id^=inventory_details_price_]").live("keyup",function(){
+                jQuery(":input[id^=inventory_details_price_]").each(function(){
+                    jQuery(this).val(jQuery(this).val().replace(/[^0-9.]/g,''));
+                });
+            });
+
+            //物流运费
+            jQuery("#buyer_transport_info").find("input[type='text']").live("keyup",function(){
+                jQuery(":input[id='mail_trans_fee']").each(function(){
+                    jQuery(this).val(jQuery(this).val().replace(/[^0-9.]/g,''));
+                });
+            });
+
+
+            //table切换
+            jQuery("#ul_table li").click(function(){
+                jQuery(this).parent().find("li a").removeClass("this");
+                jQuery(this).find("a").addClass("this");
+                var id =jQuery(this).attr("id");
+                jQuery("table").hide();
+                jQuery("table[id=goods_"+id+"]").show();
+                var val =jQuery("#inventory_type[checked='checked']").val();
+                var display =$('#inventory_detail').css('display');
+                if((val=="spec" && id=="store") || display != 'none'){
+                    jQuery("#inventory_detail_content table").show();
+                    if(jQuery("#inventory_detail_content>table").height()>=350){
+                        jQuery("#inventory_detail_content").css({"width":"100%","height":"350px","float":"left","overflow":"auto;","margin-top":" 10px"});
+                    }else{
+                        jQuery("#inventory_detail_content").css({"width":"100%","height":"auto","float":"left","overflow":"auto","margin-top":" 10px"});
+                    }
+                }
+
+            });
+            //
+            jQuery(":radio[id=inventory_type]").live("click",inventory_type);
+            jQuery(":checkbox[id^=spec_]").live("click",inventory_type);
+            //
+            editor = KindEditor.create('#goods_details_web',options1);
+            editor3 = KindEditor.create('#pack_details',options1);
+            editor4= KindEditor.create('#goods_service',options1);
+            //
+            jQuery(":radio[id='goods_transfee']").click(function(){
+                var val=jQuery(this).val();
+                if(val==0){
+                    jQuery("#buyer_transport_info").show();
+                }else{
+                    jQuery("#buyer_transport_info").hide();
+                }
+            });
+            jQuery(":radio[id=special_goods]").click(function(){
+                if(jQuery(this).val()==1){
+                    jQuery("tr[id^=f_code_]").show();
+                    jQuery("tr[id^=advance_sale_]").hide();
+                    jQuery("tr[id^=limit]").hide();
+                }else if(jQuery(this).val()==2){
+                    jQuery("tr[id^=f_code_]").hide();
+                    jQuery("tr[id^=advance_sale_]").show();
+                    jQuery("tr[id^=limit]").hide();
+                }else if(jQuery(this).val()==3){
+                    jQuery("tr[id^=limit]").show();
+                    jQuery("tr[id^=advance_sale_]").hide();
+                    jQuery("tr[id^=f_code_]").hide();
+                }else{
+                    jQuery("tr[id^=f_code_]").hide();
+                    jQuery("tr[id^=advance_sale_]").hide();
+                    jQuery("tr[id^=limit]").hide();
+                }
+            });
+
+            //
+            //品牌搜索
+            jQuery("#brand ul li").click(function(){
+                jQuery("#brand").hide();
+                jQuery("#goods_brand").html(jQuery(this).html());
+                jQuery("#goods_brand_id").val(jQuery(this).attr("bid"));
+            });
+            jQuery("#div_goods_brand").click(function(){
+                if(jQuery("#brand").is(":hidden")){
+                    jQuery("#brand").show();
+                }else{
+                    jQuery("#brand").hide();
+                }
+                jQuery("#brand ul li").show();
+            });
+            jQuery.expr[':'].contains = function(a, i, m){
+                return jQuery(a).text().toUpperCase()
+                    .indexOf(m[3].toUpperCase()) >= 0;
+            };
+            jQuery("#ibrand").keyup(function(){
+                jQuery("#brand ul li").hide().filter(":contains('"+( jQuery(this).val() )+"')").show();
+            })
+            //类型可以搜索
+            jQuery("input[id^=keyup_]").live("keyup",function(){
+                var id=jQuery(this).attr("pid");
+                jQuery("#list_"+id+" ul li").hide().filter(":contains('"+( jQuery(this).val() )+"')").show();
+            })
+
+            jQuery(".goods_brand_input_top").live("click",function(){
+                var id=jQuery(this).attr("pid");
+                if(jQuery("#list_"+id).is(":hidden")){
+                    jQuery("#list_"+id).show();
+                }else{
+                    jQuery("#list_"+id).hide();
+                }
+                jQuery("#list_"+id+" ul li").show();
+
+            });
+            jQuery(".goods_brand_input").each(function(){
+                var s=jQuery(this);
+                jQuery("body").click(function(i){
+                    if(!jQuery(i.target).parents(".goods_brand_input").first().is(s)){
+                        s.find(".goods_brand_input_list").hide();
+
+                    }
+                });
+            });
+            jQuery(".goods_brand_input_list ul li").live("click",function(){
+                jQuery(this).parent().parent().hide();
+                var id=jQuery(this).parent().parent().attr("lid");
+                jQuery("#property_"+id).html(jQuery(this).html());
+            });
+            <!--规格点击时表格中同步更改-->
+            jQuery("#ul_table li").live("click",function(){
+                jQuery(this).next().attr("style","");
+            });
+            jQuery(":checkbox[id^=spec]").live("click",function(){
+                var a=jQuery(this).parent().next().find(".cc_sp3").next();
+                a.attr("style","border: 1px dotted #F00;");
+                a.find("input").focus();
+                a.find("input").blur(function(){
+                    a.attr("style","");
+                });
+            });
+            jQuery(":input[id^=specname_]").bind('input propertychange', function() {
+                var specname=jQuery(this).attr("id");
+                var value=jQuery(this).val();
+                jQuery("td[specname="+specname+"]").text(value);
+                specname=specname.replace("specname_","");
+                jQuery("#spec_"+specname).attr("gsp_val",value);
+            });
+            <!--初始化时规格选中状态-->
+            jQuery("tr[id^=gs_]").each(function(index, element) {
+                jQuery(element).find(":checkbox[id^=spec_][checked=true]").each(function(index2, element2){
+                    var s=jQuery(element).attr("id");
+                    s=s.replace("gs_","");
+                    jQuery("a[use='"+s+"']").attr("class","this");
+                    jQuery("a[use='"+s+"']").attr("visibility","show");
+                    jQuery(element).show();
+                });
+            });
+            jQuery("img[use='app_detail_del']").live("click",function(){
+                jQuery(this).parent().parent().parent().remove();
+                app_detail_preview();
+            });
+            jQuery(".word").live("focusout",function(){
+                app_detail_preview();
+            });
+            jQuery("#app_detail_album").live("change",function(element){
+                var album_id = jQuery("#app_detail_album").val();
+                jQuery.post("$!webPath/goods_img",{"type":"app_detail_imgs","album_id":album_id},function(text){
+                    jQuery("#app_detail_imgs").empty();
+                    jQuery("#app_detail_imgs").append(text);
+                    var app_detail_imgs_src=jQuery("#app_detail_imgs_src").val();
+                    jQuery.each(jQuery("img[use='app_img']"),function(index,item){
+                        var bigsrc=jQuery(item).attr("bigsrc");
+                        if(app_detail_imgs_src.indexOf(bigsrc)>-1){
+                            jQuery(item).parent().parent().find("span").show();
+                        }
+                    });
+                },"text");
+            });
+
+        });
+
+        function init_gs_add() {
+            jQuery("a[id^=gs_add_]").live("click",function() {
+                var button_text = jQuery(this).text();
+                if (button_text == "新增规格值") {
+                    jQuery(this).text("提交");
+                    jQuery(this).parent().parent().find(".coler_chose_add_left").show();
+                }
+                if (button_text == "提交") {
+                    var gs_id = jQuery(this).attr("gs_id");
+                    var nameline = jQuery(this).parent().parent().find("input[use=add]");
+                    var name = nameline.val();
+                    if (name != "") {
+                        if (jQuery(this).parent().parent().parent().parent().attr("gs_type") == "text") {
+                            nameline.val("");
+                            jQuery(this).parent().parent().find(".coler_chose_add_left").hide();
+                            var gs_line = jQuery(this);
+                            gs_line.text("新增规格值");
+                            jQuery.post("$!webPath/goods_spec_ajax_add", {
+                                    "id": gs_id,
+                                    "name": name,
+                                    "type":"0"
+                                },
+                                function(text) {
+                                    if (text != null) {
+                                        var data = eval("(" + text + ")");
+                                        nameline.parent().before("<li> <span class=\"cc_sp1\"> <input name=\"spec_" + data.id + "\" type=\"checkbox\" id=\"spec_" + data.id + "\" gs_id=\"" + gs_id + "\"  gsp_val=\"" + name + "\" value=\"" + data.id + "\" /> </span> <label use=\"spec_" + data.id + "\"> <span class=\"cc_sp3\">" + name + "</span> <span style=\"visibility: hidden\" class=\"edit\"> <input id=\"specname_" + data.id + "\" name=\"specname_" + data.id + "\" type=\"text\" value=\"" + name + "\"/> </span> </label> </li>");
+                                        jQuery(":input[id^=specname_]").bind('input propertychange',
+                                            function() {
+                                                var specname = jQuery(this).attr("id");
+                                                var value = jQuery(this).val();
+                                                jQuery("td[specname=" + specname + "]").text(value);
+                                                specname = specname.replace("specname_", "");
+                                                jQuery("#spec_" + specname).attr("gsp_val", value);
+                                            });
+                                    }
+                                },
+                                "text");
+                        } else {
+
+                            var fileid = "gsp_add_img_" + gs_id;
+                            var img_src=jQuery("#"+fileid).val();
+                            if(img_src!=""){
+                                nameline.val("");
+                                jQuery(this).parent().parent().find(".coler_chose_add_left").hide();
+                                var gs_line = jQuery(this);
+                                gs_line.text("新增规格值");
+
+                                jQuery(this).parent().parent().find(".img_see").attr("style","display:none");
+                                jQuery(this).parent().parent().find(".img_see").find("img").attr("src","");
+
+                                jQuery.ajaxFileUpload({
+                                    url: '/goods_spec_ajax_add',
+                                    fileElementId: [fileid],
+                                    fileFilter: "$!imageSuffix1",
+                                    data:{
+                                        "id": gs_id,
+                                        "name": name,
+                                        "type":"1"
+                                    },
+                                    dataType: 'json',
+                                    success: function(text) {
+                                        if (text != null) {
+                                            jQuery("#"+fileid).val("");
+                                            var data = eval(text);
+                                            nameline.parent().before("<li> <span class=\"cc_sp1\"> <input name=\"spec_" + data.id + "\" type=\"checkbox\" id=\"spec_" + data.id + "\" gs_id=\"" + gs_id + "\"  gsp_val=\"" + name + "\" value=\"" + data.id + "\" /> </span><span class=\"cc_sp2\"> <img src=\"" + data.url + "\" width=\"16\" height=\"16\" /> </span> <label use=\"spec_" + data.id + "\"> <span class=\"cc_sp3\">" + name + "</span> <span style=\"visibility: hidden\" class=\"edit\"> <input id=\"specname_" + data.id + "\" name=\"specname_" + data.id + "\" type=\"text\" value=\"" + name + "\"/> </span> </label> </li>");
+                                            jQuery(":input[id^=specname_]").bind('input propertychange',
+                                                function() {
+                                                    var specname = jQuery(this).attr("id");
+                                                    var value = jQuery(this).val();
+                                                    jQuery("td[specname=" + specname + "]").text(value);
+                                                    specname = specname.replace("specname_", "");
+                                                    jQuery("#spec_" + specname).attr("gsp_val", value);
+                                                });
+                                        }
+                                    }
+
+                                });}else{
+                                showDialog("msg_info","","请选择规格图片",2,"warning",3,'');
+                            }
+
+                        }
+
+                    } else{
+                        showDialog("msg_info","","规格名称不能为空",2,"warning",3,'');
+                    }
+
+                }
+            });
+        }
+        function inventory_type(){
+            var gsp_length =jQuery(":checkbox[gs_color='true'][checked=true]").length;
+            //限制颜色tr只能选择一组颜色
+            var gs_list="";
+            var color_ver="true"
+            var color_img_ul_li="";
+            jQuery(":checkbox[gs_color='true'][checked=true]").each(function(){
+                if(gs_list==""||gs_list.indexOf(jQuery(this).attr("gs_id"))>=0){
+                    gs_list=jQuery(this).attr("gs_id")+"_"+gs_list;
+                    color_img_ul_li = '<li id="'+jQuery(this).val()+'">'+jQuery(this).attr("gsp_val")+'</li>'+color_img_ul_li;
+                }else{
+                    color_ver="false"
+                    jQuery(this).attr("checked",false);
+                }
+            });
+            if(gsp_length>0){//显示颜色图片设置tr
+                jQuery("#color_img_tr").show();
+                var id = jQuery("#color_img_ul").html(color_img_ul_li).find("li:first").addClass("this").attr("id");
+                add_ul_img(id);
+            }else{//隐藏颜色图片设置tr
+                jQuery("#color_img_tr").hide();
+            }
+            //颜色设置切换颜色
+            jQuery("#color_img_ul li").click(function(){
+                jQuery(this).parent().find("li").removeClass("this");
+                var id = jQuery(this).addClass("this").attr("id");
+                add_ul_img(id);
+            });
+            function add_ul_img(id){
+                var url_img=jQuery("ul[ul_img="+id+"]");
+                jQuery("#ul_img_list ul").hide();
+                if(jQuery(url_img).length>0){
+                    if(jQuery(url_img).css("display")=="none"){
+                        jQuery(url_img).show();
+                    }
+                }else{;
+                    var ul_img_html='<ul ul_img='+id+'>#foreach($count in [1..5])<li count="$!{velocityCount}"><span class="sptable_color_right_img"><img width="140px" heigth="140px" color_id='+id+' count="$!{velocityCount}" src="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name" /><img mark="loading" src="$!cdnServer/resources/style/system/front/default/images/waiting.gif" style="margin-top: 45px;margin-left: 45px;display:none" width="50px" heigth="50px"/></span> <span class="sptable_color_right_edit">+<input name="imgFile_'+id+'_$!{velocityCount}" id="imgFile_'+id+'_$!{velocityCount}" type="file" count="$!{velocityCount}" color_id='+id+' /></span><span class="sptable_color_right_edit_inde"><img index="false" id="top" src="$!cdnServer/resources/style/system/front/default/images/shopping_address_top.png" style="display:none"/></span> <span class="sptable_color_right_edit_b" style="display:none"><b style="width:63px"><a href="javascript:void(0);" onclick="dele_img(this);" color_id='+id+' count="$!{velocityCount}"><i><img src="$!cdnServer/resources/style/system/front/default/images/head_search_history_dele.png" /></i>删除</a></b><a href="javascript:void(0);" onclick="index_img(this);" color_id='+id+' count="$!{velocityCount}" mark="setIndex"><b><i><img src="$!cdnServer/resources/style/system/front/default/images/inde.png" /></i>设为首图</b></a></span></li>#end </ul>';
+                    jQuery("#ul_img_list").append(ul_img_html);
+                }
+            }
+//颜色图片同步到商品图片
+            jQuery(".sptable_color_update a").live("click",function(){
+                var count=0;
+                jQuery("#ul_img_list ul:visible").children().each(function(){
+                    var src =jQuery(this).find(".sptable_color_right_img img").attr("src");
+                    var img_id =jQuery(this).find(".sptable_color_right_img img").attr("img_id");
+                    if(typeof(img_id)=="undefined"||img_id!=""){
+                        count++;
+                    }
+                });
+                if(count<jQuery("#ul_img_list ul:visible").children().length){
+                    //清除所有图片
+                    jQuery("#show_img .upload_pictures_bottom_del").each(function(){
+                        var tg = jQuery(this).find("a:eq(1)");
+                        remove_goods_image(tg);
+                    });
+                }
+                //重新添加商品图片
+                jQuery("#ul_img_list ul:visible").children().each(function(){
+                    var src =jQuery(this).find(".sptable_color_right_img img").attr("src");
+                    var img_id =jQuery(this).find(".sptable_color_right_img img").attr("img_id");
+                    if(typeof(img_id)!="undefined"&&img_id!=""){
+                        jQuery(".add_loading").removeClass("add_loading").addClass("add_img");
+                        if(img_id.indexOf("m")>=0){
+                            img_id = img_id.replace("m_","");
+                        }
+                        draw_goods_img(src,img_id);
+                    }
+                });
+                if(count<jQuery("#ul_img_list ul:visible").children().length){
+                    jQuery(this).parent().find("b").html("同步成功！").show();
+                    jQuery(this).parent().find("b").fadeOut(4000);
+                }else{
+                    jQuery(this).parent().find("b").html("请上传图片！").show();
+                    jQuery(this).parent().find("b").fadeOut(4000);
+                }
+            });
+//颜色图片ajax上传图片
+            jQuery("input[id^='imgFile_'][type='file'][color_id!='']").live("change",function(){
+                var count =jQuery(this).attr("count");
+                var color_id =jQuery(this).attr("color_id");
+                var fileName="imgFile_"+color_id+"_"+count;
+                var obj =jQuery("img[color_id="+color_id+"][count="+count+"]");
+                jQuery(obj).hide();
+                jQuery(obj).parent().find("img[mark=loading]").show();
+                jQuery.ajaxFileUpload({url:'$!webPath/swf_upload',
+                    dataType:'json',
+                    fileElementId:[fileName],
+                    fileFilter:"$!imageSuffix1",
+                    data:{
+                        "fileName": fileName
+                    },
+                    success:function(data){
+                        if(data.remainSpace!="null"){
+                            if(data.remainSpace<=0){
+                                /*空间不足*/
+                                showDialog("msg_info","","图片空间不足！",2,"warning",3,'');
+                            }
+                        }
+                        if(data.id!=""){
+                            jQuery(obj).attr("src",data.url).attr("img_id",data.id).removeAttr("style");
+                            jQuery("ul[ul_img="+color_id+"] li[count="+count+"]").find(".sptable_color_right_edit_b").show();
+                            jQuery(obj).parent().find("img[mark=loading]").hide();
+                            var i = 0;
+                            jQuery("img[color_id="+color_id+"]").each(function(){
+                                if(typeof(jQuery(this).attr("img_id"))!="undefined"&&jQuery(this).attr("img_id")!=""){
+                                    i++;
+                                }
+                            });
+
+                            if(i==1){
+                                var target =jQuery("a[color_id="+color_id+"][count="+count+"][mark='setIndex']");
+                                index_img(target);
+                                target.parent().parent().parent().parent().find(".sptable_color_update").show();
+                            }
+                        }else{
+                            showDialog("msg_info","","上传失败！",2,"warning",3,'');
+                        }
+                    }
+                });
+
+
+            });
+
+
+            if(color_ver=="true"){
+                var rv=jQuery(":radio[id=inventory_type][checked=true]").val();
+                if(rv=="all"){
+                    jQuery("#inventory_detail").hide();
+                }else{
+                    <!--保存之前的表格中的数据，重新生成表格后id不变的可以重新赋值回去-->
+                    var temp_id = new Array();
+                    var temp_count = new Array();
+                    var temp_price = new Array();
+                    var temp_supp = new Array();
+                    var temp_code = new Array();
+                    jQuery("input[id^=inventory_details_count_]").each(function(index,element){
+                        var id=jQuery(this).attr("name");
+                        var count=jQuery(this).val();
+                        var price=jQuery("#inventory_details_price_"+id).val();
+                        var supp=jQuery("#inventory_details_supplement_"+id).val();
+                        var code=jQuery("#inventory_details_code_"+id).val();
+                        temp_id[index]=id;
+                        temp_count[index]=count;
+                        temp_price[index]=price;
+                        temp_supp[index]=supp;
+                        temp_code[index]=code;
+                    });
+
+                    <!--遍历规格，筛选被选中的规格生成表格-->
+                    var gs_name = new Array();
+                    var goods_spec_ids = new Array();
+                    var goods_spec_name = new Array();
+
+                    var mindex=0;
+                    jQuery("tr[id^=gs_]").each(function(index, element) {
+                        var id_temp = new Array();
+                        var name_temp = new Array();
+                        jQuery(element).find(":checkbox[id^=spec_][checked=true]").each(function(index2, element2){
+                            id_temp[index2]=jQuery(this).val();
+                            name_temp[index2]=jQuery(this).attr("gsp_val");
+                        });
+                        if(id_temp.length>0){
+                            gs_name[mindex] = jQuery(element).attr("gs_name");
+                            goods_spec_ids[mindex]=id_temp;
+                            goods_spec_name[mindex]=name_temp;
+                            mindex=mindex+1;
+                        }
+                    });
+
+                    var table="<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"tabledetail\" > <tr style=\"background:#CCC\">";
+
+                    jQuery("#inventory_detail").show();
+                    jQuery("#inventory_detail_content").empty();
+                    if(gs_name.length>0){
+
+                        for(var i=0;i<gs_name.length;i++){
+                            table=table+"<td width=\"15%\">"+gs_name[i]+"</td>"
+                        }
+
+                        table=table+"<td width=\"15%\"><b style=\"float:left;\">库存</b> <span class=\"select_all\" id=\"select_all_count\" mark=\"count\"><img src=\"$!cdnServer/resources/style/system/front/default/images/batch.png\" style=\"cursor:pointer\"/></span> <span class=\"select_all_input\" mark=\"count\" style=\"display:none;\"><b>      <input name=\"\" type=\"text\" mark=\"all_count\" />      </b><i><a href=\"javascript:void(0);\" mark=\"count\" id=\"sure_count\">确定</a></i></span></td>  <td width=\"15%\">        <b style=\"float:left;\">预警</b>         <span class=\"select_all\" id=\"select_all_supplement\" mark=\"supplement\"><img src=\"$!cdnServer/resources/style/system/front/default/images/batch.png\" style=\"cursor:pointer\"/></span>    <span class=\"select_all_input\" mark=\"supplement\" style=\"display:none;\"><b><input name=\"\" type=\"text\" mark=\"all_supplement\" /></b><i><a href=\"javascript:void(0);\" mark=\"supplement\" id=\"sure_supplement\">确定</a></i></span>     </td>  <td width=\"15%\" ><b style=\"float:left;\">价格</b> <span class=\"select_all\" id=\"select_all_price\" mark=\"price\"><img src=\"$!cdnServer/resources/style/system/front/default/images/batch.png\" style=\"cursor:pointer\"/></span> <span class=\"select_all_input\" mark=\"price\" style=\"display:none;\"><b>      <input name=\"\" type=\"text\" mark=\"all_price\" />      </b><i><a href=\"javascript:void(0);\" mark=\"price\" id=\"sure_price\">确定</a></i></span></td><td width=\"15%\"><b style=\"float:left;\">商品货号</b></td>  </tr>";
+                        spec_list="";
+                        format_spec(goods_spec_ids,goods_spec_name,0,"","");
+
+                        table=table+spec_list;
+                        table=table+"</table>";
+                        jQuery("#inventory_detail_content").append(table);
+
+                        if(jQuery("#inventory_detail_content>table").height()>=350){
+                            jQuery("#inventory_detail_content").css({"width":"100%","height":"350px","float":"left","overflow":"auto;","margin-top":" 10px"});
+                        }else{
+                            jQuery("#inventory_detail_content").css({"width":"100%","height":"auto","float":"left","overflow":"auto","margin-top":" 10px"});
+                        }
+                        <!--之前保存的数据，重新生成表格后id不变的赋值回去-->
+
+                        for(var i=0;i<temp_id.length;i++){
+                            var id=temp_id[i];
+                            jQuery("#inventory_details_count_"+id).val(temp_count[i]);
+                            jQuery("#inventory_details_price_"+id).val(temp_price[i]);
+                            jQuery("#inventory_details_supplement_"+id).val(temp_supp[i]);
+                            jQuery("#inventory_details_code_"+id).val(temp_code[i]);
+                        }
+
+
+                        jQuery("span[id^=select_all_]").click(function(){
+                            var mark =	jQuery(this).attr("mark");
+                            jQuery("span.select_all_input[mark='"+mark+"']").show();
+                            jQuery(this).hide();
+                        });
+                        jQuery("a[id^=sure_]").click(function(){
+                            var mark =jQuery(this).attr("mark");
+                            var val = jQuery("input[mark=all_"+mark+"]").val();
+                            jQuery("#select_all_"+mark).show();
+                            jQuery("span.select_all_input[mark='"+mark+"']").hide();
+                            jQuery("input[id^=inventory_details_"+mark+"_]").each(function(){
+                                if(val!=""){
+                                    var reg = new RegExp("^[0-9]*$");
+                                    var reg2 = new RegExp("^[\+]{1}[0-9]*$");
+                                    var reg3 = new RegExp("^[\-]{1}[0-9]*$");
+                                    if(!reg.test(val)){
+                                        if(reg2.test(val)){
+                                            var num=parseInt(jQuery(this).val())+parseInt(val.replace("+",""));
+                                            if(num>=0)
+                                                jQuery(this).val(num);
+                                        }else if(reg3.test(val)){
+                                            var num=parseInt(jQuery(this).val())-parseInt(val.replace("-",""));
+                                            if(num>=0)
+                                                jQuery(this).val(num);
+                                        }
+                                    }else{
+                                        jQuery(this).val(val);
+                                    }
+                                }
+                            });
+                            var goods_inventory=0;
+                            jQuery(":input[id^=inventory_details_count_]").each(function(){
+                                var reg = new RegExp("^[0-9]*$");
+                                if(!reg.test(jQuery(this).val())){
+                                    jQuery(this).val("0");
+                                }
+                                goods_inventory=parseInt(jQuery(this).val())+goods_inventory;
+                            });
+                            jQuery("#goods_inventory").val(goods_inventory);
+                        });
+                    }
+
+                }
+            }else{//已选择一组颜色
+                showDialog("warning","","只能选择同组颜色！",2,"warning",3);
+            }
+        }
+        /*遍历规格，在表格中添加行*/
+        var spec_list="";
+        function format_spec(goods_spec_ids,goods_spec_name,count,name,ids){
+            for(var i=0;i<goods_spec_ids[count].length;i++){
+                if(count==0){
+                    name = "";
+                    ids = "";
+                }
+
+                var str2=name+"<td specname=\"specname_"+goods_spec_ids[count][i]+"\">"+goods_spec_name[count][i]+"</td>";
+                var ids2=ids+goods_spec_ids[count][i]+"_";
+
+                if(count==goods_spec_ids.length-1){
+                    spec_list=spec_list+"<tr>"+str2+"<td><input name=\""+ids2+"\" type=\"text\" id=\"inventory_details_count_"+ids2+"\" style=\"border:1px solid #A7A6AA; height:20px; width:70px; line-height:20px; padding-left:5px;margin-bottom:5px;\" value=\"0\"></td>  <td><input name=\""+ids2+"\" type=\"text\" id=\"inventory_details_supplement_"+ids2+"\" style=\"border:1px solid #A7A6AA; height:20px; width:70px; line-height:20px; padding-left:5px;margin-bottom:5px;\" value=\"0\"></td>  <td><input name=\""+ids2+"\" type=\"text\" id=\"inventory_details_price_"+ids2+"\" style=\"border:1px solid #A7A6AA; height:20px; width:70px; line-height:20px; padding-left:5px;margin-bottom:5px;\" value=\"0\"></td><td><input name=\""+ids2+"\" type=\"text\" id=\"inventory_details_code_"+ids2+"\" style=\"border:1px solid #A7A6AA; height:20px; width:70px; line-height:20px; padding-left:5px;margin-bottom:5px;\"value=\"0\"></td></tr>";
+                }else{
+                    format_spec(goods_spec_ids,goods_spec_name,count+1,str2,ids2);
+                }
+            }
+        }
+
+
+        //规格图片删除
+        function dele_img(obj){
+            var count =jQuery(obj).attr("count");
+            var color_id =jQuery(obj).attr("color_id");
+            var target =jQuery("img[color_id="+color_id+"][count="+count+"]");
+            var index =jQuery("ul[ul_img="+color_id+"]").find("li[count="+count+"]").find("#top").attr("index");
+            if(index=="true"){
+                showDialog("warning","","首图不可以删除！",2,"warning",3);
+            }else{
+                jQuery(target).attr("src","$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name");
+                jQuery(target).attr("img_id","");
+                jQuery("ul[ul_img="+color_id+"] li[count="+count+"]").find(".sptable_color_right_edit_b").hide();
+            }
+        }
+
+        //规格图片设置为首图
+        function index_img(obj){
+            var count =jQuery(obj).attr("count");
+            var color_id =jQuery(obj).attr("color_id");
+            jQuery("ul[ul_img="+color_id+"]").find("#top").hide().attr("index","false");
+            jQuery("ul[ul_img="+color_id+"]").find("li[count="+count+"]").find("#top").show().attr("index","true");
+            var le = jQuery("ul[ul_img="+color_id+"]").find("li");
+            le.each(function(){
+                var id =jQuery(this).find("img[color_id="+color_id+"]").attr("img_id");
+                if(typeof(id)!="undefined" && id!=""){
+
+                    id = id.replace("m_","");
+                    jQuery(this).find("img[color_id="+color_id+"]").attr("img_id",id)
+                }
+            });
+            var target = jQuery("ul[ul_img="+color_id+"]").find("li[count="+count+"]").find("img[color_id="+color_id+"]");
+            target.attr("img_id","m_"+jQuery(target).attr("img_id"));
+
+        }
+
+        /*Ajax分页*/
+        function ajaxPage(url,currentPage,obj){
+            var ajax_page=jQuery(obj).parent().attr("ajax_page");
+            if(ajax_page=="goods_transport"){
+                jQuery.post("$!webPath/goods_transport",{"currentPage":currentPage,"ajax":true},function(data){
+                    jQuery("#ListForm").empty().html(data);
+                },"html");
+            }else if(ajax_page=="goods_img"){
+                var ajax_type=jQuery(obj).parent().attr("ajax_type");
+                var type=jQuery(obj).parent().attr("type");
+                var album_id=jQuery(obj).parent().attr("album_id");
+                jQuery.post("$!webPath/goods_img",{"currentPage":currentPage,"type":type,"album_id":album_id},function(text){
+                    jQuery(ajax_type).empty();
+                    jQuery(ajax_type).append(text);
+                },"text");
+
+            }else if(ajax_page=="goods_album"){
+                var ajax_type=jQuery(obj).parent().attr("ajax_type");
+                var album_name=jQuery("#id_"+ajax_type.substring(1)).val();
+                jQuery.post("$!webPath/goods_album",{"currentPage":currentPage,"ajax_type":ajax_type,"album_name":album_name},function(text){
+                    jQuery(ajax_type).empty();
+                    jQuery(ajax_type).append(text);
+                },"text");
+            }else if(ajax_page=="app_detail_imgs"){
+                var album_id=jQuery(obj).parent().attr("album_id");
+                var album_id = jQuery("#app_detail_album").val();
+                jQuery.post("$!webPath/goods_img",{"currentPage":currentPage,"type":"app_detail_imgs","album_id":album_id},function(text){
+                    jQuery("#app_detail_imgs").empty();
+                    jQuery("#app_detail_imgs").append(text);
+                    var app_detail_imgs_src=jQuery("#app_detail_imgs_src").val();
+                    jQuery.each(jQuery("img[use='app_img']"),function(index,item){
+                        var bigsrc=jQuery(item).attr("bigsrc");
+                        if(app_detail_imgs_src.indexOf(bigsrc)>-1){
+                            jQuery(item).parent().parent().find("span").show();
+                        }
+                    });
+                },"text");
+
+            }
+        }
+        function saveForm(){
+            editor.sync();//同步编辑器的数据到texterea
+            if(jQuery(":radio[id=update_inventory][checked=true]").val()==1){
+                var storehouse_id=jQuery("#storehouse_id").val();
+                if(storehouse_id==""){
+                    jQuery("#ul_table li a").removeClass("this");
+                    jQuery("#store").find("a").addClass("this");
+                    jQuery("table").hide();
+                    jQuery("table[id=goods_store]").show();
+                    showDialog("warning","","请选择库房！",2,"warning",3);
+                    return;
+                }
+            }
+            var goodstag_ids="";
+            jQuery.each(jQuery("#taglist").find("li"),function(index,element){
+                goodstag_ids=goodstag_ids+jQuery(element).attr("goodstag_id")+",";
+            });
+            jQuery("#goodstag_ids").val(goodstag_ids);
+            var goods_details_mobile="";
+            jQuery(".phone_left_center").find("li").each(function(index, element) {
+                if(jQuery(element).find(".word").length>0){
+                    var str=jQuery(element).find("textarea").val();
+                    if(str!="")
+                        goods_details_mobile+="<li>"+str+"</li>";
+                }else{
+                    var str=jQuery(element).find(".img").find("img").attr("src");
+                    goods_details_mobile+="<li><img src='"+str+"' width='100%'></li>";
+                }
+            });
+            jQuery("#goods_details_mobile").val(goods_details_mobile);
+
+            /*商品图片处理*/
+            var image_ids="";
+            var main_image_id="";
+            jQuery(".upload_pictures_bottom_i img").each(function(index, element) {
+
+                var image_id=jQuery(element).attr("img_id");
+                if(index==0){
+                    main_image_id=image_id;
+                }else{
+                    image_ids=image_ids+","+image_id;
+                }
+
+            });
+            if(image_ids=="" && main_image_id==""){
+                jQuery("#ul_table li a").removeClass("this");
+                jQuery("#img").find("a").addClass("this");
+                jQuery("table").hide();
+                jQuery("table[id=goods_img]").show();
+                showDialog("warning","","请至少上传一张商品图片！",2,"warning",3);
+            }else{
+                jQuery("#image_ids").val(image_ids);
+                jQuery("#goods_main_img_id").val(main_image_id);
+                var goods_spec_ids="";
+                var goods_spec_id_value_map="";
+                jQuery(":checkbox[id^=spec_][checked=true]").each(function(){
+                    goods_spec_ids=jQuery(this).val()+","+goods_spec_ids;
+                    goods_spec_id_value_map=jQuery(this).val()+":"+jQuery("#specname_"+jQuery(this).val()).val()+","+goods_spec_id_value_map;
+                });
+                jQuery("#goods_spec_id_value").val(goods_spec_id_value_map);
+                jQuery("#goods_spec_ids").val(goods_spec_ids);
+                var goods_properties="";
+                jQuery("label[id^=property_]").each(function(){
+                    if(jQuery(this).html()!=""){
+                        goods_properties=jQuery(this).attr("id").substring(9)+","+jQuery(this).html()+";"+goods_properties;
+                    }
+                });
+                jQuery("#goods_properties").val(goods_properties);
+                var intentory_details="";
+                jQuery("input[id^=inventory_details_count_]").each(function(){
+                    var id=jQuery(this).attr("name");
+                    var count=jQuery(this).val();
+                    var price=jQuery("#inventory_details_price_"+id).val();
+                    var code=jQuery("#inventory_details_code_"+id).val();
+                    var supp=jQuery("#inventory_details_supplement_"+id).val();
+                    if(code==null || code==undefined || code==""){
+                        code="0";
+                    }
+                    intentory_details=id+","+count+","+supp+","+price+","+code+";"+intentory_details;
+                })
+                jQuery("#intentory_details").val(intentory_details);
+                //颜色图片处理
+                var color_info="";
+                jQuery("ul[id=color_img_ul] li").each(function(){
+                    var color_id =jQuery(this).attr("id");
+                    var ids="";
+                    jQuery("img[color_id="+color_id+"]").each(function(){
+                        if(typeof(jQuery(this).attr("img_id"))!="undefined" && jQuery(this).attr("img_id")!=""){
+                            var img_id =jQuery(this).attr("img_id");
+                            ids = ids+"-"+img_id;
+                        }
+                    });
+                    if(ids!=""){
+                        color_info = ids+"#"+ color_id+"|"+color_info;
+                    }
+                });
+                jQuery("#color_info").val(color_info);
+
+                var special_goods_type = jQuery("input[id='special_goods']:checked").val();
+                jQuery("#special_goods_type").val(special_goods_type);
+
+                /*验证预售商品的日期*/
+            #if(!$!ad_goods_edit)
+                if (special_goods_type==2){
+                    var start=jQuery("#rest_start_date").val();
+                    var end=jQuery("#rest_end_date").val();
+                    var ad=jQuery("#advance_date").val();
+                    var startDate = new Date(start.replace("-", "/").replace("-", "/"));
+                    var endDate = new Date(end.replace("-", "/").replace("-", "/"));
+                    var adDate = new Date(ad.replace("-", "/").replace("-", "/"));
+                    if(start=="" || end=="" || ad=="" || startDate>=endDate || endDate>=adDate || startDate>=adDate){
+                        jQuery("#ul_table li a").removeClass("this");
+                        jQuery("#spec").find("a").addClass("this");
+                        jQuery("table").hide();
+                        jQuery("table[id=goods_spec]").show();
+                        showDialog("warning","","请正确填写预售商品的日期信息！",2,"warning",3);
+                    }else{
+                        jQuery("#theForm").submit();
+                    }
+                }else{
+                    jQuery("#theForm").submit();
+                }
+            #else
+                if (special_goods_type==2){
+                    jQuery("#edit_advance_info").val("edit");
+                }
+                jQuery("#theForm").submit();
+            #end
+            }
+        }
+        function switch_detail_editor(str){
+            jQuery("a[id^='detail_']").removeClass("this");
+            jQuery("#detail_"+str).addClass("this");
+
+            if(str=="app"){
+                jQuery("#goods_details_div_app").show();
+
+                jQuery("#goods_details_div_web").hide();
+                jQuery("#goods_details_img_web").hide();
+            }else{
+                jQuery("#goods_details_div_app").hide();
+
+                jQuery("#goods_details_div_web").show();
+                jQuery("#goods_details_img_web").show();
+            }
+        }
+        //商品图片删除
+        function del_goods_image(img_id,obj){
+            if(confirm("删除后不可恢复，是否继续？")){
+                jQuery(obj).parent().parent().remove();
+                jQuery.post("$!webPath/goods_image_del",{"image_id":img_id},function(data){
+                    if(data.result==true){
+                        draw_goods_main_img();
+                        jQuery(".add_img").show();
+                    }else showDialog("msg_info","","删除失败!",2,"warning",3,'');
+                },"json");
+            }
+        }
+        function remove_goods_image(obj){
+            jQuery(obj).parent().parent().remove();
+            draw_goods_main_img();
+            jQuery(".add_img").show();
+        }
+        //根据传入新图片的URL，绘制下方小图。
+        function  draw_goods_img(img_url,img_id){
+            if(jQuery("#show_img").children().size()==5) {alert("最多可选择5张商品图片"); return;}
+            jQuery("#show_img").append("<li><span class='upload_pictures_bottom_i'><img src='"+img_url+"' img_id='"+img_id+"' title='可拖动' /></span><span class='upload_pictures_bottom_del'><a href='javascript:void(0)' onclick='del_goods_image("+img_id+",this)'><img src='$!cdnServer/resources/style/system/front/default/images/usercenter/del_left.png' title='删除图片文件' /></a><a href='javascript:void(0)' onclick='remove_goods_image(this)'><img src='$!cdnServer/resources/style/system/front/default/images/usercenter/del_right.png' title='删除图片数据'/></a></span></li>");
+            draw_goods_main_img();
+            if(jQuery("#show_img").children().size()>=5) jQuery(".add_img").hide();
+        }
+        /*绘制商品主图*/
+        function  draw_goods_main_img(){
+            if(jQuery("#show_img").children().size()==0){
+                jQuery(".upload_pictures_top_img img").attr("src","$!cdnServer/resources/style/system/front/default/images/banner_nothing.png");
+            }else if(jQuery("#show_img").children().size()>=1){
+                var img_url=jQuery(".upload_pictures_bottom_i img").attr("src");
+                jQuery(".upload_pictures_top_img img").attr("src",img_url);
+            }
+        }
+        //商品图片ajax上传
+        var upload_goods_img_mark = false;
+        function upload_goods_img(){
+            upload_goods_img_mark = true;
+            jQuery.ajaxFileUpload({url:'$!webPath/swf_upload',
+                dataType:'json',
+                fileElementId:['imgFile'],
+                fileFilter:"$!imageSuffix1",
+                success:function(data){
+                    jQuery(".add_loading").removeClass("add_loading").addClass("add_img");
+                    draw_goods_img(data.url,data.id);
+                }
+            });
+            upload_goods_img_mark = false;
+        }
+        jQuery(document).ajaxStart(function() {
+            if(upload_goods_img_mark){
+                jQuery(".add_img").removeClass("add_img").addClass("add_loading");
+            }
+        })
+        //新增规格区域显示与隐藏
+        function gs_add_show(element){
+            var p=jQuery(element).parent().parent();
+            if(p.attr("visibility")=="show"){
+                p.find("li[use=add]").hide();
+                p.attr("visibility","hide");
+            }else{
+                p.find("li[use=add]").show();
+                p.attr("visibility","show");
+            }
+        }
+        //取消
+        function cancle_gs_add(element){
+            var p=jQuery(element).parent().parent();
+            p.attr("visibility","hide");
+            p.find("li[use=add]").hide();
+        }
+        //提交
+        function submit_gs_add(element) {
+            var gs_add_name = jQuery("#gs_add_name").val();
+            var gs_add_sequence = jQuery("#gs_add_sequence").val();
+            var gs_add_type = jQuery(":radio[name=gs_add_type][checked=true]").val();
+            if(gs_add_name=="")
+                showDialog("msg_info","","规格名称不能为空",2,"warning",3,function(){});
+            else
+                jQuery.post("$!webPath/goods_specification_ajax_add", {
+                        "gc_id": "$!goods_class.id",
+                        "name": gs_add_name,
+                        "sequence": gs_add_sequence,
+                        "type": gs_add_type
+                    },
+                    function(text) {
+
+                        if (text != null) {
+                            var p=jQuery(element).parent().parent();
+                            p.attr("visibility","hide");
+                            p.find("li[use=add]").hide();
+                            var data = eval("(" + text + ")");
+
+                            jQuery(".standard_list").append("<span><a href=\"javascript:void(0)\" onclick=\"show_line(this)\" class=\"this\" use=\""+data.id+"\" visibility=\"hide\">"+data.name+"</a></span>");
+
+                            jQuery("tr[id^=gs_]").each(function(index, element) {
+                                if(data.type=="text"){
+                                    if (jQuery(element).attr("gs_sequence") > data.sequence) {
+                                        jQuery(element).before("<tr id=\"gs_" + data.id + "\" gs_name=\"" + data.name + "\"  gs_sequence=\"" + data.sequence + "\" gs_type=\"text\"><td align=\"right\" valign=\"top\">" + data.name + "：</td><td class=\"sptable\"><ul class=\"color_chose\"><li class=\"coler_chose_add_left\" style=\"display:none;\"><input use=\"add\" type=\"text\" /></li><li class=\"color_chose_add\"><a href=\"javascript:void(0)\" id=\"gs_add_" + data.id + "\" gs_id=\"" + data.id + "\">新增规格值</a></li></ul></td></tr>");
+                                        jQuery("#gs_add_name").val("");
+                                        jQuery("#gs_add_sequence").val("");
+                                        return false;
+                                    }
+                                    if (index == jQuery("tr[id^=gs_]").length - 1) {
+                                        jQuery(element).after("<tr id=\"gs_" + data.id + "\" gs_name=\"" + data.name + "\" gs_sequence=\"" + data.sequence + "\" gs_type=\"text\"><td align=\"right\" valign=\"top\">" + data.name + "：</td><td class=\"sptable\"><ul class=\"color_chose\"><li class=\"coler_chose_add_left\" style=\"display:none;\"><input use=\"add\" type=\"text\" /></li><li class=\"color_chose_add\"><a href=\"javascript:void(0)\" id=\"gs_add_" + data.id + "\" gs_id=\"" + data.id + "\">新增规格值</a></li></ul></td></tr>");
+                                        jQuery("#gs_add_name").val("");
+                                        jQuery("#gs_add_sequence").val("");
+                                        return false;
+                                    }
+                                }else{
+                                    if (jQuery(element).attr("gs_sequence") > data.sequence) {
+                                        jQuery(element).before("<tr id=\"gs_" + data.id + "\" gs_name=\"" + data.name + "\" gs_sequence=\"" + data.sequence + "\" gs_type=\"img\"><td align=\"right\" valign=\"top\">" + data.name + "：</td><td class=\"sptable\"><ul class=\"color_chose\"><li class=\"coler_chose_add_left\" style=\"display:none;\"><span class=\"img_file\">添加图片<input class=\"input_img\" id=\"gsp_add_img_" + data.id + "\" name=\"gsp_add_img_" + data.id + "\" use=\"add_img\" type=\"file\" width=\"16\" height=\"16\"  onchange=\"gs_change_img(this)\"/></span><b class=\"img_see\" style=\"display:none\"><img src=\"\" /></b><input use=\"add\" type=\"text\" /></li><li class=\"color_chose_add\"><a href=\"javascript:void(0)\" id=\"gs_add_" + data.id + "\" gs_id=\"" + data.id + "\">新增规格值</a></li></ul></td></tr>");
+                                        jQuery("#gs_add_name").val("");
+                                        jQuery("#gs_add_sequence").val("");
+                                        return false;
+                                    }
+                                    if (index == jQuery("tr[id^=gs_]").length - 1) {
+                                        jQuery(element).after("<tr id=\"gs_" + data.id + "\" gs_name=\"" + data.name + "\" gs_sequence=\"" + data.sequence + "\" gs_type=\"img\"><td align=\"right\" valign=\"top\">" + data.name + "：</td><td class=\"sptable\"><ul class=\"color_chose\"><li class=\"coler_chose_add_left\" style=\"display:none;\"><span class=\"img_file\">添加图片<input class=\"input_img\" id=\"gsp_add_img_" + data.id + "\" name=\"gsp_add_img_" + data.id + "\" use=\"add_img\" type=\"file\" width=\"16\" height=\"16\"  onchange=\"gs_change_img(this)\"/></span><b class=\"img_see\" style=\"display:none\"><img src=\"\" /></b><input use=\"add\" type=\"text\" /></li><li class=\"color_chose_add\"><a href=\"javascript:void(0)\" id=\"gs_add_" + data.id + "\" gs_id=\"" + data.id + "\">新增规格值</a></li></ul></td></tr>");
+                                        jQuery("#gs_add_name").val("");
+                                        jQuery("#gs_add_sequence").val("");
+                                        return false;
+                                    }
+                                }
+                            });
+
+                            if(jQuery("tr[id^=gs_]").length==0){
+                                if(data.type=="text"){
+                                    p.parent().parent().parent().after("<tr id=\"gs_" + data.id + "\" gs_name=\"" + data.name + "\" gs_sequence=\"" + data.sequence + "\" gs_type=\"text\"><td align=\"right\" valign=\"top\">" + data.name + "：</td><td class=\"sptable\"><ul class=\"color_chose\"><li class=\"coler_chose_add_left\" style=\"display:none;\"><input use=\"add\" type=\"text\" /></li><li class=\"color_chose_add\"><a href=\"javascript:void(0)\" id=\"gs_add_" + data.id + "\" gs_id=\"" + data.id + "\">新增规格值</a></li></ul></td></tr>");
+                                    jQuery("#gs_add_name").val("");
+                                    jQuery("#gs_add_sequence").val("");
+                                    return false;
+                                }else{
+                                    p.parent().parent().parent().after("<tr id=\"gs_" + data.id + "\" gs_name=\"" + data.name + "\" gs_sequence=\"" + data.sequence + "\" gs_type=\"img\"><td align=\"right\" valign=\"top\">" + data.name + "：</td><td class=\"sptable\"><ul class=\"color_chose\"><li class=\"coler_chose_add_left\" style=\"display:none;\"><span class=\"img_file\">添加图片<input class=\"input_img\" id=\"gsp_add_img_" + data.id + "\" name=\"gsp_add_img_" + data.id + "\" use=\"add_img\" type=\"file\" width=\"16\" height=\"16\"  onchange=\"gs_change_img(this)\"/></span><b class=\"img_see\" style=\"display:none\"><img src=\"\" /></b><input use=\"add\" type=\"text\" /></li><li class=\"color_chose_add\"><a href=\"javascript:void(0)\" id=\"gs_add_" + data.id + "\" gs_id=\"" + data.id + "\">新增规格值</a></li></ul></td></tr>");
+                                    jQuery("#gs_add_name").val("");
+                                    jQuery("#gs_add_sequence").val("");
+                                    return false;
+                                }
+                            }
+                        }
+                    },
+                    "text");
+        }
+        //显示选中的规格行
+        function show_line(element){
+            var id=jQuery(element).attr("use");
+            if(jQuery(element).attr("visibility")=="hide"){
+                jQuery(element).attr("class","this");
+                jQuery("tr[id=gs_"+id+"]").show();
+                jQuery(element).attr("visibility","show")
+            }else{
+                jQuery(element).attr("class","");
+                jQuery("tr[id=gs_"+id+"]").hide();
+                jQuery(element).attr("visibility","hide")
+            }
+        }
+        function gs_change_img(element){
+            var src=getFullPath(jQuery(element)[0]);
+            if(navigator.appName=="Microsoft Internet Explorer"){//ie
+                element.select();
+                src=document.selection.createRange().text;
+                jQuery(element).parent().parent().find(".img_see").attr("style","");
+                jQuery(element).parent().parent().find(".img_see").find("img").attr("src",src);
+            }else{//其他浏览器
+                var file = element.files[0];
+                if(window.FileReader) {
+                    var fr = new FileReader();
+                    fr.onloadend = function(e) {
+                        src = e.target.result;
+                        jQuery(element).parent().parent().find(".img_see").attr("style","");
+                        jQuery(element).parent().parent().find(".img_see").find("img").attr("src",src);
+                    };
+                    fr.readAsDataURL(file);
+                }
+            }
+        }
+
+        if(navigator.appName=="Microsoft Internet Explorer"){
+            <!--ajax上传start-->
+            jQuery(document).ready(function(e) {
+                jQuery("#HTML5UplaodDiv").remove();
+                jQuery(".cover").click(function(){
+                    jQuery(".cover_updown").slideToggle();
+                });
+            #if($!albums.size() < 5)
+                var ulHeight = $!albums.size() *38;
+                jQuery(".cover_updown ul").height(ulHeight);
+            #end
+            })<!--end-->
+            var upload_img_show = function(){
+                jQuery(".album_white_content").fadeIn();
+                jQuery(".album_black_overlay").fadeIn();
+            }
+            var upload_album_img = function(){
+                var album_id = jQuery("#album_id").val();
+                jQuery("#imageInfo").hide();
+                jQuery("#load_word").show();
+                jQuery.ajaxFileUpload({url:'$!webPath/goods_detail_image_upload',
+                    dataType:'json',
+                    fileElementId:['fileImage'],
+                    data:{ajaxUploadMark:true,album_id:album_id},
+                    fileFilter:"$!imageSuffix1",
+                    success:function(data){
+                        if(data!=""){
+                            var html="<img src='/"+data.url+"' />";
+                            if(jQuery("#goods_details_div_web").is(":hidden")){
+                                jQuery(".phone_left_center").find("ul").append("<li><span class='img'><i>"+html+"</i></span><span class='edit'><i><img  use='app_detail_move' src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_move.png'/></i><i><img  use='app_detail_del'src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_dele.png'/></i></span></li>");
+                                app_detail_preview();
+                            }else
+                                editor.insertHtml(html);
+
+                            jQuery(".empty").html("").hide();
+                            jQuery(".pic_upload_list .add_pic").remove();
+                            jQuery(".pic_upload_list").show().append("<dl style='height:140px;'><dt><img src='/"+data.url+"' /></dt></dl>");
+                            jQuery(".pic_upload_list").append("<dl class='add_pic' style='height:140px;'><dd><div class='file_01' style='height:140px;'><input style='font-size:100px;' class='ip_file' type='file'  id='fileImage'  name='fileImage'  onchange='upload_album_img()'  style='cursor:pointer' /><input class='ip_btn' type='button'/></div></dd></dl>");
+                            jQuery("#load_word").hide();
+                        }else{
+                            jQuery("#load_word").html("<b style='color:#F60;'>上传失败！</b>");
+                            jQuery(".load").fadeOut(3000);
+                        }
+                        jQuery("#imageInfo").show();
+                    },
+                });
+            }
+            var upload_img_cancel = function(){;
+                jQuery(".album_white_content").fadeOut();
+                jQuery(".album_black_overlay").fadeOut();
+                jQuery(".pic_upload_list").html("").hide();
+                jQuery(".empty").show();
+                jQuery(".empty").html("<div class='file_01'><input style='font-size:100px;' class='ip_file' type='file' id='fileImage'  name='fileImage'  onchange='upload_album_img()' /><input class='ip_btn' type='button'/></div><span></span>");
+            }
+            jQuery(document).ajaxStart(function() {
+                jQuery("#imageInfo").hide();
+                jQuery("#load_word").show();
+            });
+            <!--ajax上传start-->
+        }else{
+            <!--HTML5上传start-->
+            var fileInput ;
+            var upButton ;
+            var fileFilter = [];//文件数组
+            var dragDrop ;
+            var fileProgressBar ;//上传进度条
+            var fileUploadFailureCount = 0;
+            jQuery(document).ready(function(e) {
+                jQuery("#ajaxUplaodDiv").remove();
+                fileInput = jQuery("#fileImage").get(0);
+                upButton = jQuery("#fileSubmit").get(0);
+                dragDrop = jQuery(".pic_upload_bd").get(0);
+                jQuery(".cover").click(function(){
+                    jQuery(".cover_updown").slideToggle();
+                });
+            #if($!albums.size() < 5 &&$!albums.size()>0)
+                var ulHeight = $!albums.size() *38;
+                jQuery(".cover_updown ul").height(ulHeight);
+            #end
+                init();
+            });<!--end-->
+            //文件上传
+            function funUploadFile() {
+                if(!fileFilter.length>0){
+                    return;
+                }
+                jQuery(".pic_upload_bottom ul").hide();
+                jQuery(".load").html("<div class='load_word' id='load_word'>图片上传中，请不要关闭浏览器...<span style='width:0px;background-color:#F60; height:2px;'></span></div>").show();
+                fileProgressBar = Math.floor( 990 /(fileFilter.length) );
+                for (var i = 0, file; file = fileFilter[i]; i++) {
+                    (function(file) {
+                        var xhr = new XMLHttpRequest();
+                        if (xhr.upload) {
+                            // 上传中
+                            xhr.upload.addEventListener("progress",function(e){funProgress(file, e.loaded, e.total)},false);
+
+                            // 开始上传
+                            xhr.open("POST","$!webPath/goods_detail_image_upload", true);
+                            var formData = new FormData();
+                            formData.append('fileImage',file);
+                            formData.append("album_id",jQuery("#album_id").val());
+                            xhr.send(formData);
+
+                            // 文件上传成功或是失败
+                            xhr.onreadystatechange = function(e) {
+                                if (xhr.readyState == 4) {
+                                    if (xhr.status == 200) {
+                                        if(xhr.responseText==''){
+                                            funUploadFailure(file);
+                                        }else{
+                                            var jsongstr=eval("("+xhr.responseText+")");
+                                            var html="<img src='$!webPath/"+jsongstr.url+"' />";
+                                            if(jQuery("#goods_details_div_web").is(":hidden")){
+                                                jQuery(".phone_left_center").find("ul").append("<li><span class='img'><i>"+html+"</i></span><span class='edit'><i><img  use='app_detail_move' src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_move.png'/></i><i><img  use='app_detail_del'src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_dele.png'/></i></span></li>");
+                                                app_detail_preview();
+                                            }else{
+                                                try {
+                                                    editor.insertHtml(html);
+                                                } catch(err) {}
+
+                                            }
+                                            funDeleteFile(file);
+                                        }
+                                        jQuery("#load_word span").width(jQuery("#load_word span").width()+fileProgressBar);
+                                        if (!fileFilter.length) {
+                                            setTimeout(function(){funUploadComplete()},1000);
+                                        }
+                                    }
+                                }
+                            };
+
+                        }
+                    })(file);
+                }
+            }
+            function funUploadFailure(fileTarget){
+                jQuery("#uploadImageList_"+fileTarget.index).find("dd:last").html("<span class='bar_gray'><i style='width:100%;'></i><strong class='bg_red'>上传失败！</strong></span>");
+                fileUploadFailureCount += 1;
+                var arrFile = [];
+                for (var i = 0, file; file = fileFilter[i]; i++) {
+                    if (file != fileTarget) {
+                        arrFile.push(file);
+                    }
+                }
+                fileFilter = arrFile;
+            }
+            function funUploadComplete() {
+                if(fileUploadFailureCount==0){
+                    jQuery("#load_word").html("<b style='color:#F60;'>已完成上传</b>");
+                }else{
+                    jQuery("#load_word").html("<b style='color:#F60;'>有"+fileUploadFailureCount+"张图片上传失败！</b>");
+                    fileUploadFailureCount = 0;
+                }
+                jQuery(".load").fadeOut(3000);
+                jQuery(".pic_upload_bottom ul").show();
+                jQuery(".empty").show();
+                jQuery(".pic_upload_list").hide();
+                funUploadImageInfoShow();
+            }
+            //进度
+            function funProgress(file, loaded, total){
+                var eleProgress = jQuery("#uploadImageList_" + file.index).find("dd:last");
+                var percent = (loaded / total * 100).toFixed(2);
+                eleProgress.html("<span class='bar_gray'><i style='width:"+percent+"%;'></i><strong>"+percent+"%</strong></span>");
+            }
+            function funUploadImageInfoShow(){
+                var imageCount = fileFilter.length;
+                if(imageCount==0){
+                    jQuery("#imageInfo").html("");
+                    return;
+                }
+                var imageAllSize = 0 ;
+                for(i=0;i<imageCount;i++){
+                    imageAllSize = fileFilter[i].size + imageAllSize;
+                }
+                jQuery("#imageInfo").html("已选择"+imageCount+"张图片，总大小"+(imageAllSize/1048576).toFixed(2)+"MB");
+            }
+            //删除对应的文件
+            function funDeleteFile(fileDelete) {
+                var arrFile = [];
+                for (var i = 0, file; file = fileFilter[i]; i++) {
+                    if (file != fileDelete) {
+                        arrFile.push(file);
+                    } else {
+                        jQuery("#uploadImageList_" + file.index).fadeOut();
+                    }
+                }
+                fileFilter = arrFile;
+                if(fileFilter.length==0){
+                    jQuery(".empty").show();
+                    jQuery(".pic_upload_list").hide();
+                }
+                funUploadImageInfoShow();
+                return this;
+            };
+            //选择文件组的过滤方法
+            function filter(files) {
+                var arrFiles = [];
+                var configFilesize = ("$!{config.imageFilesize}" - 0 )*1024;
+                for (var i = 0, file; file = files[i]; i++) {
+                    if (file.type.indexOf("image") == 0) {
+                        if (file.size >= configFilesize) {
+                            alert('您这张"'+ file.name +'"图片大小过大，应小于$!{config.imageFilesize}k');
+                        } else {
+                            arrFiles.push(file);
+                        }
+                    } else {
+                        alert('文件"' + file.name + '"不是图片。');
+                    }
+                }
+                return arrFiles;
+            };
+            //获取选择文件，file控件或拖放
+            function funGetFiles(e) {
+                // 取消鼠标经过样式
+                funDragHover(e);
+                // 获取文件列表对象
+                var files = e.target.files || e.dataTransfer.files;
+                //继续添加文件
+                fileFilter = fileFilter.concat(filter(files));
+                if(fileFilter.length==0){
+                    return;
+                }
+                funUploadImageInfoShow();
+                funDealFiles();
+            };
+            //选中文件的处理与回调
+            function funDealFiles() {
+                for (var i = 0, file; file = fileFilter[i]; i++) {
+                    //增加唯一索引值
+                    file.index = i;
+                }
+                //执行选择回调
+                funAllDrawing(fileFilter);
+            };
+            function funAllDrawing(files) {//绘制图片预览图
+                var html = '', i=0;
+                jQuery(".empty").hide();
+                jQuery(".pic_upload_list").show().html("");
+                var funAppendDrawing = function(){
+                    file = files[i];
+                    if(file){
+                        var reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = function(e) {
+                            html = '<dl id="uploadImageList_'+i+'"><dt><img src="'+e.target.result+'" /></dt><dd>'+file.name+'</dd><dd class="edit"><a class="del" href="javascript:void(0);" mark="'+i+'"></a></dd><dd class="bar"></dd></dl>';
+                            jQuery(".pic_upload_list").append(html);
+                            i++;
+                            funAppendDrawing();
+                        };
+                    }else{
+                        html = '<dl class="add_pic"><dd><div class="file_01"><input class="ip_btn" type="button" onclick="funOpenBrowse()"/></div></dd></dl>';
+                        jQuery(".pic_upload_list").append(html);
+                        jQuery(".del").click(function() {
+                            funDeleteFile(files[parseInt($(this).attr("mark"))]);
+                            return false;
+                        });
+                    }
+                };
+                funAppendDrawing();
+            };
+            //文件拖放
+            function funDragHover(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                this[e.type === "dragover"? "onDragOver": "onDragLeave"].call(e.target);
+                return this;
+            };
+            function onDragOver() {
+                jQuery(this).addClass("bg_drag");
+            };
+            function onDragLeave() {
+                jQuery(this).removeClass("bg_drag");
+            };
+            function init() {
+                dragDrop.addEventListener("dragover", function(e) { funDragHover(e); }, false);
+                dragDrop.addEventListener("dragleave", function(e) { funDragHover(e); }, false);
+                dragDrop.addEventListener("drop", function(e) {funGetFiles(e); }, false);
+                fileInput.addEventListener("change", function(e) {funGetFiles(e);}, false);
+                upButton.addEventListener("click", function(e) {funUploadFile(e); }, false);
+            };
+            var funOpenBrowse = function(){
+                var ie=navigator.appName=="Microsoft Internet Explorer" ? true : false;
+                if(ie){
+                    document.getElementById("fileImage").click();
+                    document.getElementById("fileImage").value=document.getElementById("fileImage").value;
+                }else{
+                    var a=document.createEvent("MouseEvents");//FF的处理
+                    a.initEvent("click", true, true);
+                    document.getElementById("fileImage").dispatchEvent(a);
+                }
+
+            }
+            var upload_img_show = function(){
+                jQuery(".album_white_content").fadeIn();
+                jQuery(".album_black_overlay").fadeIn();
+            }
+            var upload_img_cancel = function(){;
+                jQuery(".album_white_content").fadeOut();
+                jQuery(".album_black_overlay").fadeOut();
+                jQuery(".pic_upload_list").hide();
+                jQuery(".empty").show();
+                jQuery("#imageInfo").html("");
+                fileFilter = [];
+            }
+            <!--切换相册-->
+            function album_select(album_id,obj){
+                jQuery("#album_id").val(album_id);
+                jQuery(".cover_updown").slideToggle();
+                jQuery(".cover img").attr("src",jQuery(obj).find("img").attr("src"));
+                jQuery(".cover strong").html(jQuery(obj).find("strong").text());
+            }
+            <!--HTML5上传end-->
+        }
+        function app_album_show(){
+            jQuery(".phone_uploading_center").fadeIn();
+            jQuery(".album_black_overlay").fadeIn();
+            jQuery.each(jQuery("img[use='app_img']"),function(index,item){
+                jQuery(item).parent().parent().find("span").hide();
+            });
+        }
+        function app_album_hide(){
+            jQuery(".phone_uploading_center").fadeOut();
+            jQuery(".album_black_overlay").fadeOut();
+            jQuery("#app_detail_imgs_src").val("");
+            jQuery("#app_detail_imgs_num").html("0");
+        }
+        function app_detail_imgs_submit(){
+            jQuery(".phone_uploading_center").fadeOut();
+            jQuery(".album_black_overlay").fadeOut();
+            var app_detail_imgs_src=jQuery("#app_detail_imgs_src").val();
+            jQuery.each(app_detail_imgs_src.split(","),function(index,value){
+                if(value!=""){
+                    var html="<img width='100% ' src='"+value+"'>";
+                    jQuery(".phone_left_center").find("ul").append("<li><span class='img'><i>"+html+"</i></span><span class='edit'><i><img  use='app_detail_move' src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_move.png'/></i><i><img  use='app_detail_del'src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_dele.png'/></i></span></li>");
+                    app_detail_preview();
+                }
+            });
+            jQuery("#app_detail_imgs_src").val("");
+            jQuery("#app_detail_imgs_num").html("0");
+        }
+        function app_add_text(){
+            jQuery(".phone_left_center").find("ul").append("<li><span class='word'><textarea name='' cols='' rows=''></textarea></span><span class='edit'><i><img  use='app_detail_move' src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_move.png'/></i><i><img  use='app_detail_del'src='$!cdnServer/resources/style/system/front/default/images/usercenter/phone_dele.png'/></i></span></li>");
+        }
+        function app_detail_preview(){//手机详情预览
+            jQuery(".phone_right").find("ul").empty();
+            jQuery(".phone_left_center").find("li").each(function(index, element) {
+                if(jQuery(element).find(".word").length>0){
+                    var str=jQuery(element).find("textarea").val();
+                    if(str!="")
+                        jQuery(".phone_right").find("ul").append("<li>"+str+"</li>");
+                }else{
+                    var str=jQuery(element).find(".img").find("img").attr("src");
+                    jQuery(".phone_right").find("ul").append("<li><img src='"+str+"' width='100%'></li>");
+                }
+            });
+
+        }
+        function app_detail_imgs_select(element){
+            var selected_img=jQuery(element).find("span");
+            var src=jQuery(element).find("img[use='app_img']").attr("bigsrc");
+            var app_detail_imgs_src=jQuery("#app_detail_imgs_src").val();
+            if(typeof(app_detail_imgs_src)=="undefined")
+                app_detail_imgs_src="";
+
+            if(selected_img.is(":hidden")){
+                app_detail_imgs_src=app_detail_imgs_src+src+",";
+                selected_img.show();
+            }else{
+                app_detail_imgs_src=app_detail_imgs_src.replace(src+",");
+                selected_img.hide();
+            }
+            jQuery("#app_detail_imgs_src").val(app_detail_imgs_src);
+            var num=app_detail_imgs_src.split(",").length-1;
+            jQuery("#app_detail_imgs_num").html(num);
+        }
+        //添加商品标签
+        function add_goodstag(){
+            var goodstag=jQuery("#goodstag").val();
+            if(goodstag!=""){
+                var album_id = jQuery("#app_detail_album").val();
+                jQuery.post("$!webPath/add_goodstag",{"tagname":goodstag},function(text){
+                    if (text != null) {
+                        var data = eval("(" + text + ")");
+                        jQuery("#goodstag").val("");
+                        jQuery("#taglist").append("<li goodstag_id='"+data.id+"'><span>"+data.name+"</span><i><a href='javascript:void(0)' onclick='deletetag("+data.id+")'>x</a></i></li>");
+                    }
+                },"json");
+            }
+        }
+        function deletetag(id){
+            jQuery("li[goodstag_id='"+id+"']").remove();
+        }
+        //新增商品属性
+        function gtp_show(){
+            if(jQuery("#gtp_add").is(":hidden")){
+                jQuery("#gtp_add_a").text("关闭新增");
+                jQuery("#gtp_add").show();
+                jQuery("#gtp_add").find("table").show();
+            }else{
+                jQuery("#gtp_add_a").text("新增属性");
+                jQuery("#gtp_add").hide();
+                jQuery("#gtp_add").find("table").hide();
+            }
+        }
+        //保存属性
+        function saveType(){
+            var params="";
+            var count=0;
+            jQuery("tr[id=goods_type_property_]").each(function(){
+                var name=jQuery(this).find("input[id^=gtp_name_]").val();
+                var value=jQuery(this).find("input[id^=gtp_value]").val();
+                if(name!=""&&value!=""){
+                    count++;
+                    params=params+"&"+name+"/"+value+"/"+jQuery(this).find("input[id^=gtp_sequence]").val();
+                }
+            });
+            jQuery.post('$!webPath/ajax_save_gtp',{"params":params,"count":count,"goodsType":"$!goods_class.goodsType.id","goodsclass":"$!goods_class.id"},
+                function(text){
+                    jQuery("#mark").before(text);
+                    jQuery("#gtp_add").hide();
+                    jQuery("tr[id=goods_type_property_]").remove();
+                    jQuery("#gtp_add_a").text("新增属性");
+                    loadeach();
+                },"text")
+
+        }
+        //属性加载实现点击其他位置隐藏下拉
+        function loadeach(){
+            jQuery(".goods_brand_input").each(function(){
+                var s=jQuery(this);
+                jQuery("body").live("click",function(i){
+                    if(!jQuery(i.target).parents(".goods_brand_input").first().is(s)){
+                        s.find(".goods_brand_input_list").hide();
+
+                    }
+                });
+            });
+
+        }
+        //显示预售信息
+        function advance_sale(){
+            var status= jQuery("#advance_sale_list").is(":hidden");//是否隐藏
+            if(status){//隐藏，需显示
+                jQuery("#advance_sale_list").show();
+                jQuery("#advance_sale_no_list").hide();
+                jQuery("#advance_sale_hide").show();
+                jQuery("#advance_sale_show").hide();
+            }else{//显示，需隐藏
+                jQuery("#advance_sale_list").hide();
+                jQuery("#advance_sale_no_list").show();
+                jQuery("#advance_sale_hide").hide();
+                jQuery("#advance_sale_show").show();
+            }
+        }
+    </script>
+    <style type="text/css">
+        label.error {
+            color: #F00;
+            margin-left: 3px;
+        }
+        input.error {
+            border: 2px solid #F00;
+        }
+    </style>
+</head>
+<body>
+
+
+<form action="$!webPath/distribution_agreement_save" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id"/>
+    <div class="cont">
+        <h1 class="seth">认证管理</h1>
+        <div class="nav_list">
+
+            <ul>
+                #if($!flag)
+                <!--<li> <a href="$!webPath/distribution_grade_save"><b>新增协议</b></a></li>-->
+                <li> <a href="" class="this"><b>新增认证信息</b></a></li>
+                #else
+                <li> <a href="" class="this"><b>编辑认证信息</b></a></li>
+                #end
+            </ul>
+
+        </div>
+        #if($!flag)
+        <div class="edit">
+            <div class="editul setcont" id="base">
+                <ul class="set1" >
+                    <li class="setcont_bg"> <strong class="sred">*</strong>姓名：</li>
+                    <li >
+                        <input name="name" type="text" id="collage_one" value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>联系方式：</li>
+                    <li>
+                        <input name="phone" type="text" id="collage_two" value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>身份证号码：</li>
+                    <li>
+                        <input name="card" type="text" id="collage_three" value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>身份证照片(正)：</li>
+                    <li>
+                        <input name="" type="text" id="collage_four " value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>身份证照片(反)：</li>
+                    <li>
+                        <input name="" type="text" id="collage_five " value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>所属单位：</li>
+                    <li>
+                        <input name="company" type="text" id="collage_six " value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>所属部门：</li>
+                    <li>
+                        <input name="department" type="text" id="collage_seven  " value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>职位：</li>
+                    <li>
+                        <input name="position" type="text" id="collage_eight " value=""/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>备注：</li>
+                    <li>
+                        <input name="remark" type="text" id="collage_nine" value=""/>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="editul setcont">
+            </div>
+        </div>
+        #else
+        <div class="edit">
+            <div class="editul setcont" id="base">
+                <ul class="set1" >
+                    <li class="setcont_bg"> <strong class="sred">*</strong>姓名：</li>
+                    <li >
+                        <input name="name" type="text" id="collage_one_a" value="$!{name}"/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>联系方式：</li>
+                    <li>
+                        <input name="phone" type="text" id="collage_two_b" value="$!{phone}"/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>身份证号码：</li>
+                    <li>
+                        <input name="card" type="text" id="collage_three_c" value="$!{card}"/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>所属单位：</li>
+                    <li>
+                        <input name="company" type="text" id="collage_six_d" value="$!{company}"/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>所属部门：</li>
+                    <li>
+                        <input name="department" type="text" id="collage_seven_e" value="$!{department}"/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>职位：</li>
+                    <li>
+                        <input name="position" type="text" id="collage_eight_f" value="$!{position}"/>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>备注：</li>
+                    <li>
+                        <input name="remark" type="text" id="collage_nine_g" value="$!{remark}"/>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="editul setcont">
+            </div>
+        </div>
+        #end
+    </div>
+    <div class="submit">
+        #if($!view)
+        #else
+        <!--<span class="pad80"> <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/></span>-->
+        <span class="pad80"> <input name="" type="submit" value="保存" style="cursor:pointer;"/></span>
+        #end
+        <a href="$!webPath/distribution_agreement_list"><span class="pad80"> <input name="" type="button" value="返回" style="cursor:pointer;" /></span></a>
+    </div>
+</form>
+
+</body>
+</html>

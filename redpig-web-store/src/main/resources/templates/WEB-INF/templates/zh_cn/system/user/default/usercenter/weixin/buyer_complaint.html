@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>我的投诉 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" type="text/css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+	var currentPage = 2;
+jQuery(document).ready(function(){
+	var  ret = 1;
+	var totalPage = "$!totalPage";
+	if(totalPage>1){
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+		if(currentPage<=totalPage){
+		jQuery("#loading").hide();
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/buyer/complaint',
+				   data:{"currentPage":currentPage},
+				beforeSend:function(){
+				  currentPage = currentPage+1;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				  ret = 2;
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+				 ret = 1;
+	             if(data != ""){ 
+				  	jQuery(".complain_list").append(data);
+			 	 }else{
+					 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+		 }else{
+		 	if(currentPage>totalPage){
+						jQuery("#loading_none").show();
+					}else{
+						jQuery("#loading_none").hide();
+				}
+		 }
+	 }
+	});
+	}
+});<!--end-->
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+		<div class="user_c_title">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>我的投诉
+		<a class="per_c_icon" href="$!webPath/wap/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a>
+	</div>
+        
+        <div class="complain_nav">
+        	<ul class="c_nav_ul">
+            	<li><a href="$!webPath/wap/buyer/order_complaint_list">商品列表</a></li>
+                <li class="this"><a href="$!webPath/wap/buyer/complaint">我的投诉</a></li>
+            </ul>
+        </div>
+        #if($!objs.size()>0)
+        <div class="complain_list">
+        #foreach($obj in $objs)
+        #foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.of.goods_info"))
+        #if($!{velocityCount}=="1")
+        #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+        #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+        #set($goods_id = "$!{map.get('goods_id')}")	
+       		    #if($!obj.status==0)
+                #set($status="新投诉")
+                #end
+                #if($!obj.status==1)
+                #set($status="待申诉")
+                #end
+                #if($!obj.status==2)
+                #set($status="对话中")
+                #end
+                #if($!obj.status==3)
+                #set($status="待仲裁")
+                #end
+                #if($!obj.status==4)
+                #set($status="已完成")
+                #end
+                
+        	<div class="complain_item">
+            	<a href="$!webPath/wap/buyer/complaint_view?id=$!obj.id">
+                    <div class="goods_content">
+                        <div class="goods_pic"><img src="$!img"></div>
+                        <div class="store_name">#if($!obj.to_user)$!obj.to_user.userName #else 平台商 #end</div>
+                        <div class="c_state" >
+                            <span class="state">$!status</span>
+                             <span class="time">$!CommUtil.formatLongDate($!obj.addTime)</span>
+                        </div>
+                    </div>
+                 </a>
+            </div>
+         #end
+         #end
+         #end
+        </div>
+        #else
+        <div class="main">
+          <div class="mt50" style="height:49px;"></div>
+          <div class="error_page1">
+            <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+            <p>暂无记录！</p>
+          </div>
+        </div>
+        #end
+<div class="loading" id="loading" style="display:none">
+<ul>
+  <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+  <li>正在加载....</li>
+</ul>
+</div>
+<div class="loading" id="loading_none" style="display:none">
+<ul>
+  <li>没有更多了....</li>
+</ul>
+</div>
+        
+</div>
+</body>
+</html>

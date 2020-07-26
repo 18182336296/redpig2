@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+  var w=jQuery("#no li").length-1;
+  var i=jQuery("#a_"+$act.id).index();
+  var a=jQuery("#a_"+$act.id).index()-1;	
+  var b=jQuery("#a_"+$act.id).index()+1;
+  //判断多少个活动，少于三个需要显示暂无
+  if(w<1){
+	jQuery("#ul").append("<li class='active_nav_left'><span>暂无</span><b> 活动时间xx-xx-xx 至 xx-xx-xx</b><i class='active_nav_left'></i></li>");
+    jQuery("#no li").eq(i).clone(true).appendTo("#ul");
+	jQuery("#ul").append("<li class='active_nav_left'><span>暂无</span><b> 活动时间xx-xx-xx 至 xx-xx-xx</b><i class='active_nav_left'></i></li>");
+	jQuery("#prev").hide();
+	jQuery("#next").hide();
+  }else if(w==1){
+	  jQuery("#no li").eq(a).clone(true).appendTo("#ul");
+	  jQuery("#no li").eq(i).clone(true).appendTo("#ul");
+	  jQuery("#ul").append("<li class='active_nav_left'><span>暂无</span><b> 活动时间xx-xx-xx 至 xx-xx-xx</b><i class='active_nav_left'></i></li>");
+	  jQuery("#next").hide();
+  }else {
+   jQuery("#no li").eq(a).clone(true).appendTo("#ul");
+	jQuery("#no li").eq(i).clone(true).appendTo("#ul");
+	if(i==w){
+	 jQuery("#no li").eq(0).clone(true).appendTo("#ul");
+	}else{
+	 jQuery("#no li").eq(b).clone(true).appendTo("#ul");
+	}
+  }
+  //给中间的活动加this
+  jQuery("#ul li").eq(1).attr("class","active_nav_left this");
+  jQuery(".img_cspan img").lazyload({effect:"fadeIn",width:226,height:226});
+});
+ 
+  
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+#if($!op)
+$!httpInclude.include("/nav1?op=activity")
+#else
+$!httpInclude.include("/nav1?op=activity&id=$!{act.id}")
+#end
+
+<div class="active_main">
+<!-- 活动导航 start -->
+<div class="active_main_nav">
+	<div class="active_main_nav_c">
+    	<ul>
+        	<li id="prev" class="active_nav_left"><a class="prev" href="javascript:void(0);"></a></li>
+            <li id="next" class="active_nav_right"><a class="next" href="javascript:void(0);"></a></li>
+        </ul>
+    </div>
+</div>
+<!-- 活动导航 end -->
+<!-- 活动主体部分 start -->
+<div class="active_main_center">
+<div class="active_nav">
+
+	<div class="active_nav_center">
+    	<ul id="ul">
+      
+        </ul>
+    </div>
+</div>
+<div class="main">
+ <div class="active_page">
+  #if($!act)
+    <div class="active_banner">
+      <div class="active_b_left"> <span class="active_b_big"><img src="$!imageWebServer/$!act.ac_acc.path/$!act.ac_acc.name" width="950" height="320" /></span></div>
+      <div class="active_b_right"> <b> <img src="$!imageWebServer/$!act.ac_acc3.path/$!act.ac_acc3.name" width="250" height="320" /> </b>
+        <h3>活动详情</h3>
+        <p><a  href="javascript:void(0);">$!act.ac_content</a> </p>
+      </div>
+    </div>
+  #end  
+    <form id="ListForm" name="ListForm" action="" method="post">
+      <div class="active_pro_hid">
+       #foreach($!obj in $!objs)
+        #if($!obj.ag_goods.goods_main_photo)
+        #set($bigimg="$!imageWebServer/$!{obj.ag_goods.goods_main_photo.path}/$!{obj.ag_goods.goods_main_photo.name}")
+        #set($img="$!{bigimg}_middle.$!{obj.ag_goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        #set($goods_url="$!webPath/items_$!{obj.ag_goods.id}")
+        #if($!config.second_domain_open && $!obj.ag_goods.goods_type==1 && $!obj.ag_goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.ag_goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.ag_goods.id}")
+        #end
+        
+        <div class="active_pro_one">
+          <ul>
+            <li class="active_pro_img">
+              <a href="$!{goods_url}">
+                 <span class="img_cspan">
+                   <p>
+                     <img original="$!{img}" src="$!cdnServer/resources/style/common/images/loader.gif" width="28" height="28"  onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" />
+                   </p>
+                 </span>
+                 <em></em>   
+              </a> 
+               #set($min=$activityViewTools.getA_Prices("$!obj.ag_goods.id")) 
+              </li>
+              <li class="active_pro_name">
+               <a href="$!goods_url">$!obj.ag_goods.goods_name</a>
+              </li>
+              <li class="active_pro_price">
+                <b>销量：$!obj.ag_goods.goods_salenum</b>最低价：<span><s>¥</s>$min</span>
+              </li>
+          </ul>
+        </div>
+        #end 
+        
+        #if($!objs.size()==0||!$!objs)
+        <div class="main_list_box">
+          <div class="main_list_none"> <span class="main_none_box"> <i></i>
+            <p> 抱歉，没有相应的活动商品！<a href="$!webPath/index">返回商城首页</a></p>
+            </span></div>
+        </div>
+        #end </div>
+      <div class="fenye"><span>$!gotoPageFormHTML</span></div>
+      <input id="currentPage" name="currentPage" type="hidden" value="$!currentPage"/>
+    </form>
+    <ul id="no" style="display:none" >
+#foreach($obj in $acts)        
+<li id="a_$!obj.id" class="active_nav_left">
+<a href="$!webPath/activity/index_$!{obj.id}">
+<span>$!{obj.ac_title}</span><b> 活动时间：$!CommUtil.formatShortDate($!obj.ac_begin_time) 至 $!CommUtil.formatShortDate($!obj.ac_end_time)</b><i class="active_nav_left"></i></a></li>
+#end
+</ul>
+  </div>
+
+  </div>
+  </div>
+<!-- 活动主体部分 end -->
+  $!httpInclude.include("/footer") 
+  </div>
+   $!httpInclude.include("/toolbar") 
+</body>
+</html>

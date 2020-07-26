@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!obj.gg_name - 团购信息 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!obj.gg_name" />
+<meta name="description" content="$!obj.gg_name" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/group.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery.js" type="text/javascript"></script>
+<script src="$!cdnServer/resources/js/groupBuying.js" type="text/javascript"></script>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath//resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script type="text/javascript">
+function timeCount(remain_id){
+   function _fresh(){
+      var nowDate = new Date(),                                    //当前时间
+      endDate = new Date($('#'+remain_id).attr('endtime')),    //截止时间
+      totalS  = parseInt((endDate.getTime() - nowDate.getTime()) / 1000);    
+      _day    = parseInt(totalS / 3600 / 24);
+      _hour   = parseInt((totalS / 3600) % 24);
+      _minute = parseInt((totalS / 60) % 60);
+      _second = parseInt(totalS % 60);
+     jQuery('#'+remain_id).html('<em>' + _day +'</em>天<em>' + _hour + '</em>小时<em>' + _minute + '</em>分<em>' + _second + '</em>秒');
+     if( totalS <= 0){
+       jQuery('#'+remain_id).html('该团购已结束');
+       clearInterval(sh);
+     }
+  }
+  _fresh();
+  var sh = setInterval(_fresh,1000);
+}
+jQuery(document).ready(function(){
+  #if($!obj.group_status==1)
+  timeCount("time_down_info");
+  #else
+  jQuery('#'+remain_id).html('该团购已结束');
+  #end
+  jQuery("#group_click li").click(function(){
+				jQuery("#group_click li").removeClass("this");						   
+				jQuery(this).addClass("this");
+				jQuery(".group_introbox").hide();
+				jQuery(".group_introbox").eq(jQuery(this).index()).show();
+				var url=jQuery(this).attr("url");
+				var mark=jQuery(this).attr("mark");
+				jQuery.post(url,"",function(data){
+					jQuery("#"+mark).empty();
+					jQuery("#"+mark).append(data);
+	 									},"text");
+										   });
+});
+function ajaxPage(url,currentPage,obj){
+  jQuery.ajax({type:'POST',url:url,data:{"currentPage":currentPage,"goods_id":"$!obj.gg_goods.id","id":"obj.gg_goods.goods_store.id"},
+			  beforeSend:function(){
+			   },
+			  success:function(data){
+                 jQuery(".group_introbox").not("#info").empty();						
+                 jQuery(".group_introbox").not("#info").append(data);	
+				 }
+		})
+  }
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/group/head")
+
+<div class="group_nav">
+<div class="top_nav_Box">
+    	<div class="nav_title">
+        	<h3>全部团购分类</h3>
+            <a href="" class="title_row"><img src="$!cdnServer/resources/style/system/front/default/images/group/changecity_row.png"></a>
+            <div class="left_nav"> 
+    #foreach($gc in $gcs)
+    #set($temp=$velocityCount)
+	#set($temp=($temp - 1)*56)
+      <div class="left_navitem">
+        <div class="first_level">
+          <dl>
+            <dt class="title"> <a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc.id">$!gc.gc_name</a> </dt>
+            #foreach($recom in $groupViewTools.getRecom($!gc.id))
+            <dd><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!recom.id">$recom.gc_name</a></dd>
+          	#end
+          </dl>
+        </div>
+        <div class="second_level" #if(${temp}!=0) style="top:-${temp}px;" #end > 
+        	#foreach($gc2 in $!gc.childs)
+            <div class="second_level_item" style="display:inline-block;">
+              <h4 class="second_title">$!gc2.gc_name</h4>
+              #set ($item=$!groupViewTools.getItems($!gc2.childs))<!--分割list-->
+              #if($!item.get("0"))
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("0"))
+                  <li><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc3.id">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("1").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("1"))
+                  <li><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc3.id">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("2").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("2"))
+                  <li><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc3.id">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              </div>
+              #end
+         </div>
+      </div>
+      #end 
+      </div>
+            
+        </div>
+    <div class="nav_items">
+      <ul>
+        #set($nums=[1 .. $groupViewTools.getButtonSize("$!gi.gid_nav_word_list")])
+        #foreach($o in $nums)
+        <li> #foreach($wc in $groupViewTools.getInfo_list("$!gi.gid_nav_word_list","$o"))<a href="$!wc.href">$!wc.name</a>#end </li>
+        #end 
+      </ul>
+    </div>
+    </div>
+    </div>
+
+<div class="group_bg" style="clear:left;">
+<div class="main">
+<div class="group_default">
+<div class="group_default_left">
+<div class="group_defleft_top">
+<h2 class="group_h2"><a href="javascript:void(0);">$!obj.gg_name</a></h2>
+<div class="group_defmid">
+<div class="group_defmid_img"><span class="img_cspan"><p><img src="$!imageWebServer/$!obj.group_acc.path/$!obj.group_acc.name" width="440" height="292" /></p></span></div>
+<div class="group_defmid_right">
+<ul class="group_defmid_ul">
+#set($save = $!{obj.cost_price}-$!{obj.group_price})
+#set($rate="$!groupViewTools.getRate($!CommUtil.null2Double($!obj.group_price),$!CommUtil.null2Double($!obj.cost_price))")
+<li class="group_defmid_ulprice"><b>¥</b>$!{obj.group_price}</li>
+<li class="group_defmid_ulmoney"><span class="ulmoney_spa"><em>原价</em><s>¥$!{obj.cost_price}</s></span><span class="ulmoney_spa" style="border-right:none;"><em>折扣</em><b>$!{rate}折</b></span></li>
+#if($!obj.group_status!=2)<span class="group_defbottom"><i><em #if($!config.grouplife_order_return==0)class="no_return"#end>#if($!config.grouplife_order_return==0)不支持退款，#else $!{config.grouplife_order_return}天内随时退款#end </em></i><i style="border-right:none;"><strong>$!obj.selled_count</strong>人已团购</i>
+
+<b id="time_down_info" endTime="$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss',$!{obj.endTime})"><em>1</em>天<em>17</em>小时<em>35</em>分钟<em>30</em>秒</b></span>#end
+
+#if($!obj.group_status==1)
+#if($!{obj.group_count} > $!{obj.groupInfos.size()})
+<li class="group_defmid_ulbtn"><a  href="javascript:void(0);" #if(!$!user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="window.location.href='$!webPath/life_order?gid=$!obj.id'" #end>马上团</a></li>
+#else
+<li class="group_defmid_ulbtn_unable"><a href="javascript:void(0);">已售完</a></li></li>
+#end
+#elseif($!obj.group_status==2)
+<li class="group_defmid_ulbtn_unable"><a href="javascript:void(0);">未开始</a></li></li>
+#else
+<li class="group_defmid_ulbtn_unable"><a href="javascript:void(0);">已结束</a></li></li>
+#end
+
+</ul>
+
+</div>
+</div>
+<div class="group_enjoy"><span class="enjoy_text"><div style="float:left; line-height:30px;">分享到：</div><div style="float:left">$!{config.share_code} </div></span></div>
+</div>
+
+<style>
+.purchase_box{ clear:left; width:940px;}
+.purchase_box h2{padding: 20px 0 10px;border-bottom: 2px solid #777;font-size:18px;font-weight:normal; color:#666;}
+.purchase_box ul li,.purchase_box ul{ list-style:none; margin:0; padding:0;}
+.purchase_box ul li dl{ overflow:hidden;background: #f9f9f9;}
+.purchase_box ul li dl dt,.purchase_box ul li dl dd{ float:left;padding: 8px 10px;text-align: left;line-height: 25px;min-height: 24px;border-top: 1px solid #eee;word-break: break-all;word-wrap: break-word;white-space: pre-wrap;}
+.purchase_box ul li dl dt{ width:140px;color: #666; font-weight:bold;font-weight: bold;font-size: 14px; }
+.purchase_box ul li dl dd{ width:759px;background: #fff;border-left: 1px solid #eee;}
+</style>
+<div class="purchase_box">
+        <h2 id="purchaseinfo">购买须知</h2>
+         <ul>
+         	<li>
+            	<dl>
+                	<dt>有效期</dt>
+        			<dd>$!CommUtil.formatLongDate($!obj.beginTime) 至$!CommUtil.formatLongDate($!obj.endTime)（周末、法定节假日通用）</dd>
+                </dl>
+            </li>
+           <li>
+            	<dl>
+                	 <dt>使用时间</dt>
+       				 <dd>#if($!desc.get("gg_timerengestart"))$!desc.get("gg_timerengestart")#else 0:00  #end 至#if( $!desc.get("gg_timerengeend")) $!desc.get("gg_timerengeend")#else 24:00 #end</dd>			
+                </dl>
+            </li>
+            <li>
+            	<dl>
+                	<dt>使用范围</dt>
+        			<dd>$!desc.get("gg_scope")</dd>
+                </dl>
+            </li>
+            <li>
+            	<dl style="border-bottom: 1px solid #eee;">
+                  	<dt>使用规则</dt>
+        			<dd>$!desc.get("gg_rules")</dd>	
+                </dl>
+            </li>
+         </ul>
+    </div>
+
+
+<div class="group_introduces">
+<div class="group_tab_top"><span class="group_addcar"><b>¥$!{obj.group_price}</b>
+#if($!obj.group_status==1)
+#if($!{obj.group_count} > $!{obj.groupInfos.size()})
+<a  href="javascript:void(0);" #if(!$!user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="window.location.href='$!webPath/life_order?gid=$!obj.id'" #end>马上团</a>
+#end
+#end
+</span>
+<ul id="group_click">
+<li class="this" style="cursor:pointer">商品介绍</li>
+</ul></div>
+
+<div class="group_introbox" id="info">
+<div class="group_contact">
+$!CommUtil.addImgWebServer2($!imageWebServer,$!obj.group_details)
+</div>
+</div>
+</div>
+</div>
+<div class="group_default_right">
+<div class="group_hot">
+<h3><span>热门团购</span></h3>
+<div class="group_hot_box">
+#foreach($gg in $hot_ggs) 
+<ul class="group_hot_one">
+<li class="group_hot_img"><span class="img_cspan"><p><a href="$!webPath/grouplife/view_$!{gg.id}"><img src="$!imageWebServer/$!gg.group_acc.path/$!gg.group_acc.name" width="218" height="150" /></a></p>
+</span><i></i></li>
+<li class="group_hot_name"><a href="$!webPath/grouplife/view_$!{gg.id}">$!gg.gg_name</a></li>
+<li class="group_hot_price"><em><a href="$!webPath/grouplife/view_$!{gg.id}">抢购</a></em><b>¥$!{gg.group_price}</b><i>已售出<strong>$!{gg.selled_count}</strong></i></li>
+</ul>
+#end
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+$!httpInclude.include("/footer")
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>账户安全页面 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" type="text/css" rel="stylesheet"/>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="user_c_title">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>账户安全
+		<a class="per_c_icon" href="$!webPath/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a>
+	</div>
+<div class="a_safe_content">
+  <ul class="safe_content">
+    <a href="$!webPath/buyer/edit_password">
+    <li class="login_key"><span >登录密码</span></li>
+    </a> <a href="$!webPath/buyer/account_pay_password">
+    <li class="pay_keyword"><span>支付密码</span></li>
+    </a> <a href="$!webPath/buyer/account_mobile_bind">
+    <li class="phone_verify"><span>手机绑定验证</span></li>
+    </a> #if($!user.userMark) <a href="$!webPath/buyer/datum">
+    <li class="login_key"><span >完善资料</span></li>
+    </a> <a href="$!webPath/buyer/datum?type=bind">
+    <li class="login_key"><span >绑定已有账号</span></li>
+    </a> #end
+  </ul>
+</div>
+</body>
+</html>

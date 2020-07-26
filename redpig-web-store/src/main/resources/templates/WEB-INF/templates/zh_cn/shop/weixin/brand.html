@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>品牌街 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+    var idth;
+jQuery(document).ready(function() {
+	var top_hei = jQuery("#phone_hd").height(); 
+	var end_hei = jQuery(".bottom_nav").height();
+	var tol_hei = jQuery(window).height()-top_hei-end_hei;
+	var tol_num = parseInt("$!all_list.size()")+1;
+	jQuery("#brand_nav_fixed").css("line-height",tol_hei/tol_num+"px") 
+	jQuery(".brand_nav_fixed a:first").addClass("this");
+   jQuery(window).scroll(function(){
+	 	var top = 0;
+	 	top = jQuery(document).scrollTop();
+		if(jQuery("#brand_list ul:last").offset().top-50 - jQuery(window).scrollTop() < 0){
+			id = jQuery("#brand_list ul:last").attr("id");
+		      if(idth!=id){
+			  jQuery(".brand_nav_fixed a").removeClass("this");
+			  jQuery("#word_"+id).addClass("this");
+			  idth=id;
+			  return false;
+		  }
+		}else{
+		jQuery("#brand_list ul").each(function(){
+	    var tal_top=jQuery(this).offset().top-50 - jQuery(window).scrollTop();
+		var tan_top=1;
+		if(jQuery(this).next().offset()!=undefined){
+		tan_top=jQuery(this).next().offset().top-50 - jQuery(window).scrollTop();
+		}
+		if(tal_top<0 && tan_top>0){
+		  id = jQuery(this).attr("id");
+		  if(idth!=id){
+			  jQuery(".brand_nav_fixed a").removeClass("this");
+			  jQuery("#word_"+id).addClass("this");
+			  idth=id;
+		  }
+		}
+	  });
+	  }
+	});	
+	jQuery("a[id^=word_]").click(function(){
+			var word = jQuery(this).attr("word");
+			var top = jQuery("#"+word).offset().top;
+			jQuery('body,html').animate({scrollTop:top-44},300);
+	});	
+		 
+});<!--end-->
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd" id="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a><b id="ss"></b>品牌街<a class="menu home" href="$!webPath/wap/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="phone_main">
+  <!--品牌街-->
+  <div class="brand_page">
+    <div class="brand_list" id="brand_list">
+    #foreach($list in $all_list)
+      <h2>$!list.get('word')</h2>
+      <ul id="$!list.get('word')" >
+      #foreach($map in $!list.get("brand_list"))
+        <li><span class="lg"><a href="$!webPath/wap/brand_items?gb_id=$!map.get('id')"><img src="$!map.get('photo')" width="142" height="66" /></a></span>
+          <p class="name">$!map.get("name")</p>
+          </li>
+      #end  
+      </ul>
+      #end
+    </div>
+  </div>
+  <!--右侧字母-->
+  <div class="brand_nav_fixed" id="brand_nav_fixed">
+   #foreach($list in $all_list)
+  <a count="$!velocityCount" href="javascript:void(0);" id="word_$!list.get('word')" word="$!list.get('word')" >$!list.get("word")</a>
+  #end
+ </div>
+ </div>
+$!httpInclude.include("/wap/layer")
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>服务中心页面 - $!{config.title}</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+	jQuery(function(){
+		jQuery(".consult_li").click(function(){
+			window.location="$!webPath/wap/buyer/consult";
+		})
+		jQuery(".complain_li").click(function(){
+			window.location="$!webPath/wap/buyer/order_complaint_list";
+		})
+	})
+	
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+	<div class="user_c_title">
+    	<a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>服务中心
+		<a class="per_c_icon" href="$!webPath/wap/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a>
+    </div>
+    <div class="service_content">
+    	<ul class="service_c">
+        	<li class="consult_li"><span>咨询</span></li>
+            <li class="complain_li"><span>投诉</span></li>
+        </ul>
+    </div>
+
+</body>
+</html>

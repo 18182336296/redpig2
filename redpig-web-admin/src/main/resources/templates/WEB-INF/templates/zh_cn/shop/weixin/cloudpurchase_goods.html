@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>1元云购 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/TouchSlide.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.wap.common.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!records.size()>0)
+   var begin_count =12;
+   var ret=true;
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret) {
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/cloudpurchase_record_ajax',
+				  data:{"begin_count":begin_count},
+				beforeSend:function(){
+					ret = false;
+				  begin_count = begin_count +12;
+				},
+			   success:function(data){
+	             if(data){ 
+				  jQuery(".record_list_wrap").find("li").last().after(data);
+				   ret = true;
+			 	 }  
+              	}
+	    });
+	 }
+	});		
+   #end
+});
+</script>
+</head>
+
+<body>
+<div class="phone_hd">
+    <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png"></a>
+    云购商品详情
+    <a class="menu home" href="$!webPath/wap/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png"></a>
+</div>
+
+<div class="phone_main">
+	<div class="snatch_d" style="margin-top:2rem;" id="snatch_d">
+    	<div class="g_detail_pic">
+        	<div class="slideBox" id="slideBox">
+                <div class="bd">
+                         <ul>
+                        		  #if($!obj.cloudPurchaseGoods.primary_photo)
+						          <li><img src="$!{obj.cloudPurchaseGoods.primary_photo}"></li>
+						          #end
+                                  
+                                  #foreach($pic in $pics)
+                            		<li><img src="$!pic"></a></li>
+                           		  #end
+       
+                        </ul>
+                    </div>
+                    <div class="hd">
+                        <ul>
+                            <li class="on"></li>
+                            #foreach($pic in $pics)
+                            <li></li>
+                            #end
+                    	</ul>
+                    </div>
+                     <script type="text/javascript">
+		TouchSlide({ 
+			slideCell:"#snatch_d",
+			mainCell:"#slideBox ul", 
+			effect:"left", 
+			autoPlay:true,//自动播放			
+			switchLoad:"_src" //切换加载，真实图片路径为"_src" 
+		});
+	</script>
+            </div>
+        </div>
+        
+        <p class="g_name">$!obj.cloudPurchaseGoods.goods_name</p>
+        <p class="issue">期号：$!obj.period</p>
+        <div class="w_progressBar" style="padding:0px 15px;">
+            <p class="w_line">
+             #set($p = 100*$!obj.purchased_times/$!obj.cloudPurchaseGoods.goods_price)
+                <span class="w_bar" style="width:$!{p}%"><!--进度条由百分比控制-->
+                    <i class="color"></i>
+                </span>
+            </p>
+            <ul class="txt">
+                <li class="txt_1">总需$!obj.cloudPurchaseGoods.goods_price 人次</li>
+                <li class="txt_2">剩余$!obj.purchased_left_times</li>
+            </ul>
+        </div>
+        #if($!obj.status==15)
+        <div class="snatch_result">
+        	<div class="record">
+            	<i class="lucky_icon"></i>
+                #set($photo = "$!cdnServer/resources/style/system/front/default/images/weixin/snatch_default.jpg")
+                #if($!obj.lucky_userphoto)
+              	#set($photo = "$!obj.lucky_userphoto")
+                #end
+                <div class="lucky_p_img">
+                	<img src="$!{photo}">
+                </div>
+                <div class="lucky_p_info">
+                	<p>获奖者：<b>$!obj.lucky_username</b> </p>
+                    <p>本期参与：$!obj.lucky_usertimes人次</p>
+                    <p>揭晓时间：$!{obj.announced_date}</p>
+                </div>
+            </div>
+            <p class="result_luckyCode">幸运号码：<b>$!obj.lucky_code</b></p>
+        </div>
+        #end
+        <div class="login_after">
+        	<a href="$!webPath/wap/buyer/cloud_order_list"> 查看你的夺宝号码！</a>
+        </div>
+    </div>
+    
+    <div class="detail_more">
+    	<a class="w_bar" href="$!webPath/wap/cloudpurchase_items?id=$!obj.id&type=details">
+        	图文详情
+            <span class="advice">( 建议在wifi下查看 )</span>
+            <i class="icon_row"></i>
+        </a>
+        <a class="w_bar" href="$!webPath/wap/cloudpurchase_ago?id=$!obj.id">
+        	往期揭晓
+            <i class="icon_row"></i>
+        </a>
+    </div>
+    #if($!records.size()>0)
+    <div class="detail_record">
+    	<a class="w_bar" href="javascript:void(0);">
+        	所有参与记录
+            <span class="advice">( 自$!CommUtil.formatLongDate($!{obj.addTime})开始 )</span>
+        </a>
+        
+        <div class="record_list">
+        	<ul class="record_list_wrap">
+                #foreach($record in $records)
+            	<li>
+                	<a class="avatar" href="javascript:void(0);"><img src="$!record.user_photo"></a>
+                    <div class="info_text">
+                    	<a class="w_name" href="javascript:void(0);">$!record.user_name</a>
+                        <p>参与了<em class="num">$!record.purchased_times</em>人次 $!CommUtil.formatLongDate($!{record.addTime})</p>
+                    </div>
+                </li>
+                #end
+            </ul>
+        </div>
+    </div>
+    #end
+</div>
+
+<script>
+function add_cart(){
+	var id = "$!{obj.id}";
+ jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/add_cloudpurchase_cart',
+				  data:{"id":id},
+				beforeSend:function(){
+					
+				},
+			   success:function(data){
+					 Wap_alert("加入清单成功");					  
+ 
+              	}
+	    });
+}
+</script>
+
+#if($!obj.status==5)
+<!--活动进行中显示m_detail_buy，活动结束后m_detail_go-->
+<div class="fake_div"></div>
+<div class="m_detail_buy">
+	<a class="quick_buy" #if(!$!user)   href="$!webPath/wap/login" #else href="$!webPath/wap/cloudpurchase_cart?id=$!obj.id" #end>立即参与</a>
+    <a class="add_tocart"   #if(!$!user) href="$!webPath/wap/login" #else onClick="add_cart();" href="javascript:void(0);" #end>加入清单</a>
+</div>
+#end
+#if($!obj.status==15&&$!current)
+<div class="fake_div"></div>
+<div class="m_detail_go">
+	<span>最新一期正在火热进行...</span>
+    <a class="quick_go" href="$!webPath/wap/cloudpurchase_items?id=$!current.id">立即前往</a>
+</div>
+#end
+#if($!obj.status==10)
+<script>
+function clock(){
+	var date="$!obj.announced_date";
+	date=date.replace(".0","");
+	date = new Date(Date.parse(date.replace(/-/g, "/")));  
+	var now = new Date();
+	var diff = date.getTime()-now.getTime();
+	if(diff>0){
+		 var hh = parseInt(diff / 1000 / 60 / 60 % 24);//计算剩余的小时数  
+         var mm = parseInt(diff / 1000 / 60 % 60);//计算剩余的分钟数  
+         var ss = parseInt(diff / 1000 % 60, 10);//计算剩余的秒数  
+		 hh = checkTime(hh);  
+         mm = checkTime(mm);  
+         ss = checkTime(ss); 
+		 
+		jQuery("#time_down_info").html(hh+":"+mm+":"+ss);
+	}else{
+		jQuery.post("$!current_webPath/cloudbuy/getresult", {
+            "lottery_id": $!obj.id
+        },
+        function(data) {
+           
+
+        },
+        "json");
+	}
+}
+function checkTime(i)    
+            {    
+               if (i < 10) {    
+                   i = "0" + i;    
+                }    
+               return i;    
+            }
+setInterval(clock,1000);
+</script>
+<div class="fake_div"></div>
+<div class="m_detail_go look_time">
+	距离揭晓时间还有
+	<span class="time_span" id="time_down_info" endTime="$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss',$!{obj.announced_date})">
+
+    </span>
+</div>
+#end
+</body>
+</html>

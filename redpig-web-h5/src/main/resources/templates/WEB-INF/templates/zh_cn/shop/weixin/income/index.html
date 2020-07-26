@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>我的收益</title>
+    	<link href="$!cdnServer/resources/yingerMall/css/mui.min.css" rel="stylesheet"/>
+    	<link rel="stylesheet" href="$!cdnServer/resources/yingerMall/css/common.css" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav mui-income-bar">
+			<a class="mui-icon mui-pull-left mui-icon-back-white" href="javascript:history.go(-1);"></a>
+			<h1 class="mui-title">我的收益</h1>
+			<a class="mui-icon mui-pull-right mui-icon-more-white" href="$!webPath/index"></a>
+		</header>
+		<div class="income-top mui-clearfix">
+			<img src="$!cdnServer/resources/yingerMall/images/head.png" class="mui-pull-left income-nic"/>
+			<div class="mui-pull-left">
+				<div class="income-row">
+					<span class="income-name">$!obj.user_name</span>
+					<span class="income-lable">$!obj.grade</span>
+				</div>
+				<p class="income-phone">$!obj.user.mobile</p>
+			</div>
+		</div>
+		<div class="mui-content mui-income-content">
+			<!--广告栏-->
+			<div class="advert-box">
+				<p class="advert-text mui-ellipsis">升级到店长，佣金比高达5%，返利高达8%。</p>
+				<i class="mui-icon mui-icon-right"></i>
+			</div>
+			<!--当前累计收益-->
+			<div class="income-pad">
+				<div class="income-cumulate">
+					<div class="cumul-top">
+						<p class="cu-mul">当前累计收益(元)</p>
+						<div class="cu-pri">
+							<span>￥</span>
+							<span>$!obj.sum_price</span>
+						</div>
+					</div>
+					<div class="mui-clearfix cu-bottom">
+						<div class="mui-pull-left">
+							<span class="cu-b-la">可提现佣金</span>
+							<span class="cu-b-num">$!obj.balance_price</span>
+						</div>
+						<div class="mui-pull-right">
+							<a href="$!webPath/income/withdraw"><span class="cu-btn">立即提现</span><a>
+						</div>
+						<!--<div class="mui-pull-right">
+							<a href="$!webPath/income/withdraw_record"><span class="cu-btn" style="margin-left: 10px;">提现记录</span><a>
+						</div>-->
+					</div>
+				</div>
+			</div>
+			
+			<!--累计数据-->
+			<div class="income-pad">
+				<div class="cum-flex">
+					<!--累计客户-->
+					<div class="cum-flex-1">
+						<a href="$!webPath/income/cumul_customer">
+							<p class="cum-num">$!obj.sum_user</p>
+							<p class="cum-lable">累计客户</p>
+							<i class="cum-r-b"></i>
+						</a>
+					</div>
+					<!--累计订单金额-->
+					<div class="cum-flex-1">
+						<a href="$!webPath/income/cumul_orders">
+							<p class="cum-num">$!obj.sum_deal_price</p>
+							<p class="cum-lable">累计订单金额</p>
+							<i class="cum-r-b"></i>
+						</a>
+					</div>
+					<!--下线累计订单金额-->
+					<div class="cum-flex-1">
+						<a href="$!webPath/income/cumul_orders_offline">
+							<p class="cum-num">$!obj.down_sum_price</p>
+							<p class="cum-lable">下线累计订单金额</p>
+						</a>
+					</div>
+				</div>
+			</div>
+			<!--店铺推广 商品推广 邀请朋友-->
+			<div class="income-pad">
+				<div class="promote-flex">
+					<div class="pro-flex-1 click-active" style="margin-right: 10px;">
+						<img src="$!cdnServer/resources/yingerMall/images/shop.png" class="icon-pro1"/>
+						<span class="pro-text">店铺推广</span>
+					</div>
+					<div class="pro-flex-1 click-active">
+						<img src="$!cdnServer/resources/yingerMall/images/commodity.png" class="icon-pro2"/>
+						<a href="$!webPath/income/goods_extension_list"><span class="pro-text">商品推广</span></a>
+					</div>
+				</div>
+				<div class="pro-fri click-active">
+					<img src="$!cdnServer/resources/yingerMall/images/Invitation.png" class="icon-pro3"/>
+					<span class="pro-text">邀请朋友</span>
+				</div>
+			</div>
+			
+		</div>
+    <script src="$!cdnServer/resources/yingerMall/js/mui.min.js"></script>
+	</body>
+</html>

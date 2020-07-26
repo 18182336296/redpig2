@@ -1,0 +1,134 @@
+<script>
+jQuery(".right_nav_r_r_car_center dl").mouseenter(function(){
+   jQuery(this).find(".right_nav_r_r_car_center_b").show();
+}).mouseleave(function(){
+     jQuery(this).find(".right_nav_r_r_car_center_b").hide();
+  });
+function big_cart_remove(ids){
+					   jQuery.post("$!current_webPath/remove_goods_cart",{"ids":ids},function(data){
+							if(data.code==100){
+								jQuery("#cart_goods_count_top").html(data.count);
+								jQuery("#car b").html(data.count);
+								jQuery("#count").html(data.count);
+								jQuery("#top_good_cart").html(data.count);
+								jQuery("#"+ids+"_dl").remove();
+								jQuery(".buy_bottom b").html("¥"+data.total_price);
+								if(jQuery(".right_nav_r_r_car_center dl").length<1){
+								  jQuery("#right_cart_none").show();
+								}
+							}
+						},"json");
+       }
+</script>
+      <div class="right_nav_r_r_top">
+      <h3><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/backe.png" /></a></h3>
+      <span id="span">购物车</span> </div>
+      
+      <div id="right_cart_none"  #if($!cart.size()>0||$!ac_goods||$!er_goods) style="display:none" #end class="right_footer_none" ><img src="../resources/style/system/front/default/images/buy_center_none_bg.png" /><span>购物车还没有商品哦！</span></div>
+      
+      <div class="right_nav_r_r_car_center">
+       #foreach($obj in $cart)
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #if($!obj.goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")         
+        #end
+        
+        #set($goods_url="$!webPath/items_$!{obj.goods.id}")
+        #if($!config.second_domain_open && $!obj.goods.goods_type==1 && $!obj.goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.goods.id}")
+        #end
+        <dl id="$!{obj.id}_dl">
+          <dd><span><a href="$!goods_url" target="_blank"><img src="$!{img}" /></a></span>
+            <div class="right_nav_r_r_car_center_norms"><a href="$!goods_url" target="_blank">#if($!{obj.goods.group_buy}==2)<i style="color:#f00">[团购]</i>#end  #if($!{obj.goods.activity_status}==2) <i style="color:#f00">[促销]</i> #end $!obj.goods.goods_name</a></div>
+            <div class="right_nav_r_r_car_center_price"><i>$!obj.price</i><b>x$!obj.count</b><div class="right_nav_r_r_car_center_b" style="display:none"><a title="删除" href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');">x</a></div></div>
+          </dd>
+        </dl>   
+        #end
+        <!--普通商品结束-->
+        <!--满就减活动开始-->
+         #if($!er_goods)
+        #foreach($param in ${er_goods.keySet()})
+          #foreach($obj in ${er_goods.get($param)})
+        #if($!obj.goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        
+        #set($goods_url="$!webPath/items_$!{obj.goods.id}")
+        #if($!config.second_domain_open && $!obj.goods.goods_type==1 && $!obj.goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.goods.id}")
+        #end
+        
+         <dl id="$!{obj.id}_dl">
+          <dt>
+          <em class="manj"></em>
+          <span>$!erString.get($param)</span></dt>
+          <dd><span><a href="$!goods_url" target="_blank"><a href="$!goods_url" target="_blank"><img src="$!{img}" /></a></a></span>
+            <div class="right_nav_r_r_car_center_norms"><a href="$!goods_url" target="_blank">$!obj.goods.goods_name</a></div>
+            <div class="right_nav_r_r_car_center_price"><i>$!obj.price</i><b>x$!obj.count</b><div class="right_nav_r_r_car_center_b" id="b" style="display:none"><a title="删除" href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');">x</a></div></div>
+          </dd>
+        </dl>     
+         #end
+        #end
+        #end
+         <!--满就送活动开始-->
+         
+          #if($!ac_goods)
+        #foreach($param in ${ac_goods.keySet()})
+        #set($buyGift = $!goodsViewTools.query_buyGift("$!{param}"))
+              
+          #foreach($obj in ${ac_goods.get($param)})
+        #if($!obj.goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        
+        #set($goods_url="$!webPath/items_$!{obj.goods.id}")
+        #if($!config.second_domain_open && $!obj.goods.goods_type==1 && $!obj.goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.goods.id}")
+        #end
+       
+        <dl id="$!{obj.id}_dl">
+          <dt>
+          <em class="manz"></em>
+          <span>活动商品满$!buyGift.condition_amount元，即可领取赠品</span></dt>
+          <dd><span><a href="$!goods_url" target="_blank"><img src="$!{img}" /></a></span>
+            <div class="right_nav_r_r_car_center_norms"><a href="$!goods_url" target="_blank">$!obj.goods.goods_name</a></div>
+            <div class="right_nav_r_r_car_center_price"><i>$!obj.price</i><b>x$!obj.count</b><div class="right_nav_r_r_car_center_b" id="b" style="display:none"><a title="删除" href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');">x</a></div></div>
+          </dd>
+        </dl>
+         #end
+        #end
+        #end
+        <!--套装-->  
+        
+         #if($!combin_carts)
+        #foreach($obj in $combin_carts)
+        #if($!obj.combin_main==1)
+        #set($suit_map=$!goodsViewTools.getSuitInfo("$!obj.id"))
+        #end
+        #if($!obj.goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        
+        #set($goods_url="$!webPath/items_$!{obj.goods.id}")
+        #if($!config.second_domain_open && $!obj.goods.goods_type==1 && $!obj.goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.goods.id}")
+        #end
+        
+         <dl id="$!{obj.id}_dl">
+          <dd><span><a href="$!goods_url" target="_blank"><img src="$!{img}" /></a></span>
+            <div class="right_nav_r_r_car_center_norms"><a href="$!goods_url" target="_blank"><i style="color:#f00">[套装]</i>$!obj.goods.goods_name</a></div>
+            <div class="right_nav_r_r_car_center_price"><i>$!obj.price</i><b>x$!obj.count</b><div class="right_nav_r_r_car_center_b" id="b" style="display:none"><a title="删除" href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');">x</a></div></div>
+          </dd>
+        </dl>
+         #end
+        #end
+      </div>
+      
+      <div class="buy_bottom"><span>共计<strong id="count">#if($!carts.size()) $!carts.size()#else 0 #end</strong>件</span><b>#if($!{total_price}) ¥ $!{total_price} #else ¥0 #end</b></div>
+      <div class="right_nav_r_buy_bottom"><a href="$!webPath/goods_cart1">进入购物车</a></div>

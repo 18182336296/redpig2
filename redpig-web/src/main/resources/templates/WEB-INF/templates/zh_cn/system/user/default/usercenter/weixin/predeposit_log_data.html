@@ -1,0 +1,37 @@
+   #foreach($obj in $objs)
+    	<div class="item">
+        	<p class="time">$!CommUtil.formatLongDate($!obj.addTime)</p>
+            <ul>
+            <!--若为支出则加“expense”若为收入则加“income“-->
+                #if($!obj.pd_log_amount<0)        
+            	<li class="sign expense"></li>
+                <li class="info">
+                	<dl>
+                    	<dt class="type">$!obj.pd_op_type</dt>
+                        <dd class="description">$!obj.pd_log_info</a></dd>
+                    </dl>
+                </li>
+                <!--当超过四位数时添加small_font控制字体变小-->
+                 #if($!obj.pd_log_amount>=1000 || $!obj.pd_log_amount<=-1000)
+                 <li class="value small_font">¥$!obj.pd_log_amount</li>
+                #else
+                 <li class="value">¥$!obj.pd_log_amount</li>
+                #end                 
+                #else                
+                <li class="sign income"></li>
+                <li class="info">
+                	<dl>
+                    	<dt class="type">$!obj.pd_op_type</dt>
+                        <dd class="description">$!obj.pd_log_info</dd>
+                    </dl>
+                </li>
+                <!--当超过四位数时添加small_font控制字体变小-->
+                 #if($!obj.pd_log_amount>=1000 || $!obj.pd_log_amount<=-1000)
+                 <li class="value small_font">¥$!obj.pd_log_amount</li>
+                #else
+                 <li class="value">¥$!obj.pd_log_amount</li>
+                #end
+                #end
+            </ul>
+       </div>
+    #end

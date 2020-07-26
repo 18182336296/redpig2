@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.FavoriteMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Favorite">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="goods_photo" property="goods_photo" jdbcType="VARCHAR"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="goods_store_id" property="goods_store_id" jdbcType="BIGINT"/>
+		<result column="goods_current_price" property="goods_current_price" jdbcType="DECIMAL"/>
+		<result column="goods_photo_ext" property="goods_photo_ext" jdbcType="VARCHAR"/>
+		<result column="goods_store_second_domain" property="goods_store_second_domain" jdbcType="VARCHAR"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="store_photo" property="store_photo" jdbcType="VARCHAR"/>
+		<result column="store_second_domain" property="store_second_domain" jdbcType="VARCHAR"/>
+		<result column="store_addr" property="store_addr" jdbcType="VARCHAR"/>
+		<result column="store_ower" property="store_ower" jdbcType="VARCHAR"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Favorite">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="goods_photo" property="goods_photo" jdbcType="VARCHAR"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="goods_store_id" property="goods_store_id" jdbcType="BIGINT"/>
+		<result column="goods_current_price" property="goods_current_price" jdbcType="DECIMAL"/>
+		<result column="goods_photo_ext" property="goods_photo_ext" jdbcType="VARCHAR"/>
+		<result column="goods_store_second_domain" property="goods_store_second_domain" jdbcType="VARCHAR"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="store_photo" property="store_photo" jdbcType="VARCHAR"/>
+		<result column="store_second_domain" property="store_second_domain" jdbcType="VARCHAR"/>
+		<result column="store_addr" property="store_addr" jdbcType="VARCHAR"/>
+		<result column="store_ower" property="store_ower" jdbcType="VARCHAR"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,type,goods_name,goods_id,goods_photo,goods_type,goods_store_id,goods_current_price,goods_photo_ext,goods_store_second_domain,store_name,store_id,store_photo,store_second_domain,store_addr,store_ower,user_name,user_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="type != null">and type = #{type,jdbcType=INTEGER}</if>
+		<if test="goods_name != null">and goods_name = #{goods_name,jdbcType=VARCHAR}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+		<if test="goods_photo != null">and goods_photo = #{goods_photo,jdbcType=VARCHAR}</if>
+		<if test="goods_type != null">and goods_type = #{goods_type,jdbcType=INTEGER}</if>
+		<if test="goods_store_id != null">and goods_store_id = #{goods_store_id,jdbcType=BIGINT}</if>
+		<if test="goods_current_price != null">and goods_current_price = #{goods_current_price,jdbcType=DECIMAL}</if>
+		<if test="goods_photo_ext != null">and goods_photo_ext = #{goods_photo_ext,jdbcType=VARCHAR}</if>
+		<if test="goods_store_second_domain != null">and goods_store_second_domain = #{goods_store_second_domain,jdbcType=VARCHAR}</if>
+		<if test="store_name != null">and store_name = #{store_name,jdbcType=VARCHAR}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="store_photo != null">and store_photo = #{store_photo,jdbcType=VARCHAR}</if>
+		<if test="store_second_domain != null">and store_second_domain = #{store_second_domain,jdbcType=VARCHAR}</if>
+		<if test="store_addr != null">and store_addr = #{store_addr,jdbcType=VARCHAR}</if>
+		<if test="store_ower != null">and store_ower = #{store_ower,jdbcType=VARCHAR}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		type= #{type},
+		goods_name= #{goods_name},
+		goods_id= #{goods_id},
+		goods_photo= #{goods_photo},
+		goods_type= #{goods_type},
+		goods_store_id= #{goods_store_id},
+		goods_current_price= #{goods_current_price},
+		goods_photo_ext= #{goods_photo_ext},
+		goods_store_second_domain= #{goods_store_second_domain},
+		store_name= #{store_name},
+		store_id= #{store_id},
+		store_photo= #{store_photo},
+		store_second_domain= #{store_second_domain},
+		store_addr= #{store_addr},
+		store_ower= #{store_ower},
+		user_name= #{user_name},
+		user_id= #{user_id},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Favorite" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_favorite 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Favorite" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_favorite obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<delete id="delete" parameterType="com.redpigmall.domain.Favorite">
+		delete from redpigmall_favorite where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByGoodsId" parameterType="long">
+		delete from redpigmall_favorite where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_favorite obj 
+		where 1=1
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Favorite" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_favorite obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Favorite" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_favorite(addTime,deleteStatus,type,goods_name,goods_id,goods_photo,goods_type,goods_store_id,goods_current_price,goods_photo_ext,goods_store_second_domain,store_name,store_id,store_photo,store_second_domain,store_addr,store_ower,user_name,user_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{type,jdbcType=INTEGER},#{goods_name,jdbcType=VARCHAR},#{goods_id,jdbcType=BIGINT},#{goods_photo,jdbcType=VARCHAR},#{goods_type,jdbcType=INTEGER},#{goods_store_id,jdbcType=BIGINT},#{goods_current_price,jdbcType=DECIMAL},#{goods_photo_ext,jdbcType=VARCHAR},#{goods_store_second_domain,jdbcType=VARCHAR},#{store_name,jdbcType=VARCHAR},#{store_id,jdbcType=BIGINT},#{store_photo,jdbcType=VARCHAR},#{store_second_domain,jdbcType=VARCHAR},#{store_addr,jdbcType=VARCHAR},#{store_ower,jdbcType=VARCHAR},#{user_name,jdbcType=VARCHAR},#{user_id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Favorite">
+		update redpigmall_favorite
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_favorite where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_favorite where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Favorite" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_favorite obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Favorite" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_favorite obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Favorite" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_favorite
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<!-- 个人商品收藏列表 -->
+	<select id="PersonaCollectionList" resultType="map" parameterType="map">
+		select
+		obj.goods_id,obj.goods_current_price,obj.goods_name,obj.goods_photo 
+		from redpigmall_favorite obj where 1=1 	and type=0 
+		<if test="user_id !=null">
+		and user_id = #{user_id,jdbcType=BIGINT}
+		</if>	
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<!-- 个人店铺收藏列表 -->
+	<select id="storeCollectionList" resultType="map" parameterType="map">
+	select
+		obj.store_id,obj.store_name,obj.store_photo,store.favorite_count
+		from redpigmall_favorite obj,redpigmall_store  store where 1=1 	and type=1 and obj.store_id = store.id 
+		<if test="user_id !=null">
+		and obj.user_id = #{user_id,jdbcType=BIGINT}
+		</if>	
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_favorite where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

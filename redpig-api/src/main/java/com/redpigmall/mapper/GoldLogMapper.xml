@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoldLogMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoldLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gl_type" property="gl_type" jdbcType="INTEGER"/>
+		<result column="gl_money" property="gl_money" jdbcType="INTEGER"/>
+		<result column="gl_count" property="gl_count" jdbcType="INTEGER"/>
+		<result column="gl_payment" property="gl_payment" jdbcType="VARCHAR"/>
+		<result column="gl_content" property="gl_content" jdbcType="VARCHAR"/>
+		<result column="gl_admin_time" property="gl_admin_time" jdbcType="TIMESTAMP"/>
+		<result column="gl_admin_content" property="gl_admin_content" jdbcType="VARCHAR"/>
+		<association property="gl_user" column="gl_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="gl_admin" column="gl_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="gr" column="gr_id" select="com.redpigmall.dao.GoldRecordMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoldLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gl_type" property="gl_type" jdbcType="INTEGER"/>
+		<result column="gl_money" property="gl_money" jdbcType="INTEGER"/>
+		<result column="gl_count" property="gl_count" jdbcType="INTEGER"/>
+		<result column="gl_payment" property="gl_payment" jdbcType="VARCHAR"/>
+		<result column="gl_content" property="gl_content" jdbcType="VARCHAR"/>
+		<result column="gl_admin_time" property="gl_admin_time" jdbcType="TIMESTAMP"/>
+		<result column="gl_admin_content" property="gl_admin_content" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,gl_type,gl_money,gl_count,gl_payment,gl_content,gl_user_id,gl_admin_id,gl_admin_time,gl_admin_content,gr_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="gl_type != null">and gl_type = #{gl_type,jdbcType=INTEGER}</if>
+		<if test="gl_money != null">and gl_money = #{gl_money,jdbcType=INTEGER}</if>
+		<if test="gl_count != null">and gl_count = #{gl_count,jdbcType=INTEGER}</if>
+		<if test="gl_payment != null">and gl_payment = #{gl_payment,jdbcType=VARCHAR}</if>
+		<if test="gl_content != null">and gl_content = #{gl_content,jdbcType=VARCHAR}</if>
+		<if test="gl_content_like != null">and gl_content like CONCAT('%',#{gl_content_like},'%')  </if>
+		<if test="gl_admin_time != null">and gl_admin_time = #{gl_admin_time,jdbcType=TIMESTAMP}</if>
+		<if test="gl_admin_content != null">and gl_admin_content = #{gl_admin_content,jdbcType=VARCHAR}</if>
+		<if test="gl_user_id != null">and gl_user_id = #{gl_user_id,jdbcType=BIGINT}</if>
+		<if test="gl_admin_id != null">and gl_admin_id = #{gl_admin_id,jdbcType=BIGINT}</if>
+		<if test="gr_id != null">and gr_id = #{gr_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		gl_type= #{gl_type},
+		gl_money= #{gl_money},
+		gl_count= #{gl_count},
+		gl_payment= #{gl_payment},
+		gl_content= #{gl_content},
+		<if test="gl_user == null or gl_user.id == null">gl_user_id = null,</if>
+		<if test="gl_user != null and gl_user.id != null">gl_user_id = #{gl_user.id,jdbcType=BIGINT},</if>
+		<if test="gl_admin == null or gl_admin.id == null">gl_admin_id = null,</if>
+		<if test="gl_admin != null and gl_admin.id != null">gl_admin_id = #{gl_admin.id,jdbcType=BIGINT},</if>
+		gl_admin_time= #{gl_admin_time},
+		gl_admin_content= #{gl_admin_content},
+		<if test="gr != null and gr.id != null">gr_id = #{gr.id,jdbcType=BIGINT},</if>
+		<if test="gr == null or gr.id == null">gr_id = null,</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_gold_log 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_gold_log obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_gold_log obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getGlUserByUserId" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_log
+		where
+			gl_user_id = #{gl_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGlAdminByUserId" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_log
+		where
+			gl_admin_id = #{gl_admin_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGrByGoldRecordId" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_log
+		where
+			gr_id= #{gr_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_log obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoldLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_gold_log(addTime,deleteStatus,gl_type,gl_money,gl_count,gl_payment,gl_content,gl_admin_time,gl_admin_content,gl_user_id,gl_admin_id,gr_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{gl_type,jdbcType=INTEGER},#{gl_money,jdbcType=INTEGER},#{gl_count,jdbcType=INTEGER},#{gl_payment,jdbcType=VARCHAR},#{gl_content,jdbcType=VARCHAR},#{gl_admin_time,jdbcType=TIMESTAMP},#{gl_admin_content,jdbcType=VARCHAR},#{gl_user.id,jdbcType=BIGINT},#{gl_admin.id,jdbcType=BIGINT},#{gr.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoldLog">
+		update redpigmall_gold_log
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_gold_log where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_gold_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_log obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_gold_log obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoldLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_log
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_gold_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

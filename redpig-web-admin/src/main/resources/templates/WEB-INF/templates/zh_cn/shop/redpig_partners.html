@@ -1,0 +1,11 @@
+#if($!img_partners.size()>0 ||$!$text_partners.size()>0)
+<div class="friendlink">
+  <h1>友情链接</h1>
+  <ul class="linkimg">
+    #foreach($info in $img_partners)
+    <li> <a href="$!info.url" target="_blank"><img src="$!imageWebServer/$!info.image.path/$!info.image.name" width="92" height="35" /></a></li>
+    #end
+  </ul>
+  <div class="linka">#foreach($info in $text_partners)<a href="$!info.url" target="_blank">$!info.title</a>#end </div>
+</div>
+#end

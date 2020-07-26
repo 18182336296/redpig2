@@ -1,0 +1,47 @@
+<div class="home-sale-layout wrapper">
+  <div class="left-layout"> 
+    <ul class="tabs-nav">
+         #set($goodscases=$!goodsCaseViewTools.queryGoodsCase("index_top"))
+         #set($first=1)
+         #foreach($obj in $goodscases)
+         	<li #if($!first==1) class="tabs-selected" #set($first=0) #end ><i class="arrow"></i><h3>$!obj.case_name</h3></li>
+         #end
+    </ul>
+          
+          #set($first=1)
+          #foreach($obj in $goodscases)
+           <div #if($!first==1) #set($first=0) class="tabs-panel" #else class="tabs-panel  tabs-hide" #end>
+             #set($case_list=$!goodsCaseViewTools.queryCaseGoods($obj.case_content))
+             <ul>
+            #foreach($casegoods in $case_list)
+	            #if($!casegoods.goods_main_photo)
+	            	#set($img="$!imageWebServer/$!{casegoods.goods_main_photo.path}/$!{casegoods.goods_main_photo.name}_middle.$!{casegoods.goods_main_photo.ext}")
+	            #else
+	            	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	            #end
+            
+           		#set($goods_url="$!config.indexUrl/items_$!{casegoods.id}_gcase")
+            
+	            #if($!config.second_domain_open && $!casegoods.goods_type==1 && $!casegoods.goods_store.store_second_domain!="")
+	            	#set($goods_url="http://$!{casegoods.goods_store.store_second_domain}.$!{domainPath}/goods_$!{casegoods.id}_gcase")
+	            #end
+               <li style="width:19%">
+                 <dl>
+                   <dt class="goods-name"><a target="_blank" href="$!goods_url" title="$!casegoods.goods_name">
+                   	$!casegoods.goods_name</a></dt>
+                   <dd class="goods-thumb">
+                   	<a target="_blank" href="$!goods_url">
+                   	<img src="$!img" alt="$!casegoods.goods_name" >
+                   	</a></dd>
+                   <dd class="goods-price">商城价：<em>￥$!casegoods.goods_current_price</em></dd>
+                 </dl>
+               </li>
+
+             #end
+             </ul>
+           </div>
+           #end
+     </div>
+    
+    
+  </div>

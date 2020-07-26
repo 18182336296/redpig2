@@ -1,0 +1,8 @@
+<!--平台所有设置页面显示商品分类情况下，分类信息异步加载，-->
+
+
+<option value="">请选择商品分类...</option>
+#foreach ( $some in $gcs )
+<option value="$!some.id">
+$!some.className</option>
+#end 

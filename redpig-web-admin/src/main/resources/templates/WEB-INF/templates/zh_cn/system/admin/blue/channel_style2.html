@@ -1,0 +1,107 @@
+<script>
+jQuery(document).ready(function(){
+  jQuery(".box_edit_class").sortable({containment:".box_edit_class",opacity:0.9,cursor:"move"});
+  jQuery(".box_edit_class").disableSelection();	
+  #foreach($c_gc in $gf_tools.generic_gf_gc("$!obj.gf_gc_list"))
+  jQuery(".box_edit_li span[id=child_$!{c_gc.id}]").sortable({containment:".box_edit_li span[id=child_$!{c_gc.id}]",opacity:0.9,cursor:"move"});
+  jQuery(".box_edit_li span[id=child_$!{c_gc.id}]").disableSelection();	  
+  #end
+	
+  //改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  
+  jQuery("#gc_id").change(function(){							   
+	var gc_id=jQuery(this).val();	
+	if(gc_id!=null){
+     jQuery.ajax({type:'POST',url:'$!webPath/channel_style_load',data:{"gc_id":gc_id,"type":"1"},success:function(data){
+	   if(data!=null && data!=""){
+		   jQuery("#goods_class_two").remove();
+	       jQuery("#goods_class").after(data);
+	   }
+	 }});
+	}
+  });
+  
+});
+function save_form(){
+  var ids="";
+   jQuery(".box_edit_li a").each(function(){									  
+     var pid=jQuery(this).attr("pid");
+	 var id=jQuery(this).attr("gc_id");
+	 if(pid!=undefined){
+	  ids=ids+",pid:"+pid;
+	 }else{
+      ids=ids+",cid:"+id;
+	 }
+   });
+  var size=jQuery("#box_edit_class li").size();
+  jQuery("#ids").val(ids);
+  if(size==0){
+     alert("请添加商品分类");
+  }else if(size>1){
+     alert("最多只能添加一个分类信息");
+  }else{
+     jQuery.ajax({
+			  type:'POST',
+			  url:'$!webPath/channel_style_save',
+			  data:{"id":$!obj.id,"seq":$!seq,"type":$!style,"ids":ids},
+			  success:function(data){
+	             if(data!=null){
+				    jQuery("#channel_style_2").remove();
+					window.location.href="$!webPath/channel_template?id=$!obj.id";  
+				 }
+			  }
+	   });
+  }
+}
+</script>
+<form action="$!webPath/channel_style_save" method="post" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id">
+  <input name="seq" type="hidden" id="seq" value="$!seq">
+  <input name="type" type="hidden" id="type" value="$!style">
+  <input name="ids" type="hidden" id="ids">
+  <div class="box_floor">
+    <!--分类开始-->
+    <h6 class="box_floor_h6">当前分类</h6>
+    <em class="floor_warning" style="margin-left:20px;margin-bottom:5px;">注释:只能添加一个商品分类，且二级类目只能选择1个，双击删除已选分类，按下鼠标拖动分类次序</em>
+    <div class="box_edits">
+      <ul class="box_edit_class" id="box_edit_class">
+      #foreach($goodsClass in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","$!seq"))
+        <li class="box_edit_li">
+  <h6><a href="javascript:void(0);" ondblclick="javascript:jQuery(this.parentNode.parentNode).remove();" pid="$!goodsClass.id">$!goodsClass.className</a></h6>
+  <span>
+  #foreach($c_gc in $goodsClass.childs)
+  <a href="javascript:void(0);" ondblclick="javascript:jQuery(this).remove();" gc_id="$!c_gc.id" parent="$!goodsClass.id">$!c_gc.className</a>
+  #end
+  </span>
+</li>
+        #end
+      </ul>
+    </div>
+    <div class="box_floor_class" id="goods_class"><b>选择商品分类：</b>
+     <span> <select name="gc_id" id="gc_id">
+        <option value="">请选择商品分类...</option>
+      #foreach($gc in $gcs)
+        <option value="$!gc.id">$!gc.className</option>
+      <!-- #foreach($c_gc in $gc.childs)
+        <option value="$!c_gc.id">&nbsp;&nbsp;&nbsp;$!c_gc.className</option>
+       #end-->
+      #end
+    
+      </select></span>
+    </div>
+    <div class="submit">
+      <input name="按钮" type="button" value="保存" onClick="save_form();" />
+    </div>
+  </div>
+</form>

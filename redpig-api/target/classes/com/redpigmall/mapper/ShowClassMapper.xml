@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ShowClassMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.ShowClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="showName" property="showName" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="level" property="level" jdbcType="INTEGER"/>
+		<result column="show_type" property="show_type" jdbcType="INTEGER"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="channel_id" property="channel_id" jdbcType="BIGINT"/>
+		<result column="display" property="display" jdbcType="BIT"/>
+		<result column="recommend" property="recommend" jdbcType="BIT"/>
+		<result column="icon_type" property="icon_type" jdbcType="INTEGER"/>
+		<result column="icon_sys" property="icon_sys" jdbcType="VARCHAR"/>
+		<result column="photo_id" property="photo_id" jdbcType="BIGINT"/>
+		<result column="sc_color" property="sc_color" jdbcType="VARCHAR"/>
+		<result column="sc_advert" property="sc_advert" jdbcType="VARCHAR"/>
+		<result column="scb_info" property="scb_info" jdbcType="VARCHAR"/>
+		<result column="seo_keywords" property="seo_keywords" jdbcType="VARCHAR"/>
+		<result column="seo_description" property="seo_description" jdbcType="VARCHAR"/>
+		<result column="weixinChannel_id" property="weixinChannel_id" jdbcType="BIGINT"/>
+		<association property="parent" column="parent_id" select="com.redpigmall.dao.ShowClassMapper.selectByPrimaryKey"/>
+		<collection property="childs" column="id" select="com.redpigmall.dao.ShowClassMapper.getParentByShowClassId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.ShowClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="showName" property="showName" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="level" property="level" jdbcType="INTEGER"/>
+		<result column="show_type" property="show_type" jdbcType="INTEGER"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="channel_id" property="channel_id" jdbcType="BIGINT"/>
+		<result column="display" property="display" jdbcType="BIT"/>
+		<result column="recommend" property="recommend" jdbcType="BIT"/>
+		<result column="icon_type" property="icon_type" jdbcType="INTEGER"/>
+		<result column="icon_sys" property="icon_sys" jdbcType="VARCHAR"/>
+		<result column="photo_id" property="photo_id" jdbcType="BIGINT"/>
+		<result column="sc_color" property="sc_color" jdbcType="VARCHAR"/>
+		<result column="sc_advert" property="sc_advert" jdbcType="VARCHAR"/>
+		<result column="scb_info" property="scb_info" jdbcType="VARCHAR"/>
+		<result column="seo_keywords" property="seo_keywords" jdbcType="VARCHAR"/>
+		<result column="seo_description" property="seo_description" jdbcType="VARCHAR"/>
+		<result column="weixinChannel_id" property="weixinChannel_id" jdbcType="BIGINT"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,showName,parent_id,sequence,level,show_type,url,channel_id,display,recommend,icon_type,icon_sys,photo_id,sc_color,sc_advert,scb_info,seo_keywords,seo_description,weixinChannel_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="showName != null">and showName = #{showName,jdbcType=VARCHAR}</if>
+		<if test="parent_id != null">and parent_id = #{parent_id,jdbcType=BIGINT}</if>
+		<if test="sequence != null">and sequence = #{sequence,jdbcType=INTEGER}</if>
+		<if test="level != null">and level = #{level,jdbcType=INTEGER}</if>
+		<if test="show_type != null">and show_type = #{show_type,jdbcType=INTEGER}</if>
+		<if test="url != null">and url = #{url,jdbcType=VARCHAR}</if>
+		<if test="channel_id != null">and channel_id = #{channel_id,jdbcType=BIGINT}</if>
+		<if test="display != null">and display = #{display,jdbcType=BIT}</if>
+		<if test="recommend != null">and recommend = #{recommend,jdbcType=BIT}</if>
+		<if test="icon_type != null">and icon_type = #{icon_type,jdbcType=INTEGER}</if>
+		<if test="icon_sys != null">and icon_sys = #{icon_sys,jdbcType=VARCHAR}</if>
+		<if test="photo_id != null">and photo_id = #{photo_id,jdbcType=BIGINT}</if>
+		<if test="sc_color != null">and sc_color = #{sc_color,jdbcType=VARCHAR}</if>
+		<if test="sc_advert != null">and sc_advert = #{sc_advert,jdbcType=VARCHAR}</if>
+		<if test="scb_info != null">and scb_info = #{scb_info,jdbcType=VARCHAR}</if>
+		<if test="seo_keywords != null">and seo_keywords = #{seo_keywords,jdbcType=VARCHAR}</if>
+		<if test="seo_description != null">and seo_description = #{seo_description,jdbcType=VARCHAR}</if>
+		<if test="weixinChannel_id != null">and weixinChannel_id = #{weixinChannel_id,jdbcType=BIGINT}</if>
+		
+		<if test="parent == -1">and parent_id is null</if>
+		<if test="parent != -1 and parent!=null">and parent_id=#{parent,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		showName= #{showName},
+		<if test="parent == null or parent.id == null">parent_id = null,</if>
+		<if test="parent != null and parent.id != null">parent_id = #{parent.id,jdbcType=BIGINT},</if>
+		sequence= #{sequence},
+		level= #{level},
+		show_type= #{show_type},
+		url= #{url},
+		channel_id= #{channel_id},
+		display= #{display},
+		recommend= #{recommend},
+		icon_type= #{icon_type},
+		icon_sys= #{icon_sys},
+		photo_id= #{photo_id},
+		sc_color= #{sc_color},
+		sc_advert= #{sc_advert},
+		scb_info= #{scb_info},
+		seo_keywords= #{seo_keywords},
+		seo_description= #{seo_description},
+		weixinChannel_id= #{weixinChannel_id},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_showclass 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_showclass obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_showclass obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getParentByShowClassId" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_showclass
+		where
+			parent_id = #{parent_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageListByParentIsNull" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_showclass
+		where
+			 parent_id is null
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_showclass obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.ShowClass" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_showclass(addTime,deleteStatus,showName,sequence,level,show_type,url,channel_id,display,recommend,icon_type,icon_sys,photo_id,sc_color,sc_advert,scb_info,seo_keywords,seo_description,weixinChannel_id,parent_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{showName,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{level,jdbcType=INTEGER},#{show_type,jdbcType=INTEGER},#{url,jdbcType=VARCHAR},#{channel_id,jdbcType=BIGINT},#{display,jdbcType=BIT},#{recommend,jdbcType=BIT},#{icon_type,jdbcType=INTEGER},#{icon_sys,jdbcType=VARCHAR},#{photo_id,jdbcType=BIGINT},#{sc_color,jdbcType=VARCHAR},#{sc_advert,jdbcType=VARCHAR},#{scb_info,jdbcType=VARCHAR},#{seo_keywords,jdbcType=VARCHAR},#{seo_description,jdbcType=VARCHAR},#{weixinChannel_id,jdbcType=BIGINT},#{parent.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.ShowClass">
+		update redpigmall_showclass
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_showclass where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_showclass where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_showclass obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_showclass obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.ShowClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_showclass
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_showclass where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	<select id="queryListWithNoRelations" parameterType="map" resultType="com.redpigmall.domain.ShowClass">
+		select
+		id, showName, sequence
+		from redpigmall_showclass
+		where 1 = 1
+		<if test="deleteStatus !=null">
+		and deleteStatus = #{deleteStatus}
+		</if>
+		<if test="parent_id == null">
+		and parent_id is null
+		</if>
+		<if test="parent_id != null">
+		and parent_id = #{parent_id}
+		</if>
+		<if test="orderBy != null and orderType != null">
+		order by ${orderBy} ${orderType}
+		</if>
+	</select>
+	<select id="queryListWithNoRelations4fir" parameterType="map" resultType="map">
+		select
+		id, showName, sequence
+		from redpigmall_showclass
+		where 1 = 1
+		<if test="deleteStatus !=null">
+		and deleteStatus = #{deleteStatus}
+		</if>
+		<if test="parent_id == null">
+		and parent_id is null
+		</if>
+		<if test="parent_id != null">
+		and parent_id = #{parent_id}
+		</if>
+		<if test="orderBy != null and orderType != null">
+		order by ${orderBy} ${orderType}
+		</if>
+	</select>
+</mapper>

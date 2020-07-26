@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.SysLogMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.SysLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="ip" property="ip" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="ip_city" property="ip_city" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.SysLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="ip" property="ip" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="ip_city" property="ip_city" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,title,type,content,user_name,ip,user_id,ip_city
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="title != null">and title = #{title,jdbcType=VARCHAR}</if>
+		<if test="type != null">and type = #{type,jdbcType=INTEGER}</if>
+		<if test="content != null">and content = #{content,jdbcType=VARCHAR}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="ip != null">and ip = #{ip,jdbcType=VARCHAR}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="ip_city != null">and ip_city = #{ip_city,jdbcType=VARCHAR}</if>
+	</sql>
+	<sql id="ifStatement">
+		title= #{title},
+		type= #{type},
+		content= #{content},
+		user_name= #{user_name},
+		ip= #{ip},
+		user_id= #{user_id},
+		ip_city= #{ip_city},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.SysLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_syslog 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.SysLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_syslog obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_syslog obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.SysLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_syslog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.SysLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_syslog(addTime,deleteStatus,title,type,content,user_name,ip,user_id,ip_city)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{content,jdbcType=VARCHAR},#{user_name,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},#{user_id,jdbcType=BIGINT},#{ip_city,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.SysLog">
+		update redpigmall_syslog
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_syslog where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_syslog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.SysLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_syslog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.SysLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_syslog obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.SysLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_syslog
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_syslog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

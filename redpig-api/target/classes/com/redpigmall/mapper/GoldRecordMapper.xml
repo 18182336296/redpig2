@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoldRecordMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoldRecord">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gold_sn" property="gold_sn" jdbcType="VARCHAR"/>
+		<result column="gold_payment" property="gold_payment" jdbcType="VARCHAR"/>
+		<result column="gold_money" property="gold_money" jdbcType="INTEGER"/>
+		<result column="gold_count" property="gold_count" jdbcType="INTEGER"/>
+		<result column="gold_exchange_info" property="gold_exchange_info" jdbcType="VARCHAR"/>
+		<result column="gold_admin_info" property="gold_admin_info" jdbcType="VARCHAR"/>
+		<result column="gold_admin_time" property="gold_admin_time" jdbcType="TIMESTAMP"/>
+		<result column="gold_status" property="gold_status" jdbcType="INTEGER"/>
+		<result column="gold_pay_status" property="gold_pay_status" jdbcType="INTEGER"/>
+		<result column="order_sign" property="order_sign" jdbcType="VARCHAR"/>
+		<association property="gold_user" column="gold_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="gold_admin" column="gold_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="log" column="id" select="com.redpigmall.dao.GoldLogMapper.getGrByGoldRecordId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoldRecord">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gold_sn" property="gold_sn" jdbcType="VARCHAR"/>
+		<result column="gold_payment" property="gold_payment" jdbcType="VARCHAR"/>
+		<result column="gold_money" property="gold_money" jdbcType="INTEGER"/>
+		<result column="gold_count" property="gold_count" jdbcType="INTEGER"/>
+		<result column="gold_exchange_info" property="gold_exchange_info" jdbcType="VARCHAR"/>
+		<result column="gold_admin_info" property="gold_admin_info" jdbcType="VARCHAR"/>
+		<result column="gold_admin_time" property="gold_admin_time" jdbcType="TIMESTAMP"/>
+		<result column="gold_status" property="gold_status" jdbcType="INTEGER"/>
+		<result column="gold_pay_status" property="gold_pay_status" jdbcType="INTEGER"/>
+		<result column="order_sign" property="order_sign" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,gold_sn,gold_user_id,gold_payment,gold_money,gold_count,gold_exchange_info,gold_admin_id,gold_admin_info,gold_admin_time,gold_status,gold_pay_status,order_sign
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="gold_sn != null">and gold_sn = #{gold_sn,jdbcType=VARCHAR}</if>
+		<if test="gold_payment != null">and gold_payment = #{gold_payment,jdbcType=VARCHAR}</if>
+		<if test="gold_money != null">and gold_money = #{gold_money,jdbcType=INTEGER}</if>
+		<if test="gold_count != null">and gold_count = #{gold_count,jdbcType=INTEGER}</if>
+		<if test="gold_exchange_info != null">and gold_exchange_info = #{gold_exchange_info,jdbcType=VARCHAR}</if>
+		<if test="gold_admin_info != null">and gold_admin_info = #{gold_admin_info,jdbcType=VARCHAR}</if>
+		<if test="gold_admin_time != null">and gold_admin_time = #{gold_admin_time,jdbcType=TIMESTAMP}</if>
+		<if test="gold_status != null">and gold_status = #{gold_status,jdbcType=INTEGER}</if>
+		<if test="gold_pay_status != null">and gold_pay_status = #{gold_pay_status,jdbcType=INTEGER}</if>
+		<if test="order_sign != null">and order_sign = #{order_sign,jdbcType=VARCHAR}</if>
+		<if test="now_date_less_thran_equal !=null">and ztc_begin_time <![CDATA[ <= ]]> #{now_date_less_thran_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="addTime_more_thran_equal !=null">and addTime <![CDATA[ >= ]]> #{addTime_more_thran_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="addTime_less_thran_equal !=null">and addTime <![CDATA[ <= ]]> #{addTime_less_thran_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="gold_count_more_thran_equal !=null">and gold_count <![CDATA[ >= ]]> #{gold_count_more_thran_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="gold_count_less_thran_equal !=null">and gold_count <![CDATA[ <= ]]> #{gold_count_more_thran_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="gold_user_id != null">and gold_user_id = #{gold_user_id,jdbcType=BIGINT}</if>
+		<if test="gold_admin_id != null">and gold_admin_id = #{gold_admin_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		gold_sn= #{gold_sn},
+		<if test="gold_user == null or gold_user.id == null">gold_user_id = null,</if>
+		<if test="gold_user != null and gold_user.id != null">gold_user_id = #{gold_user.id,jdbcType=BIGINT},</if>
+		gold_payment= #{gold_payment},
+		gold_money= #{gold_money},
+		gold_count= #{gold_count},
+		gold_exchange_info= #{gold_exchange_info},
+		<if test="gold_admin == null or gold_admin.id == null">gold_admin_id = null,</if>
+		<if test="gold_admin != null and gold_admin.id != null">gold_admin_id = #{gold_admin.id,jdbcType=BIGINT},</if>
+		gold_admin_info= #{gold_admin_info},
+		gold_admin_time= #{gold_admin_time},
+		gold_status= #{gold_status},
+		gold_pay_status= #{gold_pay_status},
+		order_sign= #{order_sign},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_gold_record 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_gold_record obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_gold_record obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getGoldUserByUserId" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_record
+		where
+			gold_user_id = #{gold_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGoldAdminByUserId" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_record
+		where
+			gold_admin_id = #{gold_admin_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_record obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoldRecord" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_gold_record(addTime,deleteStatus,gold_sn,gold_payment,gold_money,gold_count,gold_exchange_info,gold_admin_info,gold_admin_time,gold_status,gold_pay_status,order_sign,gold_user_id,gold_admin_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{gold_sn,jdbcType=VARCHAR},#{gold_payment,jdbcType=VARCHAR},#{gold_money,jdbcType=INTEGER},#{gold_count,jdbcType=INTEGER},#{gold_exchange_info,jdbcType=VARCHAR},#{gold_admin_info,jdbcType=VARCHAR},#{gold_admin_time,jdbcType=TIMESTAMP},#{gold_status,jdbcType=INTEGER},#{gold_pay_status,jdbcType=INTEGER},#{order_sign,jdbcType=VARCHAR},#{gold_user.id,jdbcType=BIGINT},#{gold_admin.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoldRecord">
+		update redpigmall_gold_record
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_gold_record where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_gold_record where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_record obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_gold_record obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoldRecord" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_gold_record
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_gold_record where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

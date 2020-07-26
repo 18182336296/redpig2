@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.base.js"></script>
+<script src="$!cdnServer/resources/js/jquery.metadata.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js"  charset="utf-8"></script>
+<script>
+jQuery(document).ready(function() {
+	#if($!ad_status)
+	jQuery("#ad_status_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	jQuery("#ad_status").val("true");
+	jQuery("#choose_img").show();
+	#end
+
+    jQuery("#ad_status_button").click(function() {
+        var integral = jQuery("#ad_status").val();
+        if (integral == "true") {
+            jQuery("#ad_status_button").attr("src", "$!cdnServer/resources/style/system/manage/blue/images/no.jpg");
+            jQuery("#ad_status").val("false");
+            jQuery("#choose_img").hide();
+        } else {
+            jQuery("#ad_status_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+            jQuery("#ad_status").val("true");
+            jQuery("#choose_img").show();
+        }
+    });
+});
+function submit_form() {
+    var ad_status = jQuery("#ad_status").val();
+    if (ad_status == "true") {
+        var file = jQuery("#ad_launch_img").val();
+        if (file != "") {
+            jQuery.ajaxFileUpload({
+                url: '/admin/app_launch_ad_setting',
+                fileElementId: ["ad_launch_img"],
+                fileFilter: "$!imageSuffix1",
+                data: {
+                    "status": ad_status
+                },
+                dataType: 'json',
+                success: function(text) {
+                    jQuery(".and_preview").empty();
+                    var img = "<img src='" + text.return_str + "' width='320px' height='473px' />";
+                    jQuery(".and_preview").append(img);
+					jQuery("#ad_launch_img").val("")
+                    showDialog("msg_info", "", "广告开启成功!", 2, "succeed", 3, '');                    
+                }
+            });
+        } else {
+            showDialog("msg_info", "", "请选择广告图片!", 2, "warning", 3, '');
+        }
+    } else {
+        jQuery.post("$!webPath/app_launch_ad_setting", {
+            "status": ad_status
+        },
+        function(text) {
+            if (text != null) {
+                var data = eval("(" + text + ")");
+				jQuery(".and_preview").empty();
+                if (data.return_str == 1) showDialog("msg_info", "", "广告关闭成功!", 2, "succeed", 3, '');				
+            }
+        },
+        "text");
+    }
+}
+</script>
+</head>
+<body>
+<div class="android_app_template">
+<div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>广告图片在手机上会填充满屏幕，在不同尺寸屏幕上会有不同表现，以实际情况为准。</li>
+        <li>推荐使用16:9的纵向图片。</li>
+      </ul>
+    </div>
+  <div class="and_fl">
+    <div class="and_scroll_box">
+      <div class="and_preview"> #if($!img_url)<img width="320px" height="473px" src="$!img_url"/>#end</div>
+    </div>
+  </div>
+  <div class="and_fr">
+    
+    <table id="setting_table" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td width="20%" align="right">是否开启：</td>
+          <td><span class="webSwitch">
+            <input name="ad_status" id="ad_status" type="hidden" value="$!ad_status" />
+            <img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/no.jpg" width="61" height="23" style="cursor:pointer" id="ad_status_button"/></span></td>
+        </tr>
+        <tr id="choose_img" style="display:none">
+          <td width="20%" align="right">广告图片：</td>
+          <td>
+          	<div class="choose_img_upload">
+            	<i> <input class="ip200" type="file" id="ad_launch_img" name="ad_launch_img"/>  </i>
+                <span>上传图片</span>
+            </div>
+                 
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input class="ip_btn" type="button" value="提 交" onclick="submit_form()"/></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

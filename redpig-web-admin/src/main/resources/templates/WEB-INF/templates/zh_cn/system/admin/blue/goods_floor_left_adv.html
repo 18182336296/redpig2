@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+
+<script>
+jQuery(document).ready(function(){
+  jQuery(":radio").click(function(){
+     if(jQuery(this).val()=="user"){
+	   jQuery("li[id^=user_adv_]").show();
+	   jQuery("#shop_adv").hide();
+	 }else{
+	   jQuery("li[id^=user_adv_]").hide();
+	   jQuery("#shop_adv").show();	 
+	 }
+  });
+  //
+  jQuery("#img").change(function(){
+     jQuery("#file_val").val(jQuery(this).val());
+  });
+  //
+  
+   jQuery("#theForm").validate({		
+	 ignore: "",
+     rules:{
+	   img:{accept:"$!config.imageSuffix"}
+	   
+	 },
+	messages:{
+	  img:{accept:'图片格式不正确'}
+	  
+	}
+  });
+  
+  
+  jQuery("#logoShow").hover(function(){
+		jQuery("#logoImg").show();							   
+	},function(){
+		jQuery("#logoImg").hide();	
+		});
+  });
+
+  function save_form(){
+	 jQuery("#theForm").submit();
+  }
+</script>
+<form action="$!webPath/goods_floor_left_adv_save" method="post" enctype="multipart/form-data" id="theForm">
+<div class="box_floor">
+  <div class="floor_advertisment"> <em class="floor_warning">注释：可以上传广告图片也可以使用商城广告</em>
+    <ul class="floor_adv">
+      <li>
+       <b class="left">
+       <input name="id" type="hidden" id="id" value="$!obj.id">
+       选择类型：</b> 
+      <span class="floor_adv_sp">
+      <i><label><input name="type" type="radio" id="type" value="user" checked="checked" />图片上传</label></i>
+      <i><label><input name="type" type="radio" id="type" value="adv" />商城广告</label></i>
+      </span> 
+      </li>
+      <li id="user_adv_img"> 
+      <b class="left">广告图片上传：</b> 
+      <span class="floor_adv_sp">
+        <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+        <input name="button" type="button" class="floor_file_btn" value=""/>
+        <input type="file"  size="33" class="flooor_file" id="img" name="img"/>
+       <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="20" height="20"  id="logoShow" style="cursor:help"/> </span> </span>
+        <i class="floor_adv_node">&nbsp;&nbsp;建议上199*180像素图片</i> 
+        <div class="bigimgpre" id="logoImg" style="display:none;">
+        <img src="$!imageWebServer/$!obj_map.acc_img" width="200" height="80" />
+      </li>
+      <li id="user_adv_url"> <b class="left">广告链接：</b>
+       <span class="floor_adv_sp">
+        <input name="adv_url" type="text"class="floor_file_txt2" id="adv_url" value="$!obj_map.acc_url"/>
+        </span> <i class="floor_adv_node">格式为：http://www.xxx.com</i>
+      </li>
+       <li id="shop_adv" style="display:none;"> <b class="left">广告选择：</b>
+       <span class="floor_adv_sp">
+       <select name="adv_id" id="adv_id">
+       #foreach($ap in $aps)
+        <option value="">请选择图片广告位</option>
+        <option value="$!ap.id" #if($!{obj_map.adv_id}==$!{ap.id}) selected="selected" #end>$!{ap.ap_title}</option>
+       #end
+       </select>
+        </span>
+        <i class="floor_adv_i">仅支持193*193图片广告位</i> 
+      </li>
+    </ul>
+  </div>
+  <div class="submit">
+      <input name="按钮" type="button" value="保存" onClick="save_form();" />
+  </div>
+</div>
+</form>

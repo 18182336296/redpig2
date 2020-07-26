@@ -1,0 +1,156 @@
+<link href="$!cdnServer/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<!--<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>-->
+<script>
+function query_goods(){
+   jQuery("#wait_query").show();
+   var goods_name=jQuery("#query_goods_name").val();
+   var gc_id=jQuery("#gc_id").val();
+   jQuery.getJSON("$!webPath/nuke_goods_add_load",{"goods_name":goods_name,"gc_id":gc_id},function(data){
+	  jQuery("#goods_list").empty();
+	  jQuery("#wait_query").hide();
+      jQuery.each(data, function(index,item){
+	     var s="<option store_price='"+item.store_price+"' store_inventory='"+item.store_inventory+"' value='"+item.id+"'>"+item.goods_name+"</option>";
+		 jQuery("#goods_list").append(s);
+	  });
+   });
+   /* jQuery.ajax({
+        type: 'POST',
+        url: "$!webPath/getGoodsById",
+        data: {"goods_id":jQuery(this).val()},
+        beforeSend:function(){
+            console.log(12124);
+        },
+        success: function(data){
+            alert(123);
+        },error:function(){
+            //console.log(data);
+        },
+        dataType: "json"
+    });*/
+
+}
+jQuery(document).ready(function(){
+
+});
+// 绑定列表选中商品事件
+/*jQuery('#goods_list').bind("change",function () {
+    // 获取id,请求获取商品实体,此处要动态加载商品的规格
+    jQuery.ajax({
+        async:false,
+        type: 'POST',
+        url: "$!webPath/getGoodsById",
+        data: {"goods_id":jQuery(this).val()},
+        success: function(data){
+            // 获得商品的规格型号
+            console.log(data);
+            console.log(data.get("goods_specs"));
+            console.log(data.get("specs"));
+        },error:function(){
+            //console.log(data);
+        },
+        dataType: "json"
+    });
+})*/
+function nuke_goods_sel(){
+   var goods_id=jQuery("#goods_list").val();
+   var goods_name=jQuery("#goods_list option:selected").text();
+   var store_price=jQuery("#goods_list option:selected").attr("store_price");
+   var store_inventory=jQuery("#goods_list option:selected").attr("store_inventory");
+   if(goods_id!=null){
+       jQuery("#store_price_info").text("¥"+store_price);
+       jQuery("#origin_price").val(store_price);
+       jQuery("#store_price").show();
+       jQuery("#store_inventory_info").html("<span style='color:#f00'>"+store_inventory+"</span>");
+       jQuery("#store_inventory").show();
+       jQuery("#goods_id").val(goods_id);
+       jQuery("#goods_name").val(goods_name);
+       // 清除规格信息
+       jQuery("#specs_name").val("");
+       jQuery("#goods_spec_id").val("");
+       // 移除窗口
+       jQuery("#nuke_goods").remove();
+       //设置规格选择地址
+       jQuery("#specs_name").attr("dialog_uri","$!webPath/nuke_goods_spec_select?goods_id="+goods_id);
+
+   }else{
+     alert("请选择一款商品");
+   }
+}
+</script>
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td width="100" align="right" valign="top">商品名称：
+      </td>
+      <td align="left"><input name="query_goods_name" type="text" id="query_goods_name" size="30" style="border: 1px solid #E7E7E7;height: 20px;border-radius: 3px;" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">商品分类：</td>
+      <td align="left">
+      <select name="gc_id" id="gc_id">
+      <option value="" selected="selected">请选择商品分类...</option>
+      #foreach($gc in $gcs)
+     	 <option value="$!gc.id">$!gc.className</option>
+      #end
+      </select>
+      </td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">&nbsp;</td>
+      <td align="left"><input name="input" type="button" value="查询" class="btn_white_a" style="cursor: pointer;border: none;padding: 3px 10px;background: #2aaaf3;color: #fff;border-radius: 3px;" onclick="query_goods();"/><img id="wait_query" src="$!cdnServer/resources/style/common/images/wait.gif" style="display:none;" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">商品列表：</td>
+      <td align="left">
+      <select name="goods_list" size="10" id="goods_list" style="width:300px;">
+      </select></td>
+    </tr>
+    <!--<tr>
+      <td align="right" valign="top">选择：</td>
+      <td align="left">
+        <div class="model_info">
+          <div class="model_pic"></div>
+          <ul class="model_text">
+            <li class="value">￥<span  id="store_price2"></span></li>
+            <li class="amount">库存：<span id="goods_inventory" goods_inventory="$!{obj.goods_inventory}">$!{obj.goods_inventory}件</span></li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">选择：</td>
+        <td align="left">
+          #foreach($spec in $goodsViewTools.generic_spec("337"))
+          <li>$!{spec.name}：</li>
+          <ul>
+            #set($index=1)
+            #foreach($gsp in $obj.goods_specs)
+            #if($!{gsp.spec.id}==$!spec.id)
+            #if($index==1)
+            #if($!spec.type=="img") <li class="this" mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);"  sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"><img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="29" height="29" />$!gsp.value</a></li>#end
+            #if($!spec.type=="text") <li class="this" mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);" onClick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">$!gsp.value</a></li>#end
+
+            #else
+            #if($!spec.type=="img") <li mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"><img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="29" height="29" />$!gsp.value</a></li>#end
+            #if($!spec.type=="text") <li mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);"  sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">$!gsp.value</a></li>#end
+            #end
+            #set($index=$index+1)
+            #end
+          </ul>
+          #end
+          #end
+        </td>-->
+        <!--<div class="model_amount">
+          <h4 class="amount_title">数量<span>#if($!obj.goods_limit==1 && $!obj.goods_limit_count>0 && $!limit_count<$!{obj.goods_inventory} && $!limit_count!=-1) (限购$!obj.goods_limit_count件  #if($!obj.goods_limit_count>$!limit_count && $!limit_count>0) ,可以购买$!limit_count 件 #elseif($!limit_count==0),您已超过购买数量！#end) #end</span></h4>
+          <ul  style="overflow:hidden">
+            <li class="input_text"><input type="text" id="count" name="count"  value="1"/></li>
+          </ul>
+        </div>-->
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+      <span class="setsub">
+        <input name="按钮" type="button" style="cursor: pointer;border: none;padding: 5px 20px;background: #2aaaf3;color: #fff;border-radius: 3px;" value="确定"  onclick="nuke_goods_sel();" />
+      </span>
+      </td>
+    </tr>
+  </table>

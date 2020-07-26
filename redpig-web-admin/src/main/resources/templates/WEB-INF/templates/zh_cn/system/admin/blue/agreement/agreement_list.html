@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+    // tab样式聚焦
+    if("$!cg_status"==""){
+        jQuery(".nav_list ul li:first a").addClass("this");
+    }
+    else if("$!cg_status"=="1"){
+        jQuery(".nav_list ul li:eq(1) a").addClass("this");
+    }else if("$!cg_status"=="2"){
+        jQuery(".nav_list ul li:eq(2) a").addClass("this");
+    }else if("$!cg_status"=="-2"){
+        jQuery(".nav_list ul li:eq(3) a").addClass("this");
+    }
+});
+function removes(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery("#ListForm").find(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId+=jQuery(this).val()+",";
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("是否继续？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+function clearData() {
+    jQuery("#collage_name").val("");
+    jQuery('#beginTime').textbox('setValue','');
+    jQuery('#endTime').textbox('setValue','');
+}
+</script>
+ <script >
+     jQuery(document).ready(function(){
+         jQuery('#beginTime').attr("readonly","readonly").datepicker({
+             dateFormat:"yy-mm-dd",
+             changeMonth: true,
+             changeYear: true
+         });
+         jQuery('#endTime').attr("readonly","readonly").datepicker({
+             dateFormat:"yy-mm-dd",
+             changeMonth: true,
+             changeYear: true
+         });
+     });
+
+
+ </script>
+</head>
+<body>
+<div class="cont">
+<form action="$!webPath/distribution_agreement_list" method="post" >
+    <div class="nav_list">
+
+        <ul>
+            <li><a href="$!webPath/distribution_agreement_list"><b>所有协议</b></a> </li>
+            <li><a href="$!webPath/distribution_agreement_add"><b>新增协议</b></a> </li>
+        </ul>
+    </div>
+    <div class="search">
+        <ul>
+            <li>
+                <span>协议名称</span>
+                <span class="size200">
+                   <input name="agreement_name" type="text" id="collage_name" value="$!agreement_name"/>
+                </span>
+
+                <span>创建时间</span>
+                <span class="size200">
+      <input name="beginTime" type="text" id="beginTime" value="$!beginTime" readonly="readonly" class="user_title_txt"  style="width:128px"  placeholder="开始时间"/>
+    </span>
+                <span  style="float:left; line-height:24px; padding-right:5px;">—</span>
+                <span class="size200">
+    <input name="endTime" type="text" id="endTime" value="$!endTime" readonly="readonly" class="user_title_txt" style="width:128px" placeholder="结束时间" />
+    </span>
+
+
+                <input name="" type="submit" value="搜索" style="cursor:pointer;margin-left: 20px;" class="search_btn" />
+                <!--<input name="" type="button" value="清除" style="cursor:pointer;margin-left: 20px;" class="search_btn" onclick="clearData()"/>-->
+            </li>
+        </ul>
+    </div>
+</form>
+<div>
+
+</div>
+  <form method="post" id="ListForm" action="$!webPath/distribution_agreement_list">
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <!--<th width="6%"></th>-->
+        <th width="12%" align="center"><span class="form_btna">协议名称</span></th>
+        <th width="12%" align="center"><span class="form_btna">协议类型</span></th>
+        <th align="center" width="12%"><span class="form_btna">创建时间</span></th>
+         <th align="center" width="12%"><span class="form_btna">修改时间</span></th>
+
+        <th align="center" width="12%"><span class="form_btna">协议版本</span></th>
+        <th align="center" width="12%"><span class="form_btna">状态</span></th>
+        <th  align="center"><span class="form_btna">操作</span></th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr id="$!{obj.id}">
+         <!--<td class="check_position">
+              <label for="ids_$!obj.id">
+                  <input class="ace" name="ids_$!obj.id" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl"></span></label></td>-->
+
+          <td align="center">$!obj.agreement_name</td>
+          <td align="center">$!obj.agreement_type</td>
+        <td align="center">$!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss ",$!obj.addTime)</td>
+          <td align="center"> $!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss ",$!obj.update_time)</td>
+        <td align="center">$!obj.agreement_version</td>
+          <td align="center">$!obj.agreement_state</td>
+
+        <td  align="center" class="hui oprate_con">
+	        <a href="$!webPath/distribution_agreement_look?id=$!obj.id&currentPage=$!currentPage" class="blue">查看</a>|
+	        <a href="$!webPath/distribution_agreement_update?id=$!obj.id&currentPage=$!currentPage"  class="blue">编辑</a>
+            <a href="javascript:if(confirm('删除后不可恢复?'))window.location.href='$!webPath/distribution_agreement_delete?id=$!obj.id&currentPage=$!currentPage'">删除</a>
+        </td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="7">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+    #if($!objs.size()>0)
+    <div class="operation_box">
+        <div class="operation_left">
+    <!--    <ul>
+            <li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+            <li><a href="javascript:void(0);" onclick="$!webPath/distribution_grade_delete">删除</a></li>
+        </ul>-->
+        </div>
+        <div class="operation_right">
+            <div class="fenye">
+            <span id="queryCondition" style="display:none">
+            </span>
+                <input name="mulitId" type="hidden" id="mulitId" />
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML
+            </div>
+        </div>
+    </div>
+ #end
+  </div>
+  </form>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoodsFloorMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoodsFloor">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gf_name" property="gf_name" jdbcType="VARCHAR"/>
+		<result column="gf_css" property="gf_css" jdbcType="VARCHAR"/>
+		<result column="gf_style" property="gf_style" jdbcType="VARCHAR"/>
+		<result column="gf_sequence" property="gf_sequence" jdbcType="INTEGER"/>
+		<result column="gf_goods_count" property="gf_goods_count" jdbcType="INTEGER"/>
+		<result column="gf_level" property="gf_level" jdbcType="INTEGER"/>
+		<result column="gf_display" property="gf_display" jdbcType="BIT"/>
+		<result column="gf_gc_list" property="gf_gc_list" jdbcType="VARCHAR"/>
+		<result column="gf_gc_goods" property="gf_gc_goods" jdbcType="VARCHAR"/>
+		<result column="gf_list_goods" property="gf_list_goods" jdbcType="VARCHAR"/>
+		
+		<result column="gf_left_adv" property="gf_left_adv" jdbcType="VARCHAR"/>
+		<result column="gf_right_adv" property="gf_right_adv" jdbcType="VARCHAR"/>
+		<result column="gf_brand_list" property="gf_brand_list" jdbcType="VARCHAR"/>
+		<result column="gf_style2_goods" property="gf_style2_goods" jdbcType="VARCHAR"/>
+		
+		<result column="gf_type" property="gf_type" jdbcType="INTEGER"/>
+		<result column="wide_template" property="wide_template" jdbcType="VARCHAR"/>
+		<result column="wide_adv_brand" property="wide_adv_brand" jdbcType="VARCHAR"/>
+		<result column="wide_adv_rectangle_four" property="wide_adv_rectangle_four" jdbcType="VARCHAR"/>
+		<result column="wide_adv_square_four" property="wide_adv_square_four" jdbcType="VARCHAR"/>
+		<result column="wide_goods" property="wide_goods" jdbcType="VARCHAR"/>
+		<result column="wide_adv_five" property="wide_adv_five" jdbcType="VARCHAR"/>
+		<result column="wide_adv_eight" property="wide_adv_eight" jdbcType="VARCHAR"/>
+		
+		
+		<association property="parent" column="parent_id" select="com.redpigmall.dao.GoodsFloorMapper.selectByPrimaryKey"/>
+		<association property="icon" column="icon_id" select="com.redpigmall.dao.AccessoryMapper.getIconByAccessoryId"/>
+		<collection property="childs" column="id" select="com.redpigmall.dao.GoodsFloorMapper.getParentByGoodsFloorId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoodsFloor">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gf_name" property="gf_name" jdbcType="VARCHAR"/>
+		<result column="gf_css" property="gf_css" jdbcType="VARCHAR"/>
+		<result column="gf_style" property="gf_style" jdbcType="VARCHAR"/>
+		<result column="gf_sequence" property="gf_sequence" jdbcType="INTEGER"/>
+		<result column="gf_goods_count" property="gf_goods_count" jdbcType="INTEGER"/>
+		<result column="gf_level" property="gf_level" jdbcType="INTEGER"/>
+		<result column="gf_display" property="gf_display" jdbcType="BIT"/>
+		<result column="gf_gc_list" property="gf_gc_list" jdbcType="VARCHAR"/>
+		<result column="gf_gc_goods" property="gf_gc_goods" jdbcType="VARCHAR"/>
+		<result column="gf_list_goods" property="gf_list_goods" jdbcType="VARCHAR"/>
+		
+		<result column="gf_left_adv" property="gf_left_adv" jdbcType="VARCHAR"/>
+		<result column="gf_right_adv" property="gf_right_adv" jdbcType="VARCHAR"/>
+		<result column="gf_brand_list" property="gf_brand_list" jdbcType="VARCHAR"/>
+		<result column="gf_style2_goods" property="gf_style2_goods" jdbcType="VARCHAR"/>
+		
+		
+		<result column="gf_type" property="gf_type" jdbcType="INTEGER"/>
+		<result column="wide_template" property="wide_template" jdbcType="VARCHAR"/>
+		<result column="wide_adv_brand" property="wide_adv_brand" jdbcType="VARCHAR"/>
+		<result column="wide_adv_rectangle_four" property="wide_adv_rectangle_four" jdbcType="VARCHAR"/>
+		<result column="wide_adv_square_four" property="wide_adv_square_four" jdbcType="VARCHAR"/>
+		<result column="wide_goods" property="wide_goods" jdbcType="VARCHAR"/>
+		<result column="wide_adv_five" property="wide_adv_five" jdbcType="VARCHAR"/>
+		<result column="wide_adv_eight" property="wide_adv_eight" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,gf_name,gf_css,gf_style,gf_sequence,gf_goods_count,parent_id,gf_level,gf_display,icon_id,gf_gc_list,gf_gc_goods,gf_list_goods,gf_left_adv,gf_right_adv,gf_brand_list,gf_style2_goods,gf_type,wide_template,wide_adv_brand,wide_adv_rectangle_four,wide_adv_square_four,wide_goods,wide_adv_five,wide_adv_eight
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="gf_name != null">and gf_name = #{gf_name,jdbcType=VARCHAR}</if>
+		<if test="gf_css != null">and gf_css = #{gf_css,jdbcType=VARCHAR}</if>
+		<if test="gf_style != null">and gf_style = #{gf_style,jdbcType=VARCHAR}</if>
+		<if test="gf_sequence != null">and gf_sequence = #{gf_sequence,jdbcType=INTEGER}</if>
+		<if test="gf_goods_count != null">and gf_goods_count = #{gf_goods_count,jdbcType=INTEGER}</if>
+		<if test="gf_level != null">and gf_level = #{gf_level,jdbcType=INTEGER}</if>
+		<if test="gf_display != null">and gf_display = #{gf_display,jdbcType=BIT}</if>
+		<if test="gf_gc_list != null">and gf_gc_list = #{gf_gc_list,jdbcType=VARCHAR}</if>
+		<if test="gf_gc_goods != null">and gf_gc_goods = #{gf_gc_goods,jdbcType=VARCHAR}</if>
+		<if test="gf_list_goods != null">and gf_list_goods = #{gf_list_goods,jdbcType=VARCHAR}</if>
+		
+		<if test="gf_left_adv != null">and gf_left_adv = #{gf_left_adv,jdbcType=VARCHAR}</if>
+		<if test="gf_right_adv != null">and gf_right_adv = #{gf_right_adv,jdbcType=VARCHAR}</if>
+		<if test="gf_brand_list != null">and gf_brand_list = #{gf_brand_list,jdbcType=VARCHAR}</if>
+		<if test="gf_style2_goods != null">and gf_style2_goods = #{gf_style2_goods,jdbcType=VARCHAR}</if>
+		
+		<if test="gf_type != null">and gf_type = #{gf_type,jdbcType=INTEGER}</if>
+		<if test="wide_template != null">and wide_template = #{wide_template,jdbcType=VARCHAR}</if>
+		<if test="wide_adv_brand != null">and wide_adv_brand = #{wide_adv_brand,jdbcType=VARCHAR}</if>
+		<if test="wide_adv_rectangle_four != null">and wide_adv_rectangle_four = #{wide_adv_rectangle_four,jdbcType=VARCHAR}</if>
+		<if test="wide_adv_square_four != null">and wide_adv_square_four = #{wide_adv_square_four,jdbcType=VARCHAR}</if>
+		<if test="wide_goods != null">and wide_goods = #{wide_goods,jdbcType=VARCHAR}</if>
+		<if test="wide_adv_five != null">and wide_adv_five = #{wide_adv_five,jdbcType=VARCHAR}</if>
+		<if test="wide_adv_eight != null">and wide_adv_eight = #{wide_adv_eight,jdbcType=VARCHAR}</if>
+		
+		<if test="parent != null and parent==1"> and parent_id is null</if>
+		<if test="parent != null and parent== -1 "> and parent_id is null</if>
+		<if test="parent == 1 and parent != null"> and parent_id= #{parent,jdbcType=BIGINT}</if>
+		
+		<if test="icon_id != null">and icon_id = #{icon_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		gf_name= #{gf_name},
+		gf_css= #{gf_css},
+		gf_style= #{gf_style},
+		gf_sequence= #{gf_sequence},
+		gf_goods_count= #{gf_goods_count},
+		<if test="parent == null or parent.id == null">parent_id = null,</if>
+		<if test="parent != null and parent.id != null">parent_id = #{parent.id,jdbcType=BIGINT},</if>
+		gf_level= #{gf_level},
+		gf_display= #{gf_display},
+		<if test="icon == null or icon.id == null">icon_id = null,</if>
+		<if test="icon != null and icon.id != null">icon_id = #{icon.id,jdbcType=BIGINT},</if>
+		gf_gc_list= #{gf_gc_list},
+		gf_gc_goods= #{gf_gc_goods},
+		gf_list_goods= #{gf_list_goods},
+		
+		gf_left_adv= #{gf_left_adv},
+		gf_right_adv= #{gf_right_adv},
+		gf_brand_list= #{gf_brand_list},
+		gf_style2_goods= #{gf_style2_goods},
+		
+		
+		gf_type= #{gf_type},
+		wide_template= #{wide_template},
+		wide_adv_brand= #{wide_adv_brand},
+		wide_adv_rectangle_four= #{wide_adv_rectangle_four},
+		wide_adv_square_four= #{wide_adv_square_four},
+		wide_goods= #{wide_goods},
+		wide_adv_five= #{wide_adv_five},
+		wide_adv_eight= #{wide_adv_eight},
+		
+		
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goods_floor 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goods_floor obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from 
+			redpigmall_goods_floor obj
+		<where>
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryAll" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goods_floor obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.GoodsFloor" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_goods_floor(
+		addTime,
+		deleteStatus,
+		gf_name,
+		gf_css,
+		gf_style,
+		gf_sequence,
+		gf_goods_count,
+		gf_level,
+		gf_display,
+		gf_gc_list,
+		gf_gc_goods,
+		gf_list_goods,
+		
+		gf_left_adv,
+		gf_right_adv,
+		gf_brand_list,
+		gf_style2_goods,
+		
+		
+		gf_type,
+		wide_template,
+		wide_adv_brand,
+		wide_adv_rectangle_four,
+		wide_adv_square_four,
+		wide_goods,
+		wide_adv_five,
+		wide_adv_eight,
+		
+		
+		parent_id,
+		icon_id
+		)
+		values(
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{gf_name,jdbcType=VARCHAR},
+		#{gf_css,jdbcType=VARCHAR},
+		#{gf_style,jdbcType=VARCHAR},
+		#{gf_sequence,jdbcType=INTEGER},
+		#{gf_goods_count,jdbcType=INTEGER},
+		#{gf_level,jdbcType=INTEGER},
+		#{gf_display,jdbcType=BIT},
+		#{gf_gc_list,jdbcType=VARCHAR},
+		#{gf_gc_goods,jdbcType=VARCHAR},
+		#{gf_list_goods,jdbcType=VARCHAR},
+		
+		#{gf_left_adv,jdbcType=VARCHAR},
+		#{gf_right_adv,jdbcType=VARCHAR},
+		#{gf_brand_list,jdbcType=VARCHAR},
+		#{gf_style2_goods,jdbcType=VARCHAR},
+		
+		
+		#{gf_type,jdbcType=INTEGER},
+		#{wide_template,jdbcType=VARCHAR},
+		#{wide_adv_brand,jdbcType=VARCHAR},
+		#{wide_adv_rectangle_four,jdbcType=VARCHAR},
+		#{wide_adv_square_four,jdbcType=VARCHAR},
+		#{wide_goods,jdbcType=VARCHAR},
+		#{wide_adv_five,jdbcType=VARCHAR},
+		#{wide_adv_eight,jdbcType=VARCHAR},
+		
+		
+		#{parent.id,jdbcType=BIGINT},
+		#{icon.id,jdbcType=BIGINT}
+		)
+	</insert>
+	<update id="update" parameterType="com.redpigmall.domain.GoodsFloor">
+		update redpigmall_goods_floor 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from redpigmall_goods_floor where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_goods_floor obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getParentByGoodsFloorId" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods_floor
+		where
+			parent_id = #{parent_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageListByParentIsNull" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods_floor
+		where
+			 parent_id is null
+	</select>
+	<select id="getIconByAccessoryId" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods_floor
+		where
+			icon_id = #{icon_id,jdbcType=BIGINT}
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoodsFloor" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_goods_floor(addTime,deleteStatus,gf_name,gf_css,gf_style,gf_sequence,gf_goods_count,gf_level,gf_display,gf_gc_list,gf_gc_goods,gf_list_goods,gf_left_adv,gf_right_adv,gf_brand_list,gf_style2_goods,gf_type,wide_template,wide_adv_brand,wide_adv_rectangle_four,wide_adv_square_four,wide_goods,wide_adv_five,wide_adv_eight,parent_id,parent_id,icon_id,icon_id,parent_id,icon_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{gf_name,jdbcType=VARCHAR},#{gf_css,jdbcType=VARCHAR},#{gf_style,jdbcType=VARCHAR},#{gf_sequence,jdbcType=INTEGER},#{gf_goods_count,jdbcType=INTEGER},#{gf_level,jdbcType=INTEGER},#{gf_display,jdbcType=BIT},#{gf_gc_list,jdbcType=VARCHAR},#{gf_gc_goods,jdbcType=VARCHAR},#{gf_list_goods,jdbcType=VARCHAR},#{gf_left_adv,jdbcType=VARCHAR},#{gf_right_adv,jdbcType=VARCHAR},#{gf_brand_list,jdbcType=VARCHAR},#{gf_style2_goods,jdbcType=VARCHAR},#{gf_type,jdbcType=INTEGER},#{wide_template,jdbcType=VARCHAR},#{wide_adv_brand,jdbcType=VARCHAR},#{wide_adv_rectangle_four,jdbcType=VARCHAR},#{wide_adv_square_four,jdbcType=VARCHAR},#{wide_goods,jdbcType=VARCHAR},#{wide_adv_five,jdbcType=VARCHAR},#{wide_adv_eight,jdbcType=VARCHAR},#{parent.id,jdbcType=BIGINT},#{icon.id,jdbcType=BIGINT},#{parent.id,jdbcType=BIGINT},#{icon.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoodsFloor">
+		update redpigmall_goods_floor
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_goods_floor where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_goods_floor where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.*
+		from 
+			redpigmall_goods_floor obj
+		<where>
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goods_floor obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.gf_sequence 
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoodsFloor" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods_floor
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_goods_floor where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

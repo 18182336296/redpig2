@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户头像修改-$!{config.title}-$!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function() {
+	//系统图片
+	jQuery("#sys_icon").val(jQuery("#icon_1").children("img").attr("src"));
+    jQuery("#portrait li").click(function(){
+	   jQuery("#sys_icon").val(jQuery(this).children("img").attr("src"));
+       jQuery(this).addClass("this");
+	   jQuery(this).siblings().removeClass("this");
+	});	
+	//上传图片
+	jQuery("#icon").live("change",function(){
+		var eid=this.id;
+		jQuery.ajaxFileUpload({
+			type:'POST',
+			url:'$!webPath/buyer/upload_avatar',
+			data:{"type":"upload"},
+            fileElementId:[eid],
+		    fileFilter:".jpg,.gif,.png",
+			fileSize:1048576,      
+            dataType: 'json',                
+            success: function (data){  
+				if(data){
+					showDialog("msg_info","","上传成功！",0,"succeed",1,function(){
+				     	window.location.reload();
+		   		    });
+				 }else{
+					 showDialog("msg_info","","上传失败！",0,"succeed",1,function(){});
+				 }
+			}
+		});
+    });
+});
+
+function saveForm(){
+	var value=jQuery("#sys_icon").val();
+    jQuery.ajax({
+	    type:'POST',
+		url:'$!webPath/buyer/upload_avatar',
+		data:{"value":value,"type":"sys"},
+		success:function(data){
+		    if(data){
+			    showDialog("msg_info","","保存成功！",0,"succeed",1,function(){
+				    window.location.reload();
+		   		});
+			}else{
+		        showDialog("msg_info","","保存失败！",0,"succeed",1,function(){});
+			}	
+	    }
+   });
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="usercenter">
+     $!httpInclude.include("/buyer/nav?op=account")
+    <div class="usercenter_right">
+      <div class="myorder">
+        <h4><strong>账户信息</strong></h4>
+      </div>
+      <div class="user_list">
+        <div class="user_list_title">
+          <ul class="user_title_ul">
+            <li><i></i><a href="$!webPath/buyer/account">基本信息</a></li>
+            <li class="this"><i></i><a href="$!webPath/buyer/account_avatar">修改头像</a></li>
+          </ul>
+        </div>     
+        #if($!user.photo)
+		#set($img="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+		#else 
+		#set($img="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+		#end
+        
+          <div class="add_usercenter">
+          <!--------左侧---------->
+          <div class="usercenter_photo_edit">
+            <div class="photo_edit_left">
+                <div class="edit_l_t">
+                    <div class="edit_l_t_in"><b><input type="file" name="icon" id="icon" style="cursor:pointer"/></b><span><a href="javascript:void(0);">上传头像图片</a></span><i>仅支持JPG、GIF、PNG、JPEG、BMP格式，文件小于4M</i></div>
+                    <div class="edit_l_t_c">
+                        <b><img src="$img" /></b>
+                    </div>
+                </div>
+                <div class="add_user_photo">
+                 <span>
+                    <ul id="portrait">
+                       <i class="tj">推荐头像</i>
+                       <!------------点击头像  this ---------->
+                       <input type="hidden" id="sys_icon" name="sys_icon" />
+                       #foreach($count in [1..16])
+                       <li class="">
+                            <img src="$!cdnServer/resources/style/system/front/default/images/usercenter/portrait/$!{count}.jpg" />
+                            <i></i>
+                        </li>
+                       #end
+                    </ul>
+                    <strong><a href="javascript:void(0);" onclick='saveForm();'>保存</a></strong>
+                    <em style="display:none;"><img src="$img" width="132" height="132"></em>
+                    <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe>
+                  </span>
+                 </div>
+             </div>
+          </div>
+          <!--------右侧---------->
+          <div class="photo_edit_right">
+            <h3>效果预览</h3>
+            <h4>你上传的图片会自动生成2种尺寸，请注意小尺寸的头像是否清晰</h4>
+            <div class="photo_edit_right_c">
+            	<b><img src="$img" /></b>
+                <i>100*100像素</i>
+                <span><img src="$img" /></span>
+                <i>50*50像素</i>
+            </div>
+            <div class="photo_edit_right_t"></div>
+         </div>
+         
+        </div>
+      </div>  
+    </div> 
+  </div>
+  $!httpInclude.include("/footer")
+</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>优惠券领取 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function() {
+	jQuery(".discount_coupon_list a").click(function(){
+		if(jQuery(this).attr("coupon")==null){return;}
+		jQuery(this).html("正在领取");
+		var coupon_id = jQuery(this).attr("coupon");
+		jQuery(this).removeAttr("coupon");		
+		jQuery.ajax({type:'POST',url:'$!webPath/capture_goods_coupon',data:{"coupon_id":coupon_id},
+						  success:function(data){
+							if(data=="true"){
+								showDialog("msg_info","","领取成功！",0,"succeed",1,function(){
+				     				window.location.reload();
+		   						});
+							}else{
+								showDialog("msg_info","","领取失败！",0,"succeed",1,function(){
+				     				window.location.reload();
+		   						});
+							}
+						  }
+			  });
+	});	
+   
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main_bg" style="background:url($!cdnServer/resources/style/system/front/default/images/coupon_bg.png) center top; width:100%; float:left;"> 
+<div class="main">
+  <div class="discount_coupon">
+	<div class="discount_coupon_list">
+    	#if($!coupons.size()>0)
+    	<ul>
+        	#foreach($coupon in $coupons)
+            <li>
+            	<span><img src="$!imageWebServer/$!coupon.coupon_acc.path/$!coupon.coupon_acc.name" /></span>
+                <strong style="text-align:right">$!CommUtil.formatShortDate($!coupon.coupon_begin_time)至$!CommUtil.formatShortDate($!coupon.coupon_end_time)</strong>
+                <b>
+                	<i>还剩<em>#if($!coupon.coupon_surplus_amount==0)9999#else$!coupon.coupon_surplus_amount#end</em>张
+                    #if($!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+                    <a href="javascript:void(0)" class="this">已领取</a>
+                    #else
+                    <a href="javascript:void(0)" coupon="$!{coupon.id}" >立即领取</a>
+                    #end
+                    </i>
+                    <i></i>
+                </b>
+            </li>
+            #end
+        </ul>
+        #else
+    	<div class="discount_coupon_list_none"></div>
+        #end
+    </div>
+</div>
+</div>
+</div>
+  $!httpInclude.include("/footer") 
+</body>
+</html>

@@ -1,0 +1,73 @@
+#if($!img_list)  <!--规格图片开始goods_color_image-->
+      #set($big_img="$!img_list.get(0).bigImg")
+      #set($small_img="$!img_list.get(0).smallImg")
+      #if($!big_img=="")
+      #set($big_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+      #end
+      #if($!small_img=="")
+      #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+      #end
+      <script>
+      jQuery(document).ready(function(){				
+			jQuery('.jqzoom').jqzoom({
+					zoomType: 'standard',
+					zoomWidth:450,
+					zoomHeight:400,
+					lens:true,
+					preloadImages: false,
+					alwaysOn:false,
+					title:true,
+					preloadText:'努力加载'
+				});						  
+		});
+      </script>
+        <div class="product_image">
+         <a href="$!big_img" class="jqzoom" rel='gal1'  title="商品细节图" onclick="div_show($!{color_id})" > <img src="$!big_img"  title="商品细节图"  id="main_img" width="400" height="400" /> </a> <i class="product_image_f" style="cursor:pointer" onclick="div_show($!{color_id})"><img src="$!cdnServer/resources/style/system/front/default/images/product_image_f.png" /></i> </div>
+        <!--小图片开始-->
+        <div class="product_imgs"> 
+          <div class="pro_imgbox"> #foreach($img in $img_list)
+              #set($big_img="$!img.bigImg")
+     		  #set($small_img="$!img.smallImg")
+              #if($!big_img=="")
+              #set($big_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+              #if($!small_img=="")
+              #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+           <a href='javascript:void(0);' #if($!velocityCount==1)class="zoomThumbActive this" #end rel="{gallery: 'gal1', smallimage: '$!img.bigImg',largeimage: '$!img.bigImg'}" ><span>
+            <p> <img src="$!img.smallImg" big_img="$!img.bigImg" width="60" height="60"  onmouseover="img_switch(this);" style="cursor:pointer;" /> </p>
+            </span></a> #end </div> 
+        </div>
+#else        
+<script>
+jQuery(document).ready(function(){				
+jQuery('.jqzoom').jqzoom({
+		zoomType: 'standard',
+		zoomWidth:450,
+		zoomHeight:400,
+		lens:true,
+		preloadImages: false,
+		alwaysOn:false,
+		title:true,
+		preloadText:'努力加载'
+	});						  
+});
+</script>
+#if($!obj.goods_main_photo)
+#set($small_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+#set($big_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}")
+#else
+#set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+#set($big_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+#end
+<div class="product_image">
+<a href="$!big_img" class="jqzoom" rel='gal1'  title="商品细节图" onclick="div_show($!{color_id})" > <img src="$!big_img"  title="商品细节图"  id="main_img" width="400" height="400" /> </a> <i class="product_image_f" style="cursor:pointer" onclick="div_show($!{color_id})"><img src="$!cdnServer/resources/style/system/front/default/images/product_image_f.png" /></i> </div>
+<!--小图片开始-->
+<div class="product_imgs"> 
+<div class="pro_imgbox"> <a class="zoomThumbActive this" href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: '$!big_img',largeimage: '$!big_img'}"><span>
+<p><img src="$!small_img" big_img="$!big_img" width="60" height="60"  onmouseover="img_switch(this);"  style="cursor:pointer;"  /></p>
+</span></a> #foreach($img in $obj.goods_photos) <a href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: '$!imageWebServer/$!img.path/$!{img.name}',largeimage: '$!imageWebServer/$!img.path/$!img.name'}" ><span>
+<p> <img src="$!imageWebServer/$!img.path/$!{img.name}_small.$!{img.ext}" big_img="$!imageWebServer/$!img.path/$!img.name" width="60" height="60"  onmouseover="img_switch(this);" style="cursor:pointer;" /> </p>
+</span></a> #end </div> 
+</div>       
+#end

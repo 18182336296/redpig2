@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoodsSpecPropertyMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoodsSpecProperty">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="value" property="value" jdbcType="VARCHAR"/>
+		<association property="specImage" column="specImage_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="spec" column="spec_id" select="com.redpigmall.dao.GoodsSpecificationMapper.selectByPrimaryKey"/>
+		<collection property="goods_list" column="id" select="com.redpigmall.dao.GoodsMapper.getGoodsSpecsByGoodsSpecPropertyId"/>
+		<collection property="cart_list" column="id" select="com.redpigmall.dao.GoodsCartMapper.getGspsByGoodsSpecPropertyId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoodsSpecProperty">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="value" property="value" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,sequence,value,specImage_id,spec_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		
+		<if test="ids != null and ids.size() > 0">
+			and id in
+			<foreach collection="ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+		</if>
+		
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="sequence != null">and sequence = #{sequence,jdbcType=INTEGER}</if>
+		<if test="value != null">and value = #{value,jdbcType=VARCHAR}</if>
+		<if test="specImage_id != null">and specImage_id = #{specImage_id,jdbcType=BIGINT}</if>
+		<if test="spec_id != null">and spec_id = #{spec_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		sequence= #{sequence},
+		value= #{value},
+		<if test="specImage != null and specImage.id != null">specImage_id = #{specImage.id,jdbcType=BIGINT},</if>
+		<if test="specImage == null or specImage.id == null">specImage_id = null,</if>
+		<if test="spec == null or spec.id == null">spec_id = null,</if>
+		<if test="spec != null and spec.id != null">spec_id = #{spec.id,jdbcType=BIGINT},</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsspecproperty 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsspecproperty obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_goodsspecproperty obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.GoodsSpecProperty" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_goodsspecproperty(addTime,deleteStatus,sequence,value,specImage_id,spec_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{sequence,jdbcType=INTEGER},#{value,jdbcType=VARCHAR},#{specImage.id,jdbcType=BIGINT},#{spec.id,jdbcType=BIGINT}
+	</insert>
+	<update id="update" parameterType="com.redpigmall.domain.GoodsSpecProperty">
+		update redpigmall_goodsspecproperty 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from redpigmall_goodsspecproperty where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteGoodsCartAndGoodsSpecProperty" parameterType="map">
+		delete from redpigmall_cart_gsp where 
+		<foreach collection="gsps" index="index" item="item" separator="or"> 
+            (cart_id=#{goodsCartId} and gsp_id = #{item.id}) 
+        </foreach>
+	</delete>
+	<select id="getSpecImageByAccessoryId" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsspecproperty
+		where
+			specImage_id= #{specImage_id,jdbcType=BIGINT}
+	</select>
+	<select id="getSpecByGoodsSpecificationId" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsspecproperty
+		where
+			spec_id = #{spec_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsspecproperty obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoodsSpecProperty" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_goodsspecproperty(addTime,deleteStatus,sequence,value,specImage_id,spec_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{sequence,jdbcType=INTEGER},#{value,jdbcType=VARCHAR},#{specImage.id,jdbcType=BIGINT},#{spec.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoodsSpecProperty">
+		update redpigmall_goodsspecproperty
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_goodsspecproperty where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_goodsspecproperty where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsspecproperty obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsspecproperty obj 
+		where 1=1 
+		<if test="ids!=null">
+			and obj.id in
+			<foreach collection="ids" index="index" item="item" open="(" separator="or" close=")"> 
+	            #{item}
+	        </foreach>
+		</if>
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsspecproperty
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_goodsspecproperty where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<select id="getGoodsSpecsByGoodsId" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT gsp.* FROM redpigmall_goodsspecproperty gsp
+		JOIN redpigmall_goods_spec ftn ON ftn.spec_id = gsp.id AND ftn.goods_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getGspsByGoodsCartId" resultType="com.redpigmall.domain.GoodsSpecProperty" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT gps.* FROM redpigmall_goodsspecproperty gps 
+		JOIN redpigmall_cart_gsp ftn ON ftn.gsp_id = gps.id AND ftn.cart_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+</mapper>

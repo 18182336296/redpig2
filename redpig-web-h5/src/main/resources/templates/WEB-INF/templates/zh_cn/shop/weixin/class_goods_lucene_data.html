@@ -1,0 +1,40 @@
+#if($!big_map=="小图") 
+   #foreach($obj in $objs) 
+            <li>
+            	<a href="$!webPath/items?id=$!{obj.vo_id}">
+                	<div class="goods_pic"><img src="$!imageWebServer/$!obj.vo_main_photo_url"></div>
+                    <div  class="goods_info">
+                     	<div class="goods_name">$!obj.vo_title</div>
+                        <div  class="goods_amount">销量$!{obj.vo_goods_salenum}笔</div>
+                        
+                    </div>
+                    <div class="goods_value"><span class="value">¥$!obj.vo_store_price</span>
+                    #set($actName="")
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","group_buy")=="true")
+                  #set($actName="团购")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","activity_status")=="true")
+                  #set($actName="促销")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","combin_status")=="true")
+                  #set($actName="组合")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","order_enough_give_status")=="true")
+                  #set($actName="满送")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","enough_reduce")=="true")
+                  #set($actName="满减")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","f_sale_type")=="true")
+                  #set($actName="F码")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","advance_sale_type")=="true")
+                  #set($actName="预售")
+                  #end
+                        #if($!actName!="")
+                    <span class="promotion">$!CommUtil.substring($!actName,1)</span>#end</span>
+                </a>
+            </li>
+  #end
+  
+  #end

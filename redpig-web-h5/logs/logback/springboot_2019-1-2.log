@@ -1,0 +1,45 @@
+2019-1-2 13:23:50 main DEBUG Included patterns for restart : []
+2019-1-2 13:23:50 main DEBUG Excluded patterns for restart : [/spring-boot-actuator/target/classes/, /spring-boot-devtools/target/classes/, /spring-boot/target/classes/, /spring-boot-starter-[\w-]+/, /spring-boot-autoconfigure/target/classes/, /spring-boot-starter/target/classes/]
+2019-1-2 13:23:50 main DEBUG Matching URLs for reloading : [file:/F:/work_yemaill/ye_maill/redpig-web-h5/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-api/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-beans/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-chat/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-cms/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-circle/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-yungou/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-delivery/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-express/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-framework/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-h5/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-payment/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-sns/target/classes/]
+2019-1-2 13:23:51 restartedMain DEBUG Application started with classpath: [file:/F:/work_yemaill/ye_maill/redpig-web-h5/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-api/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-beans/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-chat/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-cms/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-circle/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-yungou/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-delivery/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-express/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-framework/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-h5/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-payment/target/classes/, file:/F:/work_yemaill/ye_maill/redpig-sns/target/classes/]
+2019-1-2 13:23:52 restartedMain DEBUG Loading source class com.redpigmall.boot.RedPigWebWap
+2019-1-2 13:23:53 restartedMain DEBUG Loaded config file 'file:/F:/work_yemaill/ye_maill/redpig-web-h5/target/classes/application.yml' (classpath:/application.yml)
+2019-1-2 13:23:53 restartedMain INFO Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@368dcb6a: startup date [Wed Jan 02 13:23:53 CST 2019]; root of context hierarchy
+2019-1-2 13:23:53 restartedMain DEBUG Bean factory for org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@368dcb6a: org.springframework.beans.factory.support.DefaultListableBeanFactory@39406cd8: defining beans [org.springframework.context.annotation.internalConfigurationAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,org.springframework.context.event.internalEventListenerProcessor,org.springframework.context.event.internalEventListenerFactory,redPigWebWap]; root of factory hierarchy
+2019-1-2 13:24:15 restartedMain DEBUG @EnableAutoConfiguration was declared on a class in the package 'com.redpigmall.boot'. Automatic @Repository and @Entity scanning is enabled.
+2019-1-2 13:24:19 restartedMain DEBUG Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@7a70d95b]
+2019-1-2 13:24:19 restartedMain DEBUG Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@60945b43]
+2019-1-2 13:24:21 restartedMain DEBUG Code archive: C:\Users\Administrator\.m2\repository1\org\springframework\boot\spring-boot\2.0.2.RELEASE\spring-boot-2.0.2.RELEASE.jar
+2019-1-2 13:24:21 restartedMain DEBUG Code archive: C:\Users\Administrator\.m2\repository1\org\springframework\boot\spring-boot\2.0.2.RELEASE\spring-boot-2.0.2.RELEASE.jar
+2019-1-2 13:24:21 restartedMain DEBUG None of the document roots [src/main/webapp, public, static] point to a directory and will be ignored.
+2019-1-2 13:24:21 restartedMain INFO Tomcat initialized with port(s): 8803 (http)
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Added existing Servlet initializer bean 'druidServlet'; order=2147483647, resource=class path resource [com/redpigmall/config/DruidConfiguration.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Added existing Filter initializer bean 'filterRegistrationBean'; order=2147483647, resource=class path resource [com/redpigmall/config/DruidConfiguration.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Added existing Servlet initializer bean 'dispatcherRegistration'; order=2147483647, resource=com.redpigmall.boot.RedPigWebWap
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Added existing Servlet initializer bean 'dispatcherServletRegistration'; order=2147483647, resource=class path resource [org/springframework/boot/autoconfigure/web/servlet/DispatcherServletAutoConfiguration$DispatcherServletRegistrationConfiguration.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Added existing Filter initializer bean 'wapLoginFilter'; order=2147483647, resource=null
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Added existing EventListener initializer bean 'com.redpigmall.api.tools.InitSpringUtilListener'; order=2147483647, resource=null
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Created Filter initializer for bean 'characterEncodingFilter'; order=-2147483648, resource=class path resource [org/springframework/boot/autoconfigure/web/servlet/HttpEncodingAutoConfiguration.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Created Filter initializer for bean 'hiddenHttpMethodFilter'; order=-10000, resource=class path resource [org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Created Filter initializer for bean 'httpPutFormContentFilter'; order=-9900, resource=class path resource [org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Created Filter initializer for bean 'requestContextFilter'; order=-105, resource=class path resource [org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration$WebMvcAutoConfigurationAdapter.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Created Filter initializer for bean 'urlRewriteFilterConfig'; order=2147483647, resource=file [F:\work_yemaill\ye_maill\redpig-api\target\classes\com\redpigmall\config\UrlRewriteFilterConfig.class]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Created EventListener initializer for bean 'webAppRootListener'; order=2147483647, resource=com.redpigmall.boot.RedPigWebWap
+2019-1-2 13:24:22 localhost-startStop-1 INFO Servlet statViewServlet mapped to [/druid/*]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Servlet redpigmall mapped to [/]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Servlet dispatcherServlet mapped to [/]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Mapping filter: 'requestContextFilter' to: [/*]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Mapping filter: 'webStatFilter' to urls: [/*]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Mapping filter: 'wapLoginFilter' to urls: [/*]
+2019-1-2 13:24:22 localhost-startStop-1 INFO Mapping filter: 'urlRewriteFilterConfig' to: [/*]
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Initializing filter 'requestContextFilter'
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Filter 'requestContextFilter' configured successfully
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Initializing filter 'httpPutFormContentFilter'
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Filter 'httpPutFormContentFilter' configured successfully
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Initializing filter 'hiddenHttpMethodFilter'
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Filter 'hiddenHttpMethodFilter' configured successfully
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Initializing filter 'characterEncodingFilter'
+2019-1-2 13:24:22 localhost-startStop-1 DEBUG Filter 'characterEncodingFilter' configured successfully

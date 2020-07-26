@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-客服管理-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+</head>
+<body>
+$!httpInclude.include("/seller/top")
+<div class="main">
+  <div class="seller_center">
+    <div class="seller_center_left"> $!httpInclude.include("/seller/nav?op=chatting") </div>
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index">商家中心</a></b>><b>我的店铺</b>><b>客服管理</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li class="this"><a href="$!webPath/seller/chatting_user_list"><i></i>客服列表</a></li>
+            <li ><a href="$!webPath/seller/chatting_user_add"><i></i>客服分配</a></li>
+          </ul>
+        </div>
+        <div class="seller_list_box">
+          <form method="post" name="ListForm" id="ListForm" action="$!webPath/seller/chatting_user_list">
+            <div class="operation"> #if($objs.size()>0)
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table">
+                <tr id="opertitle">
+                  <th width="128">客服名称</th>
+                  <th width="125">对应子账号</th>
+                  <th width="100">最后登录时间</th>
+                  <th width="100">客服类型</th>
+                  <th width="100">客服状态</th>
+                  <th width="100" align="center">操作</th>
+                </tr>
+                #foreach($obj in $objs)
+                <tr >
+                  <td align="center">$!obj.chatting_name</td>
+                  <td align="center">$!obj.chatting_user_name</td>
+                  <td align="center">$!CommUtil.formatLongDate($!obj.chatting_last_login)</td>
+                  <td align="center">#if($!obj.chatting_type==0)售前客服#end #if($!obj.chatting_type==1)售后客服#end #if($!obj.chatting_type==2)商家服务#end</td>
+                  <td align="center">#if($!obj.chatting_status==0)禁用#end#if($!obj.chatting_status==1)启用#end</td>
+                  <td align="center" class="del_operate"><a href="$!webPath/seller/chatting_user_edit?id=$!obj.id&currentPage=$!currentPage" class="del_a">编辑</a> #if($!obj.chatting_status==0) <a href="javascript:if(confirm('启用的客服后可进行在线服务，是否继续?'))window.location.href='$!webPath/seller/chatting_user_enable?mulitId=$!obj.id'" class="del_a">启用</a> #end
+                    #if($!obj.chatting_status==1) <a href="javascript:if(confirm('禁用后的客服，下次登录无法进行任何在线对话，是否继续?'))window.location.href='$!webPath/seller/chatting_user_disable?mulitId=$!obj.id'" class="del_a">禁用</a> #end</td>
+                </tr>
+                #end
+              </table>
+              #else
+              <table>
+                <tr>
+                  <td colspan="6" align="center"><div class="seller_center_nothing">
+                      <div class="seller_center_nothing_left"><img src="$!cdnServer/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                      <div class="seller_center_nothing_right">暂时没有数据</div>
+                    </div></td>
+                </tr>
+              </table>
+              #end </div>
+            <input id="currentPage" name="currentPage" type="hidden" value="$!currentPage"/>
+            #if($!objs.size()>0)
+            <div class="seller_list_page">
+              <div  class="seller_page_sp"> $!gotoPageFormHTML</div>
+            </div>
+            #end
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

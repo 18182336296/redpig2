@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!obj.goods_name - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!obj.seo_keywords" />
+<meta name="description" content="$!obj.seo_description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!webPath/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/jquery.jqzoom.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.jqzoom-core.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<style>
+div, h1, h2, h3, h4, h5, h6, b, i, em, strong, a, s, p, dl, dd, dt, ul, li, input, select {
+	behavior: url(ie-css3.htc);
+}
+</style>
+</head>
+<body>
+$!httpInclude.include("/top") 
+$!httpInclude.include("/head") 
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="product_head">
+  	<h1>$!snap.good_name </h1>
+  </div>
+  <div class="product_top">
+      <!--弹出 start -->
+      <div class="product_details_img_big_center" style="display:none;">
+       	<div class="img_big_center_close"><a href="javascript:void(0)" onclick="div_close()">x</a></div>
+      	
+        <div class="img_big_center_img">
+            <div class="img_big_center_left"><a href="javascript:void(0)" onclick="div_switch('-1')"></a></div>
+            <div class="img_big_center_img_center"><img src="$!imageWebServer/$!{snap.good_mian_img}" /></div>
+            <div class="img_big_center_right"><a href="javascript:void(0)" onclick="div_switch('+1')"></a></div>
+        </div>
+       
+        
+      </div>
+      <!--弹出 end --> 
+    <!--大图片开始-->
+    
+    <div class="product_top_left">
+      	<div class="trade_pic"><img src="$!imageWebServer/$!{snap.good_mian_img}"/></div>
+      
+    </div>
+    <div class="product_top_right">
+      <h2 class="product_title_h2">#if($!{snap.activity_status}=="1") <strong>当前商品为促销商品，用户登录后方可享受促销价格！</strong> #end #if($!{snap.activity_status}=="2") <strong>当前商品为团购商品</strong> #end #if($!{snap.activity_status}=="3") <strong>当前商品为满就赠商品</strong> #end</h2>
+      <div class="product_data_left">
+        <ul class="pro_details">
+          <li class="pro_details_li"><span class="deta_left">商品价格：</span><span class="deta_right"><strong class="deta_red">¥$!{snap.good_price}</strong></span></li>
+          <li class="pro_details_li"><span class="deta_left">商品类型：</span><span class="deta_right">$!{snap.gc}</span></li>
+         #if($!snap.address) <li class="pro_details_li"><span class="deta_left">发货地区：</span><span class="deta_right">$!snap.address</span></li>#end
+           <li class="pro_details_li"><span class="deta_left">运费：</span><span class="deta_right">#if($!snap.good_cod=="0") 买家承担运费 #else 商家承担运费#end</span></li>
+           <li class="pro_details_li"><span class="deta_left">商品来源：</span><span class="deta_right">#if($!snap.good_source=="0") 平台商品 #else 商家商品#end</span></li>
+            <li class="pro_details_li"><span class="deta_left">货到付款：</span><span class="deta_right">#if($!snap.good_cod=="0") 支持 #else 不支持 #end</span></li>
+             <li class="pro_details_li"><span class="deta_left">售后服务：</span><span class="deta_right">#if($!snap.good_source=="0") 由$!{config.websiteName}发货并提供售后服务
+            #else
+            由入驻商家发货并提供售后服务 #end</span></li>
+           <li class="pro_details_li snap_li">
+           		<p><i></i>您现在查看的是<a href="javascript:void(0);" class="blue">交易快照</a></p>
+                <p class="pd"><a href="$!webPath/items_$!{snap.good_id}" target="_blank"><b class="blue">点此查看最新商品详情</b></a></p>
+           </li>
+          
+          #set($well_evaluate = $!CommUtil.null2Double($!{obj.well_evaluate})*100)
+          #if($obj.goods_choice_type==0) <li class="pro_details_li"><span class="deta_left">配 送 至：</span><span class="deta_right"> 
+            <!--经过时i加active---> 
+            <!--物流运费--> 
+            #if($!obj.goods_transfee==1) <span class="detbt"></span><span>商家承担</span> #else
+            #if($!obj.transport) <span> #if($!obj.transport.trans_mail)
+            平邮: <i id="goods_mail_fee">¥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","mail","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}") </i> #end
+            #if($!obj.transport.trans_express)
+            快递: <i id="goods_express_fee"> ¥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","express","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}") </i> #end 
+            #if($!obj.transport.trans_ems)
+            EMS: <i id="goods_ems_fee"> ¥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","ems","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}") </i> #end </span> #else <span>平邮:¥$!CommUtil.null2Float($!{obj.mail_trans_fee}) 快递:¥$!CommUtil.null2Float($!{obj.express_trans_fee}) EMS:¥$!CommUtil.null2Float($!{obj.ems_trans_fee})</span> #end
+            #end </span></li> #end
+          #if($snap.goods_choice_type==0) <li class="pro_details_li"><span class="deta_left">货到付款：</span><span class="deta_right">#if($!obj.goods_cod==0)支持#end #if($!obj.goods_cod==-1)不支持#end</span></li>
+          <li class="pro_details_li"><span class="deta_left">售后服务：</span><span class="deta_right"> #if(!$!store)
+            由$!{config.websiteName}发货并提供售后服务
+            #else
+            由入驻商家发货并提供售后服务
+            #end </span></li>
+          #if($!obj.advance_sale_type==1)
+          <li class="pro_details_li"><span class="deta_left">发货时间：</span><span class="deta_right">$!CommUtil.formatShortDate($!obj.advance_date)<i class="deta_right_r">预售</i></span></li>
+          #end
+          #end
+        </ul>
+      
+        <ul class="product_choose">
+          #if($!count>0)
+          #foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+          <li class="pro_choose_li" mark="spec"> <span class="choose_left">$!{spec.name}：</span> <span class="choose_right"> #foreach($gsp in $obj.goods_specs)
+            #if($!{gsp.spec.id}==$!spec.id)
+            
+            #if($!spec.type=="img") <a href="javascript:void(0);" onclick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"> <img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="20" height="20" /> <b>$!gsp.value</b><i></i></a> #end
+            
+            #if($!spec.type=="text") <a href="javascript:void(0);" onclick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"> <b>$!gsp.value</b><i></i></a> #end 
+            #end
+            #end </span> </li>
+          #end
+          #end
+          
+          <li class="pro_choose_li red" id="show_spec_li" style="display:none">已选择<strong></strong></li>
+        
+        </ul>
+      </div>
+      <!--商家店铺-->
+      <div class="product_shop">
+        <h3><span>卖&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家：</span><b><a href="javascript:void(0);">
+        #if($!snap.good_source=="0")
+        平台自营
+        #else
+   $!{storeTools.queryJson("$!snap.store_info","store_name")}
+   #end
+   </a></b></h3>
+   #if($!snap.good_source=="0")
+   <div class="pro_shop_value"><span>正品保证</span> <b>诚信经营</b></div>
+   <div class="pro_shop_value"><span>服务到位</span> <b>差价返还</b></div>
+   #end
+   #if($!snap.good_source=="1")
+       <div class="pro_shop_value"><span>综合评分：</span> <b> <em> 
+          <!--评分改变width的百分数--> 
+          <div class="scores" id="$!pecent"> <a class="scores_scroll" href="javascript:void(0);"> <span class="scroll_gray"></span> <span class="scroll_red" style="width:$!{storeTools.queryJson("$!snap.store_info","store_point1")}%;"></span> </a> </div>
+          </em>#if($!{storeTools.queryJson("$!snap.store_info","store_point")}) $!{storeTools.queryJson("$!snap.store_info","store_point")} #else 0 #end分</b><i class="value_top"></i><i class="value_down" style="display:none"></i> </div>
+        <ul class="pro_shop_date">
+          <li><span>描述相符：<strong>#if($!{storeTools.queryJson("$!snap.store_info","des_point")}) $!{storeTools.queryJson("$!snap.store_info","des_point")} #else 0 #end分</strong></span> </li>
+          <li><span>服务态度：<strong>#if($!{storeTools.queryJson("$!snap.store_info","ser_point")}) $!{storeTools.queryJson("$!snap.store_info","ser_point")}  #else  0 #end分</strong></span></li>
+          <li><span>发货速度：<strong>#if($!{storeTools.queryJson("$!snap.store_info","ship_point")}) $!{storeTools.queryJson("$!snap.store_info","ship_point")}  #else 0 #end分</strong></span></li>
+        </ul>
+        <ul class="pro_shop_botom">
+          <li><span>公司名称：</span><b>#if($!{storeTools.queryJson("$!snap.store_info","company_name")})$!{storeTools.queryJson("$!snap.store_info","company_name")} #else 暂未填写 #end</b></li>
+          <li><span>所&nbsp;&nbsp;在&nbsp;地：</span><b>#if($!{storeTools.queryJson("$!snap.store_info","store_add")}) $!{storeTools.queryJson("$!snap.store_info","store_add")} #else 暂未填写 #end</b></li>
+        </ul>
+        #if($!snap.good_source=="1")
+        #set($id=$!storeTools.queryJson("$!snap.store_info","store_id"))
+       
+        <div class="pro_into_shop"><a href="$!webPath/store_$!{id}" target="_blank">进入商家店铺</a></div>
+        #end
+        #end
+      </div>
+       </div>
+  </div>
+  <div class="prodect_bottom prodect_trade_detail">
+    <div class="prodect_b_right"> 
+      <script>
+      jQuery(document).ready(function(e) {
+		jQuery(".bottom_li li").click(function(e) {
+			jQuery(".bottom_li li").removeClass("this");
+            jQuery(this).addClass("this");
+			if(jQuery(this).attr("type")=="detail"){
+				jQuery("#goods_detail").show();
+				jQuery("#goods_shou,#goods_bao").hide();
+				
+				}
+				if(jQuery(this).attr("type")=="bao"){
+				jQuery("#goods_bao").show();
+				jQuery("#goods_detail,#goods_shou").hide();
+				}
+				if(jQuery(this).attr("type")=="shou"){
+				jQuery("#goods_shou").show();
+				jQuery("#goods_detail,#goods_bao").hide();
+				}
+        });
+		
+		
+		
+    });
+      </script>
+      <div class="pro_introduces">
+        <div class="pro_tab_outbox">
+          <div class="pro_tab_top" id="pro_tab"> <span class="pro_addcar">
+           #if($!obj.f_sale_type==0)
+            #if($!{obj.activity_status}==2 && !$!user)
+        <a href="javascript:void(0);" dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn" id="add_car_g">加入购物车</a>
+        #else 
+          <a href="javascript:void(0);" onclick="add_cart();" class="add_car_btn" id="add_car_g">加入购物车</a> 
+           #end
+        #end 
+          </span>
+            <ul class="bottom_li">
+              <li class="this"  style="cursor:pointer" type="detail" ><a href="javascript:void(0);">商品详情</a></li>
+            <li  type="shou"><a href="javascript:void(0);">售后保障</a></li>
+            <li  type="bao"><a href="javascript:void(0);">包装清单</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="img_center_load" style="display:none;text-align:center; padding-top:5px;"> <img height="28" width="28" src="$!cdnServer/resources/style/common/images/loader.gif" /> </div>
+        <div> 
+           <div id="goods_detail">
+            <div style="float:left; line-height:26px; padding:10px 0px;"> $!snap.good_info</div>
+          </div>
+          <div id="goods_shou" style="display:none">
+            <div style="float:left; line-height:26px; padding:10px 0px;">$!snap.goods_service</div>
+          </div>
+           <div id="goods_bao" style="display:none">
+            <div style="float:left; line-height:26px; padding:10px 0px;">$!snap.good_pack_details</div>
+          </div>
+          <!--成交记录-->
+          <div class="details_list_dl" id="goods_order"   style="display:none">
+            <div class="pro_grade">
+              <h3><strong>成交记录</strong></h3>
+              <div id="goods_order" class="okcode" style="margin-top:10px;" >
+                <ul>
+                  <li>
+                    <table width="797" border="0" cellspacing="0" cellpadding="0" class="okcodetable">
+                      <tr style=" background:#EEEDED; font-weight:bold">
+                        <td width="33%" align="center">付款方式</td>
+                        <td width="33%" align="center">介绍</td>
+                        <td align="center">手续费</td>
+                      </tr>
+                      <tr>
+                        <td align="center">快捷支付</td>
+                        <td align="center">用绑定了“支付宝”的银行卡付款</td>
+                        <td align="center">2-5%</td>
+                      </tr>
+                      <tr>
+                        <td align="center">快捷支付</td>
+                        <td align="center">用绑定了“支付宝”的银行卡付款</td>
+                        <td align="center">2-5%</td>
+                      </tr>
+                      <tr>
+                        <td align="center">快捷支付</td>
+                        <td align="center">用绑定了“支付宝”的银行卡付款</td>
+                        <td align="center">2-5%</td>
+                      </tr>
+                    </table>
+                  </li>
+                </ul>
+              </div>
+              <div class="details_discus_page"> <span target_id="goods_order">$!order_gotoPageAjaxHTML</span> </div>
+            </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer") </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.ad-gallery.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+	var number=0;
+   jQuery(".photo_manage_close").live("click",function(){
+	    location.reload();
+		jQuery(".picture_opre_bg").hide();
+		jQuery(".photo_manage").hide();
+	 })
+    jQuery(".nav_list_right").click(function(){
+		jQuery(".nav_list_right").not(this).next().slideUp();
+		jQuery(this).next().slideToggle();
+	});								
+   //
+});
+function showBig(obj){
+	number=jQuery(obj).attr("number")-1;
+   	jQuery(".picture_opre_bg").show();
+	jQuery(".photo_manage").show();
+	var img=jQuery(obj).attr("o");
+	var path=jQuery(obj).attr("pa");
+	var name=jQuery(obj).attr("na");
+	var h=jQuery(obj).attr("h");
+	jQuery(".picture_opre_img table td img").attr("src","$!webPath/"+path+"/"+name);
+	jQuery('.ad-gallery').adGallery({
+	loader_image:"$!cdnServer/resources/style/system/manage/blue/images/waiting.gif",
+    splitTitle:'slide-vert',	
+	start_at_index:number,							  
+	slideshow:{							  
+     enable: false,//是否启用开始和暂停功能
+     autostart: false,//是否自动播放
+	 speed: 5000,//切换时间
+     start_label: '播放',//开始按钮显示的内容，可以为图片按钮
+     stop_label: '停止'//停止按钮显示的内容，可以为图片按钮 
+    }
+  });
+}
+</script>
+</head>
+<body>
+<form method="post" name="ListForm" id="ListForm">
+  <div class="cont">
+    <h1 class="seth">自营相册</h1>
+    <div class="nav_list">
+      <ul>
+        <li> <a href="$!webPath/album"><b>我的相册</b></a></li>
+        <li> <a href="javascript:void(0);" class="this"><b>图片列表</b></a></li>
+        <li><a href="$!webPath/watermark"><b>水印管理</b></a> </li>
+      </ul>
+    </div>
+    <div class="photo_oper">
+      <div class="photo_batch"><span class="batch_op">
+         <label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label>
+        <input name="mulitId" type="hidden" id="mulitId" value="" />
+        |<a href="javascript:void(0);" onclick="cmd('$!webPath/album_img_del')"> 删除</a>|
+        <a href="javascript:void(0);" dialog_uri="$!webPath/album_transfer?album_id=$!{album.id}&currentPage=$!{currentPage}" dialog_title="转移相册" dialog_width="400" dialog_height="100" dialog_id="album_add"> 转移相册</a>|<a href="javascript:void(0);" onclick="cmd('$!webPath/album_watermark')"> 添加水印</a> </span></div>
+      <input name="album_id" type="hidden" id="album_id" value="$!album.id" />
+    </div>
+    #if($!objs.size()>0)
+    <div class="picture_opre">
+   		#foreach($obj in $objs)  
+            <div class="pictrue_one">
+               <div class="pictrue_one_check"><label for="ids_$!obj.id"> <input  id="ids_$!obj.id"  name="ids" type="checkbox" value="$!obj.id" class="ace" /> <span class="lbl"></span></label></div>
+                <i><span><a number="$!velocityCount" pa="$!obj.path"  na="$!{obj.name}" h="$!{obj.height}" href="javascript:void(0);" onclick="showBig(this);"><img src="$!imageWebServer/$!obj.path/$!{obj.name}_small.$!{obj.ext}" width="170" height="170" /></a></span></i>
+                <span class="nav_list_right" style="cursor:pointer"><img src="$!cdnServer/resources/style/system/front/default/images/user_photo/nav_list.png" /></span>
+                <ul style="display:none;">
+                    <li><a href="javascript:void(0);" dialog_uri="$!webPath/album_transfer?album_id=$!obj.album.id&id=$!obj.id&currentPage=$!currentPage" dialog_title="转移相册" dialog_width="400" dialog_height="100" dialog_id="album_add"><b class="changepic"></b>转移相册</a></li>
+                    <li><a href="$!webPath/album_cover?id=$!obj.id&album_id=$!obj.album.id&currentPage=$!currentPage"><b class="setm"></b>设为封面</a></li>
+                    <li><a href="javascript:void(0);" onclick="showDialog('msg_info','','删除图片后不可恢复，是否继续?',1,'question',3,function(){window.location.href='$!webPath/album_img_del?mulitId=$!obj.id&album_id=$!album.id&currentPage=$!currentPage'});"><b class="delpic"></b>删除图片</a></li>
+                </ul>
+                <h4>上传时间:$!CommUtil.formatShortDate($!obj.addTime)</h4>
+                <h4>原图尺寸:$!{obj.width}X$!{obj.height}</h4>
+            </div>
+          #end
+    </div>
+      <script type="text/javascript">
+			var rDrag = {
+			 o:null,
+			 init:function(o){
+			  o.onmousedown = this.start;
+			 },
+			 start:function(e){
+			  var o;
+			  e = rDrag.fixEvent(e);
+						   e.preventDefault && e.preventDefault();
+						   rDrag.o = o = this;
+			  o.x = e.clientX - rDrag.o.offsetLeft;
+							o.y = e.clientY - rDrag.o.offsetTop;
+			  document.onmousemove = rDrag.move;
+			  document.onmouseup = rDrag.end;
+			 },
+			 move:function(e){
+			  e = rDrag.fixEvent(e);
+			  var oLeft,oTop;
+			  oLeft = e.clientX - rDrag.o.x;
+			  oTop = e.clientY - rDrag.o.y;
+			  rDrag.o.style.left = oLeft + 'px';
+			  rDrag.o.style.top = oTop + 'px';
+			 },
+			 end:function(e){
+			  e = rDrag.fixEvent(e);
+			  rDrag.o = document.onmousemove = document.onmouseup = null;
+			 },
+				fixEvent: function(e){
+					if (!e) {
+						e = window.event;
+						e.target = e.srcElement;
+						e.layerX = e.offsetX;
+						e.layerY = e.offsetY;
+					}
+					return e;
+				}
+			}
+			window.onload = function(){
+					var obj = document.getElementById('photo_manage');
+			 rDrag.init(obj);
+			}
+			</script>
+       <div class="picture_opre_bg" style="display:none;"></div>
+        <div id="photo_manage" class="photo_manage" style="display:none;">
+          	<div class="photo_manage_close"></div>
+                <div id="gallery" class="ad-gallery">
+                  <div class="ad-image-wrapper"> </div>
+                  <div class="ad-nav">
+                    <div class="ad-thumbs">
+                      <ul class="ad-thumb-list">
+                        #foreach($photo in $objs)
+                        <li><a href="$!webPath/$!{photo.path}/$!{photo.name}"> <img src="$!imageWebServer/$!{photo.path}/$!{photo.name}_small.$!{photo.ext}" width="50" height="50" img_width="$!{photo.width}" img_height="$!{photo.height}" 
+            img_ext="$!{photo.ext}"  img_small="$!imageWebServer/$!{photo.path}/$!{photo.name}_small.$!{photo.ext}" 
+            img_big="$!imageWebServer/$!{photo.path}/$!{photo.name}"/> </a> </li>
+                        #end
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+    </div>
+    #else
+    
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+    <tr>
+	<td colspan="5">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+   </table> 
+    
+    #end
+  </div>
+</form>
+</body>
+</html>

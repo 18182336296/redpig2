@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="no" />
+<meta name="format-detection" content="telephone=no,address=no" />
+<title>0元试用详细 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery1.42.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+function saveForm(){
+	jQuery("#theForm").submit();
+	}
+	jQuery(document).ready(function(){  	
+	jQuery("#theForm").validate({
+
+	rules: {
+		use_experience:{
+			required:true
+		},
+		
+	},
+	messages: {
+		
+		use_experience:{
+			required:"使用评价不能为空"
+			
+		},
+	},	
+	});
+});
+</script>
+<style>
+.e_td_right{ color:#F94D4D;}
+</style>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="user_c_title"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"/></a>我的0元试用</div>
+<div class="phone_main">
+ #set($obj = $!this.queryFreeGoods("$!applyLog.freegoods_id"))
+  #set($img = "$!imageWebServer/$!obj.free_acc.path/$!obj.free_acc.name")
+	<!--0元试用-->
+    <form id="theForm" name="theForm" method="post" action="$!webPath/wap/buyer/free_save">
+    <div class="user_free">
+    	<div style="height:10px;"></div>
+    	<div class="use_free_img"><img src="$!img"  /></div>
+    <input type="hidden" id="id" name="id" value="$!applyLog.id" />
+    	<table class="user_free_tb" cellpadding="0" cellspacing="0">
+        	<tbody>
+            	<tr>
+            	    
+                	<td width="40%" align="right" class="td_left">0元试用名称：</td>
+                    <td align="left">$!applyLog.freegoods_name</td>
+                </tr>
+                <tr>
+                	<td align="right" class="td_left">申请时间：</td>
+                    <td align="left">$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss',$!{obj.addTime})</td>
+                </tr>
+                <tr>
+                	<td align="right" class="td_left">审核状态：</td>
+                    <td align="left">
+                    #if($!applyLog.apply_status==0)
+                    待审核
+                    #elseif($!applyLog.apply_status==5)
+                    审核通过
+                    #else
+                    审核失败
+                    #end
+                    </td>
+                </tr>
+                <tr>
+                	<td align="right" class="td_left" style="vertical-align:top;">使用评价：</td>
+                    <td align="left" class="e_td_right">
+                     #if($!applyLog.evaluate_status==1 || $!applyLog.apply_status==0)
+                    <textarea name="use_experience" id="use_experience" readonly="readonly">$!applyLog.use_experience</textarea> 
+                    #else
+                    <textarea name="use_experience" id="use_experience">$!applyLog.use_experience</textarea> 
+                    #end
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+       <!-- #if($!applyLog.apply_status==5)
+        <input class="submit" type="button" value="提交" onclick="saveForm()" />
+        #end-->
+        #if($!applyLog.evaluate_status==1)
+        <input class="submit" type="button" value="提交" onclick="saveForm()" style="display:none"/>
+        #end
+        #if($!applyLog.evaluate_status!=1 && $!applyLog.apply_status==5)
+        <input class="submit" type="button" value="提交" onclick="saveForm()"/>
+        #end
+    </div>
+    </form>
+</div>
+</body>
+</html>

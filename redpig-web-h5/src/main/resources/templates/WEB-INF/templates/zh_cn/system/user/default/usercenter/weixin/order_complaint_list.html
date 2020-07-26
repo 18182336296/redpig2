@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>我的投诉 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" type="text/css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+	var currentPage = 2;
+jQuery(document).ready(function(){
+	var  ret = 1;
+	var totalPage = "$!totalPage";
+	if(totalPage>1){
+   jQuery(window).scroll(function(){
+	 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1) {	
+		if(currentPage<=totalPage){	
+		jQuery("#loading").hide();
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/buyer/order_complaint_list',
+				  data:{"currentPage":currentPage,"beginTime":"$!{beginTime}","endTime":"$!endTime","order_id":"$!order_id"},
+				beforeSend:function(){
+				  currentPage = currentPage+1;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				  ret = 2;
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+				 ret = 1;
+	             if(data != ""){ 
+				  	jQuery(".c_goods_list").append(data);
+			 	 }else{
+					 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+		 }else{
+		 	if(currentPage>totalPage){
+						jQuery("#loading_none").show();
+					}else{
+						jQuery("#loading_none").hide();
+				}
+		 }
+	 }
+	});
+  }
+});<!--end-->
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+		<div class="user_c_title">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>我的投诉
+		<a class="per_c_icon" href="$!webPath/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a>
+	</div>
+        <!--$!img-->
+        <div class="complain_nav">
+        	<ul class="c_nav_ul">
+            	<li class="this"><a href="$!webPath/buyer/order_complaint_list">商品列表</a></li>
+                <li><a href="$!webPath/buyer/complaint">我的投诉</a></li>
+            </ul>
+        </div>
+        #if($!objs.size()>0)
+        <div class="c_goods_list">
+         	#foreach($obj in $objs)
+        	#foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.goods_info"))
+            #set($goods_id = "$!{map.get('goods_id')}")	
+            #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+            #set($store=$!orderFormTools.goods_second_domain("$!{goods_id}","goods"))
+            #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+            #set($goods_return_status="$!{map.get('goods_return_status')}")
+            #set($goods_choice_type="$!{map.get('goods_choice_type')}")
+            #set($goods_gsp_ids="$!{map.get('goods_gsp_ids')}")
+            #set($goods_complaint_status="$!{map.get('goods_complaint_status')}") 
+        	<div class="c_goods_item">
+            	<h3 class="order_number">订单编号：$!obj.order_id
+                <!--#if($!store)
+                	<span class="mine">$!store.store_name</span>
+               	#else
+                	<span class="mine">自营</span>
+                #end-->
+                </h3>
+            	<div class="goods_content">
+						<div class="goods_pic"><a href="$!webPath/items?id=$!{goods_id}"><img src="$!img"></a></div>
+                        <div  class="goods_text">
+                            <a href="$!webPath/items?id=$!{goods_id}">
+                                <div class="goods_name">$!map.get('goods_name')</div>
+                            </a>
+                        </div>
+                        
+                        <div class="goods_value">
+                            <span class="now_value"><b>￥</b>$!map.get('goods_price')</span>
+                        </div>
+                </div>
+                #if($!{goods_complaint_status}==1||$!{obj.order_form}==1)
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!obj.addTime)</span>
+                    <a href="javascript:void(0);" class="btn this">投诉</a>
+                </div>
+                #else
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!obj.addTime)</span>
+                    <a #if($!{config.complaint_time}==0) href="javascript:void(0);" class="btn this" #else href="$!webPath/buyer/complaint_handle?order_id=$!obj.id&currentPage=$!currentPage&goods_id=$!goods_id" class="btn" #end>投诉</a>
+                </div>
+                #end
+            </div>
+             #if($!obj.child_order_detail)
+                             #foreach($child_map in $!orderFormTools.queryGoodsInfo("$!obj.child_order_detail"))
+                                     #set($child_order=$!orderFormTools.query_order("$!child_map.get('order_id')"))
+                                     #set($order_total_price=$order_total_price+$child_order.totalPrice)
+                                     #set($order_total_ship_price=$order_total_ship_price+$child_order.ship_price)
+                                     #set($order_id=$!child_map.get('order_id'))
+                                 #foreach($map in $!orderFormTools.queryGoodsInfo("$!child_order.goods_info"))
+                                     #set($goods_id = "$!{map.get('goods_id')}")	
+                                     #set($goods_name = "$!{map.get('goods_name')}")
+                                     #set($goods_count = $!{map.get('goods_count')})
+                                     #set($goods_price = $!{map.get('goods_price')})
+                                     #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+                                     #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+                                     #set($store=$!orderFormTools.goods_second_domain("$!{goods_id}","goods"))
+               						 #set($goods_domainPath="$!webPath/items_$!{goods_id}")
+              						 #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+               						 #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+               						 #end
+                                     #set($goods_return_status="$!{map.get('goods_return_status')}")
+                                     #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+                                     #set($goods_choice_type="$!{map.get('goods_choice_type')}")
+                                      #set($goods_complaint_status="$!{map.get('goods_complaint_status')}")                     
+                    <div class="c_goods_item">
+            	<h3 class="order_number">订单编号：$!child_order.order_id
+                </h3>
+            	<div class="goods_content">
+						<div class="goods_pic"><a href="$!webPath/items?id=$!{goods_id}"><img src="$!img"></a></div>
+                        <div  class="goods_text">
+                            <a href="$!webPath/items?id=$!{goods_id}">
+                                <div class="goods_name">$!goods_name</div>
+                            </a>
+                        </div>
+                        
+                        <div class="goods_value">
+                            <span class="now_value"><b>￥</b>$!goods_price</span>
+                        </div>
+                </div>
+                #if($!{goods_complaint_status}==1||$!{child_order.order_form}==1)
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!child_order.addTime)</span>
+                    <a href="javascript:void(0);" class="btn this">投诉</a>
+                </div>
+                #else
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!child_order.addTime)</span>
+                    <a href="$!webPath/buyer/complaint_handle?order_id=$!child_order.id&goods_id=$!goods_id" class="btn">投诉</a>
+                </div>
+                #end
+            </div>
+                    
+             	 #end
+                 #end
+                 #end
+        	#end
+            
+       		#end
+            
+        </div>
+        #else
+        <div class="main">
+          <div class="mt50" style="height:49px;"></div>
+          <div class="error_page1">
+            <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+            <p>暂无记录！</p>
+          </div>
+        </div>
+        #end
+		<div class="loading" id="loading" style="display:none">
+		<ul>
+ 			 <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+ 			 <li>正在加载....</li>
+		</ul>
+		</div>
+		<div class="loading" id="loading_none" style="display:none">
+        <ul>
+          	 <li>没有更多了....</li>
+        </ul>
+        </div>
+</div>
+</body>
+</html>

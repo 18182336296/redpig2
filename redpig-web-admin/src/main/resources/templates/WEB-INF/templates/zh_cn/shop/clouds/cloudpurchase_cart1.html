@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>云购 - $!{config.poweredby}</title>
+<meta name="keywords" content="#if($!store.store_seo_keywords!="") $!store.store_seo_keywords #else $!config.keywords #end" />
+<meta name="description" content="#if($!store.store_seo_description!="") $!store.store_seo_description #else $!config.description #end" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/cloud.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+function submit_form(){
+	jQuery("#cart_form").submit();
+}
+</script>
+</head><body bgcolor="#FFFFFF" >
+$!httpInclude.include("/top")
+
+<!---------云购  列表---------->
+<div class="main">
+<div id="carts_list">$!httpInclude.include("/goods_cart_head?op=order")
+
+  <div class="cloud_cart">
+  <form  method="post"  name="cart_form" target="_self" id="cart_form" action="$!webPath/cloudbuy/cart2">
+      <input type="hidden" name="cart_ids" id="cart_ids" value="$!cart_ids" />
+    <ul>
+      <li> <span class="c_cart_name">商品名称</span> <span class="c_cart_name1">商品期号</span> <span class="c_cart_name1">价值</span> <span class="c_cart_name1">夺宝价</span> <span class="c_cart_name1">参与人次</span> <span class="c_cart_name1">小计</span> </li>
+      #set($price=0)
+      #foreach($obj in $carts)
+      <li class="this"> <span class="c_cart_name"><a target="_blank" href="$!webPaht/cloudbuy/items?id=$obj.cloudPurchaseLottery.id">$obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</a></span> <span class="c_cart_name1">$obj.cloudPurchaseLottery.period</span> <span class="c_cart_name1">$obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price元</span> <span class="c_cart_name1">$obj.cloudPurchaseLottery.cloudPurchaseGoods.least_rmb元</span> <span class="c_cart_name1">$obj.purchased_times</span> <span class="c_cart_name1 c_cart_color">$obj.purchased_times元</span> #set($price=$price+$obj.purchased_times) </li>
+      #end
+      <li class="this c_footer"> <span class="c_footer_r">商品合计：<strong>￥$!price</strong></span> <a href="$!webPath/cloudbuy/cart">返回清单修改</a> </li>
+    </ul>
+    <div class="c_footer_b">
+      <div class="pay_total">总需支付：<strong>￥$!price</strong></div>
+      <div class="c_pay_bottom"><a href="javascript:void(0)" onclick="submit_form();">去支付</a></div>
+    </div>
+    </form>
+  </div>
+</div>
+</div>
+$!httpInclude.include("/footer")
+</body>
+</html>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.AppOperativeVersionMapper">
+  <resultMap id="BaseResultMap" type="com.redpigmall.domain.AppOperativeVersion">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="app_op_v" jdbcType="VARCHAR" property="app_op_v" />
+    <result column="idx_pop" jdbcType="CHAR" property="idx_pop" />
+    <result column="idx_pop_img" jdbcType="VARCHAR" property="idx_pop_img" />
+    <result column="idx_pop_url" jdbcType="VARCHAR" property="idx_pop_url" />
+    <result column="tab_icon_dft" jdbcType="CHAR" property="tab_icon_dft" />
+    <result column="icon_a" jdbcType="VARCHAR" property="icon_a" />
+    <result column="icon_a_txt" jdbcType="VARCHAR" property="icon_a_txt" />
+    <result column="icon_b" jdbcType="VARCHAR" property="icon_b" />
+    <result column="icon_b_txt" jdbcType="VARCHAR" property="icon_b_txt" />
+    <result column="icon_c" jdbcType="VARCHAR" property="icon_c" />
+    <result column="icon_c_txt" jdbcType="VARCHAR" property="icon_c_txt" />
+    <result column="icon_d" jdbcType="VARCHAR" property="icon_d" />
+    <result column="icon_d_txt" jdbcType="VARCHAR" property="icon_d_txt" />
+    <result column="addTime" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="in_use" jdbcType="CHAR" property="in_use" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, app_op_v, idx_pop, idx_pop_img, idx_pop_url, tab_icon_dft, icon_a, icon_a_txt, 
+    icon_b, icon_b_txt, icon_c, icon_c_txt, icon_d, icon_d_txt, addTime, in_use
+  </sql>
+    <sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="app_op_v != null">and app_op_v = #{app_op_v,jdbcType=VARCHAR}</if>
+		<if test="idx_pop != null">and idx_pop = #{idx_pop,jdbcType=CHAR}</if>
+		<if test="idx_pop_img != null">and idx_pop_img = #{idx_pop_img,jdbcType=VARCHAR}</if>
+		<if test="idx_pop_url != null">and idx_pop_url = #{idx_pop_url,jdbcType=VARCHAR}</if>
+		<if test="tab_icon_dft != null">and tab_icon_dft = #{tab_icon_dft,jdbcType=CHAR}</if>
+		<if test="icon_a != null">and icon_a = #{icon_a,jdbcType=VARCHAR}</if>
+		<if test="icon_a_txt != null">and icon_a_txt = #{icon_a_txt,jdbcType=VARCHAR}</if>
+		<if test="icon_b != null">and icon_b = #{icon_b,jdbcType=VARCHAR}</if>
+		<if test="icon_b_txt != null">and icon_b_txt = #{icon_b_txt,jdbcType=VARCHAR}</if>
+		<if test="icon_c != null">and icon_c = #{icon_c,jdbcType=VARCHAR}</if>
+		<if test="icon_c_txt != null">and icon_c_txt = #{icon_c_txt,jdbcType=VARCHAR}</if>
+		<if test="icon_d != null">and icon_d = #{icon_d,jdbcType=VARCHAR}</if>
+		<if test="icon_d_txt != null">and icon_d_txt = #{icon_d_txt,jdbcType=VARCHAR}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="in_use != null">and in_use = #{in_use,jdbcType=CHAR}</if>
+	</sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from redpigmall_app_op_version
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from redpigmall_app_op_version
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.redpigmall.domain.AppOperativeVersion">
+    insert into redpigmall_app_op_version (id, app_op_v, idx_pop, 
+      idx_pop_img, idx_pop_url, tab_icon_dft, 
+      icon_a, icon_a_txt, icon_b, 
+      icon_b_txt, icon_c, icon_c_txt, 
+      icon_d, icon_d_txt, addTime, 
+      in_use)
+    values (#{id,jdbcType=BIGINT}, #{app_op_v,jdbcType=VARCHAR}, #{idx_pop,jdbcType=CHAR}, 
+      #{idx_pop_img,jdbcType=VARCHAR}, #{idx_pop_url,jdbcType=VARCHAR}, #{tab_icon_dft,jdbcType=CHAR}, 
+      #{icon_a,jdbcType=VARCHAR}, #{icon_a_txt,jdbcType=VARCHAR}, #{icon_b,jdbcType=VARCHAR}, 
+      #{icon_b_txt,jdbcType=VARCHAR}, #{icon_c,jdbcType=VARCHAR}, #{icon_c_txt,jdbcType=VARCHAR}, 
+      #{icon_d,jdbcType=VARCHAR}, #{icon_d_txt,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{in_use,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.redpigmall.domain.AppOperativeVersion">
+    insert into redpigmall_app_op_version
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="app_op_v != null">
+        app_op_v,
+      </if>
+      <if test="idx_pop != null">
+        idx_pop,
+      </if>
+      <if test="idx_pop_img != null">
+        idx_pop_img,
+      </if>
+      <if test="idx_pop_url != null">
+        idx_pop_url,
+      </if>
+      <if test="tab_icon_dft != null">
+        tab_icon_dft,
+      </if>
+      <if test="icon_a != null">
+        icon_a,
+      </if>
+      <if test="icon_a_txt != null">
+        icon_a_txt,
+      </if>
+      <if test="icon_b != null">
+        icon_b,
+      </if>
+      <if test="icon_b_txt != null">
+        icon_b_txt,
+      </if>
+      <if test="icon_c != null">
+        icon_c,
+      </if>
+      <if test="icon_c_txt != null">
+        icon_c_txt,
+      </if>
+      <if test="icon_d != null">
+        icon_d,
+      </if>
+      <if test="icon_d_txt != null">
+        icon_d_txt,
+      </if>
+      <if test="addTime != null">
+        addTime,
+      </if>
+      <if test="in_use != null">
+        in_use,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="app_op_v != null">
+        #{app_op_v,jdbcType=VARCHAR},
+      </if>
+      <if test="idx_pop != null">
+        #{idx_pop,jdbcType=CHAR},
+      </if>
+      <if test="idx_pop_img != null">
+        #{idx_pop_img,jdbcType=VARCHAR},
+      </if>
+      <if test="idx_pop_url != null">
+        #{idx_pop_url,jdbcType=VARCHAR},
+      </if>
+      <if test="tab_icon_dft != null">
+        #{tab_icon_dft,jdbcType=CHAR},
+      </if>
+      <if test="icon_a != null">
+        #{icon_a,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_a_txt != null">
+        #{icon_a_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_b != null">
+        #{icon_b,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_b_txt != null">
+        #{icon_b_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_c != null">
+        #{icon_c,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_c_txt != null">
+        #{icon_c_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_d != null">
+        #{icon_d,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_d_txt != null">
+        #{icon_d_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="in_use != null">
+        #{in_use,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.redpigmall.domain.AppOperativeVersion">
+    update redpigmall_app_op_version
+    <set>
+      <if test="app_op_v != null">
+        app_op_v = #{app_op_v,jdbcType=VARCHAR},
+      </if>
+      <if test="idx_pop != null">
+        idx_pop = #{idx_pop,jdbcType=CHAR},
+      </if>
+      <if test="idx_pop_img != null">
+        idx_pop_img = #{idx_pop_img,jdbcType=VARCHAR},
+      </if>
+      <if test="idx_pop_url != null">
+        idx_pop_url = #{idx_pop_url,jdbcType=VARCHAR},
+      </if>
+      <if test="tab_icon_dft != null">
+        tab_icon_dft = #{tab_icon_dft,jdbcType=CHAR},
+      </if>
+      <if test="icon_a != null">
+        icon_a = #{icon_a,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_a_txt != null">
+        icon_a_txt = #{icon_a_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_b != null">
+        icon_b = #{icon_b,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_b_txt != null">
+        icon_b_txt = #{icon_b_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_c != null">
+        icon_c = #{icon_c,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_c_txt != null">
+        icon_c_txt = #{icon_c_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_d != null">
+        icon_d = #{icon_d,jdbcType=VARCHAR},
+      </if>
+      <if test="icon_d_txt != null">
+        icon_d_txt = #{icon_d_txt,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        addTime = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="in_use != null">
+        in_use = #{in_use,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.redpigmall.domain.AppOperativeVersion">
+    update redpigmall_app_op_version
+    set app_op_v = #{app_op_v,jdbcType=VARCHAR},
+      idx_pop = #{idx_pop,jdbcType=CHAR},
+      idx_pop_img = #{idx_pop_img,jdbcType=VARCHAR},
+      idx_pop_url = #{idx_pop_url,jdbcType=VARCHAR},
+      tab_icon_dft = #{tab_icon_dft,jdbcType=CHAR},
+      icon_a = #{icon_a,jdbcType=VARCHAR},
+      icon_a_txt = #{icon_a_txt,jdbcType=VARCHAR},
+      icon_b = #{icon_b,jdbcType=VARCHAR},
+      icon_b_txt = #{icon_b_txt,jdbcType=VARCHAR},
+      icon_c = #{icon_c,jdbcType=VARCHAR},
+      icon_c_txt = #{icon_c_txt,jdbcType=VARCHAR},
+      icon_d = #{icon_d,jdbcType=VARCHAR},
+      icon_d_txt = #{icon_d_txt,jdbcType=VARCHAR},
+      addTime = #{addTime,jdbcType=TIMESTAMP},
+      in_use = #{in_use,jdbcType=CHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="queryPages" resultType="com.redpigmall.domain.AppOperativeVersion" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_app_op_version obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.AppOperativeVersion" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_app_op_version obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_app_op_version obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getLatestVersion" resultType="com.redpigmall.domain.AppOperativeVersion">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_app_op_version obj
+		where in_use = '1' order by obj.addTime desc limit 1
+	</select>
+</mapper>

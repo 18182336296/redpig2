@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoodsCartMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoodsCart">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="count" property="count" jdbcType="INTEGER"/>
+		<result column="price" property="price" jdbcType="DECIMAL"/>
+		<result column="spec_info" property="spec_info" jdbcType="VARCHAR"/>
+		<result column="cart_type" property="cart_type" jdbcType="VARCHAR"/>
+		<result column="cart_gsp" property="cart_gsp" jdbcType="VARCHAR"/>
+		<result column="combin_main" property="combin_main" jdbcType="INTEGER"/>
+		<result column="combin_mark" property="combin_mark" jdbcType="VARCHAR"/>
+		<result column="combin_suit_ids" property="combin_suit_ids" jdbcType="VARCHAR"/>
+		<result column="combin_suit_info" property="combin_suit_info" jdbcType="VARCHAR"/>
+		<result column="combin_version" property="combin_version" jdbcType="VARCHAR"/>
+		<result column="cart_session_id" property="cart_session_id" jdbcType="VARCHAR"/>
+		<result column="cart_mobile_id" property="cart_mobile_id" jdbcType="VARCHAR"/>
+		<result column="gift_info" property="gift_info" jdbcType="VARCHAR"/>
+		<result column="whether_choose_gift" property="whether_choose_gift" jdbcType="INTEGER"/>
+		<result column="cart_status" property="cart_status" jdbcType="INTEGER"/>
+		<result column="remain_count" property="remain_count" jdbcType="INTEGER"/>
+		<association property="goods" column="goods_id" select="com.redpigmall.dao.GoodsMapper.selectByPrimaryKey"/>
+		<association property="user" column="user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<collection property="gsps" column="id" select="com.redpigmall.dao.GoodsSpecPropertyMapper.getGspsByGoodsCartId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoodsCart">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="count" property="count" jdbcType="INTEGER"/>
+		<result column="price" property="price" jdbcType="DECIMAL"/>
+		<result column="spec_info" property="spec_info" jdbcType="VARCHAR"/>
+		<result column="cart_type" property="cart_type" jdbcType="VARCHAR"/>
+		<result column="cart_gsp" property="cart_gsp" jdbcType="VARCHAR"/>
+		<result column="combin_main" property="combin_main" jdbcType="INTEGER"/>
+		<result column="combin_mark" property="combin_mark" jdbcType="VARCHAR"/>
+		<result column="combin_suit_ids" property="combin_suit_ids" jdbcType="VARCHAR"/>
+		<result column="combin_suit_info" property="combin_suit_info" jdbcType="VARCHAR"/>
+		<result column="combin_version" property="combin_version" jdbcType="VARCHAR"/>
+		<result column="cart_session_id" property="cart_session_id" jdbcType="VARCHAR"/>
+		<result column="cart_mobile_id" property="cart_mobile_id" jdbcType="VARCHAR"/>
+		<result column="gift_info" property="gift_info" jdbcType="VARCHAR"/>
+		<result column="whether_choose_gift" property="whether_choose_gift" jdbcType="INTEGER"/>
+		<result column="cart_status" property="cart_status" jdbcType="INTEGER"/>
+		<result column="remain_count" property="remain_count" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,goods_id,count,price,spec_info,cart_type,cart_gsp,combin_main,combin_mark,combin_suit_ids,combin_suit_info,combin_version,user_id,cart_session_id,cart_mobile_id,gift_info,whether_choose_gift,cart_status,remain_count
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		
+		<if test="mark_ids != null">
+			<foreach item="item" index="index" collection="mark_ids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="count != null">and count = #{count,jdbcType=INTEGER}</if>
+		<if test="price != null">and price = #{price,jdbcType=DECIMAL}</if>
+		<if test="spec_info != null">and spec_info = #{spec_info,jdbcType=VARCHAR}</if>
+		<if test="cart_type != null">and cart_type = #{cart_type,jdbcType=VARCHAR}</if>
+		<if test="cart_gsp != null">and cart_gsp = #{cart_gsp,jdbcType=VARCHAR}</if>
+		<if test="combin_main != null">and combin_main = #{combin_main,jdbcType=INTEGER}</if>
+		<if test="combin_main_no != null">and combin_main != #{combin_main_no,jdbcType=INTEGER}</if>
+		<if test="combin_mark != null">and combin_mark = #{combin_mark,jdbcType=VARCHAR}</if>
+		<if test="combin_suit_ids != null">and combin_suit_ids = #{combin_suit_ids,jdbcType=VARCHAR}</if>
+		<if test="combin_suit_info != null">and combin_suit_info = #{combin_suit_info,jdbcType=VARCHAR}</if>
+		<if test="combin_version != null">and combin_version = #{combin_version,jdbcType=VARCHAR}</if>
+		<if test="cart_session_id != null">and cart_session_id = #{cart_session_id,jdbcType=VARCHAR}</if>
+		<if test="cart_mobile_id != null">and cart_mobile_id = #{cart_mobile_id,jdbcType=VARCHAR}</if>
+		<if test="gift_info != null">and gift_info = #{gift_info,jdbcType=VARCHAR}</if>
+		<if test="whether_choose_gift != null">and whether_choose_gift = #{whether_choose_gift,jdbcType=INTEGER}</if>
+		<if test="cart_status != null">and cart_status = #{cart_status,jdbcType=INTEGER}</if>
+		<if test="remain_count != null">and remain_count = #{remain_count,jdbcType=INTEGER}</if>
+		<if test="goods_id!=null">and goods_id=#{goods_id,jdbcType=BIGINT}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		<if test="goods == null or goods.id == null">goods_id = null,</if>
+		<if test="goods != null and goods.id != null">goods_id = #{goods.id,jdbcType=BIGINT},</if>
+		count= #{count},
+		price= #{price},
+		spec_info= #{spec_info},
+		cart_type= #{cart_type},
+		cart_gsp= #{cart_gsp},
+		combin_main= #{combin_main},
+		combin_mark= #{combin_mark},
+		combin_suit_ids= #{combin_suit_ids},
+		combin_suit_info= #{combin_suit_info},
+		combin_version= #{combin_version},
+		<if test="user == null or user.id == null">user_id = null,</if>
+		<if test="user != null and user.id != null">user_id = #{user.id,jdbcType=BIGINT},</if>
+		cart_session_id= #{cart_session_id},
+		cart_mobile_id= #{cart_mobile_id},
+		gift_info= #{gift_info},
+		whether_choose_gift= #{whether_choose_gift},
+		cart_status= #{cart_status},
+		remain_count= #{remain_count},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodscart 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodscart obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_goodscart obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getGoodsByGoodsId" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodscart
+		where
+			goods_id = #{goods_id,jdbcType=BIGINT}
+	</select>
+	<select id="getUserByUserId" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodscart
+		where
+			user_id = #{user_id,jdbcType=BIGINT}
+	</select>
+	<select id="findGoodsCartByIds" resultMap="BaseResultMap" resultType="com.redpigmall.domain.GoodsCart" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodscart 
+		<include refid="whereStatement"/>
+	</select>
+	<!-- 删除一条记录 -->
+	<delete id="deletelById" parameterType="int">  
+        delete from redpigmall_goodscart where id = #{id}  
+    </delete>
+	<select id="queryPages" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodscart obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoodsCart" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_goodscart(addTime,deleteStatus,count,price,spec_info,cart_type,cart_gsp,combin_main,combin_mark,combin_suit_ids,combin_suit_info,combin_version,cart_session_id,cart_mobile_id,gift_info,whether_choose_gift,cart_status,remain_count,goods_id,user_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{count,jdbcType=INTEGER},#{price,jdbcType=DECIMAL},#{spec_info,jdbcType=VARCHAR},#{cart_type,jdbcType=VARCHAR},#{cart_gsp,jdbcType=VARCHAR},#{combin_main,jdbcType=INTEGER},#{combin_mark,jdbcType=VARCHAR},#{combin_suit_ids,jdbcType=VARCHAR},#{combin_suit_info,jdbcType=VARCHAR},#{combin_version,jdbcType=VARCHAR},#{cart_session_id,jdbcType=VARCHAR},#{cart_mobile_id,jdbcType=VARCHAR},#{gift_info,jdbcType=VARCHAR},#{whether_choose_gift,jdbcType=INTEGER},#{cart_status,jdbcType=INTEGER},#{remain_count,jdbcType=INTEGER},#{goods.id,jdbcType=BIGINT},#{user.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoodsCart">
+		update redpigmall_goodscart
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_goodscart where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_goodscart where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="getGspsByGoodsSpecPropertyId" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT 	GoodsCart.* FROM redpigmall_goodscart GoodsCart
+		JOIN  redpigmall_cart_gsp ftn ON ftn.cart_id = GoodsCart.id AND ftn.gsp_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodscart obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodscart obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoodsCart" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodscart
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_goodscart where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<insert id="saveGoodsCartAndGsps" parameterType="java.util.Map">
+		INSERT IGNORE INTO redpigmall_cart_gsp(cart_id,gsp_id) VALUES
+		<foreach collection="gsps" index="index" item="item" separator=","> 
+            (#{cartId},#{item.id}) 
+        </foreach>
+	</insert>
+	
+</mapper>

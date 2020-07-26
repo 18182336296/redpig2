@@ -1,0 +1,72 @@
+﻿<div id="faq">
+  <div class="faq-wrapper">
+    <ul>
+     #foreach($ac in $acs)
+     <li> 
+     <dl class="s1">
+      <dt>
+        $!ac.className      
+      </dt>
+        #foreach($article in $ac.articles)
+        	#if($!article.url!="")
+        		#set($url="$!article.url")
+        	#else
+        		#set($url="$!webPath/article_$!{article.id}")
+        	#end
+        	
+        	#if($!article.display)
+            <dd><i></i><a href="$!url" title="$!CommUtil.substring("$!article.title",12)"> $!CommUtil.substring("$!article.title",12) </a></dd>
+            #end
+        #end
+     </dl>
+     </li>
+     #end
+	</ul>	
+	
+<div class="help">
+		<div class="w1190 clearfix">
+    		<div class="contact f-l">
+    			<div class="contact-border clearfix">
+        			<span class="ic tel t20">QQ:4407509</span>
+        			<span class="ic mail">4407509@qq.com</span>
+        			<div class="attention cleafix">
+        				<div class="weixin f-l">						
+    					<img src="$!imageWebServer/data/upload/shop/common/04878464478763272.png" class="f-l jImg img-error">
+	   					<p class="f-l">
+        						<span>扫一扫</span>
+        						<span>关注我们</span>
+        					</p>
+        				</div>
+        				<div class="weibo f-l">
+        					<div class="ic qq" style="padding-left: 0px;"><ul><li><a target="_blank">腾讯微博</a></li></ul></div>
+        					<div class="ic sina" style="padding-left: 0px;"><ul><li><a target="_blank">新浪微博</a></li></ul></div>
+        				</div>
+        			</div>
+    			</div>
+    		</div>
+		</div>
+	</div>			
+      </div>
+</div>
+
+<div id="footer" class="wrapper">
+  				#set($navs=$!navTools.queryNav(1,-1))
+  				#if($!navs.size()>0)
+  				<p>
+			      #foreach($nav in $navs)
+			        #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+			        	#set($url="$!nav.url")
+			        #else
+			        	#set($url="$!webPath/$!{nav.url}")
+			        #end
+  					<a href="$!url" #if($!nav.new_win==1)target="_blank"#end>$!{nav.title}</a>
+  					#if($!{velocityCount}<$navs.size())|#end
+                  #end
+                </p>
+                #end
+
+$!{config.copyRight} <br>
+
+$!config.codeStat
+
+</div>

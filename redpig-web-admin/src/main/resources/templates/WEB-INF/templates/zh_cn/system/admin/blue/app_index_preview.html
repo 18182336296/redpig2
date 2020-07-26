@@ -1,0 +1,93 @@
+ 
+ #foreach($obj in $floor_list)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_floor($!obj.id)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_floor($!obj.id)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+  <h1><span>$!obj.title</span></h1>
+</div>
+#foreach($map in $appIndexTools.getFloorInfo($!obj.id))
+#if($map.get("line_type")==1)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+  <ul>
+    #foreach($a in $map.get("line_info"))
+    <li style='width:100%;'><img width="100%" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+  </ul>
+</div>
+#end
+#if($map.get("line_type")==2)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+  <ul style="width:101%">
+    #foreach($a in $map.get("line_info"))
+    <li style='width:50%; float:left;'><img width="100%" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+  </ul>
+</div>
+#end
+#if($map.get("line_type")==3)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+  <ul>
+    #foreach($a in $map.get("line_info"))
+    <li style='width:33.3%;'><img width="100%" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+  </ul>
+</div>
+#end
+#if($map.get("line_type")==4)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+  <ul>
+    #foreach($a in $map.get("line_info"))
+    <li style='width:63px;'><img width="100%" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+  </ul>
+</div>
+#end
+#if($map.get("line_type")==6)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+  <ul>
+    #foreach($a in $map.get("line_info"))
+    #if($!velocityCount==1)
+    <li style='width:127px;height:116px'><img width="127" height="116" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+    #if($!velocityCount==2)
+    <li style='width:127px;height:58px'><img width="127" height="58" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+    #if($!velocityCount==3)
+    <li style='height:58px; width:127px'><img width="127" height="58" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+    #end
+  </ul>
+</div>
+#end
+#if($map.get("line_type")==7)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_line($!obj.id,$!velocityCount)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+  <ul>
+    #foreach($a in $map.get("line_info"))
+    #if($!velocityCount==1)
+    <li style='width:100px;height:124px'><img width="100" height="124" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+    #if($!velocityCount==2)
+    <li style='width:155px;height:49px'><img width="159" height="49" src='$!webPath/$a.get("img_url")' /></li>
+    #end
+    #if($!velocityCount==3)
+    <li style='height:74px; width:155px'>
+      <ul>
+        <li style='width:77px;height:74px'><img width="77" height="74" src='$!webPath/$a.get("img_url")' /></li>
+        #end
+        #if($!velocityCount==4)
+        <li style='width:77px;height:74px'><img width="77" height="74" src='$!webPath/$a.get("img_url")' /></li>
+      </ul>
+    </li>
+    #end
+    #end
+  </ul>
+</div>
+#end
+#end
+<div class='android_floor_add'><a href='javascript:void(0)'  onclick='add_line($!obj.id)'>添加行</a></div>
+#end

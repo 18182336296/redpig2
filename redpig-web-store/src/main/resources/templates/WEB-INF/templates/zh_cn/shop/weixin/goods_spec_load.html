@@ -1,0 +1,76 @@
+<script>
+jQuery(document).ready(function(){
+	#if($!{cart.goods.goods_specs_info})
+	 var goods_specs_info=eval($!{cart.goods.goods_specs_info});
+	jQuery.each(goods_specs_info,function(index,item){
+        var a=jQuery("a[gsp="+item.id+"]");
+		a.attr("sname",item.name)
+		a.text(item.name);
+    });
+	#end							
+	#foreach($gps_temp in $cart.gsps)
+	jQuery("li[gsp=$!{gps_temp.id}]").addClass("this");
+	#end
+	});
+	load_class_count("$!cart.id","$!cart.cart_gsp")
+function goods_spec_set(obj){
+	    jQuery("#confirm_btu").attr("onClick","");
+		var spec = jQuery(obj).attr("spec");
+		jQuery("li[spec="+spec+"]").removeClass("this");
+		jQuery(obj).addClass("this");
+		var gsp="";
+		jQuery(obj).parent().parent().parent().find("div[id=pro_choose_li_standard_$!{cart.id}]").each(function(){
+				 jQuery.each(jQuery(this).find("li[class='choose_one_standard this']"),function(){
+					    gsp=jQuery(this).attr("gsp")+","+gsp; 							 
+				 });
+		});
+		load_class_count("$!cart.id",gsp);
+}
+function load_class_count(cart_id,gsp){
+	jQuery.post("$!webPath/wap/goods_inventory_load",{"id":cart_id,"gsp":gsp},function(data){
+					if(data){
+						if(data.count==0){
+							jQuery("#confirm_btu").addClass("sure_btn_gray");
+						}else{
+							jQuery("#confirm_btu").attr("onClick","confirm_change_spec(this);").removeClass("sure_btn_gray");
+						}
+						jQuery("#model_text_$!cart.id li[class=value]").text("￥"+data.price);
+						jQuery("#model_text_$!cart.id li[class=amount]").children("span").text(data.count+"件");
+					}
+					},"json");
+	}	
+</script>
+#if($!cart.goods.goods_main_photo)                     #set($good_img="$!imageWebServer/$!{cart.goods.goods_main_photo.path}/$!{cart.goods.goods_main_photo.name}_middle.$!{cart.goods.goods_main_photo.ext}")
+              #else
+              #set($goods_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+<div class="again_model_info">
+        	<div class="model_pic"><img src="$!good_img"></div>
+            <ul class="model_text" id="model_text_$!cart.id">
+            	<li class="value" >¥0</li>
+                <li class="amount">库存：<span>0件</span></li>
+            </ul>
+        </div>
+        <div class="again_standard_box">
+            #foreach($spec in $goodsViewTools.generic_spec("$!cart.goods.id"))
+            <div class="again_model_standard" id="pro_choose_li_standard_$!{cart.id}">
+                <h4 class="standard_title">$!{spec.name}</h4>
+                <ul>
+                	#foreach($gsp in $cart.goods.goods_specs)
+                    #if($!{gsp.spec.id}==$!spec.id)
+                    #if($!spec.type=="img") 
+                    <li id="class_choose_li_$!gsp.id" onclick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id" class="choose_one_standard"><img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="20" height="20" /><a href="javascript:void(0);" >$!gsp.value</a></li>
+                    #end
+                    #if($!spec.type=="text") 
+                    <li id="class_choose_li_$!gsp.id" onclick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id" class="choose_one_standard"><a href="javascript:void(0);">$!gsp.value</a></li>
+                    #end
+                    #end
+                    #end
+                </ul>
+            </div>
+            #end
+        </div>
+	  <a data-ajax="false" class="sure_btn" href="javascript:void(0);" id="confirm_btu" cart_id="$!{cart.id}" onClick="confirm_change_spec(this);">确定</a>
+      <div class="close_btn">
+        	<a data-ajax="false" href="javascript:void(0);" onclick="cancle_change();" ><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_coupon_btn.png"></a>
+        </div>

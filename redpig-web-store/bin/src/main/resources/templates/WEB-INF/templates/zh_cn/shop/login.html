@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户登录1 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.redpigmall.validate.js" type="text/javascript"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!config.securityCodeLogin)
+	jQuery(".login_auto").show();
+	#end
+  window.onload=function(){jQuery("#username").focus()};
+  jQuery("#normal_form").validate({
+    errorPlacement: function(error, element){
+		var display =jQuery("#nromal_login_error label").css("display");
+				if(display=="none"){
+					jQuery("#nromal_login_error").html(error);
+					jQuery(element).focus()	
+					}	
+        },
+	rules: {
+			username: {required:true},
+			password:{required:true}
+			#if($!config.securityCodeLogin),
+			code:{required:true,remote:{
+		    url: "$!webPath/verify_code",     
+            type: "post",               
+            dataType: "json",          
+            data: {                     
+                  "code": function(){return jQuery("#code").val();}
+		     }
+		  }}#end
+		  },
+		messages: {
+			username: {required:"用户名不能为空！"},
+			password: {required:"密码不能为空"}
+			#if($!config.securityCodeLogin),
+			code:{required:"验证码不能为空",remote:"验证码错误"}#end
+		}
+  });
+  
+  //手机动态验证码登录
+  jQuery("#mobile_form").validate({
+	 errorPlacement: function(error, element){
+				var display =jQuery("#mobile_login_error label").css("display");
+				if(display=="none"){
+					jQuery("#mobile_login_error").html(error);
+					jQuery(element).focus()	
+					}
+       		 },							  
+	rules: {
+			mobile: {required:true,isPhone:true,remote:{
+		    url: "$!webPath/verify_mobile",     
+            type: "post",               
+            dataType: "json",          
+            data: {                     
+                  "code": function(){return jQuery("#mobile").val();},
+				  "type":"login"
+		     }
+		  }},
+			dy_code:{required:true,digits:true,maxlength:6,minlength:6,remote:{
+		    url: "$!webPath/verify_mcode",     
+            type: "post",               
+            dataType: "json",          
+            data: {                     
+                   "mcode": function(){return jQuery("#dy_code").val();},
+				   "mobile": function(){return jQuery("#mobile").val();}
+		     }
+		  }}#if($!config.securityCodeLogin),
+			mobile_code:{required:true,remote:{
+		    url: "$!webPath/verify_code",     
+            type: "post",               
+            dataType: "json",          
+            data: {                     
+                  "code": function(){return jQuery("#mobile_code").val();}
+		     }
+		  }}#end
+		  },
+	messages: {
+			mobile: {required:"手机号码不能为空！",isPhone:"请输入正确手机号！",remote:"该手机号码没有绑定任何商城账号！"},
+			dy_code: {required:"动态密码不能为空！",digits:"只能输入数字！",maxlength:"只能输入6位数字!",minlength:"只能输入6位数字!",remote:"动态密码不正确！"}#if($!config.securityCodeLogin),
+			mobile_code:{required:"验证码不能为空！",remote:"验证码错误！"}#end
+		}
+  });
+var firstInterval;  
+var secondInterval;  
+  //
+  jQuery(".login_bottom_right").click(function(){
+					if(jQuery(".login_box_code").is(":hidden")){
+					jQuery(".login_box_code").show();
+					jQuery(".login_bottom_right_b").addClass("this");
+						jQuery("#qr_login_span").parent().find("i").animate({'left': '-233px','opacity': 1},1000);
+						refresh_qr();
+						 if(firstInterval) clearInterval(firstInterval);
+						 firstInterval = setInterval("qr_login()", 5000); 
+						 if(secondInterval) clearInterval(secondInterval);
+						 secondInterval = setInterval("refresh_qr()",30000);
+					}else{
+					jQuery(".login_box_code").hide();
+					jQuery(".login_bottom_right_b").removeClass("this");
+						jQuery("#qr_login_span").parent().find("i").stop().css("left","-62px").css("opacity","0");	
+						}
+						
+				 });
+ 
+  
+  //登录方式切换
+    jQuery(".login_top_nav span").click(function(){
+			jQuery(this).parent().find("span").removeClass("this");									 
+				var type =jQuery(this).addClass("this").attr("type");
+				jQuery("div[type^=login_]").hide();
+				jQuery("div[type^=login_"+type+"]").show();
+				jQuery("input[type='text'][focus_type="+type+"]").focus();
+				jQuery("#mobile_login_error label").hide();
+				jQuery("#nromal_login_error label").hide();
+				#if($!config.securityCodeLogin)
+				if(type=="mobile"){
+					mobile_refreshCode();
+					}else{
+					refreshCode();	
+						}
+				#end		
+  			});
+  
+  //
+  jQuery(document).keydown(function(e){
+		var type =jQuery(".login_top_nav span[class='this']").attr("type");
+        var key =  e.which;
+		if(key==13){
+			login_submit(type);
+			}
+   		 });   
+});//end
+function qr_login(){
+		jQuery.ajax({type:'POST',url:'$!webPath/qr_login',data:{},dataType:'json',
+				  success:function(data){
+					  if(data.ret=="true"){
+						  	jQuery(".login_box_code_m").hide();
+							jQuery(".login_going").show();
+						  clearInterval();
+						   window.location.href="$!webPath/qr_login_confirm?user_id="+data.user_id+"&qr_log_mark="+data.qr_log_mark;						   
+					  }
+				  }
+		});
+	}
+function refresh_qr(){
+		 jQuery("#qr_login_img").attr("src","$!webPath/qr_login_img?uuid=$!{uuid}&d"+new Date().getTime());
+	}
+function login_submit(type){
+		if(type=="normal" || type=="mobile"){
+				if(jQuery("#"+type+"_form").valid()){
+				jQuery(".logging").show();
+				jQuery("#"+type+"_login_error label").hide().html("");
+				login_ajax(type);
+				}
+			}
+	}
+	
+function login_ajax(type){
+	 var params = jQuery("#"+type+"_form").serialize();
+	 if(type=="normal"){
+		 	 jQuery.ajax({type:'POST',url:'$!webPath/verity_user',data:params,
+			  success:function(ret){
+				  console.log(ret);
+					if(ret==100){
+					jQuery("#normal_form").submit();
+					}else if(ret==200 || ret==300||ret==500){
+					jQuery(".logging").hide();
+						if(ret==200){
+							jQuery(".logging").hide();
+						    jQuery(".login_auto").show();
+							refreshCode();
+							jQuery("#nromal_login_error label").show().html("验证码错误！或输入次数过多！");		
+							}else{
+								if(ret==500){
+									refreshCode();
+								}
+							jQuery("#nromal_login_error label").show().html("用户名或密码错误，请重新输入！");				
+							}
+						#if($!config.securityCodeLogin)
+						refreshCode();
+						#end	
+					}else if(ret==400){
+						jQuery(".logging").hide();
+						jQuery("#nromal_login_error label").show().html("用户未激活，请立即激活！");
+					}
+				}
+			 });
+	 }else{
+		 if(jQuery("#"+type+"_form").valid()){
+		 	jQuery.ajax({type:'POST',url:'$!webPath/mobile_login_confirm',data:params,dataType:'json',
+			  success:function(data){
+						if(data.ret=="100"){
+							jQuery.ajax({type:'POST',url:'$!webPath/mobile_login_confirm2',data:params,dataType:'text',
+								  success:function(data){
+									  if(data=="success"){
+										   window.location.href="$!webPath/index";	
+										  }else{
+											jQuery(".logging").hide();  
+											jQuery("#mobile_login_error label").show().html("登录失败，请重新登录！");		
+										 }
+									}
+								 });
+						}else{
+							jQuery("#mobile_login_error label").show().html(data.msg);	
+							jQuery(".logging").hide();
+					}
+				}
+			 });
+		  }
+		 }
+			
+	}
+//
+
+//发送验证码
+function send_code(obj){
+	if(jQuery("#mobile_form").validate().element(jQuery("#mobile"))){
+		var disabled =jQuery(obj).attr("send");
+		if(disabled=="true"){
+			jQuery(".phone_input_button").css("background-color","#999");
+			 down_time();
+			 jQuery(obj).attr("send","false");
+			 var params = jQuery("#mobile_form").serialize();
+			 jQuery.ajax({type:'POST',url:'$!webPath/send_mcode',dataType:"json",data:params,
+				  success:function(data){
+					 if(data.ret==100){
+						 jQuery("#mobile_login_error label").show().html(data.msg).animate({'display':'block'},4000,'',function(){jQuery("#mobile_login_error label").fadeOut(1000)});
+						 }else{
+						  jQuery("#mobile_login_error label").show().html(data.msg);
+						  cancel_down_time();
+							 } 
+				  }
+			 });
+		}			
+	}
+}
+//倒计时
+var timer;
+function down_time(){
+		jQuery("#send_code").attr("send","false");
+		  var count=60;
+			 timer = window.setInterval(go,1000);
+			  function go(){
+				count--;
+				jQuery(".phone_input_button").css("background-color","#999").find("a").html("重新发送 ("+count+")");
+				if(count<0){
+					cancel_down_time();
+					}
+			  }
+	}
+//取消倒计时	
+function cancel_down_time(){
+			window.clearInterval(timer);
+			jQuery("#send_code").attr("send","true");
+			jQuery(".phone_input_button").removeAttr("style").find("a").html("获取动态密码");
+	}	
+
+</script>
+</head><body>
+<!--手机客户端弹出 -->
+<div class="login_box_show_bg" style="display:none;"></div>
+<div class="login_box_show" style="display:none;"> <i><a href="javascript:void(0);" onclick="jQuery('div[class^=login_box_show]').hide();">x</a></i>
+  <dl>
+    <span><img src="$!imageWebServer/$!{config.uploadFilePath}/app/app_dowload.png" /></span>
+    <dd><a href="$!config.ios_download" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/for_iphone.png" /></a></dd>
+    <dd><a href="$!config.android_download" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/for_andriod.png" /></a></dd>
+  </dl>
+</div>
+<div class="login_bg">
+  <div class="login_head">
+    <h1><span> #if($!config.websiteLogo) <a href="$!webPath/index"> <img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /> </a> #else <a href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/logo.jpg"   /> </a> #end </span><strong>用户登录</strong></h1>
+  </div>
+  <div class="login_box"> #set($img="$!imageWebServer/$!imageViewTools.random_login_img()")
+    <div class="login_left_adv"><img src="$!img" width="490" height="400" /> </div>
+    <div class="login_box_right">
+      <div class="login_top_nav"> <span type="normal" class="this">账号登录<em></em></span> <span type="mobile">手机动态密码登录<em></em></span> </div>
+      <div class="login_box_left">
+        <div class="logging" style="display:none"><img src="$!cdnServer/resources/style/system/front/default/images/login/loging.gif"></div>
+        <!--普通登录 -->
+        <div class="login_box_login" type="login_normal" style="display:;">
+          <form action="$!webPath/redpigmall_login" method="post" name="normal_form" id="normal_form">
+          <input id="referer" value="$!referer" name="referer" type="hidden">
+            <ul class="login_ul">
+              <div id="nromal_login_error">
+                <label style="display:none"></label>
+              </div>
+              <li class="login_ul_li">
+                <input name="username" type="text" id="username" focus_type="normal" class="login_input_name"  placeholder="账号/邮箱/已绑定手机" spellcheck="false" tabindex="1" />
+              </li>
+              <li class="login_ul_li">
+                <input  name="password" type="password" id="password"  class="login_input_pwd" placeholder="登录密码" tabindex="2" />
+              </li>
+              <li class="forget_psd"><a href="$!webPath/forget1">忘记密码？</a></li>
+              <script>
+                 function refreshCode(){
+	                 jQuery("#code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+                 }
+             </script>
+              <li class="login_auto" style="display:none;">
+                <input name="code" type="text" id="code"  autocomplete="off" class="login_code" placeholder="验证码" tabindex="3"  />
+                #if($!config.securityCodeType=='voice')
+                <script>
+				   function readCode(id){
+                         var  s = "<embed id='sound_play' name='sound_play' src='$!cdnServer/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                    jQuery("#"+id).html(s);
+                    }
+					 </script>
+                <a href="javascript:void(0);" onclick="readCode('player')" title="朗读验证码" class="code_speech"></a> <span id="player"></span>#elseif($!config.securityCodeLogin)<b><img width="86" height="40" id="code_img" src="$!webPath/verify"  /></b><a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a> #else <b><img width="86" height="40" id="code_img"/></b><a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a> #end </li>
+              <li></li>
+            </ul>
+            <div class="login_btn">
+              <input name="" type="button"  onclick="login_submit('normal');"  value="立即登录"/>
+              <input name="login_role" type="hidden" id="login_role" value="user" />
+            </div>
+          </form>
+          #if($!{config.sina_login}||$!{config.qq_login} || $!{config.weixin_login})
+          <div class="login_other">
+            <h4>使用合作网站账号登录：</h4>
+            <div class="login_other_box">
+            	<ul>
+                	#if($!{config.qq_login})<li class="login_qq"> <a  href="$!webPath/qq_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/qq.png" /></a> </li>#end
+                   #if($!{config.sina_login}) <li class="login_sina">  <a  href="$!webPath/sina_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/sina.png" /></a></li>#end
+                     #if($!{config.weixin_login}==1) <li class="login_wechat">  <a  href="$!webPath/wechat_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/wx.png" /></a></li>#end
+                </ul>
+			</div>
+          </div>
+          #end
+          <!--二维码登录 -->
+          #if($!config.qr_login==1)
+          <div class="login_bottom_right">
+            <div class="login_box_code" style="display:none;">
+              <!--二维码登录前... -->
+              <div class="login_box_code_m"  style="display:;">
+                <div class="login_box_code_top"> <strong> 用<a href="javascript:void(0);" onclick="jQuery('div[class^=login_box_show]').show();">手机客户端</a>扫描安全登录</strong> </div>
+                <div class="login_box_code_center"> <span id="qr_login_span"><img id="qr_login_img" src="" onclick="refresh_qr();"/></span> <i style="left:-42px;opacity:0"><img src="$!cdnServer/resources/style/system/front/default/images/login/coke_img.png"/></i> </div>
+              </div>
+              <!--二维码登录中... -->
+              <div class="login_going" style="display:none;">
+                <div class="login_going_img"><img src="$!cdnServer/resources/style/system/front/default/images/login/login_going_img.png" /></div>
+                <div class="login_going_l"><img src="$!cdnServer/resources/style/system/front/default/images/login/login_going.gif" width="160" /></div>
+                <div class="login_going_word">正在扫描二维码登录...</div>
+              </div>
+            </div>
+            <div class="login_bottom_right_b"><a href="javascript:void(0);" class="login_computer "></a></div>
+          </div>
+          #end
+        </div>
+        <!--手机动态密码登录-->
+        <div class="login_phone_cd" type="login_mobile" style="display:none;">
+          <form id="mobile_form" name="mobile_form" action="" method="">
+          <input id="verify_mobile_code" value="$!verify_mobile_code" name="verify_mobile_code" type="hidden">
+          <input id="referer" value="$!referer" name="referer" type="hidden">
+            <ul class="login_ul">
+              <div id="mobile_login_error">
+                <label style="display:none"></label>
+              </div>
+              <li class="login_ul_li">
+                <input name="mobile" id="mobile" type="text" focus_type="mobile" class="phone_input_name" tabindex="1" placeholder="已绑定手机"  />
+              </li>
+              <li class="login_ul_li" style="margin-bottom:18px;">
+                <input name="dy_code" id="dy_code" type="text" class="phone_input_pwd" placeholder="请输入动态密码" tabindex="2" />
+                <span class="phone_input_button"><a href="javascript:void(0);" id="send_code" onclick="send_code(this);" send="true">获取动态密码</a></span> </li>
+              #if($!config.securityCodeLogin)
+              <script>
+                 function mobile_refreshCode(){
+	                 jQuery("#mobile_code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+                 }
+             </script>
+              <li class="login_auto">
+                <input name="mobile_code" type="text" id="mobile_code"  autocomplete="off" class="login_code" placeholder="验证码" tabindex="3"  />
+                #if($!config.securityCodeType=='voice')
+                <script>
+				   function readCode2(id){
+                         var  s = "<embed id='sound_play' name='sound_play' src='$!cdnServer/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                    jQuery("#"+id).html(s);
+                    }
+					 </script>
+                <a href="javascript:void(0);" onclick="readCode2('player2')" title="朗读验证码" class="code_speech"></a> <span id="player2"></span> #else <b><img width="86" height="40" id="mobile_code_img" src="$!webPath/verify" /></b><a href="javascript:void(0);" onclick="mobile_refreshCode();" class="code_refresh"></a> #end </li>
+              #end
+            </ul>
+            <div class="login_btn">
+              <input name="mobile_submit" id="mobile_submit" type="button" onclick="login_submit('mobile');"  value="立即登录"/>
+            </div>
+          </form>
+          #if($!{config.sina_login}||$!{config.qq_login} || $!{config.weixin_login})
+          <div class="login_other">
+            <h4>使用合作网站账号登录：</h4>
+            <div class="login_other_box">
+            	<ul>
+                #if($!{config.qq_login})<li class="login_qq"> <a  href="$!webPath/qq_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/qq.png" /></a> 		</li>#end
+                   #if($!{config.sina_login}) <li class="login_sina">  <a  href="$!webPath/sina_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/sina.png" /></a></li>#end
+                     #if($!{config.weixin_login}==1) <li class="login_wechat">  <a  href="$!webPath/wechat_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/wx.png" /></a></li>#end
+                </ul>
+			</div>
+          </div>
+          #end </div>
+      </div>
+      <div class="login_box_bottom"><a href="$!webPath/register" class="free_resgist">免费注册</a></div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

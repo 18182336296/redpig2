@@ -1,0 +1,54 @@
+<script>
+function get_coupon_bt(coupon_id){
+		if(coupon_id==null){return;}	
+		jQuery.ajax({type:'POST',url:'$!webPath/wap/capture_goods_coupon',data:{"co_id":coupon_id},
+						  success:function(data){
+							if(data=="true"){
+								jQuery("#coupon_"+coupon_id).addClass("get_coupon_finish").removeAttr("onClick").text("已领取");
+							}else{
+								Wap_alert("领取失败！");
+							}
+						  }
+			  });
+}
+function cart_all_coupon_get(){
+		jQuery.ajax({type:'POST',url:'$!webPath/wap/capture_goods_coupon',data:{"store_id":'$!store.id',"co_id":'all',"goods_id":"$!goods_id"},dataType:'json',
+						  success:function(data){
+							if(data!=""){
+								jQuery.each(data,function(index, element) {
+                                    jQuery("#coupon_"+element).addClass("get_coupon_finish").removeAttr("onClick").text("已领取");
+                                });
+							}else{
+								Wap_alert("已全部领取");
+							}
+						  }
+			  });
+}
+</script>
+      <h3>#if($!store) $!store.store_name 优惠券 #else #if($!goods_id) 商城自营 优惠券 #else 优惠券领取 #end #end </h3>
+        #if($!coupons.size()>0)
+        <ul class="shopin_coupon_item">
+        	#foreach($coupon in $coupons)
+            #if($!coupon.coupon_surplus_amount>0 || $!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+        	<li>
+            	<strong>
+                	<span class="value">$!coupon.coupon_amount<em>元</em></span><br>
+				    <span class="text">订单满$!coupon.coupon_order_amount元使用(不含运费)</span><br>
+                    <span class="time">使用期限$!CommUtil.formatShortDate($!coupon.coupon_begin_time)至$!CommUtil.formatShortDate($!coupon.coupon_end_time)</span>
+                </strong>
+                #if($!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+                <a data-ajax="false" class="get_coupon_btn get_coupon_finish" href="javascript:void(0);">已领取</a><!--领取后加get_coupon_finish-->
+                #else
+                <a data-ajax="false" class="get_coupon_btn" href="javascript:void(0);" id="coupon_$!coupon.id" onClick="get_coupon_bt($!coupon.id);">领取</a>
+                #end
+            </li>
+            #end
+            #end
+        </ul>
+        <div class="all_coupon_get" onClick="cart_all_coupon_get();"><a data-ajax="false" href="javascript:void(0);">一键领取</a>
+        </div>
+        #else
+        <p style="color: #878787;text-align: center;margin-top: 50px;font-size: 1.2em;">下手慢了！优惠券都被抢没了！</p>
+        #end
+        <div class="close_btn" onClick="cancle_coupon();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_coupon_btn.png">
+        </div>

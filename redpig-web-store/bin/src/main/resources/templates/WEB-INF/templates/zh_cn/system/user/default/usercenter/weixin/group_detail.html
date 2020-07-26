@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>订单详情 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+	jQuery(document).ready(function(e) {
+        jQuery("#cond").click(function(){
+			WapshowDialog(2,"您确定取消该订单吗？",method);
+			function method(){
+					window.location.href="$!webPath/wap/buyer/order_cancel?id=$!{obj.id}";
+			}
+		});
+	var currentPage = 2;	
+	var  ret = 1;
+	var totalPage = "$!totalPage";
+	if(totalPage>1){
+    jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+		if(currentPage<=totalPage){
+		jQuery("#loading").hide();
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/buyer/group_view_data',
+				   data:{"currentPage":currentPage,
+				   		 "id":"$!obj.id"
+						},
+				beforeSend:function(){
+				  currentPage = currentPage+1;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				  ret = 2;
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+				 ret = 1; 
+	             if(data){
+
+				  	jQuery("#user_life_tab").append(data);
+			 	 }else{
+					 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+		 }else{
+		 	if(currentPage>totalPage){
+						jQuery("#loading_none").show();
+					}else{
+						jQuery("#loading_none").hide();
+				}
+		 }
+	 }
+	});
+	}
+});
+
+</script>
+</head>
+
+<body class="user_bg" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<!--<div class="user_bar"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back_black.png" width="30" height="30" /></a><span class="fl">订单详情</span>#if($!obj.order_status==10) <input class="del" type="button" id="cond" value="取消订单"> #end</div>
+-->
+<div class="user_c_title"> <a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>订单详情 <a class="per_c_icon" href="$!webPath/wap/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a> </div>
+<div class="order_page" style="padding-bottom:0"> 
+  <!--交易成功-->
+  <table class="trade_table" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td class="td_left"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/order_info_01.png" width="30" height="30" /></td>
+        <td><ul>
+            <li class="big"><span class="fl">交易成功</span></li>
+            #set($price = $!obj.totalPrice)
+            <li>订单金额：￥ $!{price}</li>
+          </ul></td>
+      </tr>
+    </tbody>
+  </table>
+  <!--收货人-->
+  <table class="trade_table cnee_table" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td class="td_left"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/order_info_02.png" width="30" height="30" /></td>
+        <td><ul>
+            <li class="big"><span class="fl">收货人: $!user.userName </span></li>
+            <li>电话：$!user.mobile</li>
+          </ul></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="order_page_box">
+    <h1><span class="fl">订单号：$!obj.order_id</span></h1>
+    #set($map = $!orderFormTools.queryGroupInfo("$!obj.group_info"))
+    #set($goods_name = "$!{map.get('goods_name')}")
+    #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+    #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+    #set($goods_count = "$!{map.get('goods_count')}")
+    #set($goods_price = "$!{map.get('goods_price')}")
+    #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+    #set($goods_id = "$!{map.get('goods_id')}")
+    <div class="order_goods">
+      <div class="dt"><a href="$!webPath/wap/grouplife/view?id=$!goods_id"><img src="$img" width="50" height="50" /></a></div>
+      <ul>
+        <li><b>¥ $!goods_price</b></li>
+        <li>X $!goods_count</li>
+      </ul>
+      <div class="dd dd_01"> <span class="name"><a href="javascript:void(0);">$!goods_name</a></span> <span class="size">$!goods_gsp_val </span> </div>
+    </div>
+    <table class="fre_table" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td align="left"><span class="big">实付款：</span></td>
+          <td align="right"><span class="big red">￥ $!obj.totalPrice</span></td>
+        </tr>
+      </tbody>
+    </table>
+	<!--收货人-->
+    <table class="trade_table cnee_table" cellpadding="0" cellspacing="0">
+    	<tbody>
+        	<tr>
+            	<td class="td_left"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/order_info_02.png" width="30" height="30" /></td>
+                <td>
+                	<ul>
+                    	<li class="big"><span class="fl">收货人: $!user.userName	</span><span class="fr">电话：$!user.mobile</span></li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+	<div class="order_page_box">
+    	<h1><span class="fl">订单号：$!obj.order_id</span></h1>
+        
+        
+        #set($map = $!orderFormTools.queryGroupInfo("$!obj.group_info"))
+        #set($goods_name = "$!{map.get('goods_name')}")
+        #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+        #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+        #set($goods_count = "$!{map.get('goods_count')}")
+        #set($goods_price = "$!{map.get('goods_price')}")
+        #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+        #set($goods_id = "$!{map.get('goods_id')}")
+        <div class="order_goods">
+        	<div class="dt"><a href="$!webPath/wap/grouplife/view?id=$!goods_id"><img src="$img" width="50" height="50" /></a></div>
+            <ul>
+            	<li><b>¥ $!goods_price</b></li>
+                <li>X $!goods_count</li>
+            </ul>
+            <div class="dd dd_01">
+            	<span class="name"><a href="javascript:void(0);">$!goods_name</a></span>
+                <span class="size">$!goods_gsp_val </span>
+            </div>
+        </div>    
+        
+        <table class="fre_table" cellpadding="0" cellspacing="0">
+        	<tbody>
+            	
+                
+                <tr>
+                	<td align="left"><span class="big">实付款：</span></td>
+                    <td align="right"><span class="big red">￥ $!obj.totalPrice</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_life_table">
+            <tr>
+              <th width="40%">团购消费码</th>
+              <th width="20%">使用状态</th>
+               <th>到期时间</th>
+            </tr>
+            #foreach($obj in $infos)
+            <tr>
+              <td align="center">$!obj.group_sn</td>
+              <td align="center">#if($!obj.status==0)未使用#end #if($!obj.status==1) 已使用 #end #if($!obj.status==-1) 已过期 #end #if($!obj.status==3||$!obj.status==5)退款中#end #if($!obj.status==7)已退款#end</td>
+              <td align="center">$!CommUtil.formatLongDate($!goods.endTime)</td>
+            </tr>
+            #end
+          </table>
+        #if($!obj.shipCode)
+        <!--物流信息-->
+        <a href="$!webPath/wap/buyer/group_ship_detail?order_id=$!obj.id">
+        <table class="trade_table cnee_table" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="td_left"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/order_info_03.png" width="22" height="70" /></td>
+                    <td class="td_mid">
+                        <ul>
+                            <li class="big"><span class="fl">物流信息: $!orderFormTools.queryGoodsInfo("$!obj.express_info").get("express_company_name")</span></li>
+                            <li class="green">点击查看您的物流信息</li>
+                            <li class="gray">物流单号：$!obj.shipCode</li>
+                        </ul>
+                    </td>
+                    <td><img src="$!cdnServer/resources/style/system/front/default/images/weixin/order_info_04.png" width="13" height="45" /></td>
+                </tr>
+            </tbody>
+        </table>
+        </a>
+        #end
+      </table>
+    </div>
+    <div class="loading" id="loading" style="display:none">
+      <ul>
+        <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+        <li>正在加载....</li>
+      </ul>
+    </div>
+    <div class="loading" id="loading_none" style="display:none">
+      <ul>
+        <li>没有更多了....</li>
+      </ul>
+    </div>
+    
+  </div>
+</div>
+
+<!--订单详细底部--> 
+	#if($!obj.order_status==10)
+	  <div class="order_foot">
+    	<a class="bg_red" href="$!webPath/wap/buyer/go_pay?id=$!obj.id"> 付 款 </a>
+	  </div>
+    #end
+
+  <!--   #if($!obj.order_status==40)
+    <a href="$!webPath/wap/buyer/group_discuss?id=$!obj.id">添加评论</a>
+    #end
+    #if($!obj.order_status==30 || $!obj.order_status==35)
+    <a href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a>
+    
+    #end
+    #if($!obj.order_status==10)
+    <a class="bg_red" href="$!webPath/wap/buyer/go_pay?id=$!obj.id"> 付 款 </a>
+    #end
+   <script>
+    function order_cofirm(id){
+		if(confirm("确定要确认收货？")){
+			window.location.href="$!webPath/wap/buyer/group_cofirm?id="+id;
+		}
+	}
+    </script>
+</div>-->
+</body>
+</html>

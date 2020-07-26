@@ -1,0 +1,83 @@
+<!----------header------->
+<script>
+function cloud_search() {
+    var search_keyword = jQuery("#search_keyword").val();
+    if (search_keyword) {
+        window.location.href = "$!webPath/cloudbuy/list?keyword=" + search_keyword;
+    } else {
+        showDialog("msg_info", "", "请先输入您要查找的关键字！", 2, "warning", 3, '');
+    }
+}
+function cloud_refresh(){
+	jQuery.post("$!current_webPath/cloudbuy/cartlist", {},
+        function(data) {
+			jQuery(".cart_nb").html(data.data.length);
+            if (data.data.length == 0) {
+                jQuery(".list_none").show();
+				jQuery(".cart_layer_footer").hide();
+                jQuery(".list_center").hide();
+            } else {
+                jQuery(".list_none").hide();
+				jQuery(".list_center").remove();
+				var price=0;
+				jQuery.each(data.data,function(index,value){
+					jQuery(".list_none").parent().append("<li class='list_center' car_id='"+value.id+"'><div class='cart_layer_pic'><img src='"+value.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo+"' /></div><div class='cart_layer_text'> <span>"+value.cloudPurchaseLottery.cloudPurchaseGoods.goods_name+"</span> <b><i>"+value.purchased_times+"夺宝币</i><i class='this'><a href='javascript:void(0)' cloud_del='"+value.id+"' >删除</a></i></b> </div></li>");
+					price+=value.purchased_times;
+				});
+				jQuery("#cartlist_count").html(data.data.length);
+				jQuery("#cartlist_price").html(price);
+				jQuery(".cart_layer_footer").show();
+                jQuery(".list_center").show();				
+            }
+        },
+        "json");
+}
+jQuery(document).ready(function() {
+	cloud_refresh();
+	jQuery(".cart_layer").find("a[cloud_del!='']").live("click",function(){
+		var id=jQuery(this).attr("cloud_del");
+		jQuery.post("$!current_webPath/cloudbuy/cartdel", {"cart_id":id},
+        function(data) {
+            if(data.code!=10002){
+				cloud_refresh();
+			}
+        },
+        "json");
+	});
+    jQuery(".cloud_index_header_cart").hover(function() {		
+        jQuery(".cart_layer").show();
+    },
+    function() {
+        jQuery(".cart_layer").hide();
+    });
+	
+	jQuery("#cart_btn").mouseenter(function(){
+	    cloud_refresh();
+	});
+});
+</script>
+
+#if($!config.websiteLogo)
+    #set($img="$!imageWebServer/$!{config.websiteLogo.path}/$!{config.websiteLogo.name}")
+    #else
+    #set($img="$!cdnServer/resources/style/system/front/default/images/logo.png")
+    #end
+    <div class="cloud_index_header f_clear">
+  <div class="cloud_index_header_logo"> <a href="$webPath/index"><img src="$img" /></a> </div>
+  <div class="cloud_index_header_slogan"><a href="$webPath/cloudbuy/index"><img src="$!cdnServer/resources/style/system/front/default/images/cloudpurchase/logo_banner_v3.png" /></a></div>
+  <div class="cloud_index_header_cart"> <a href="$webPath/cloudbuy/cart" target="_blank" class="cloud_index_header_cart_btn" id="cart_btn"> <i class="cart_ico"><img src="$!cdnServer/resources/style/system/front/default/images/cloudpurchase/cart.png" /></i> 清单 <b class="cart_nb">#if($cart_count)$!cart_count #else 0 #end</b> </a> 
+        <!---------鼠标经过显示 cart_layer---------->
+        <div class="cart_layer" style="display:none;">
+      <ul>
+            <!------清单为空----------->
+            <li class="list_none" >您的清单中还没有任何商品！</li>            
+          </ul>
+      <div class="cart_layer_footer" style="display:none;"> <span>共有<i id="cartlist_count">0</i>件商品，总计金额：<strong id="cartlist_price">0</strong>元</span> <a href="$webPath/cloudbuy/cart">查看清单并结算</a> </div>
+    </div>
+      </div>
+  <div class="cloud_index_header_search">
+        <div class="cloud_index_header_search_input">
+      <input type="text" placeholder="请输入要搜索的商品..." id="search_keyword" name="search_keyword" />
+    </div>
+        <a href="javascript:void(0)" class="cloud_index_header_search_btn" onclick="cloud_search()"><i class="ico"><img src="$!cdnServer/resources/style/system/front/default/images/cloudpurchase/search.png" /></i></a> </div>
+</div>

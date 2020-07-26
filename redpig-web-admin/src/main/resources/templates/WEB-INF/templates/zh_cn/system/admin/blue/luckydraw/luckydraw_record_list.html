@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>抽奖记录列表</title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/icon.css">
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/locale/easyui-lang-zh_CN.js"></script>
+<script>
+jQuery(document).ready(function(){
+
+});
+function removes(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery("#ListForm").find(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId+=jQuery(this).val()+",";
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("只能将尚无进行中的抽奖活动删除，是否继续？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+function clearData() {
+    jQuery("#mobile").val("");
+    jQuery('#beginTime').textbox('setValue','');
+    jQuery('#endTime').textbox('setValue','');
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">活动管理</h1>
+<form action="$!webPath/luckydraw_record_list?status=$!status" method="post" id="queryForm" >
+    <div class="search">
+        <ul>
+            <li>
+                <span>用户账号</span>
+                <span class="size200">
+                    <input name="mobile" type="text" id="mobile" value="$!{luckydraw_name}"/>
+                </span>
+                <span>创建时间</span>
+                <span class="size200">
+                    <input id="beginTime" name="beginTime" value="$!{beginTime}" class="easyui-datetimebox" data-options="editable:false" labelPosition="top" style="width:100%;">
+                </span>
+                <span>-</span>
+                <span class="size200">
+                    <input id="endTime" name="endTime" value="$!{endTime}" class="easyui-datetimebox" data-options="editable:false" data-options="validType:'testDate[\'#beginTime\']'" labelPosition="top" style="width:100%;">
+                </span>
+                <input name="" type="submit" value="搜索" style="cursor:pointer;margin-left: 20px;" class="search_btn" />
+                <input name="" type="button" value="清除" style="cursor:pointer;margin-left: 20px;" class="search_btn" onclick="clearData()"/>
+            </li>
+        </ul>
+    </div>
+</form>
+<div>
+
+</div>
+  <form method="post" id="ListForm" action="$!webPath/luckydraw_record_list">
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="4%"></th>
+        <th width="8%" align="center"><span class="form_btna">用户名称</span></th>
+        <th width="6%" align="center"><span class="form_btna">用户账号</span></th>
+        <th align="center" width="15%"><span class="form_btna">抽奖次数</span></th>
+        <th align="center" width="10%"><span class="form_btna">抽奖时间</span></th>
+          <th align="center" width="10%"><span class="form_btna">是否中奖</span></th>
+        <th align="center" width="8%"><span class="form_btna">奖品类型</span></th>
+        <th align="center" ><span class="form_btna">奖品名称</span></th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr id="$!{obj.id}">
+         <td class="check_position">
+              <label for="ids_$!obj.id">
+                  <input class="ace" name="ids_$!obj.id" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl"></span></label>
+         </td>
+        <td align="center">$!obj.user.userName</td>
+        <td align="center">$!obj.user.mobile</td>
+        <td align="center">$!obj.timer</td>
+        <td align="center">$!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss ",$!obj.addTime)</td>
+          #if($!obj.is_win==1) #set($win="是") #end
+          #if($!obj.is_win==0) #set($win="否") #end
+        <td align="center">$!win</td>
+        <td align="center">??</td>
+        <td align="center">??</td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="7">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+    #if($!objs.size()>0)
+    <div class="operation_box">
+        <div class="operation_right">
+            <div class="fenye">
+            <span id="queryCondition" style="display:none">
+            </span>
+                <input name="mulitId" type="hidden" id="mulitId" />
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML
+            </div>
+        </div>
+    </div>
+ #end
+  </div>
+  </form>
+
+</div>
+</body>
+</html>

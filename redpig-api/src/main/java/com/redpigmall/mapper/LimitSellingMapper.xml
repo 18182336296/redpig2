@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.LimitSellingMapper">
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.LimitSelling">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="limit_name" property="limit_name" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="limit_status" property="limit_status" jdbcType="INTEGER"/>
+		<collection property="limitSellingGoods" column="id" select="com.redpigmall.dao.GoodsMapper.getGoodsByLimitSellingId"/>
+	</resultMap>
+	
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,limit_name,beginTime,endTime,limit_status
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="limit_name != null">and limit_name = #{limit_name,jdbcType=VARCHAR}</if>
+		
+		<if test="beginTime != null">
+			<![CDATA[ and beginTime < #{beginTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		
+		<if test="endTime != null">
+			<![CDATA[ and endTime > #{endTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		
+		<if test="limit_status != null">and limit_status = #{limit_status,jdbcType=INTEGER}</if>
+		
+	</sql>
+	<sql id="ifStatement">
+		limit_name= #{limit_name},
+		beginTime= #{beginTime},
+		endTime= #{endTime},
+		limit_status= #{limit_status},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.LimitSelling" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_limit_selling
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.LimitSelling" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_limit_selling obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_limit_selling obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.LimitSelling" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_limit_selling obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.LimitSelling" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_limit_selling(addTime,deleteStatus,limit_name,beginTime,endTime,limit_status)
+		values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{limit_name,jdbcType=VARCHAR},#{beginTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP},#{limit_status,jdbcType=INTEGER})
+	</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.LimitSelling">
+		update redpigmall_limit_selling
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_limit_selling where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_limit_selling where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.LimitSelling" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_limit_selling obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.LimitSelling" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_limit_selling obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.LimitSelling" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_limit_selling
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_limit_selling where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

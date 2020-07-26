@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.TransportMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Transport">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="trans_name" property="trans_name" jdbcType="VARCHAR"/>
+		<result column="trans_time" property="trans_time" jdbcType="INTEGER"/>
+		<result column="trans_type" property="trans_type" jdbcType="INTEGER"/>
+		<result column="trans_mail" property="trans_mail" jdbcType="BIT"/>
+		<result column="trans_mail_info" property="trans_mail_info" jdbcType="VARCHAR"/>
+		<result column="trans_express" property="trans_express" jdbcType="BIT"/>
+		<result column="trans_express_info" property="trans_express_info" jdbcType="VARCHAR"/>
+		<result column="trans_ems" property="trans_ems" jdbcType="BIT"/>
+		<result column="trans_ems_info" property="trans_ems_info" jdbcType="VARCHAR"/>
+		<result column="trans_user" property="trans_user" jdbcType="INTEGER"/>
+		<result column="free_postage_status" property="free_postage_status" jdbcType="INTEGER"/>
+		<result column="free_postage" property="free_postage" jdbcType="DECIMAL"/>
+		<association property="store" column="store_id" select="com.redpigmall.dao.StoreMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Transport">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="trans_name" property="trans_name" jdbcType="VARCHAR"/>
+		<result column="trans_time" property="trans_time" jdbcType="INTEGER"/>
+		<result column="trans_type" property="trans_type" jdbcType="INTEGER"/>
+		<result column="trans_mail" property="trans_mail" jdbcType="BIT"/>
+		<result column="trans_mail_info" property="trans_mail_info" jdbcType="VARCHAR"/>
+		<result column="trans_express" property="trans_express" jdbcType="BIT"/>
+		<result column="trans_express_info" property="trans_express_info" jdbcType="VARCHAR"/>
+		<result column="trans_ems" property="trans_ems" jdbcType="BIT"/>
+		<result column="trans_ems_info" property="trans_ems_info" jdbcType="VARCHAR"/>
+		<result column="trans_user" property="trans_user" jdbcType="INTEGER"/>
+		<result column="free_postage_status" property="free_postage_status" jdbcType="INTEGER"/>
+		<result column="free_postage" property="free_postage" jdbcType="DECIMAL"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,trans_name,trans_time,trans_type,store_id,trans_mail,trans_mail_info,trans_express,trans_express_info,trans_ems,trans_ems_info,trans_user,free_postage_status,free_postage
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="trans_name != null">and trans_name = #{trans_name,jdbcType=VARCHAR}</if>
+		<if test="trans_time != null">and trans_time = #{trans_time,jdbcType=INTEGER}</if>
+		<if test="trans_type != null">and trans_type = #{trans_type,jdbcType=INTEGER}</if>
+		<if test="trans_mail != null">and trans_mail = #{trans_mail,jdbcType=BIT}</if>
+		<if test="trans_mail_info != null">and trans_mail_info = #{trans_mail_info,jdbcType=VARCHAR}</if>
+		<if test="trans_express != null">and trans_express = #{trans_express,jdbcType=BIT}</if>
+		<if test="trans_express_info != null">and trans_express_info = #{trans_express_info,jdbcType=VARCHAR}</if>
+		<if test="trans_ems != null">and trans_ems = #{trans_ems,jdbcType=BIT}</if>
+		<if test="trans_ems_info != null">and trans_ems_info = #{trans_ems_info,jdbcType=VARCHAR}</if>
+		<if test="trans_user != null">and trans_user = #{trans_user,jdbcType=INTEGER}</if>
+		<if test="free_postage_status != null">and free_postage_status = #{free_postage_status,jdbcType=INTEGER}</if>
+		<if test="free_postage != null">and free_postage = #{free_postage,jdbcType=DECIMAL}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		trans_name= #{trans_name},
+		trans_time= #{trans_time},
+		trans_type= #{trans_type},
+		<if test="store == null or store.id == null">store_id = null,</if>
+		<if test="store != null and store.id != null">store_id = #{store.id,jdbcType=BIGINT},</if>
+		trans_mail= #{trans_mail},
+		trans_mail_info= #{trans_mail_info},
+		trans_express= #{trans_express},
+		trans_express_info= #{trans_express_info},
+		trans_ems= #{trans_ems},
+		trans_ems_info= #{trans_ems_info},
+		trans_user= #{trans_user},
+		free_postage_status= #{free_postage_status},
+		free_postage= #{free_postage},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Transport" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_transport 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Transport" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_transport obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_transport obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getStoreByStoreId" resultType="com.redpigmall.domain.Transport" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_transport
+		where
+			store_id = #{store_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Transport" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_transport obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Transport" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_transport(addTime,deleteStatus,trans_name,trans_time,trans_type,trans_mail,trans_mail_info,trans_express,trans_express_info,trans_ems,trans_ems_info,trans_user,free_postage_status,free_postage,store_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{trans_name,jdbcType=VARCHAR},#{trans_time,jdbcType=INTEGER},#{trans_type,jdbcType=INTEGER},#{trans_mail,jdbcType=BIT},#{trans_mail_info,jdbcType=VARCHAR},#{trans_express,jdbcType=BIT},#{trans_express_info,jdbcType=VARCHAR},#{trans_ems,jdbcType=BIT},#{trans_ems_info,jdbcType=VARCHAR},#{trans_user,jdbcType=INTEGER},#{free_postage_status,jdbcType=INTEGER},#{free_postage,jdbcType=DECIMAL},#{store.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Transport">
+		update redpigmall_transport
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_transport where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_transport where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Transport" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_transport obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Transport" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_transport obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Transport" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_transport
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_transport where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GroupMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Group">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="group_name" property="group_name" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="joinEndTime" property="joinEndTime" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="group_type" property="group_type" jdbcType="INTEGER"/>
+		<collection property="goods_list" column="id" select="com.redpigmall.dao.GoodsMapper.getGroupByGroupId"/>
+		<collection property="gg_list" column="id" select="com.redpigmall.dao.GroupGoodsMapper.getGroupByGroupId"/>
+		<collection property="gl_list" column="id" select="com.redpigmall.dao.GroupLifeGoodsMapper.getGroupByGroupId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Group">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="group_name" property="group_name" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="joinEndTime" property="joinEndTime" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="group_type" property="group_type" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,group_name,beginTime,endTime,joinEndTime,status,group_type
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="group_name != null">and group_name = #{group_name,jdbcType=VARCHAR}</if>
+		
+		<if test="beginTime != null">
+			<![CDATA[ and beginTime < #{beginTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="endTime != null">
+			<![CDATA[ and endTime > #{endTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		
+		<if test="beginTime_more_than_equal != null">
+			<![CDATA[ and beginTime <= #{beginTime_more_than_equal,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="endTime_less_than_equal != null">
+			<![CDATA[ and endTime >= #{endTime_less_than_equal,jdbcType=TIMESTAMP} ]]>
+		</if>
+		
+		<if test="joinEndTime != null">and joinEndTime = #{joinEndTime,jdbcType=TIMESTAMP}</if>
+		<if test="joinEndTime_more_than_equal != null">and TO_DAYS(NOW())  <![CDATA[ <= ]]> TO_DAYS(joinEndTime) </if>
+		<if test="joinEndTime_less_than_equal != null">and joinEndTime <![CDATA[ <= ]]> #{joinEndTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="status0 != null and status1 !=null">and (status = #{status0,jdbcType=INTEGER} or status = #{status1,jdbcType=INTEGER})</if>
+		<if test="group_type != null">and group_type = #{group_type,jdbcType=INTEGER}</if>
+		
+		<!-- <if test="gl_status != null">and gl_status = #{gl_status,jdbcType=INTEGER}</if> -->
+		<if test="status1 != null">and status != #{status1,jdbcType=INTEGER}</if>
+		<if test="status2 != null">and status != #{status2,jdbcType=INTEGER}</if>
+		<if test="parent !=null and parent==-1">and parent_id is null</if>
+	</sql>
+	<sql id="ifStatement">
+		group_name= #{group_name},
+		beginTime= #{beginTime},
+		endTime= #{endTime},
+		joinEndTime= #{joinEndTime},
+		status= #{status},
+		group_type= #{group_type},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Group" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_group 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Group" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_group obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_group obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Group" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Group" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_group(addTime,deleteStatus,group_name,beginTime,endTime,joinEndTime,status,group_type)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{group_name,jdbcType=VARCHAR},#{beginTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP},#{joinEndTime,jdbcType=TIMESTAMP},#{status,jdbcType=INTEGER},#{group_type,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Group">
+		update redpigmall_group
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_group where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_group where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Group" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Group" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_group obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Group" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_group where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

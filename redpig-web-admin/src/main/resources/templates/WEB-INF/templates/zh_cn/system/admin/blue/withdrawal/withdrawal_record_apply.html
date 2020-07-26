@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>提现申请</title>
+	<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+	<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+	<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+</head>
+<body>
+	<h1 class="seth">提现申请</h1>
+	<!--搜索表单 -->
+	<form name="ListForm" id="ListForm" action="$!webPath/withdrawal_record_list" method="get">
+	<div class="search">
+    	<span>受理状态</span>
+		<span>
+			<select name="acceptStatus" id="acceptStatus">
+				<option value="0" selected="selected">所有</option>
+				<option value="1">未受理</option>
+				<option value="2">已受理</option>
+			</select>
+		</span>
+		<span>联系方式</span>
+		<span class="size100">
+			<input name="mobile" type="text" id="mobile" value="$!mobile" />
+		</span>
+		<span>受理时间</span>
+		<!-- 开始时间 -->
+		<span class="size100">
+			<input name="acceptStartTime" type="text" id="beginTime" value="$!acceptStartTime" readonly="readonly" class="user_title_txt"  style="width:128px"  placeholder="开始时间"/>
+		</span>
+		<!-- 结束时间 -->
+		<span class="size100">
+			<input name="acceptEndTime" type="text" id="endTime" value="$!acceptEndTime" readonly="readonly" class="user_title_txt"  style="width:128px"  placeholder="结束时间"/>
+		</span>
+		<span>
+			<input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+			<input id="resetId" name="" type="button"  value="重置" style="cursor:pointer;"  class="search_btn"/>
+		</span>
+	</div>
+	</form>
+	<!-- 列表 -->
+    <div class="fshoptb">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+			<tr>
+				<th width="3%">&nbsp;</th>
+				<th width="7%"><span class="form_btna">昵称</span></th>
+				<th width="10%"><span class="form_btna">联系方式</span></th>
+				<th width="7%"><span class="form_btna">总金额</span></th>
+				<th width="7%"><span class="form_btna">提现金额</span></th>
+				<th width="7%"><span class="form_btna">剩余金额</span></th>
+				<th width="7%"><span class="form_btna">提现方式</span></th>
+				<th width="10%"><span class="form_btna">申请时间</span></th>
+				<th width="7%"><span class="form_btna">受理状态</span></th>
+				<th width="10%"><span class="form_btna">受理时间</span></th>
+				<th width="7%"><span class="form_btna">提现状态</span></th>
+				<th align="center"><b class="form_btnb">操作</b></th>
+			</tr>
+        	#if($!objs.size()>0)
+        	#foreach($obj in $objs)
+			<tr>
+				<td class="check_position">
+					<input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" />
+				</td>
+				<td align="center">$!obj.nickName</td>
+				<td align="center">$!obj.mobile</td>
+				<td align="center">$!obj.balancePrice</td>
+				<td align="center">$!obj.withdrawalMoney</td>
+				<td align="center">$!obj.balance</td>
+				#if($!obj.withdrawalWay==1)
+					#set($withdrawalWay="支付宝")
+				#end
+				#if($!obj.withdrawalWay==2)
+					#set($withdrawalWay="微信")
+				#end
+				#if($!obj.withdrawalWay==2)
+					#set($withdrawalWay="银联")
+				#end
+				<td align="center">$!withdrawalWay</td>
+				<td align="center">$!CommUtil.formatTime('yyyy-MM-dd HH:mm',$!obj.createTime)</td>
+				#if($!obj.acceptStatus==1)
+					#set($acceptStatusName="未受理")
+				#end
+				#if($!obj.acceptStatus==2)
+					#set($acceptStatusName="已受理")
+				#end
+				<td align="center">$!acceptStatusName</td>
+				<td align="center">$!CommUtil.formatTime('yyyy-MM-dd HH:mm',$!obj.acceptTime)</td>
+				#if($!obj.withdrawalStatus==1)
+					#set($withdrawalStatus="未提现")
+				#end
+				#if($!obj.withdrawalStatus==2)
+					#set($withdrawalStatus="提现成功")
+				#end
+				#if($!obj.withdrawalStatus==3)
+					#set($withdrawalStatus="提现失败")
+				#end
+				<td align="center">$!withdrawalStatus</td>
+				<td class="hui oprate_con" align="center" style="white-space:nowrap"><a href="$!webPath/withdrawal_record_accept?id=$!obj.id" class="blue">受理</a></td>
+			</tr>
+			#end
+			#else
+			<tr>
+				<td colspan="6">
+					<div class="center_nothing">
+						<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+						<b>没有任何信息</b>
+					</div>
+				</td>
+			</tr>
+			#end
+		</table>
+    </div>
+	<!-- 列表结束 -->
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		//初始化时间控件
+		jQuery('#beginTime').attr("readonly","readonly").datepicker({
+			dateFormat:"yy-mm-dd",
+			changeMonth: true,
+			changeYear: true
+		});
+		jQuery('#endTime').attr("readonly","readonly").datepicker({
+			dateFormat:"yy-mm-dd",
+			changeMonth: true,
+			changeYear: true
+		});
+		jQuery("#acceptStatus").val("$!acceptStatus");
+	});
+	
+	//重置按钮
+	jQuery("#resetId").click(function(){
+		jQuery("#acceptStatus").val(0);
+		jQuery("#mobile").val('');
+		jQuery('#beginTime').datepicker('setDate', "");
+		jQuery('#endTime').datepicker('setDate', "");
+	});
+	</script>
+</body>
+</html>

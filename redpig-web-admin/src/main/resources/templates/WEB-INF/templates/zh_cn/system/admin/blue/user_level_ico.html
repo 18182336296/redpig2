@@ -1,0 +1,186 @@
+<link href="$!cdnServer/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+  jQuery(document).ready(function(){
+	  /* 系统图标样式*/
+	jQuery(".sys a").click(function(){
+	  jQuery("#icon_sys").val(jQuery(this).attr("icon"));
+	  jQuery(this).parent().find("a").removeClass("this");
+	  jQuery(this).addClass("this");
+	});
+   
+jQuery("#thisForm").validate({
+	   ignore:".ignore",
+       rules:{
+		  ico_line:{
+		            required:true,
+					accept:"$!config.imageSuffix"
+			       }
+	   },
+	   messages:{
+	      ico_line:{
+		            required:"未选择图片",
+					accept:"格式错误"
+			       }
+	   }
+     });
+	jQuery("#ico_line").change(function(){
+		var name=jQuery("#ico_line").val();
+		jQuery("#ico_name").val(jQuery("#ico_line").val());
+		
+    });
+	
+});
+
+//鼠标经过logo图片显示
+	jQuery("img[id='logoShow']").mouseover(function(){
+	    jQuery("#logoImg").show();
+	});
+	jQuery("img[id='logoShow']").mouseout(function(){
+		 jQuery("#logoImg").hide();
+	});
+ 
+ //改变系统提示的样式
+  jQuery(".w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  }); 
+  
+function system_ico(){
+    jQuery("#system_ico").show();
+	jQuery(".s_style").show();
+	jQuery(".l_style").hide();
+	jQuery("#line_ico").hide();
+}
+function line_ico(){
+	jQuery("#system_ico").hide();
+	jQuery(".l_style").show();
+	jQuery(".s_style").hide();
+	jQuery("#line_ico").show();
+}
+
+#if($!obj.level_icon_type==0)
+	   jQuery(":radio[value='0']").attr("checked","true");
+	   jQuery("#system_ico").show();
+	   jQuery("#line_ico").hide();
+	   jQuery("#icon_sys").val($!obj.sys_seq);
+#elseif($!obj.level_icon_type==1)
+	   jQuery(":radio[value='1']").attr("checked","true");
+	   jQuery("#system_ico").hide();
+	   jQuery("#line_ico").show();
+	   jQuery(".preview").show();
+	   jQuery("#ico_line").addClass("ignore");
+#end
+
+function level_icon_save(){
+	var type=jQuery("input:radio[name='ico_style']:checked").val();
+	var value=jQuery("#icon_sys").val();
+	if(type==0){//系统图标
+		if(value!=""){
+			jQuery("#ico_line").addClass("ignore");
+			jQuery("#thisForm").submit();
+		}else{
+		    showDialog("msg_info","","请选择系统图标",2,"warning",3,'');
+		}
+	}else{//在线上传
+	    #if($!edit)
+		   jQuery("#ico_line").addClass("ignore");
+		#else
+		   jQuery("#ico_line").removeClass("ignore");
+		#end
+		jQuery("#thisForm").submit();
+	}
+}
+</script>
+<body>
+
+    <form action="$!webPath/user_level_ico_save" method="post" name="thisForm" id="thisForm"  enctype="multipart/form-data">
+    <input name="id" type="hidden" id="id" value="$!obj.id">
+        <div class="reputation">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="reputation_table">
+           <tr>
+              <td class="spoprat">
+                <div>
+                 <span style=" float:left; margin-left:22px;">
+                    <label onClick="system_ico();">
+                       <span class="use_code">
+                         <strong>
+                          <input type="radio" name="ico_style" id="ico_style" value="0"  checked/>
+                          </strong>
+                          <strong class="usecode"> 
+                            系统图标
+                          </strong>
+                       </span> 
+                    </label>
+                   <label onClick="line_ico();"> 
+                       <span class="use_code">
+                         <strong>
+                           <input name="ico_style" type="radio" id="ico_style" value="1"  />
+                         </strong>
+                         <strong class="usecode"> 在线上传</strong>
+                        </span> 
+                   </label>
+                 </span>
+               </div>
+               <span id="nothis" class="s_style">
+                  <strong class="q"></strong>
+                  <strong class="w">请选择系统图标</strong>
+                  <strong class="c"></strong>
+                </span>
+                <span id="nothis" class="l_style" style="display:none">
+                  <strong class="q"></strong>
+                  <strong class="w">上传图片最佳尺寸为：30x20</strong>
+                  <strong class="c"></strong>
+                </span>
+              </td>
+            </tr>
+            <tr>
+                <td class="spoprat">
+                 <span id="system_ico" class="sys" style="margin:7px 0 0 37px;">
+                    #foreach($i in [0..3]) 
+                    <a href="javascript:void(0);" icon="$!i" #if($!i==$!obj.sys_seq && $!obj.level_icon_type==0) class="this" #end>
+                      <img src="$!cdnServer/resources/style/common/images/userlevel_$!{i}.png" />
+                    </a> 
+                    #end
+                 </span>
+                 <input name="icon_sys" type="hidden" id="icon_sys"  />
+                
+                <div id="line_ico" style="display:none; position:relative;">
+                 <span class="size13" style="float:left; margin-left:40px;">
+               <input type="text" name="ico_name" id="ico_name" style=""/></span>
+               
+               <span class="filebtn" style="float:left">
+                     <input name="button" type="button" id="button1" /></span>
+            
+               <span class="file_ico" style="line-height:30px;" >
+                     <input name="ico_line" type="file" id="ico_line" style=" left:-12px; top:-6px" />
+                     </span>
+                <span class="preview" style="display:none; float:left;"> 
+                    <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" id="logoShow" style="cursor:help" height="25" width="25"> 
+                 </span>
+                 <span id="nothis"><strong class="q"></strong><strong class="w">尺寸：30x20</strong><strong class="c"></strong></span>
+                 <div class="bigimgpre" id="logoImg" style="display:none; left:360px; margin-top:2px"><img src="$!imageWebServer/$!obj.level_icon"  width="30" height="20" /> </div>   
+                </div>
+             </td>
+          </tr>
+        </table>
+        </div>
+       <div class="submit" onClick="level_icon_save();">
+          <input name="" type="submit" value="提交" />
+       </div>  
+    </form>
+</body>
+</html>

@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/index_wide.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+		jQuery("div[mark=$!obj.wide_template]").show();
+	});
+</script>
+</head>
+<body bgcolor="#f9f9f9">
+<div class="cont" style="overflow:visible">
+  <h3 class="seth">首页管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/set_index_setting"><b>首页管理</b></a></li>
+      <li><a href="$!webPath/goods_floor_list"><b>窄屏楼层</b></a> </li>
+      <!-- <li><a href="$!webPath/goods_floor_list?gf_type=1"><b>宽屏楼层</b></a> </li> -->
+      <li><a href="javascript:void(0);" class="this"><b>模板编辑</b></a> </li>
+    </ul>
+  </div>
+  <!--wide_adv_rectangle_four-->
+  <div class="wide_quick" mark="wide_adv_rectangle_four" style="display:none">
+    <div class="wide_quick_c">
+      <ul>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","1"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_rectangle_four&pos=1" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","2"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_rectangle_four&pos=2" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","3"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_rectangle_four&pos=3" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","4"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_rectangle_four&pos=4" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--wide_adv_brand-->
+  <div class="wide_brand" mark="wide_adv_brand" style="display:none">
+    <div class="wide_brand_c">
+      <div class="wide_brand_c_t"><b style="width:98px; margin-left:36px">$!{obj.gf_name}</b><span>Brand For You</span><strong><a href="javascript:void(0);">全部品牌 ></a></strong></div>
+      <div class="wide_brand_c_m">
+        <div class="wide_brand_c_m_left">
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_brand&pos=1" dialog_title="编辑广告" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+          #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_brand}","$!obj.wide_template","1"))
+          #if($!{map.src}!="") <img src="$!imageWebServer/$!{map.src}" /> #end </div>
+        <div class="wide_brand_c_m_right">
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_brand&pos=2" dialog_title="编辑品牌" dialog_width="700" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+          <ul>
+            #foreach($obj in $!gf_tools.generic_gf_wide_brand_template("$!{obj.wide_adv_brand}","$!obj.wide_template","2"))
+            <li><a href="javascript:void(0);"><img src="$!imageWebServer/$!obj.brandLogo.path/$!obj.brandLogo.name" /></a></li>
+            #end
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--wide_goods -->
+  <div class="wide_floor" mark="wide_goods" style="display:none">
+    <div class="wide_floor_c">
+      <h1 style="position:absolute;top: 125px; left: 215px"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=$!{obj.wide_template}&pos=2" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+      <div class="wide_floor_c_top">$!obj.gf_name</div>
+      <div class="wide_floor_c_b">
+        <div class="wide_floor_c_right">
+          <ul>
+            #foreach($goods in $gf_tools.generic_goods("$!obj.wide_goods"))
+            #if($!goods)
+            #if($!goods.goods_main_photo)               #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_middle.$!{goods.goods_main_photo.ext}")
+            #else
+            #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            #set($goods_url="$!webPath/items_$!{goods.id}")
+            #if($!config.second_domain_open)
+            #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+            #end
+            <li> <span><a href="$!goods_url"><img src="$!img" /></a></span> <b><a href="goods_url">$!goods.goods_name</a></b> <strong>￥$!{goods.goods_price}</strong> </li>
+            #end 
+            #end
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--wide_adv_five -->
+  <div class="wide_floor" mark="wide_adv_five" style="display:none">
+    <div class="wide_floor_2">
+      <ul>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","1"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=1" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","2"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=2" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","3"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=3" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","4"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=4" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","5"))
+        <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1 style="position:absolute;top:15px;"><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=5" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--wide_adv_eight -->
+  <div class="wide_floor" mark="wide_adv_eight" style="display:none">
+    <div class="wide_floor_4">
+      <div class="wide_floor_4_m"> #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","1"))
+        <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=1" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","2"))
+        <div class="wide_floor_4_one_bottom" style="position:relative;"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a style="position:absolute;" href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=$!{obj.wide_template}&pos=2" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","3"))
+        <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=3" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","4"))
+        <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=4" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","5"))
+        <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=5" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","6"))
+        <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=6" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","7"))
+        <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=7" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","8"))
+        <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=8" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--wide_adv_square_four -->
+  <div class="wide_floor" mark="wide_adv_square_four" style="display:none">
+    <div class="wide_floor_3">
+      <div class="wide_floor_3_m"> 
+      #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","1"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=1" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+      #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","2"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=2" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+         #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","3"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=3" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","4"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+          <h1><a href="javascript:void(0);"  dialog_uri="$!webPath/goods_floor_wide_template_edit?gf_id=$!{obj.id}&wide_template=wide_adv_five&pos=4" dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a></h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

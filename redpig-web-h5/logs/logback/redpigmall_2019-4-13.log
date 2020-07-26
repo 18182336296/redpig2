@@ -1,0 +1,166 @@
+2019-4-13 10:47:44 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 6880 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 10:47:44 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 10:47:44 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 10:47:45 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 6432 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 10:47:45 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 10:47:45 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 10:48:18 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 10:48:18 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 10:48:20 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 10:48:20 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.6191702453246236494.8803\
+2019-4-13 10:48:20 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 10:48:20 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 10:48:20 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.4653668116200538128.8803\
+2019-4-13 10:48:20 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 10:49:10 restartedMain INFO Started RedPigWebWap in 89.37 seconds (JVM running for 95.701)
+2019-4-13 11:02:49 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 5100 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 11:02:49 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 11:02:49 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 11:03:11 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 11:03:12 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 11:03:12 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.317131164299585189.8803\
+2019-4-13 11:03:12 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 11:03:35 restartedMain INFO Started RedPigWebWap in 47.283 seconds (JVM running for 50.822)
+2019-4-13 11:10:40 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 7576 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 11:10:40 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 11:10:40 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 11:12:14 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 11:12:16 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 11:12:16 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.3290506099179596437.8803\
+2019-4-13 11:12:16 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 11:33:39 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 9536 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 11:33:39 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 11:33:39 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 11:34:12 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 11:34:13 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 11:34:13 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.1380446400341303546.8803\
+2019-4-13 11:34:13 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 11:34:53 restartedMain INFO Started RedPigWebWap in 75.743 seconds (JVM running for 81.157)
+2019-4-13 15:32:46 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 8332 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 15:32:46 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 15:32:46 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 15:34:29 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 15:34:32 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 15:34:33 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.939641255826093605.8803\
+2019-4-13 15:34:33 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 15:35:33 restartedMain INFO Started RedPigWebWap in 176.789 seconds (JVM running for 208.834)
+2019-4-13 15:36:51 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 7552 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 15:36:51 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 15:36:51 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 15:37:27 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 15:37:28 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 15:37:28 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.6101067687341693244.8803\
+2019-4-13 15:37:28 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 15:39:09 restartedMain INFO Started RedPigWebWap in 141.652 seconds (JVM running for 144.326)
+2019-4-13 15:41:48 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 4108 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 15:41:48 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 15:41:48 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 15:42:57 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 15:43:00 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 15:43:01 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.3778632841269328494.8803\
+2019-4-13 15:43:01 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 15:45:10 restartedMain INFO Started RedPigWebWap in 205.149 seconds (JVM running for 212.778)
+2019-4-13 16:33:41 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 9160 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 16:33:41 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 16:33:41 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 16:34:32 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 16:34:34 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 16:34:34 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.5515417867689900070.8803\
+2019-4-13 16:34:34 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 16:35:25 restartedMain INFO Started RedPigWebWap in 112.109 seconds (JVM running for 138.986)
+2019-4-13 18:43:47 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 7028 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 18:43:47 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 18:43:47 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 18:44:07 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 18:44:08 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 18:44:08 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.6026063851252685240.8803\
+2019-4-13 18:44:08 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 18:44:30 restartedMain INFO Started RedPigWebWap in 43.726 seconds (JVM running for 48.822)
+2019-4-13 20:38:13 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 5516 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 20:38:13 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 20:38:13 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 20:38:34 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 20:38:35 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 20:38:35 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.1768049060585380963.8803\
+2019-4-13 20:38:35 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 20:38:58 restartedMain INFO Started RedPigWebWap in 46.022 seconds (JVM running for 48.979)
+2019-4-13 20:45:07 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 9160 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 20:45:07 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 20:45:07 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 20:45:41 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 20:45:42 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 20:45:42 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.5352508934732160491.8803\
+2019-4-13 20:45:42 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 20:46:15 restartedMain INFO Started RedPigWebWap in 71.436 seconds (JVM running for 78.953)
+2019-4-13 21:04:02 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 6652 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 21:04:02 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 21:04:02 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 21:04:32 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 21:04:33 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 21:04:33 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.4974382936090157909.8803\
+2019-4-13 21:04:33 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 21:05:13 restartedMain INFO Started RedPigWebWap in 71.571 seconds (JVM running for 78.733)
+2019-4-13 21:17:15 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 5748 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 21:17:15 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 21:17:15 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 21:17:38 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 21:17:39 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 21:17:39 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.1667138039841860321.8803\
+2019-4-13 21:17:39 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 21:18:06 restartedMain INFO Started RedPigWebWap in 53.229 seconds (JVM running for 58.5)
+2019-4-13 22:36:44 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 6300 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 22:36:44 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 22:36:44 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 22:37:06 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 22:37:07 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 22:37:07 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.8568171389223982313.8803\
+2019-4-13 22:37:07 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 22:37:28 restartedMain INFO Started RedPigWebWap in 46.149 seconds (JVM running for 51.098)
+2019-4-13 22:39:48 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 5208 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 22:39:48 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 22:39:48 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 22:39:59 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 22:40:00 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 22:40:00 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.3368813940571758243.8803\
+2019-4-13 22:40:00 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 22:40:21 restartedMain INFO Started RedPigWebWap in 33.846 seconds (JVM running for 37.682)
+2019-4-13 22:51:44 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 8040 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 22:51:44 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 22:51:44 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 22:52:03 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 22:52:04 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 22:52:04 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.468157255086371189.8803\
+2019-4-13 22:52:04 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 22:52:24 restartedMain INFO Started RedPigWebWap in 41.036 seconds (JVM running for 43.892)
+2019-4-13 23:00:59 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 9864 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 23:00:59 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 23:00:59 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 23:01:18 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 23:01:19 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 23:01:19 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.5091942506788788647.8803\
+2019-4-13 23:01:19 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 23:01:37 restartedMain INFO Started RedPigWebWap in 39.743 seconds (JVM running for 42.017)
+2019-4-13 23:13:24 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 9792 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 23:13:24 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 23:13:24 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 23:13:45 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 23:13:46 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 23:13:46 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.4521909955344733940.8803\
+2019-4-13 23:13:46 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 23:14:09 restartedMain INFO Started RedPigWebWap in 46.745 seconds (JVM running for 49.898)
+2019-4-13 23:19:47 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 7260 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 23:19:47 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 23:19:47 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 23:20:06 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 23:20:07 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 23:20:07 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.9189345524320035050.8803\
+2019-4-13 23:20:07 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 23:20:25 restartedMain INFO Started RedPigWebWap in 39.757 seconds (JVM running for 41.857)
+2019-4-13 23:30:42 restartedMain INFO Starting RedPigWebWap on PC-20180115OHFV with PID 9064 (F:\work_yemaill\ye_maill\redpig-web-h5\target\classes started by Administrator in F:\work_yemaill\ye_maill\redpig-web-h5)
+2019-4-13 23:30:42 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2019-4-13 23:30:42 restartedMain INFO No active profile set, falling back to default profiles: default
+2019-4-13 23:31:03 localhost-startStop-1 INFO init Druid Servlet Configuration 
+2019-4-13 23:31:04 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2019-4-13 23:31:04 localhost-startStop-1 DEBUG web root abs path=C:\Users\Administrator\AppData\Local\Temp\tomcat-docbase.570728624363224513.8803\
+2019-4-13 23:31:04 localhost-startStop-1 DEBUG SpringUtil初始化完成.
+2019-4-13 23:31:32 restartedMain INFO Started RedPigWebWap in 50.799 seconds (JVM running for 52.491)

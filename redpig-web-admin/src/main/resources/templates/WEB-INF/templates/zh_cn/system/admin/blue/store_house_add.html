@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor-min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+<script>
+jQuery(document).ready(function(){	
+	#if($!obj.sh_status==1)
+	jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	jQuery("#status").val("true");
+	jQuery("#choose_img").show();
+	#end
+
+    jQuery("#status_button").click(function() {
+        var integral = jQuery("#status").val();
+        if (integral == "true") {
+            jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/blue/images/no.jpg");
+            jQuery("#status").val("false");
+            jQuery("#choose_img").hide();
+        } else {
+            jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+            jQuery("#status").val("true");
+            jQuery("#choose_img").show();
+        }
+    });
+//
+  jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+	  sh_name:{required:true},
+	  sh_type:{required:true}
+	 },
+	messages:{
+	  sh_name:{required:"库房名称不能为空"},
+	  sh_type:{required:"库房类型不能为空"}
+	 }
+  });
+  //
+  jQuery("a[use='area_id']").live("click",function(){
+	  if(jQuery(this).attr("class")=="this")
+	  	jQuery(this).attr("class","");
+	  else
+	  	jQuery(this).attr("class","this");
+  });
+});
+function load_area(obj){
+	var pid=jQuery(obj).val();
+	var area_ids=jQuery("#area_ids").val();
+	#foreach($area in $areas)
+	if(pid==$area.id){
+		jQuery("#area_list").empty();
+		#foreach($child_area in $area.childs)
+		if(area_ids.indexOf("$child_area.id")>=0){
+			jQuery("#area_list").append("<span><a href='javascript:void(0)' use='area_id' area_id='$child_area.id' class='this'>$child_area.areaName</a></span>");
+		}else{
+			jQuery("#area_list").append("<span><a href='javascript:void(0)' use='area_id' area_id='$child_area.id'>$child_area.areaName</a></span>");
+		}
+		#end
+		jQuery("#area_list").append("<span class='webname_select_b'><a href='javascript:void(0)' onclick='yes()'>确定</a><a href='javascript:void(0)' onclick='selectAll()'>全选</a></span>");
+	}
+	#end     
+}
+function yes(){
+	var area_ids=jQuery("#area_ids").val();
+	var count=0;
+	jQuery.each(jQuery("a[use='area_id']"),function(index,element){
+		var area_id=jQuery(element).attr("area_id");		
+			if(jQuery(element).attr("class")=="this"){
+				count++;
+			if(area_ids.indexOf(area_id)<0){
+				area_ids=area_ids+area_id+",";
+			}
+			}else{
+				if(area_ids.indexOf(area_id)>=0){
+					area_ids=area_ids.replace(area_id+",","")
+				}
+			}		
+	});
+	jQuery("#area_ids").val(area_ids);
+	var chosen_list=jQuery("#chosen_area_list").html();
+	var tid0=jQuery("#tid0").find("option:selected").text();
+	if(count>0){		
+		if(chosen_list.indexOf(tid0)<0){
+			chosen_list=chosen_list+tid0+" ";
+		}
+		jQuery("#chosen_list").show();
+	}else{
+		if(chosen_list.indexOf(tid0)>=0){
+			chosen_list.replace(tid0+" ","");
+		}
+	}
+	jQuery("#success_fade").show();
+	jQuery("#chosen_area_list").html(chosen_list);
+	jQuery("#success_fade").fadeOut(1000);
+}
+function selectAll(){
+	jQuery("a[use='area_id']").attr("class","this");
+}
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">库房管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/store_house_list"><b>管理</b></a> </li>
+      <li> <a href="$!webPath/store_house_add" #if(!$!edit) class="this" #end><b>新增</b></a> </li>
+      #if($!edit)
+      <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+      #end </span>
+    </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/store_house_save" method=post>
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="area_ids" type="hidden" id="area_ids" value="$!area_ids" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/store_house_list" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/store_house_add" />
+    <div class="edit">
+      <div class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>库房名称</li>
+          <li><span class="webname">
+            <input name="sh_name" type="text" id="sh_name" value="$!obj.sh_name" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">库房状态</li>
+          <li><span class="webSwitch">
+            <input name="status" id="status" type="hidden" value="$!status" />
+            <img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/no.jpg" width="61" height="23" style="cursor:pointer" id="status_button"/></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">库房编号</li>
+          <li><span class="webname">
+            <input name="sh_sequence" type="text" id="sh_sequence" value="$!obj.sh_sequence" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>库房类型</li>
+          <li><span class="webname">
+            <input name="sh_type" type="text" id="sh_type" value="$!obj.sh_type" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="webname_select_list" id="chosen_list" #if(!$chosen_area)style="display:none"#end><span id="chosen_area_list">已选地区：$!chosen_area</span><span style="margin-left:5px; display:none;" id="success_fade" > 更改成功！</span></li>
+          <li class="setcont_bg">覆盖地区</li>
+          <li><span class="webname">
+            <label for="tid0" class="select">
+              <select name="tid0" id="tid0" onchange="load_area(this)" >
+                <option value="">省份</option>
+                
+     		#foreach($area in $areas)                
+            
+                <option value="$!area.id" #if($!{area.id}==$!{first.id}) selected="selected"#end>$!area.areaName</option>
+                            
+			#end          
+          
+              </select>
+            </label>
+            </span></li>
+          <li class="webname_select" id="area_list"> </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">库房说明</li>
+          <li><span class="webname">
+            <textarea name="sh_info" id="sh_info" cols="50" rows="5">$!obj.sh_info</textarea>
+            </span></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

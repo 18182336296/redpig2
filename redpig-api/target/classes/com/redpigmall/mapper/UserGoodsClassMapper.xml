@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.UserGoodsClassMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.UserGoodsClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="className" property="className" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="display" property="display" jdbcType="BIT"/>
+		<result column="level" property="level" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<association property="parent" column="parent_id" select="com.redpigmall.dao.UserGoodsClassMapper.selectByPrimaryKey"/>
+		<collection property="childs" column="id" select="com.redpigmall.dao.UserGoodsClassMapper.getChildsByUserGoodsClassId"/>
+		<collection property="goods_list" column="id" select="com.redpigmall.dao.GoodsMapper.getGoodsUgcsByUserGoodsClassId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.UserGoodsClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="className" property="className" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="display" property="display" jdbcType="BIT"/>
+		<result column="level" property="level" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,className,sequence,display,level,parent_id,user_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="className != null">and className = #{className,jdbcType=VARCHAR}</if>
+		<if test="sequence != null">and sequence = #{sequence,jdbcType=INTEGER}</if>
+		<if test="display != null">and display = #{display,jdbcType=BIT}</if>
+		<if test="level != null">and level = #{level,jdbcType=INTEGER}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="parent_id != null">and parent_id = #{parent_id,jdbcType=BIGINT}</if>
+		<if test="parent != null and parent==-1">and parent_id is null</if>
+	</sql>
+	<sql id="ifStatement">
+		className= #{className},
+		sequence= #{sequence},
+		display= #{display},
+		level= #{level},
+		<if test="parent == null or parent.id == null">parent_id = null,</if>
+		<if test="parent != null and parent.id != null">parent_id = #{parent.id,jdbcType=BIGINT},</if>
+		user_id= #{user_id},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user_gc 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user_gc obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_user_gc obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getChildsByUserGoodsClassId" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_gc
+		where
+			parent_id = #{parent_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageListByParentIsNull" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_gc
+		where
+			 parent_id is null
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap" parameterType="map">
+		SELECT <include refid="Base_Column_List"/> FROM redpigmall_user_gc obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.UserGoodsClass" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_user_gc(addTime,deleteStatus,className,sequence,display,level,user_id,parent_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{className,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{display,jdbcType=BIT},#{level,jdbcType=INTEGER},#{user_id,jdbcType=BIGINT},#{parent.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.UserGoodsClass">
+		update redpigmall_user_gc
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_user_gc where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_user_gc where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_gc obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user_gc obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_gc
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_user_gc where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<select id="getGoodsUgcsByGoodsId" resultType="com.redpigmall.domain.UserGoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT ugc.* FROM redpigmall_user_gc ugc 
+		JOIN redpigmall_goods_ugc ftn ON ftn.class_id = ugc.id AND ftn.goods_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+</mapper>

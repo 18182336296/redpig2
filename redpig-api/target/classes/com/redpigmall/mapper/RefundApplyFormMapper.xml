@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.RefundApplyFormMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.RefundApplyForm">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="audit_date" property="audit_date" jdbcType="TIMESTAMP"/>
+		<result column="audit_user_name" property="audit_user_name" jdbcType="VARCHAR"/>
+		<result column="order_id" property="order_id" jdbcType="VARCHAR"/>
+		<result column="order_form_id" property="order_form_id" jdbcType="BIGINT"/>
+		<result column="refund_price" property="refund_price" jdbcType="DECIMAL"/>
+		<result column="store_id" property="store_id" jdbcType="VARCHAR"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.RefundApplyForm">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="audit_date" property="audit_date" jdbcType="TIMESTAMP"/>
+		<result column="audit_user_name" property="audit_user_name" jdbcType="VARCHAR"/>
+		<result column="order_id" property="order_id" jdbcType="VARCHAR"/>
+		<result column="order_form_id" property="order_form_id" jdbcType="BIGINT"/>
+		<result column="refund_price" property="refund_price" jdbcType="DECIMAL"/>
+		<result column="store_id" property="store_id" jdbcType="VARCHAR"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,user_id,user_name,status,audit_date,audit_user_name,order_id,order_form_id,refund_price,store_id,store_name
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="audit_date != null">and audit_date = #{audit_date,jdbcType=TIMESTAMP}</if>
+		<if test="audit_user_name != null">and audit_user_name = #{audit_user_name,jdbcType=VARCHAR}</if>
+		<if test="order_id != null">and order_id = #{order_id,jdbcType=VARCHAR}</if>
+		<if test="order_form_id != null">and order_form_id = #{order_form_id,jdbcType=BIGINT}</if>
+		<if test="refund_price != null">and refund_price = #{refund_price,jdbcType=DECIMAL}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=VARCHAR}</if>
+		<if test="store_name != null">and store_name = #{store_name,jdbcType=VARCHAR}</if>
+	</sql>
+	<sql id="ifStatement">
+		user_id= #{user_id},
+		user_name= #{user_name},
+		status= #{status},
+		audit_date= #{audit_date},
+		audit_user_name= #{audit_user_name},
+		order_id= #{order_id},
+		order_form_id= #{order_form_id},
+		refund_price= #{refund_price},
+		store_id= #{store_id},
+		store_name= #{store_name},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.RefundApplyForm" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_refund_apply_form 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.RefundApplyForm" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_refund_apply_form obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_refund_apply_form obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.RefundApplyForm" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_refund_apply_form obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.RefundApplyForm" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_refund_apply_form(addTime,deleteStatus,user_id,user_name,status,audit_date,audit_user_name,order_id,order_form_id,refund_price,store_id,store_name)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{user_id,jdbcType=BIGINT},#{user_name,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{audit_date,jdbcType=TIMESTAMP},#{audit_user_name,jdbcType=VARCHAR},#{order_id,jdbcType=VARCHAR},#{order_form_id,jdbcType=BIGINT},#{refund_price,jdbcType=DECIMAL},#{store_id,jdbcType=VARCHAR},#{store_name,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.RefundApplyForm">
+		update redpigmall_refund_apply_form
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_refund_apply_form where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_refund_apply_form where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.RefundApplyForm" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_refund_apply_form obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.RefundApplyForm" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_refund_apply_form obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.RefundApplyForm" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_refund_apply_form
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_refund_apply_form where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

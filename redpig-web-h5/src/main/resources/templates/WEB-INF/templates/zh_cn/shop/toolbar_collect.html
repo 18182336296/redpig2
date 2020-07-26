@@ -1,0 +1,30 @@
+<script>
+function del_fav(id,obj){
+    jQuery.post("$!webPath/del_fav",{"id":id},function(text){	
+	                 jQuery(obj).parent().parent().remove();
+					},"text");
+
+}
+
+jQuery(".collect li").mouseenter(function(){
+   jQuery(this).find(".liem").show();
+}).mouseleave(function(){
+     jQuery(this).find(".liem").hide();
+  });
+</script>
+
+<div class="right_nav_r_r_top">
+      <h3><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/backe.png" /></a></h3>
+      <span id="span">我的收藏</span> </div>
+
+<div class="right_footer_none" #if($!objs.size() > 0) style="display:none" #end><img src="$!cdnServer/resources/style/system/front/default/images/favorites_center_none_bg.png" /><span>您还没有收藏商品哦！</span></div>
+      <ul class="collect">
+        #foreach($obj in $objs)
+        <li> <span><a href="$!webPath/items_$!{obj.goods_id}" target="_blank"><img src="$!imageWebServer/$!obj.goods_photo" /></a></span> <b>￥$!obj.goods_current_price</b> <em class="liem"  style="display:none"><a title="删除" href="javascript:void(0);" onclick="del_fav($!obj.id,this);"><img src="$!cdnServer/resources/style/system/front/default/images/edit-delete.png" /></a></em> </li>
+          #end
+         
+         <div  #if($!objs.size()< 1) style="display:none" #end  class="right_more" id="collect_more">
+        	<a href="$!webPath/buyer/favorite_goods">查看更多>></a>
+        </div>
+        
+      </ul>

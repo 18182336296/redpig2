@@ -1,0 +1,177 @@
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#loginForm").validate({
+	  errorPlacement: function(error, element) {
+				element.parent().parent().find("b").html("");
+					error.appendTo(element.parent().parent().find("b"));
+	 },						 
+       rules: {
+				username:{required:true},
+				password:{required:true}
+				#if($!config.securityCodeLogin),
+				code:{required:true,remote:{
+				url: "$!webPath/verify_code",     
+				type: "post",               
+				dataType: "json",          
+				data: {                     
+					  "code": function(){return jQuery("#code").val();}
+				 }
+				 }}#end
+			},
+		messages: {
+			username: {required:"请输入用户名"},
+			password: {required:"请输入密码"}
+			#if($!config.securityCodeLogin),
+			code:{required:"请输入验证码",remote:"验证码错误"}#end
+			
+					},
+	   submitHandler:function(){
+	      var username=jQuery("#username").val();
+          var password=jQuery("#password").val();
+		  var code=jQuery("#code").val();
+          jQuery.post("$!webPath/redpigmall_login",{"username":username,"password":password,"code":code,"ajax_login":true},function(data){
+              if(data=="success"){
+	             window.location.reload();
+	          }else{
+				  jQuery("#user_login").remove();
+	             showDialog("msg_info","","登录信息错误，登录失败！！",2,"warning",3,'');
+	          }
+             },"text");
+	   },
+	   invalidHandler: function(form, validator) {  //不通过回调
+            return false;
+       } 
+  });
+  
+    jQuery(".login_box_nav a").click(function(){
+	   jQuery.ajax({type:'POST',url:'$!webPath/qr_login_img',data:'',dataType:'json',
+				  success:function(data){
+					  jQuery("#qr_login_img").attr("src",data.qr_img_url);
+					  jQuery("#qr_login_img").show();
+					  jQuery("#waiting_img").hide();
+					  setInterval("qr_login('"+data.qr_session_id+"')", 5000);  
+				  }
+	   });						
+  });
+ var firstInterval;  
+var secondInterval;  
+  jQuery(".login_code2").hover(
+					function(){
+						   var target=jQuery(this).find(".code_center");
+						   jQuery(target).show();
+						   refresh_qr();
+						    if(firstInterval) clearInterval(firstInterval);
+						 firstInterval = setInterval("qr_login()", 5000); 
+						 if(secondInterval) clearInterval(secondInterval);
+						 secondInterval = setInterval("refresh_qr()",30000);
+					},function(){
+								jQuery(this).find(".code_center").hide().find("img").attr("src","$!cdnServer/resources/style/common/images/loader1.gif");
+								clearInterval();
+						});
+  
+    jQuery(document).keydown(function(e){
+        var key =  e.which;
+		if(key==13){
+			submitForm();
+			}
+    });
+});////
+function refresh_qr(){
+		 jQuery("#qr_login_img").attr("src","$!webPath/qr_login_img?uuid=$!{uuid}&d"+new Date().getTime());
+	}
+function qr_login(qr_session_id){
+		 var code=jQuery("#code").val();
+		jQuery.ajax({type:'POST',url:'$!webPath/qr_login',data:{},dataType:'json',
+				  success:function(data){
+					  if(data.ret=="true"){
+						  clearInterval();
+						  		jQuery(".popup_login_center_c").hide();
+						  		jQuery(".login_going").show();
+						  			 jQuery.ajax({type:'POST',url:'$!webPath/dialog_qr_login_confirm',data:{"user_id":data.user_id,"qr_log_mark":data.qr_log_mark,"code":code},dataType:'text',
+								 		 success:function(data){
+									 		 if(data=="success"){
+										 		         window.location.reload();					   
+									 				 }else{
+														alert("登录失败！") 
+														jQuery(".popup_login_center_c").show();
+						  								jQuery(".login_going").hide();
+														 }
+								 			 }
+											});
+						   
+						   
+						   
+					  }
+				  }
+		});
+	}
+	
+	
+function submitForm(){
+	jQuery("#loginForm").submit();
+	}
+</script>
+<form action="$!webPath/redpigmall_login" method="post" id="loginForm">
+<!--登录窗口-->
+  <div class="popup_login_center_c">
+    <ul>
+      <li class="popup_name"><i>用户名：</i><span>
+        <input name="username" type="text" id="username" placeholder="账号/邮箱/已绑定手机" size="30" autocomplete="off" />
+        </span><b> </b></li>
+      <li class="popup_pass"><i>密&nbsp;&nbsp;&nbsp;码：</i><span>
+        <input name="password" type="password" id="password" size="30" placeholder="密码"  autocomplete="off" />
+        </span><b> </b></li>
+#if($!config.securityCodeLogin)
+      <li class="popup_yzm"><i>验证码：</i> <span>
+        <input class="input_yzm" name="code" type="text" id="code" style="text-transform:uppercase;" size="30" placeholder="验证码"  autocomplete="off"/>
+        </span> 
+        #if($!config.securityCodeType=='normal')
+        <script>
+				  	 function refreshCode(){
+						jQuery("#code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+					}
+				  </script>
+        <em class="yzm"><img src="$!webPath/verify" id="code_img" onclick="refreshCode();" style="cursor:pointer" width="59" height="27"></em> <strong class="nosee"><a href="javascript:void(0);" class="code_refresh" onclick="refreshCode();"></a></strong> <b> </b> 
+        #end
+        
+        #if($!config.securityCodeType=="voice") <a class="code_speech" href="javascript:void(0);" onclick="readCode('player')" title="朗读验证码"> </a><s id="player"></s>
+        <script>
+                               function readCode(id){
+                                     var  s = "<embed id='sound_play' name='sound_play' src='$!cdnServer/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                                jQuery("#"+id).html(s);
+                                }
+                               </script>
+                               <b></b>
+        #end </li>
+#end
+      <li class="popup_button"><span class="popup_b"><a href="javascript:void(0);" onclick="submitForm();">马上登录</a></span><span class="register"><b>还没有帐号？</b><a href="$!webPath/register" target="_blank">免费注册</a></span></li>
+    </ul>
+          #if($!{config.sina_login}||$!{config.qq_login})
+    <div class="login_other_up">
+      <h4>使用合作网站账号登录：</h4>
+      <div class="login_other_box_up">
+      <ul>
+     #if($!{config.qq_login})<li class="login_qq"> <a  href="$!webPath/qq_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/qq.png" /></a> 		</li>#end
+                   #if($!{config.sina_login}) <li class="login_sina">  <a  href="$!webPath/sina_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/sina.png" /></a></li>#end
+                     #if($!{config.weixin_login}==1) <li class="login_wechat">  <a  href="$!webPath/wechat_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/wx.png" /></a></li>#end
+      </ul>
+      </div>
+    </div>
+          #end
+          #if($!config.qr_login==1)
+    <div class="login_code2"> 
+    <span class="code_bg"> 
+    <a href="javascript:void(0);"><b class="code_center" style="display:none;"><img id="qr_login_img" src="$!cdnServer/resources/style/common/images/loader1.gif" /></b></a> 
+    </span> </div>
+    	  #end
+  </div>
+  <!-- 正在登录中-->
+  <div class="login_going" style="display:none">
+    	<div class="login_going_img"><img src="$!cdnServer/resources/style/system/front/default/images/login/login_going_img.png" /></div>
+        <div class="login_going_l"><img src="$!cdnServer/resources/style/system/front/default/images/login/login_going.gif" width="160" /></div>
+        <div class="login_going_word">正在使用二维码扫描登录...</div>
+    </div>
+  
+</form>

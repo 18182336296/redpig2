@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor-min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+<script>
+jQuery(document).ready(function() {
+    jQuery("#goods_list").find(".left_list_one").live("mouseover",
+    function() {
+        jQuery(this).find("a").show();
+    });
+    jQuery("#goods_list").find(".left_list_one").live("mouseout",
+    function() {
+        jQuery(this).find("a").hide();
+    });
+    jQuery("#goods_list").find(".left_list_one").live("click",
+    function() {
+        var goods_id = jQuery(this).attr("goods_id");
+        var src = jQuery(this).find("img").attr("src");
+        var goods_name = jQuery(this).find("i").html();
+        jQuery("#chosen_one").attr("goods_id", goods_id);
+        jQuery("#chosen_one").find("img").attr("src", src);
+        jQuery("#chosen_one").find("i").html(goods_name);
+        jQuery("dd[step=2]").attr("class", "this");
+        jQuery("dd[step=1]").attr("class", "");
+        if (jQuery("#inventory_list").html() == "") jQuery.post("$!webPath/single_goods_storehouse", {
+            "currentPage": 0,
+            "ajax": true,
+            "goods_id": goods_id
+        },
+        function(data) {
+            jQuery("#inventory_list").empty().html(data);
+
+        },
+        "html");
+    });
+});
+function search_goods() {
+    var search_goods = jQuery("#search_goods").val();
+    if (search_goods != "") {
+        jQuery.post("$!webPath/inventory_items", {
+            "currentPage": 0,
+            "ajax": true,
+            "goods_name": search_goods
+        },
+        function(data) {
+            jQuery("#goods_list").empty().html(data);
+        },
+        "html");
+    }
+}
+/*Ajax分页*/
+function ajaxPage(url, currentPage, obj) {
+    var ajax_page = jQuery(obj).parent().attr("ajax_page");
+    if (ajax_page == "goods") {
+        var search_goods = jQuery("#search_goods").val();
+        jQuery.post("$!webPath/inventory_items", {
+            "currentPage": currentPage,
+            "ajax": true,
+            "goods_name": search_goods
+        },
+        function(data) {
+            jQuery("#goods_list").empty().html(data);
+        },
+        "html");
+    } else if (ajax_page == "inventories") {
+        var goods_id = jQuery(obj).parent().attr("goods_id");
+        jQuery.post("$!webPath/single_goods_storehouse", {
+            "currentPage": currentPage,
+            "ajax": true,
+            "goods_id": goods_id
+        },
+        function(data) {
+            jQuery("#inventory_list").empty().html(data);
+        },
+        "html");
+    } else if (ajax_page == "storehouses") {
+        var goods_id = jQuery(obj).parent().attr("goods_id");
+        jQuery.post("$!webPath/single_goods_storehouse", {
+            "currentPage": currentPage,
+            "ajax": true,
+            "goods_id": goods_id
+        },
+        function(data) {
+            jQuery("#inventory_list").empty().html(data);
+        },
+        "html");
+    }
+}
+function inventory_edit(type, storehouse_id) {
+    var goods_id = jQuery("#chosen_one").attr("goods_id");
+    jQuery.post("$!webPath/single_goods_inventory_edit", {
+        "goods_id": goods_id,
+        "type": type,
+        "storehouse_id": storehouse_id
+    },
+    function(data) {
+        jQuery("#inventory_edit").empty().html(data);
+        jQuery("dd[step=3]").attr("class", "this");
+        jQuery("dd[step=2]").attr("class", "");
+    },
+    "html");
+}
+function submit_form() {
+    var flag = 0;
+    jQuery.each(jQuery("input[id^='spec_']"),
+    function(index, element) {
+        var type = jQuery("#type").val();
+        var count = jQuery(element).val();
+        if (isNaN(count)) {
+            alert("请填写数字");
+            flag = 1;
+        }
+        if (parseInt(count) < 0) {
+            alert("请填写大于0的数字");
+            flag = 1;
+        }
+        if (type == "out") {
+            var max_count = jQuery(element).attr("out_max");
+            if (count > max_count) {
+                alert("出库数量必须小于进库数量");
+                flag = 1;
+            }
+        }
+    });
+    if (flag == 0) {
+        var params = jQuery("#theForm").serialize();
+        jQuery.ajax({
+            type: 'POST',
+            url: '$!webPath/inventory_save',
+            data: params,
+            success: function(data) {
+                data = eval("(" + data + ")");
+                if (data.ret) {
+                    jQuery("#inventory_edit").empty();
+					jQuery("dd[step=3]").attr("class", "");
+            		jQuery("dd[step=2]").attr("class", "this");
+            		jQuery("dd[step=1]").attr("class", "");
+                    showDialog("msg_info", "", "库存修改成功", 2, "succeed", 3, '');
+                }
+            }
+        });
+    }
+}
+function select_step(index) {
+    var step = jQuery("dd[class='this']").attr("step");
+    if (index < step) {
+        if (index == 1) {
+            jQuery("dd[step=3]").attr("class", "");
+            jQuery("dd[step=2]").attr("class", "");
+            jQuery("dd[step=1]").attr("class", "this");
+        }
+        if (index == 2) {
+            jQuery("dd[step=3]").attr("class", "");
+            jQuery("dd[step=2]").attr("class", "this");
+            jQuery("dd[step=1]").attr("class", "");
+        }
+    }
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">库存管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/inventory_list"><b>管理</b></a> </li>
+      <li><a href="$!webPath/inventory_history" ><b>操作记录</b></a></li>
+      <li><a href="$!webPath/inventory_add" class="this"><b>库存操作</b></a></li>
+      </span>
+    </ul>
+  </div>
+  <div class="repertory_list">
+    <dl>
+      <dt onclick="select_step(1)" step="1">第一步选择商品</dt>
+      <dd class="this" step="1">
+        <div class="repertory">
+          <div class="repertory_top">
+            <div class="repertory_top_c">
+              <div class="repertory_top_c_left">
+                <div class="repertory_top_c_left_search">
+                  <h3>选择商品</h3>
+                  <span>
+                  <input name="search_goods" id="search_goods" type="text" placeholder="请输入" />
+                  <i><a href="javascript:void(0)" onclick="search_goods()"></a></i></span> </div>
+                <div id="goods_list">
+                  <div class="repertory_top_c_left_list"> #foreach($obj in $goods)
+                    #if($!obj.goods_main_photo)
+                    #set($goods_img="$!imageWebServer/$!obj.goods_main_photo.path/$!obj.goods_main_photo.name")
+                    #else
+                    #set($goods_img="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name")
+                    #end
+                    <div class="left_list_one" goods_id="$!obj.id"> <span><img src="$!goods_img" /></span> <i>$!obj.goods_name</i> <a href="javascript:void(0)" style="display:none">选择</a> </div>
+                    #end </div>
+                  <div class="fenye" ajax_page="goods"> $!gotoPageAjaxHTML</div>
+                </div>
+              </div>
+              <div class="repertory_top_c_right">
+                <h3>已选商品</h3>
+                <div class="left_list_one" id="chosen_one" goods_id=""> <span><img src="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name" /></span> <i></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dd>
+    </dl>
+    <dl>
+      <dt onclick="select_step(2)" step="2">第二步选择仓库</dt>
+      <dd step="2">
+        <div id="inventory_list"></div>
+      </dd>
+    </dl>
+    <dl>
+      <dt onclick="select_step(3)" step="3">第三步修改库存</dt>
+      <dd step="3" style="overflow:auto">
+        <div id="inventory_edit"></div>
+      </dd>
+    </dl>
+  </div>
+</div>
+</body>
+</html>

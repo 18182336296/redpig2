@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.FreeApplyLogMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.FreeApplyLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="freegoods_id" property="freegoods_id" jdbcType="BIGINT"/>
+		<result column="freegoods_name" property="freegoods_name" jdbcType="VARCHAR"/>
+		<result column="apply_reason" property="apply_reason" jdbcType="VARCHAR"/>
+		<result column="apply_status" property="apply_status" jdbcType="INTEGER"/>
+		<result column="express_info" property="express_info" jdbcType="VARCHAR"/>
+		<result column="shipCode" property="shipCode" jdbcType="VARCHAR"/>
+		<result column="receiver_Name" property="receiver_Name" jdbcType="VARCHAR"/>
+		<result column="receiver_area" property="receiver_area" jdbcType="VARCHAR"/>
+		<result column="receiver_area_info" property="receiver_area_info" jdbcType="VARCHAR"/>
+		<result column="receiver_zip" property="receiver_zip" jdbcType="VARCHAR"/>
+		<result column="receiver_telephone" property="receiver_telephone" jdbcType="VARCHAR"/>
+		<result column="receiver_mobile" property="receiver_mobile" jdbcType="VARCHAR"/>
+		<result column="use_experience" property="use_experience" jdbcType="VARCHAR"/>
+		<result column="evaluate_status" property="evaluate_status" jdbcType="INTEGER"/>
+		<result column="ship_addr_id" property="ship_addr_id" jdbcType="BIGINT"/>
+		<result column="ship_addr" property="ship_addr" jdbcType="VARCHAR"/>
+		<result column="evaluate_time" property="evaluate_time" jdbcType="TIMESTAMP"/>
+		<result column="whether_self" property="whether_self" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.FreeApplyLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="freegoods_id" property="freegoods_id" jdbcType="BIGINT"/>
+		<result column="freegoods_name" property="freegoods_name" jdbcType="VARCHAR"/>
+		<result column="apply_reason" property="apply_reason" jdbcType="VARCHAR"/>
+		<result column="apply_status" property="apply_status" jdbcType="INTEGER"/>
+		<result column="express_info" property="express_info" jdbcType="VARCHAR"/>
+		<result column="shipCode" property="shipCode" jdbcType="VARCHAR"/>
+		<result column="receiver_Name" property="receiver_Name" jdbcType="VARCHAR"/>
+		<result column="receiver_area" property="receiver_area" jdbcType="VARCHAR"/>
+		<result column="receiver_area_info" property="receiver_area_info" jdbcType="VARCHAR"/>
+		<result column="receiver_zip" property="receiver_zip" jdbcType="VARCHAR"/>
+		<result column="receiver_telephone" property="receiver_telephone" jdbcType="VARCHAR"/>
+		<result column="receiver_mobile" property="receiver_mobile" jdbcType="VARCHAR"/>
+		<result column="use_experience" property="use_experience" jdbcType="VARCHAR"/>
+		<result column="evaluate_status" property="evaluate_status" jdbcType="INTEGER"/>
+		<result column="ship_addr_id" property="ship_addr_id" jdbcType="BIGINT"/>
+		<result column="ship_addr" property="ship_addr" jdbcType="VARCHAR"/>
+		<result column="evaluate_time" property="evaluate_time" jdbcType="TIMESTAMP"/>
+		<result column="whether_self" property="whether_self" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,user_id,user_name,store_id,freegoods_id,freegoods_name,apply_reason,apply_status,express_info,shipCode,receiver_Name,receiver_area,receiver_area_info,receiver_zip,receiver_telephone,receiver_mobile,use_experience,evaluate_status,ship_addr_id,ship_addr,evaluate_time,whether_self
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="user_name_like != null">and user_name like CONCAT('%',#{user_name_like},'%') </if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="freegoods_id != null">and freegoods_id = #{freegoods_id,jdbcType=BIGINT}</if>
+		<if test="freegoods_name != null">and freegoods_name = #{freegoods_name,jdbcType=VARCHAR}</if>
+		<if test="apply_reason != null">and apply_reason = #{apply_reason,jdbcType=VARCHAR}</if>
+		<if test="apply_status != null">and apply_status = #{apply_status,jdbcType=INTEGER}</if>
+		<if test="express_info != null">and express_info = #{express_info,jdbcType=VARCHAR}</if>
+		<if test="shipCode != null">and shipCode = #{shipCode,jdbcType=VARCHAR}</if>
+		<if test="receiver_Name != null">and receiver_Name = #{receiver_Name,jdbcType=VARCHAR}</if>
+		<if test="receiver_area != null">and receiver_area = #{receiver_area,jdbcType=VARCHAR}</if>
+		<if test="receiver_area_info != null">and receiver_area_info = #{receiver_area_info,jdbcType=VARCHAR}</if>
+		<if test="receiver_zip != null">and receiver_zip = #{receiver_zip,jdbcType=VARCHAR}</if>
+		<if test="receiver_telephone != null">and receiver_telephone = #{receiver_telephone,jdbcType=VARCHAR}</if>
+		<if test="receiver_mobile != null">and receiver_mobile = #{receiver_mobile,jdbcType=VARCHAR}</if>
+		<if test="use_experience != null">and use_experience = #{use_experience,jdbcType=VARCHAR}</if>
+		<if test="evaluate_status != null">and evaluate_status = #{evaluate_status,jdbcType=INTEGER}</if>
+		<if test="ship_addr_id != null">and ship_addr_id = #{ship_addr_id,jdbcType=BIGINT}</if>
+		<if test="ship_addr != null">and ship_addr = #{ship_addr,jdbcType=VARCHAR}</if>
+		<if test="evaluate_time != null">and evaluate_time = #{evaluate_time,jdbcType=TIMESTAMP}</if>
+		<if test="whether_self != null">and whether_self = #{whether_self,jdbcType=INTEGER}</if>
+		<if test="user_name_like !=null">and user_name like concat(concat('%',#{user_name_like}),'%') </if>
+	</sql>
+	<sql id="ifStatement">
+		user_id= #{user_id},
+		user_name= #{user_name},
+		store_id= #{store_id},
+		freegoods_id= #{freegoods_id},
+		freegoods_name= #{freegoods_name},
+		apply_reason= #{apply_reason},
+		apply_status= #{apply_status},
+		express_info= #{express_info},
+		shipCode= #{shipCode},
+		receiver_Name= #{receiver_Name},
+		receiver_area= #{receiver_area},
+		receiver_area_info= #{receiver_area_info},
+		receiver_zip= #{receiver_zip},
+		receiver_telephone= #{receiver_telephone},
+		receiver_mobile= #{receiver_mobile},
+		use_experience= #{use_experience},
+		evaluate_status= #{evaluate_status},
+		ship_addr_id= #{ship_addr_id},
+		ship_addr= #{ship_addr},
+		evaluate_time= #{evaluate_time},
+		whether_self= #{whether_self},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.FreeApplyLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_freeapplylog 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.FreeApplyLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_freeapplylog obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_freeapplylog obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.FreeApplyLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_freeapplylog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.FreeApplyLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_freeapplylog(addTime,deleteStatus,user_id,user_name,store_id,freegoods_id,freegoods_name,apply_reason,apply_status,express_info,shipCode,receiver_Name,receiver_area,receiver_area_info,receiver_zip,receiver_telephone,receiver_mobile,use_experience,evaluate_status,ship_addr_id,ship_addr,evaluate_time,whether_self)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{user_id,jdbcType=BIGINT},#{user_name,jdbcType=VARCHAR},#{store_id,jdbcType=BIGINT},#{freegoods_id,jdbcType=BIGINT},#{freegoods_name,jdbcType=VARCHAR},#{apply_reason,jdbcType=VARCHAR},#{apply_status,jdbcType=INTEGER},#{express_info,jdbcType=VARCHAR},#{shipCode,jdbcType=VARCHAR},#{receiver_Name,jdbcType=VARCHAR},#{receiver_area,jdbcType=VARCHAR},#{receiver_area_info,jdbcType=VARCHAR},#{receiver_zip,jdbcType=VARCHAR},#{receiver_telephone,jdbcType=VARCHAR},#{receiver_mobile,jdbcType=VARCHAR},#{use_experience,jdbcType=VARCHAR},#{evaluate_status,jdbcType=INTEGER},#{ship_addr_id,jdbcType=BIGINT},#{ship_addr,jdbcType=VARCHAR},#{evaluate_time,jdbcType=TIMESTAMP},#{whether_self,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.FreeApplyLog">
+		update redpigmall_freeapplylog
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_freeapplylog where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_freeapplylog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.FreeApplyLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_freeapplylog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.FreeApplyLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_freeapplylog obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.FreeApplyLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_freeapplylog
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_freeapplylog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

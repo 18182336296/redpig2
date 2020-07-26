@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!class_id)	
+		jQuery("#class_id").val("$!class_id");
+	#end
+	#if($!status)	
+		jQuery("#status1").val("$!status1");
+	#end
+	});
+
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else val=value; 
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/circle_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+				   var recommend ="false";
+				   if(data==1){
+					   recommend ="true";
+					   }
+	            jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+recommend+".png");
+              }
+	    });
+}
+</script>
+<body>
+<div class="cont">
+  <h3 class="seth">圈子管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/circle_set"><b>圈子设置</b></a></li>
+      <li><a href="$!webPath/circle_list" #if(!$!status)class="this" #end><b>管理列表</b></a></li>
+      <li><a href="$!webPath/circle_list?status=0" #if($!status==0)class="this" #end><b>待审核列表</b></a></li>
+    </ul>
+  </div>
+  
+  <form action="$!webPath/circle_list" id="ListForm" name="ListForm" method="post">
+    <div class="search"> <span>圈子名称</span> <span class="size250">
+      <input name="title" type="text" id="title"  value="$!title" />
+      </span> <span>管理员</span> <span class="size100">
+      <input name="userName" type="text" id="userName" value="$!userName" />
+      </span> <span>圈子类型</span> <span>
+      <select name="class_id" id="class_id">
+        <option value="">圈子类型...</option>
+        
+            #foreach($gc in $ccs)
+             
+        <option value="$!gc.id">$!gc.className</option>
+        
+             #end
+		
+      </select>
+      </span> <span class="btn_search">
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+      </span> </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="4%">&nbsp;</th>
+          <th width="20%"><span class="form_btna">名称</span></th>
+          <th width="15%"><span class="form_btna">创建时间</span></th>
+          <th width="10%"><span class="form_btna">类型</span></th>
+          <th width="8%"><span class="form_btna">管理员</span></th>
+          <th width="8%"><span class="form_btna">帖子总数</span></th>
+          <th width="10%"><span class="form_btna">状态</span></th>
+          <th width="10%"><span class="form_btna">是否推荐</span></th>
+          <th><b class="form_btnb">操作</span></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <tr>
+          <td class="check_position"><label for="ids_$!obj.id">
+        	<input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" />
+            <span class="lbl"></span>
+        </label></td>
+          <td align="center"><a href="$!webPath/circle/detail_$!{obj.id}" target="_blank">$!obj.title</a></td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+          <td align="center">$!obj.class_name</td>
+          <td align="center">$!obj.userName</td>
+          <td align="center">$!obj.invitation_count</td>
+          <td align="center">#if($!obj.status==0)待审核#end #if($!obj.status==5)审核通过#end #if($!obj.status==-1)审核拒绝#end</td>
+          #set($recommend="false")
+          #if($!obj.recommend==1)
+          #set($recommend="true")
+          #end
+          <td align="center"><img onclick="ajax_update('$!obj.id','recommend',this)" src="$!cdnServer/resources/style/system/manage/blue/images/$!{recommend}.png" width="25" height="21" border="0" style="cursor:pointer;" title="推荐后在圈子首页圈子分类中显示"/></td>
+          <td class="hui oprate_con" align="center"><a href="$!webPath/circle_edit?id=$!obj.id&currentPage=$!currentPage" class="blue">编辑</a>|<a href="$!webPath/circle_invitation?cid=$!obj.id" class="blue">查看帖子</a> |<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/circle_del?mulitId=$!obj.id&amp;currentPage=$!currentPage'" class="blue">删除</a></td>
+        </tr>
+        #end
+        #else
+<tr>
+	<td colspan="9">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+      </table>
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/circle_del');">删除</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye"> 
+		<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+            </div>
+        </div>
+        #end
+    </div>
+  </FORM>
+  
+</div>
+</body>
+</html>

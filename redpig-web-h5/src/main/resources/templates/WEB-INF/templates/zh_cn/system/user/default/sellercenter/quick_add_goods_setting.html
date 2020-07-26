@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-快速发布商品模板-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+function save_form(){
+	var params = jQuery("#theForm").serialize();
+			jQuery(".seller_save").attr("disabled","disabled");
+			jQuery.ajax({type:'POST',url:'$!webPath/seller/enoughreduce_save',data:params,
+			success:function(data){			
+				 data = eval("(" + data + ")");
+				 if(data.ret==true){
+			 		 showDialog("msg_info","",data.op_title,0,"succeed",3,function(data){
+					 window.location.href="$!webPath/seller/enoughreduce_items?er_id="+data
+					 },data.id
+		  		 );
+		  		}else{
+					showDialog("msg_info","",data.op_title,0,"question",3,function(){
+				      window.location.href="$!webPath/seller/enoughreduce_list";
+		  		 });
+				}jQuery(".seller_save").removeAttr("disabled");
+			}});
+}
+</script>
+  <style>
+        .edit_standard_list{width:1030px; height:100px;float:left;}
+		.edit_standard_list dt{ float:left; width:100%; clear:both;transition: all 0.5s ease 0s; margin-bottom:5px;}
+		.edit_standard_list dt:Hover{ background:#eee;}
+		.edit_standard_list dt.this{ background:#eee;}
+		.edit_standard_list i{ float:left; height:15px; width:15px; margin-top:8px; margin-right:3px; margin-left:10px;}
+		.edit_standard_list dt span{ float:left; font-size:14px; height:30px; line-height:30px; padding:0 5px; margin-right:10px; font-weight:bold;color:#009AE2}
+		.edit_standard_list span{ float:left; font-size:12px; height:30px; line-height:30px; padding:0 5px; margin-right:10px; }
+		.edit_standard_list dt{ float:left; height:30px; line-height:30px; padding:0 5px; margin-right:10px;}
+		.edit_standard_list b{ width:880px; float:left; height:30px; line-height:30px; color:#959595}
+		.edit_standard_list dd{ margin-left:3%; width:97%; clear:both; float:left;transition: all 0.5s ease 0s; margin-bottom:1px; }
+		.edit_standard_list dd:Hover{ background:#eee;}
+		.edit_standard_list dd.this{ background:#eee;}
+        </style>
+
+</head>
+<body>
+$!httpInclude.include("/seller/top")
+<div class="main">
+  <div class="seller_center"> $!httpInclude.include("/seller/nav?op=quick_add_goods_setting_edit")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index">商家中心</a></b>><b>商品管理</b> ><b>快速发布商品设置</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li class="this"><a href="javascript:void(0)"><i></i>快速发布商品设置</a></li>
+          </ul>
+        </div>
+        <div class="user_ser_warning">
+          <ul>
+            <li>快速发布商品设置说明：</li>
+            <li>在快速发布商品时，以下可选项中只有被选中的可以在页面中被编辑，未被选中的不显示并被设置为默认值。</li>
+          </ul>
+        </div>
+        <form action="$!webPath/seller/quick_add_goods_setting_save" method="post" id="ListForm">
+        <div class="edit_standard_list">
+        <dl>
+          <dt><label><i>
+            <input id="basic_info" name="basic_info" type="checkbox" value="basic_info"/>
+            </i><span>基本信息</span></label><b>商品基本信息</b></dt>
+          <dd><label><i>
+            <input id="goods_type" name="goods_type" type="checkbox" value="goods_type"/>
+            </i><span>商品类型</span></label><b>分为实物商品和虚拟商品。默认为实物商品</b></dd>
+          <dd><label><i>
+            <input id="goods_cod" name="goods_cod" type="checkbox" value="goods_cod" />
+            </i><span>货到付款</span></label><b>该商品是否支持货到付款。默认为支持。</b></dd>          
+        </dl>
+      </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ReturnGoodsLogMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.ReturnGoodsLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="return_order_num" property="return_order_num" jdbcType="BIGINT"/>
+		<result column="goods_gsp_val" property="goods_gsp_val" jdbcType="VARCHAR"/>
+		<result column="goods_gsp_ids" property="goods_gsp_ids" jdbcType="VARCHAR"/>
+		<result column="return_combin_info" property="return_combin_info" jdbcType="VARCHAR"/>
+		<result column="return_service_id" property="return_service_id" jdbcType="VARCHAR"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="goods_count" property="goods_count" jdbcType="VARCHAR"/>
+		<result column="goods_price" property="goods_price" jdbcType="VARCHAR"/>
+		<result column="goods_all_price" property="goods_all_price" jdbcType="VARCHAR"/>
+		<result column="goods_mainphoto_path" property="goods_mainphoto_path" jdbcType="VARCHAR"/>
+		<result column="goods_commission_rate" property="goods_commission_rate" jdbcType="DECIMAL"/>
+		<result column="goods_return_status" property="goods_return_status" jdbcType="VARCHAR"/>
+		<result column="return_order_id" property="return_order_id" jdbcType="BIGINT"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="return_content" property="return_content" jdbcType="VARCHAR"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="self_address" property="self_address" jdbcType="VARCHAR"/>
+		<result column="return_express_info" property="return_express_info" jdbcType="VARCHAR"/>
+		<result column="express_code" property="express_code" jdbcType="VARCHAR"/>
+		<result column="refund_status" property="refund_status" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.ReturnGoodsLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="return_order_num" property="return_order_num" jdbcType="BIGINT"/>
+		<result column="goods_gsp_val" property="goods_gsp_val" jdbcType="VARCHAR"/>
+		<result column="goods_gsp_ids" property="goods_gsp_ids" jdbcType="VARCHAR"/>
+		<result column="return_combin_info" property="return_combin_info" jdbcType="VARCHAR"/>
+		<result column="return_service_id" property="return_service_id" jdbcType="VARCHAR"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="goods_count" property="goods_count" jdbcType="VARCHAR"/>
+		<result column="goods_price" property="goods_price" jdbcType="VARCHAR"/>
+		<result column="goods_all_price" property="goods_all_price" jdbcType="VARCHAR"/>
+		<result column="goods_mainphoto_path" property="goods_mainphoto_path" jdbcType="VARCHAR"/>
+		<result column="goods_commission_rate" property="goods_commission_rate" jdbcType="DECIMAL"/>
+		<result column="goods_return_status" property="goods_return_status" jdbcType="VARCHAR"/>
+		<result column="return_order_id" property="return_order_id" jdbcType="BIGINT"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="return_content" property="return_content" jdbcType="VARCHAR"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="self_address" property="self_address" jdbcType="VARCHAR"/>
+		<result column="return_express_info" property="return_express_info" jdbcType="VARCHAR"/>
+		<result column="express_code" property="express_code" jdbcType="VARCHAR"/>
+		<result column="refund_status" property="refund_status" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,return_order_num,goods_gsp_val,goods_gsp_ids,return_combin_info,return_service_id,goods_id,goods_name,goods_count,goods_price,goods_all_price,goods_mainphoto_path,goods_commission_rate,goods_return_status,return_order_id,goods_type,return_content,user_name,store_id,user_id,self_address,return_express_info,express_code,refund_status
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="return_order_num != null">and return_order_num = #{return_order_num,jdbcType=BIGINT}</if>
+		<if test="goods_gsp_val != null">and goods_gsp_val = #{goods_gsp_val,jdbcType=VARCHAR}</if>
+		<if test="goods_gsp_ids != null">and goods_gsp_ids = #{goods_gsp_ids,jdbcType=VARCHAR}</if>
+		<if test="return_combin_info != null">and return_combin_info = #{return_combin_info,jdbcType=VARCHAR}</if>
+		<if test="return_service_id != null">and return_service_id = #{return_service_id,jdbcType=VARCHAR}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+		<if test="goods_name != null">and goods_name = #{goods_name,jdbcType=VARCHAR}</if>
+		<if test="goods_count != null">and goods_count = #{goods_count,jdbcType=VARCHAR}</if>
+		<if test="goods_price != null">and goods_price = #{goods_price,jdbcType=VARCHAR}</if>
+		<if test="goods_all_price != null">and goods_all_price = #{goods_all_price,jdbcType=VARCHAR}</if>
+		<if test="goods_mainphoto_path != null">and goods_mainphoto_path = #{goods_mainphoto_path,jdbcType=VARCHAR}</if>
+		<if test="goods_commission_rate != null">and goods_commission_rate = #{goods_commission_rate,jdbcType=DECIMAL}</if>
+		<if test="goods_return_status != null">and goods_return_status = #{goods_return_status,jdbcType=VARCHAR}</if>
+		<if test="goods_return_status_no != null">and goods_return_status != #{goods_return_status_no,jdbcType=VARCHAR}</if>
+		<if test="goods_return_status1 != null">or goods_return_status = #{goods_return_status1,jdbcType=VARCHAR}</if>
+		<if test="return_order_id != null">and return_order_id = #{return_order_id,jdbcType=BIGINT}</if>
+		<if test="goods_type != null">and goods_type = #{goods_type,jdbcType=INTEGER}</if>
+		<if test="return_content != null">and return_content = #{return_content,jdbcType=VARCHAR}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="self_address != null">and self_address = #{self_address,jdbcType=VARCHAR}</if>
+		<if test="return_express_info != null">and return_express_info = #{return_express_info,jdbcType=VARCHAR}</if>
+		<if test="express_code != null">and express_code = #{express_code,jdbcType=VARCHAR}</if>
+		<if test="refund_status != null">and refund_status = #{refund_status,jdbcType=INTEGER}</if>
+		<if test="goods_name_like != null">and goods_name like CONCAT('%',#{goods_name_like},'%') </if>
+	</sql>
+	<sql id="ifStatement">
+		return_order_num= #{return_order_num},
+		goods_gsp_val= #{goods_gsp_val},
+		goods_gsp_ids= #{goods_gsp_ids},
+		return_combin_info= #{return_combin_info},
+		return_service_id= #{return_service_id},
+		goods_id= #{goods_id},
+		goods_name= #{goods_name},
+		goods_count= #{goods_count},
+		goods_price= #{goods_price},
+		goods_all_price= #{goods_all_price},
+		goods_mainphoto_path= #{goods_mainphoto_path},
+		goods_commission_rate= #{goods_commission_rate},
+		goods_return_status= #{goods_return_status},
+		return_order_id= #{return_order_id},
+		goods_type= #{goods_type},
+		return_content= #{return_content},
+		user_name= #{user_name},
+		store_id= #{store_id},
+		user_id= #{user_id},
+		self_address= #{self_address},
+		return_express_info= #{return_express_info},
+		express_code= #{express_code},
+		refund_status= #{refund_status},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.ReturnGoodsLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_returngoods_log 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.ReturnGoodsLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_returngoods_log obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_returngoods_log obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.ReturnGoodsLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_returngoods_log obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.ReturnGoodsLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_returngoods_log(addTime,deleteStatus,return_order_num,goods_gsp_val,goods_gsp_ids,return_combin_info,return_service_id,goods_id,goods_name,goods_count,goods_price,goods_all_price,goods_mainphoto_path,goods_commission_rate,goods_return_status,return_order_id,goods_type,return_content,user_name,store_id,user_id,self_address,return_express_info,express_code,refund_status)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{return_order_num,jdbcType=BIGINT},#{goods_gsp_val,jdbcType=VARCHAR},#{goods_gsp_ids,jdbcType=VARCHAR},#{return_combin_info,jdbcType=VARCHAR},#{return_service_id,jdbcType=VARCHAR},#{goods_id,jdbcType=BIGINT},#{goods_name,jdbcType=VARCHAR},#{goods_count,jdbcType=VARCHAR},#{goods_price,jdbcType=VARCHAR},#{goods_all_price,jdbcType=VARCHAR},#{goods_mainphoto_path,jdbcType=VARCHAR},#{goods_commission_rate,jdbcType=DECIMAL},#{goods_return_status,jdbcType=VARCHAR},#{return_order_id,jdbcType=BIGINT},#{goods_type,jdbcType=INTEGER},#{return_content,jdbcType=VARCHAR},#{user_name,jdbcType=VARCHAR},#{store_id,jdbcType=BIGINT},#{user_id,jdbcType=BIGINT},#{self_address,jdbcType=VARCHAR},#{return_express_info,jdbcType=VARCHAR},#{express_code,jdbcType=VARCHAR},#{refund_status,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.ReturnGoodsLog">
+		update redpigmall_returngoods_log
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_returngoods_log where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_returngoods_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.ReturnGoodsLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_returngoods_log obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.ReturnGoodsLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_returngoods_log obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.ReturnGoodsLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_returngoods_log
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_returngoods_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

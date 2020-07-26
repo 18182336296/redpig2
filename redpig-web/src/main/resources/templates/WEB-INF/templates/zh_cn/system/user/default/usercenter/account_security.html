@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>账号安全 - $!{config.title}-$!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script>
+ jQuery(document).ready(function(){
+     #if($!user.pay_password && $!user.pay_password!="")
+         jQuery("#pay_pass_ok").show();   
+		 jQuery("#pay_pass_no").hide();              
+     #else
+         jQuery("#pay_pass_no").show();   
+		 jQuery("#pay_pass_ok").hide();               
+     #end
+	 #if($!user.mobile && $!user.mobile!="")
+         jQuery("#phone_pass_ok").show();   
+		 jQuery("#phone_pass_no").hide();              
+     #else
+         jQuery("#phone_pass_no").show();   
+		 jQuery("#phone_pass_ok").hide();               
+     #end
+	 #if($!user.email && $!user.email!="")
+         jQuery("#mail_pass_ok").show();   
+		 jQuery("#mail_pass_no").hide();              
+     #else
+         jQuery("#mail_pass_no").show();   
+		 jQuery("#mail_pass_ok").hide();               
+     #end
+ });
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="usercenter">
+     $!httpInclude.include("/buyer/nav?op=account_security")
+    <div class="usercenter_right">
+      <div class="myorder">
+        <h4><strong>账户信息</strong></h4>
+      </div>
+      <div class="user_list">
+      	<div class="user_safety">
+        	<div class="user_safety_top">
+            	<div class="user_safety_top_l">
+                <!-- 安全等级高，中，低  s_high / s_middle / s_low-->
+                	<span>当前安全等级：
+                        #if($!safe<=10)
+                         <b class="s_low">低
+                        #elseif($!safe==20)
+                         <b class="s_middle">中 
+                        #else
+                        <b class="s_high">高
+                        #end 
+                        </b>
+                    </span>
+                    <i>#if($!safe>20)(您的安全设置已全部开启) #else(建议您开启全部安全设置，以保障账户及资金安全)#end	</i>
+                </div>
+            </div>
+            <div class="user_safety_center">
+            	<div class="user_safety_c_list">
+                	<div class="user_safety_c_list_left">
+                    	<span style="display:;"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/pass_word_ok.png" /></span>
+                        <span style="display:none;"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/pass_word_no.png" /></span>
+                        <!---未设置  class="this"---->
+                        <b >已经设置 </b>
+                    </div>
+                    <div class="user_safety_c_list_name">登录密码</div>
+                    <div class="user_safety_c_list_explain">建议您定期更换密码，安全性高的密码可以使账号更安全。</div>
+                    <div class="user_safety_c_list_right">
+                    	<!---已设置的 class="this" ---->
+                    	<a class="this" href="$!webPath/buyer/account_password">修改密码</a>
+                    </div>
+                </div>
+                <div class="user_safety_c_list">
+                	<div class="user_safety_c_list_left">
+                    	<span style="display:none;" id="pay_pass_ok"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/pay_pass_ok.png" /></span>
+                        <span style="display:none;" id="pay_pass_no"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/pay_pass_no.png" /></span>
+                        <!---未设置  class="this"---->
+                        #if($!user.pay_password && $!user.pay_password!="")
+                        <b >已经设置 </b>
+                        #else
+                        <b class="this">未设置 </b>
+                        #end
+                    </div>
+                    <div class="user_safety_c_list_name">支付密码</div>
+                    <div class="user_safety_c_list_explain">互联网账号存在被盗风险，支付密码保障您的资金安全。</div>
+                    <div class="user_safety_c_list_right">
+                        #if($!user.pay_password && $!user.pay_password!="")
+                        <a class="this" href="$!webPath/buyer/account_pay_password" >修改密码</a>
+                        #else
+                        <a class=""  href="$!webPath/buyer/account_pay_password">立即设置</a>
+                        #end
+                    </div>
+                </div>
+                <div class="user_safety_c_list">
+                	<div class="user_safety_c_list_left">
+                    	<span style="display:none;" id="phone_pass_ok"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/phone_pass_yes.png" /></span>
+                        <span style="display:none;" id="phone_pass_no"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/phone_pass_no.png" /></span>
+                        <!---未设置  class="this"---->
+                        #if($!user.mobile && $!user.mobile!="")
+                        <b >已经设置 </b>
+                        #else
+                        <b class="this">未设置 </b>
+                        #end
+                    </div>
+                    <div class="user_safety_c_list_name">手机绑定</div>
+                    <div class="user_safety_c_list_explain">绑定手机后，您即可享受丰富的手机服务，如手机登录、手机找回密码等。</div>
+                    <div class="user_safety_c_list_right">
+                        #if($!user.mobile && $!user.mobile!="")
+                        <a class="this" href="$!webPath/buyer/account_mobile">更改绑定</a>
+                        #else
+                        <a class="" href="$!webPath/buyer/account_mobile">立即设置</a>
+                        #end
+                    </div>
+                </div>
+                <div class="user_safety_c_list">
+                	<div class="user_safety_c_list_left">
+                    	<span style="display:none;" id="mail_pass_ok"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/mail_pass_yes.png" /></span>
+                        <span style="display:none;" id="mail_pass_no"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/mail_pass_no.png" /></span>
+                        <!---未设置  class="this"---->
+                        #if($!user.email && $!user.email!="")
+                        <b >已经设置 </b>
+                        #else
+                        <b class="this">未设置 </b>
+                        #end
+                    </div>
+                    <div class="user_safety_c_list_name">邮箱绑定</div>
+                    <div class="user_safety_c_list_explain">绑定邮箱后，您即可享受邮箱登录、邮箱找回密码等服务。</div>
+                    <div class="user_safety_c_list_right">
+                        #if($!user.email && $!user.email!="")
+                        <a class="this" href="$!webPath/buyer/account_email">更改绑定</a>
+                        #else
+                        <a class="" href="$!webPath/buyer/account_email">立即设置</a>
+                        #end
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer")
+</div>
+</body>
+</html>

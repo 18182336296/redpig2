@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.CombinPlanMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.CombinPlan">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="main_goods_info" property="main_goods_info" jdbcType="VARCHAR"/>
+		<result column="main_goods_id" property="main_goods_id" jdbcType="BIGINT"/>
+		<result column="main_goods_name" property="main_goods_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="combin_plan_info" property="combin_plan_info" jdbcType="VARCHAR"/>
+		<result column="combin_type" property="combin_type" jdbcType="INTEGER"/>
+		<result column="combin_status" property="combin_status" jdbcType="INTEGER"/>
+		<result column="combin_form" property="combin_form" jdbcType="INTEGER"/>
+		<result column="combin_refuse_msg" property="combin_refuse_msg" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.CombinPlan">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="main_goods_info" property="main_goods_info" jdbcType="VARCHAR"/>
+		<result column="main_goods_id" property="main_goods_id" jdbcType="BIGINT"/>
+		<result column="main_goods_name" property="main_goods_name" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="combin_plan_info" property="combin_plan_info" jdbcType="VARCHAR"/>
+		<result column="combin_type" property="combin_type" jdbcType="INTEGER"/>
+		<result column="combin_status" property="combin_status" jdbcType="INTEGER"/>
+		<result column="combin_form" property="combin_form" jdbcType="INTEGER"/>
+		<result column="combin_refuse_msg" property="combin_refuse_msg" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,main_goods_info,main_goods_id,main_goods_name,store_id,combin_plan_info,combin_type,combin_status,combin_form,combin_refuse_msg,beginTime,endTime
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="main_goods_info != null">and main_goods_info = #{main_goods_info,jdbcType=VARCHAR}</if>
+		<if test="main_goods_id != null">and main_goods_id = #{main_goods_id,jdbcType=BIGINT}</if>
+		<if test="main_goods_name != null">and main_goods_name = #{main_goods_name,jdbcType=VARCHAR}</if>
+		<if test="main_goods_name_like != null">and main_goods_name like CONCAT('%',#{main_goods_name_like},'%') </if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="combin_plan_info != null">and combin_plan_info = #{combin_plan_info,jdbcType=VARCHAR}</if>
+		<if test="combin_type != null">and combin_type = #{combin_type,jdbcType=INTEGER}</if>
+		<if test="combin_status != null">and combin_status = #{combin_status,jdbcType=INTEGER}</if>
+		
+		<if test="combin_status1 != null and combin_status2 != null">
+			and (combin_status = #{combin_status1,jdbcType=INTEGER} or combin_status = #{combin_status2,jdbcType=INTEGER})
+		</if>
+		
+		<if test="combin_form != null">and combin_form = #{combin_form,jdbcType=INTEGER}</if>
+		<if test="combin_refuse_msg != null">and combin_refuse_msg = #{combin_refuse_msg,jdbcType=VARCHAR}</if>
+		<if test="beginTime != null">and beginTime = #{beginTime,jdbcType=TIMESTAMP}</if>
+		<if test="endTime != null">and endTime = #{endTime,jdbcType=TIMESTAMP}</if>
+		
+		<if test="beginTime_more_than_equal != null">and beginTime <![CDATA[ >= ]]> #{beginTime_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="endTime_less_than_equal != null">and endTime <![CDATA[ <= ]]> #{endTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		
+		
+		<if test="main_goods_name_like != null">and main_goods_name like CONCAT('%',#{main_goods_name_like},'%')</if>
+		<if test="beginTime_more_than_equal !=null">and beginTime <![CDATA[ >= ]]> #{beginTime_more_than_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="endTime_less_than_equal !=null">and endTime <![CDATA[ <= ]]> #{endTime_less_than_equal,jdbcType=TIMESTAMP}  </if>
+	</sql>
+	<sql id="ifStatement">
+		main_goods_info= #{main_goods_info},
+		main_goods_id= #{main_goods_id},
+		main_goods_name= #{main_goods_name},
+		store_id= #{store_id},
+		combin_plan_info= #{combin_plan_info},
+		combin_type= #{combin_type},
+		combin_status= #{combin_status},
+		combin_form= #{combin_form},
+		combin_refuse_msg= #{combin_refuse_msg},
+		beginTime= #{beginTime},
+		endTime= #{endTime},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.CombinPlan" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_combinplan 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.CombinPlan" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_combinplan obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_combinplan obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.CombinPlan" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_combinplan obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.CombinPlan" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_combinplan(addTime,deleteStatus,main_goods_info,main_goods_id,main_goods_name,store_id,combin_plan_info,combin_type,combin_status,combin_form,combin_refuse_msg,beginTime,endTime)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{main_goods_info,jdbcType=VARCHAR},#{main_goods_id,jdbcType=BIGINT},#{main_goods_name,jdbcType=VARCHAR},#{store_id,jdbcType=BIGINT},#{combin_plan_info,jdbcType=VARCHAR},#{combin_type,jdbcType=INTEGER},#{combin_status,jdbcType=INTEGER},#{combin_form,jdbcType=INTEGER},#{combin_refuse_msg,jdbcType=VARCHAR},#{beginTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.CombinPlan">
+		update redpigmall_combinplan
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_combinplan where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_combinplan where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.CombinPlan" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_combinplan obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.CombinPlan" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_combinplan obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.CombinPlan" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_combinplan
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_combinplan where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

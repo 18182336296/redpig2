@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  tipStyle();
+});
+// 
+</script>
+<body>
+<div class="cont">
+  <h3 class="seth">库存管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/inventory_list" class="this"><b>管理</b></a></li>
+      <li><a href="$!webPath/inventory_history" ><b>操作记录</b></a></li>
+      <li><a href="$!webPath/inventory_add" ><b>库存操作</b></a></li>
+    </ul>
+  </div>
+  <form name="queryForm" id="queryForm" action="" method="post">
+    <div class="search"><span>库房名称</span><span class="size150">
+      <input name="storehouse_name" type="text" id="storehouse_name" value="$!storehouse_name"/>
+      <input name="id" type="hidden" id="id" value="$!id"/>
+      </span><span>商品名称</span><span class="size150">
+      <input name="goods_name" type="text" id="goods_name" value="$!goods_name"/>
+      </span><span class="btn_search">
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn" />
+      </span> </div>
+  </form>
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>通过商品库存管理，你可以对商品进行入库和出库操作。</li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/inventory_list" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="20%"><span class="form_btna">商品名称</span></th>
+          <th width="20%"><span class="form_btna">库房名称</span></th>
+          <th width="15%"><span class="form_btna">规格</span></th>
+          <th width="10%"><span class="form_btna">价格</span></th>
+          <th width="10%"><span class="form_btna">库存数量</span></th>
+          <th  align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <tr>
+          <td align="center"><span class="size70"> $!obj.goods_name </span></td>
+          <td align="center"><span class="size150"> $!obj.storehouse_name </span></td>
+          <td align="center">$!obj.spec_name</td>
+          <td align="center">$!obj.price</td>
+          <td align="center">$!obj.count</td>
+          <td class="hui oprate_con" align="center"><a href="javascript:void(0);" dialog_uri="$!webPath/single_inventory_update?id=$!obj.id&type=in" dialog_title="进库" dialog_width="410" dialog_height="100" dialog_id="order_shipping" class="blue">进库</a> |<a href="javascript:void(0);" dialog_uri="$!webPath/single_inventory_update?id=$!obj.id&type=out&max=$!obj.count" dialog_title="出库" dialog_width="410" dialog_height="100" dialog_id="order_shipping" class="blue">出库</a>|<a href="$!webPath/inventory_history?id=$!obj.id"  class="blue">查看历史</a></td>
+        </tr>
+        #end
+        #else
+        <tr>
+          <td colspan="7"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+        </tr>
+        #end
+      </table>
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        <div class="operation_left">
+          <ul>
+          </ul>
+        </div>
+        <div class="operation_right">
+          <div class="fenye" id="queryCondition">
+            <input name="store_house_name" type="hidden" id="store_house_name" value="$!store_house_name" />
+            <input name="mulitId" type="hidden" id="mulitId" />
+            <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+            $!gotoPageFormHTML </div>
+        </div>
+      </div>
+      #end </div>
+  </form>
+</div>
+</body>
+</html>

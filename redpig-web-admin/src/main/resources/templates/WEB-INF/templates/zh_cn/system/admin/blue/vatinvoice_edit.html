@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var val = "$!obj.status";
+	if("2"==val){
+		  jQuery("#remark_text").show();
+	  }else{
+		  jQuery("#remark_text").hide();
+		  }
+	jQuery("#status").val("$!obj.status");
+	jQuery("#theForm").validate({
+    rules:{
+	  remark:{required :true}
+	 },
+	messages:{
+	  remark:{required:"审核备注不能为空"}
+	},
+	})
+
+  jQuery("#status").change(function(){
+	  if("2"==jQuery(this).val()){
+	  	  jQuery("#remark_text").show();
+	  }else{
+	  	  jQuery("#remark_text").hide();
+	  	  }
+	  })
+});
+function div_show(obj){
+		var color_id=arguments[0];
+		var length =jQuery(".big_center_right_list ul").length;
+		var target=jQuery(".big_center_right_list ul");
+		if(length==0){
+			target=jQuery(".big_center_right_list ul");
+			}
+			jQuery(".big_center_right_list ul").hide().attr("show","false");
+			target.show().attr("show","true");
+			var index = jQuery(".pro_imgbox a[class='zoomThumbActive this']").index();
+			jQuery(".big_center_right_list li").removeClass("this");
+			jQuery(".big_center_right_list li").eq(obj).addClass("this");
+			var src = jQuery(".big_center_right_list ul[show='true'] li").eq(obj).find("img").attr("src");
+			jQuery(".big_center_right_list ul[show='true'] li").eq(obj).find("img").parent().addClass("this");
+			jQuery(".img_big_center_img_center img").attr("src",src);
+			jQuery(".product_details_img_big_bg").fadeIn();
+			jQuery(".product_details_img_big_center").fadeIn();		
+}
+function div_switch(num){
+		var index = eval(jQuery(".big_center_right_list  ul[show='true'] li[class='this']").index() + num);
+		if(index==jQuery(".big_center_right_list  ul[show='true'] li").size()){
+			index=0;
+		}
+		jQuery(".big_center_right_list  ul[show='true'] li").removeClass("this");
+		jQuery(".big_center_right_list  ul[show='true'] li").eq(index).addClass("this");
+		var src = jQuery(".big_center_right_list  ul[show='true'] li").eq(index).find("img").attr("src");
+		jQuery(".img_big_center_img_center img").attr("src",src);
+	  }
+function div_click(obj){
+		  jQuery(".big_center_right_list  ul[show='true'] li").removeClass("this");
+		  jQuery(obj).addClass("this");
+		  var src = jQuery(obj).find("img").attr("src");
+		  jQuery(".img_big_center_img_center img").attr("src",src);
+	  }
+	  function div_close(){
+		  jQuery(".product_details_img_big_bg").fadeOut();
+		  jQuery(".product_details_img_big_center").fadeOut();
+	  }
+</script>
+</head>
+<body>
+<div class="cont">
+<form method="post" id="theForm" name="ListForm" action="$!webPath/vatinvoice_save">
+   <input type="hidden" name="id" id="id" value="$!obj.id">
+   <input name="list_url" type="hidden" id="list_url" value="$!webPath/vatinvoice_list" />
+  <h1 class="seth">增票资质管理</h1>
+  <div class="nav_list">
+   <ul>
+   <li> <a href="$!webPath/vatinvoice_list"><b>增票资质列表</b></a></li>
+    <li> <a href="$!webPath/vatinvoice_edit?id=$!obj.id" class="this"><b>增票资质审核</b></a></li>
+   </ul>
+    </div>
+     <div class="edit">
+   <div class="editul setcont">
+     <ul class="set1">
+       <li class="setcont_bg">会员名称</li>
+       <li>
+           $!obj.user_name</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">公司名称</li>
+       <li>$!obj.companyName</li>
+     </ul>
+      <ul class="set1">
+       <li class="setcont_bg">注册地址</li>
+       <li>$!obj.registerAddress</li>
+     </ul>
+      <ul class="set1">
+       <li class="setcont_bg">注册电话</li>
+       <li>$!obj.registerPhone</li>
+     </ul>
+      <ul class="set1">
+       <li class="setcont_bg">开户银行</li>
+       <li>$!obj.registerbankName</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">开户银行账户</li>
+       <li>$!obj.registerbankAccount</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">提交时间</li>
+       <li>$!CommUtil.formatLongDate($!obj.addTime)</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">纳税人识别码</li>
+       <li>$!obj.taxpayerCode</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">营业执照副本</li>
+       <li><img id="img1" #if($!obj.tax_reg_card) src="$!webPath/$!obj.tax_reg_card.path/$!obj.tax_reg_card.name" #end width="160" height="110"/>
+       <p class="zp_name"><a class="blue" href="javascript:void(0);" onclick="div_show(0)">查看大图</a></p>
+       </li>
+       <div style="display:none" class="bigimgpre"><img src="$!imageWebServer/$!obj.tax_reg_card.path/$!obj.tax_reg_card.name"  /> </div>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">税务登记证</li>
+       <li><img #if($!obj.tax_general_card) src="$!imageWebServer/$!obj.tax_general_card.path/$!obj.tax_general_card.name" #end width="160" height="110"/>
+        <p class="zp_name"><a class="blue" href="javascript:void(0);" onclick="div_show(1)">查看大图</a></p>
+        </li>
+     	<div style="display:none" class="bigimgpre"><img src="$!imageWebServer/$!obj.tax_general_card.path/$!obj.tax_general_card.name"/> </div>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">一般纳税人证明</li>
+       <li><img #if($!obj.user_license) src="$!imageWebServer/$!obj.user_license.path/$!obj.user_license.name" #end width="160" height="110"/>
+        <p class="zp_name"><a class="blue" href="javascript:void(0);" onclick="div_show(2)">查看大图</a></p>
+       </li>
+       <div style="display:none" class="bigimgpre"><img src="$!imageWebServer/$!obj.user_license.path/$!obj.user_license.name"   /> </div>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">银行开户许可证</li>
+       <li><img #if($!obj.bank_permit_image) src="$!imageWebServer/$!obj.bank_permit_image.path/$!obj.bank_permit_image.name" #end width="160" height="110"/>
+        <p class="zp_name"><a class="blue" href="javascript:void(0);" onclick="div_show(3)">查看大图</a></p>
+       </li>
+       <div style="display:none" class="bigimgpre"><img src="$!imageWebServer/$!obj.bank_permit_image.path/$!obj.bank_permit_image.name"   /> </div>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">审核</li>
+       <li><span>
+      <select name="status" id="status">
+        <option value="0">未审核</option>
+        <option value="1">审核通过</option>
+        <option value="2">审核未通过</option>
+      </select>
+      </span></li>
+     </ul>
+     <ul class="set1" id="remark_text">
+       <li class="setcont_bg">审核备注</li>
+       <li><span>
+      <textarea name="remark" cols="40" rows="6" id="remark">$!obj.remark</textarea>
+      </span></li>
+     </ul>
+
+   </div>
+   </div>
+  <div class="submit">
+   <span class="pad120">
+   <input name="button" class="red_btn" type="submit" value="保存" class="save" />
+   </span>
+  </div>
+  </form>
+</div>
+ <!--弹出 start -->
+      <div class="product_details_img_big_bg"  style="display:none;"></div>
+      <div class="product_details_img_big_center" style="display:none;">
+       	<div class="img_big_center_close"><a href="javascript:void(0)" onclick="div_close()">x</a></div>
+      	
+        <div class="img_big_center_img">
+            <div class="img_big_center_left"><a href="javascript:void(0)" onclick="div_switch('-1')"></a></div>
+            <div class="img_big_center_img_center"><img src="$!big_img"/></div>
+            <div class="img_big_center_right"><a href="javascript:void(0)" onclick="div_switch('+1')"></a></div>
+        </div>
+        <div class="big_center_right" style="display:none">
+            <div class="big_center_right_list">
+               <ul style="display:none" color_id="main_img" id="main_img_show">
+                	<li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img1" src="$!imageWebServer/$!obj.tax_reg_card.path/$!{obj.tax_reg_card.name}" /><p class="name">营业执照副本</p></li>
+                    <li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img2" src="$!imageWebServer/$!obj.tax_general_card.path/$!{obj.tax_general_card.name}" /><p class="name">税务登记证</p></li>
+                    <li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img3" src="$!imageWebServer/$!obj.user_license.path/$!{obj.user_license.name}" /><p class="name">一般纳税人证明</p></li>
+                    <li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img4" src="$!imageWebServer/$!obj.bank_permit_image.path/$!{obj.bank_permit_image.name}" /><p class="name">银行开户许可证</p></li>
+                </ul>
+            </div>
+            <div>
+            </div>            
+        </div>
+      </div>
+</body>
+</html>

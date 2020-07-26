@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">运营运营管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/app_op_version_list" class="this"><b>所有版本</b></a></li>
+        <li><a href="$!webPath/app_op_version_add"><b>新增版本</b></a></li>
+        #if($!edit) 
+          <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+        #end
+    </ul>
+  </div>
+  <form method="post" id="ListForm" action="$!webPath/app_op_version_list">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="6%"><span class="form_btna">版本号</span></th>
+        <th  width="6%"><span class="form_btna">首页是否弹出框</span></th>
+        <th  width="6%"><span class="form_btna">弹出框图片</span></th>
+        <th  width="6%"><span class="form_btna">弹出框链接</span></th>
+        <th  width="6%"><span class="form_btna">是否默认icon</span></th>
+        <th  width="6%"><span class="form_btna">icon a图片</span></th>
+        <th  width="6%"><span class="form_btna">icon a文本</span></th>
+        <th  width="6%"><span class="form_btna">icon b图片</span></th>
+        <th  width="6%"><span class="form_btna">icon b文本</span></th>
+        <th  width="6%"><span class="form_btna">icon c图片</span></th>
+        <th  width="6%"><span class="form_btna">icon c文本</span></th>
+        <th  width="6%"><span class="form_btna">icon d图片</span></th>
+        <th  width="6%"><span class="form_btna">icon d文本</span></th>
+        <th  width="6%"><span class="form_btna">是否使用</span></th>
+        <th  align="center"><b class="form_btnb">操作</b></th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.app_op_v</td>
+        #if($!obj.idx_pop=="0")
+          #set($type="否")
+        #end
+        #if($!obj.idx_pop=="1")
+          #set($type="是")
+        #end
+        <td align="center">$!type</td>
+        <td align="center"><img src="$!imageWebServer/$!obj.idx_pop_img" alt="" width="80px;"height="80px;"/></td>
+        <td align="center">$!obj.idx_pop_url</td>
+        #if($!obj.tab_icon_dft=="0")
+          #set($default="是")
+        #end
+        #if($!obj.tab_icon_dft=="1")
+          #set($default="否")
+        #end
+        <td align="center">$!default</td>
+        <td align="center"><img src="$!imageWebServer/$!obj.icon_a" alt="" width="25px;"height="25px;"/></td>
+        <td align="center">$!obj.icon_a_txt</td>
+        <td align="center"><img src="$!imageWebServer/$!obj.icon_b" alt="" width="25px;"height="25px;"/></td>
+        <td align="center">$!obj.icon_b_txt</td>
+        <td align="center"><img src="$!imageWebServer/$!obj.icon_c" alt="" width="25px;"height="25px;"/></td>
+        <td align="center">$!obj.icon_c_txt</td>
+        <td align="center"><img src="$!imageWebServer/$!obj.icon_d" alt="" width="25px;"height="25px;"/></td>
+        <td align="center">$!obj.icon_d_txt</td>
+        #if($!obj.in_use=="0")
+          #set($status="否")
+        #end
+        #if($!obj.in_use=="1")
+          #set($status="是")
+        #end
+        <td align="center">$!status</td>
+        <td  align="center" class="hui oprate_con">
+        	<a href="$!webPath/app_op_version_edit?id=$!obj.id&currentPage=$!currentPage" class="blue">编辑</a>										   		#if($!obj.ad_status==0)
+        	|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/advert_del?mulitId=$!obj.id'" class="blue">删除</a>
+        #end
+        </td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="9">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+  </div>
+  #if($!objs.size()>0)
+  <div class="operate_bar">
+    <div class="fenye">
+    	<input name="ad_status" type="hidden" id="ad_status" value="$!ad_status" />
+        <input name="ad_title" type="hidden" id="ad_title" value="$!ad_title" />
+        <input type="hidden" name="mulitId" id="mulitId" />
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+    </div> 
+    
+  </div>
+  #end
+  </form>
+</div>
+</body>
+</html>

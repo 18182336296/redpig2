@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="keywords" content="#if($!store.store_seo_keywords!="") $!store.store_seo_keywords #else $!config.keywords #end" />
+<meta name="description" content="#if($!store.store_seo_description!="") $!store.store_seo_description #else $!config.description #end" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<title>$!config.title - $!{config.poweredby}</title>
+
+<link href="$!cdnServer/resources/style/system/front/jd/public/css/base.css" rel="stylesheet" type="text/css">
+<link href="$!cdnServer/resources/style/system/front/jd/static/css/web_common.css" rel="stylesheet" type="text/css">
+<link href="$!cdnServer/resources/style/system/front/jd/static/toolkit/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="$!cdnServer/resources/style/system/front/jd/public/toolkit/perfect-scrollbar/perfect-scrollbar.min.css" rel="stylesheet"/>
+
+<!-- ================== 结束基础CSS调用 ================== -->
+<!-- ================== 开始页面CSS调用 ================== -->
+<link href="$!cdnServer/resources/style/system/front/jd/static/css/home_layout.css" rel="stylesheet" type="text/css">
+
+<!-- ================== 结束页面CSS调用 ================== -->
+    <!--[if lt IE 9]>
+	<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/crossbrowserjs/es5-shim.min.js"></script>
+	<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/crossbrowserjs/html5shiv.js"></script>
+	<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/crossbrowserjs/excanvas.min.js"></script>
+	<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/crossbrowserjs/respond.min.js"></script>
+    <![endif]-->
+<!-- ================== 开始基础JavaScript调用 ================== -->
+<script>
+	//全局方法设置
+	var ncGlobal = {
+		webRoot:"$!webPath/"
+	};
+</script>
+
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/jquery/1.8.3/jquery-1.8.3.js"></script>
+
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+
+<link href="$!cdnServer/resources/style/system/front/jd/public/toolkit/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet"/>
+
+
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/layer/layer.js"></script>
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/jquery-validation/jquery.validation.min.js"></script>
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/waypoints/waypoints.js"></script>
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/jquery-thumb/jqthumb.js"></script>
+<script src="$!cdnServer/resources/style/system/front/jd/static/js/common/member.top.js"></script>
+
+<!-- ================== 结束基础JavaScript调用 ================== -->
+</head>
+<body>
+
+
+<script>
+  var hotValue = "";
+  var hotName = "";
+$(function(){
+  $(".head-search-bar").hover(null,
+          function() {
+            $('#search-tip').hide();
+          });
+    $('#keyword').focus(function(){$('#search-tip').show()})
+    //商品搜索提示
+    $("#keyword").autocomplete({
+        source: function (request, response) {
+          jQuery.getJSON(ncGlobal.webRoot + "search/suggest.json", request, function (data, status, xhr) {
+            if (status == 'success' && jQuery.isArray(data)) {
+              response(data);
+              $('#search-tip').hide();
+            }
+          });
+        },
+        select: function(ev, ui) {
+            $("#keyword").val(ui.item.label);
+            $("#top_search_form").submit();
+        },
+        delay: 500
+    });
+  var date = new Date();
+  date.setTime(date.getTime() - (60 * 60 * 1000));
+
+  var randHotNum = Math.floor(Math.random() * $("a[hotSearch]").size());
+  $("a[hotSearch]").each(function(n){
+    if (n == randHotNum) {
+      hotName = $(this).html();
+      hotValue = $(this).data("hotValue");
+      $("#keyword").attr("placeholder",hotName);
+      $("#keyword").data("hotValue",hotValue);
+      return false;
+    }
+  })
+
+
+
+
+    //搜索选项卡切换
+    $("div.head-search-tab a").on("click",function(){
+		$("div.head-search-tab a").removeClass();
+		$(this).addClass("selected");
+		$("#head-search-bar").hide();
+        $("#head-search-store-bar").hide();
+		$("#purchaseSearchDiv").hide();
+		var searchDiv=$(this).attr("data");
+		$("#"+searchDiv).show();
+	});
+});
+</script> 
+<link href="$!cdnServer/resources/style/system/front/jd/static/css/web_toolbar.css" rel="stylesheet" type="text/css">
+
+
+<script src="$!cdnServer/resources/style/system/front/jd/static/js/common/toolbar.js"></script> 
+
+<link href="$!cdnServer/resources/style/system/front/jd/static/css/web_index.css" rel="stylesheet"/>
+
+
+<style>
+/*楼层编辑标签*/
+.floor_left_sp{ display:block; width:100%;  position:absolute; top:10px; left:40%;}
+.floor_left_sp b{ position:absolute;width:100%;background:#fff;filter:alpha(opacity=80);-moz-opacity:0.80;opacity:0.80; z-index:1; }
+.floor_left_sp a{ display:block; padding:2px 8px; text-align:center; position:absolute; z-index:2; font-size:15px;border:1px solid #ccc;border-radius:3px; background:#fff; z-index:100}
+.floor_left_sp a:hover{ color:#000;border:1px solid #ff2000;}
+
+.floor_left_sp_1 a{ display:block; padding:2px 8px; text-align:center; position:absolute; z-index:2; font-size:15px;border:1px solid #ccc;border-radius:3px; background:#fff; z-index:100}
+.floor_left_sp_1 a:hover{ color:#000;border:1px solid #ff2000;}
+
+.floor_edit_a{  margin-left:10px; font-size:12px; border:1px solid #ccc;border-radius:3px; padding:2px 8px; background:#fff;} 
+.floor_edit_a:hover{ border:1px solid #ff2000; color:#ff2000; border-radius:3px;} 
+
+</style>
+
+
+<div id="floor_$!{obj.gf_sequence}" class="home-standard-layout home-style-1" data-nc-floor-panel>
+  <div class="w floor floor-t2 color0$!{obj.gf_css}"> 
+    <!-- -->
+	
+    <div class="mt"> 
+      <h2><i>F$!{obj.gf_sequence}</i>$!{obj.gf_name} <a class="floor_edit_a" href="$!webPath/redpig_goods_floor_class?id=$!{obj.id}" > 编辑</a></h2>
+      
+      <ul class="tab" data-nc-floor-tab>
+        #foreach($info in $obj.childs)
+        	<li #if($!{velocityCount}==1) class="tab-item tab-selected " #else class="tab-item " #end>
+        		
+        		#if($!{info.gf_style}=="style_jd_tab_2")
+		        	<a href="$!webPath/redpig_goods_floor_gc_items?id=$!{info.id}">$!{info.gf_name}|编辑</a>
+        		#end
+        		#if($!{info.gf_style}!="style_jd_tab_2")
+        			<a href="javascript:;">$!{info.gf_name}</a>
+        		#end
+        	</li>
+        #end
+
+      </ul>
+    </div>
+
+    <!-- 开始楼层中部内容区域 -->
+    <div class="mc" id="mc_body">
+      <div class="side">
+        <div class="side-inner">
+          <div class="banner" > 
+	          $!advTemplate
+	          <span class="floor_left_sp" ><b>
+	          <a href="$!webPath/redpig_goods_floor_left_adv?id=$!obj.id">编辑</a></b> 
+              </span>
+          </div>
+          
+          <ul class="words">
+                #foreach($gc in $gf_tools.generic_gf_gc("$!obj.gf_gc_list"))
+                #foreach($c_gc in $gc.childs)
+                <li> <a  href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank"  class="style-red"><span>$!c_gc.className</span></a> </li>
+                #end
+                #end
+          </ul>
+        </div>
+      </div>
+
+#foreach($info in $obj.childs)
+#if($!{info.gf_style}=="style_jd_tab_1")
+<div class="main ">
+  <div class="main-inner">
+    <ul class="main-body">
+      #set($map1=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","2"))
+      <li class="fore1" > 
+         <a href="javascript:void(0);" target="_blank" >
+         #if($!map1.get("img_url"))<img src='$!imageWebServer/$!map1.get("img_url")'  />#end
+         </a>  
+		<div class="floor_left_sp_1"  style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=2">编辑</a></b>
+    	</div>         
+      </li>
+      
+      #set($map2=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","3"))
+      <li class="fore2"> 
+         <a href="javascript:void(0);" target="_blank" >
+         	#if($!map2.get("img_url"))<img src='$!imageWebServer/$!map2.get("img_url")'  />#end
+         </a>
+		<div class="floor_left_sp_1"  style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=3">编辑</a></b>
+    	</div> 
+      </li>
+      
+      #set($map3=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","4"))
+      <li class="fore3"> 
+         <a href="javascript:void(0);" target="_blank" >
+         	#if($!map3.get("img_url"))<img src='$!imageWebServer/$!map3.get("img_url")'  />#end
+         </a>
+		
+		<div class="floor_left_sp_1" style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=4">编辑</a></b>
+    	</div>
+      </li>
+      
+      #set($map4=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","5"))
+      <li class="fore4"> 
+         <a href="javascript:void(0);" target="_blank" >
+         	#if($!map4.get("img_url"))<img src='$!imageWebServer/$!map4.get("img_url")'  />#end
+         </a>  
+         	
+		<div class="floor_left_sp_1" style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=5">编辑</a></b>
+    	</div>
+      </li>
+      
+      #set($map5=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","6"))
+      <li class="fore4"> 
+         <a href="javascript:void(0);" target="_blank" >
+         	#if($!map5.get("img_url"))<img src='$!imageWebServer/$!map5.get("img_url")'  />#end
+         </a>  
+		<div class="floor_left_sp_1" style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=6">编辑</a></b>
+    	</div>
+      </li>
+      
+    </ul>
+    
+    <ul class="main-extra">
+      #set($map6=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","7"))
+      <li class="fore1"> 
+         <a href="javascript:void(0);" target="_blank" >
+         	#if($!map6.get("img_url"))<img src='$!imageWebServer/$!map6.get("img_url")'  />#end
+         </a>
+		<div class="floor_left_sp_1" style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=7">编辑</a></b>
+    	</div>
+      </li>
+      
+      #set($map7=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","8"))
+      <li class="fore2"> 
+         <a href="javascript:void(0);" target="_blank" >
+         	#if($!map7.get("img_url"))<img src='$!imageWebServer/$!map7.get("img_url")'  />#end
+         </a>  
+		<div class="floor_left_sp_1" style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=8">编辑</a></b>
+    	</div>
+      </li>
+      
+      #set($map8=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","9"))
+      <li class="fore3"> 
+         <a href="javascript:void(0);" target="_blank" >
+         	#if($!map8.get("img_url"))<img src='$!imageWebServer/$!map8.get("img_url")'  />#end
+         </a>  
+		<div class="floor_left_sp_1" style="position:absolute;z-indent:2;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=9">编辑</a></b>
+    	</div>
+      </li>
+    </ul>
+    
+  </div>
+  #set($map=$!gf_tools.generic_style_jd_tab("$!info.style_jd_tab_1","1"))
+  <div class="main-side"> 
+    <ul class="slider-main" data-nc-floor-slider>
+      <li style="position:relative;"> 
+      	<a href='$!map.get("href_url")' target="_blank"> 
+		  #if($!map.get("img_url"))
+		  	<img src='$!imageWebServer/$!map.get("img_url")' />
+		  #end
+      		
+      	</a>
+		<div class="floor_left_sp" style="position:absolute;z-indent:2;left:50%;top:0;">
+        	<b><a href="$!webPath/style_jd_tab_1?id=$!info.id&index=1&width=363&height=277&module_id=1">编辑</a></b>
+    	</div>
+      </li>
+      <li>
+		
+      </li>
+    </ul>
+            
+  </div>
+  
+</div>
+#end
+
+#if($!{info.gf_style}=="style_jd_tab_2")
+<div class="main tab-hide">
+    <ul class="g-list">
+              #foreach($goods in $gf_tools.generic_goods("$!info.gf_gc_goods"))
+              #if($!goods)
+              #if($!goods.goods_main_photo)               
+              	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+              #else
+              #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+              #set($goods_url="$!webPath/items_$!{goods.id}")
+              #if($!config.second_domain_open)
+              #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+              #end
+                <li class="fore1">
+                    <div class="g-img">
+                        <a target="_blank" href="$!goods_url" title="$!{goods.goods_name} ">
+                            <img width="130" height="130" alt="$!{goods.goods_name} "
+                                 src="$!img">
+                        </a>
+                    </div>
+                    <div class="g-name">
+                        <a target="_blank" href="$!goods_url" title="$!{goods.goods_name} ">$!{goods.goods_name}</a>
+                    </div>
+                    <div class="g-price"><span>￥</span>$!{goods.goods_current_price}</div>
+                </li>
+              #end 
+              #end
+    </ul>
+</div>
+#end
+
+
+
+#end
+       </div>
+     </div>
+</div>
+#set($map=$!gf_tools.generic_goods_list("$!obj.gf_list_goods"))
+<div id="floor02" class="home-standard-layout home-style-brand">
+  <ul>
+    #if($!map.get("goods1"))
+    	#set($goods=$!map.get("goods1"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		  <span class="floor_edit_a" style="position: absolute; top: 0; left: 0;">
+		  	<a href="$!webPath/redpig_goods_floor_list_items?id=$!obj.id">编辑</a>
+		  </span>
+		</div>
+    </li>
+    #else
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+		  <span class="floor_edit_a" style="position: absolute; top: 0; left: 0;">
+		  	<a href="$!webPath/redpig_goods_floor_list_items?id=$!obj.id">编辑</a>
+		  </span>
+		</div>
+    </li>
+    #end
+    
+    #if($!map.get("goods2"))
+    	#set($goods=$!map.get("goods2"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end    
+
+    #if($!map.get("goods3"))
+    	#set($goods=$!map.get("goods3"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+
+    #if($!map.get("goods4"))
+    	#set($goods=$!map.get("goods4"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+
+    #if($!map.get("goods5"))
+    	#set($goods=$!map.get("goods5"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+    
+    
+    #if($!map.get("goods6"))
+    	#set($goods=$!map.get("goods6"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+
+    #if($!map.get("goods7"))
+    	#set($goods=$!map.get("goods7"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+
+    #if($!map.get("goods8"))
+    	#set($goods=$!map.get("goods8"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+
+    #if($!map.get("goods9"))
+    	#set($goods=$!map.get("goods9"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+
+    #if($!map.get("goods10"))
+    	#set($goods=$!map.get("goods10"))
+	    #if($!goods.goods_main_photo)                   
+	    	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	    #else
+	    	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	    #end
+    <li class="fore1"> 
+		<div style="position: relative; width: 170px; height: 89px;">
+			<a href="$!webPath/items_$!{goods.id}" target="_blank" title='$!CommUtil.substring("$!goods.goods_name",15)'> 
+				<img src="$!img"> 
+			</a>
+		</div>
+    </li>
+    #end
+
+  </ul>
+</div>
+
+
+<div class="hr16"></div>
+<link href="$!cdnServer/resources/style/system/front/jd/public/toolkit/bxslider/jquery.bxslider.css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/style/system/front/jd/public/toolkit/bxslider/jquery.bxslider.js"></script>
+<script src="$!cdnServer/resources/style/system/front/jd/static/js/home/home_index.js"></script>
+<script>
+    $(function(){
+        //页内导航条位置
+        $('#nav').onePageNav({
+            filter: ':not(.exception)'
+        });
+        //滚动固定分类导航条
+        $(".pinned").pin({
+            containerSelector: ".main-layout"
+        });
+    });
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信扫描支付 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.redpigmall.validate.js"></script>
+</head>
+
+<body>
+$!httpInclude.include("/top")
+<!--head-->
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1") 
+ <div class="main">
+ <!--- 微信支付 start --->
+    <div class="wechat_payment">
+        <div class="wechat_payment_top">
+        	<div class="wechat_payment_top_logo"><img src="$!cdnServer/resources/style/common/images/payment/wechat_pay_logo.jpg" /></div>
+            <div class="wechat_payment_top_code"><img src="$!webPath/pay_code/generate?url=$!code_url" /></div>
+            <div class="wechat_payment_top_word">请打开微信扫描二维码支付！</div>
+        </div>
+        <div class="wechat_payment_bottom">
+        	<h3><img src="$!cdnServer/resources/style/common/images/payment/wechat_pay_code_t.png" /></h3>
+            <span><img src="$!cdnServer/resources/style/common/images/payment/wechat_pay_code_tc.png" /></span>
+        </div>
+    </div>
+
+ </div>
+$!httpInclude.include("/footer")
+</body>
+</html>

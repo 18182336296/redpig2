@@ -1,0 +1,53 @@
+#foreach($record in $records)
+#if($!record.cloudPurchaseLottery.status==15)
+<div class="record_item"><!--已揭晓的夺宝记录，循环此div-->
+<div class="pic">
+<a href="$!webPath/cloudpurchase_items?id=$!record.cloudPurchaseLottery.id"><img src="$!record.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo"></a>
+</div>
+<div class="text">
+<p class="name">$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</p>
+<p>总需：$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_price人次</p>
+<p>期号：$!record.cloudPurchaseLottery.period</p>
+<p>获得者：<b class="blue">$!record.cloudPurchaseLottery.lucky_username</b>本期共参与$!record.cloudPurchaseLottery.lucky_usertimes人次</p>
+<p>幸运号码：<b class="red">$!record.cloudPurchaseLottery.lucky_code</b></p>
+<p>揭晓时间：$!CommUtil.formatLongDate($!record.cloudPurchaseLottery.announced_date)</p>
+<p>本期参与：<b class="red">$!record.purchased_times</b>人次&nbsp;<a href="javascript:void(0);" onClick="show_numb(this);" class="blue" num="$!record.purchased_times" code="$!record.purchased_codes" goods_name="$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_name">查看我的号码</a></p>
+#if($!record.status==1)
+#if($!record.cloudPurchaseLottery.delivery_status==-1)
+<p class="win_address">
+恭喜您中奖！
+<a href="">填写收货地址</a>
+</p>
+#end
+#if($!record.cloudPurchaseLottery.delivery_status==0)
+<p class="win_address">
+未发货
+</p>
+#end
+#if($!record.cloudPurchaseLottery.delivery_status==1)
+<p class="win_address">
+已发货
+<a href="">确认收货</a>
+</p>
+#end
+#if($!record.cloudPurchaseLottery.delivery_status==2)
+<p class="win_address">
+已收货
+</p>
+#end
+#end
+</div>
+</div>
+#else
+<div class="record_item"><!--正在进行中的夺宝记录，循环此div-->
+<div class="pic">
+<a href="$!webPath/cloudpurchase_items?id=$!record.cloudPurchaseLottery.id"><img src="$!record.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo"></a>
+</div>
+<div class="text">
+<p class="name">$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</p>
+<p>总需：$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_price人次</p>
+<p>期号：$!record.cloudPurchaseLottery.period</p>
+</div>
+</div>
+#end
+#end

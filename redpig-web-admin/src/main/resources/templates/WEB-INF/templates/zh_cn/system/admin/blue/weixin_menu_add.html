@@ -1,0 +1,342 @@
+<script>
+jQuery(document).ready(function(){
+	
+    jQuery("#theForm").validate({
+	   rules:{
+		   menu_name:{required:true},
+		   reply_id:{maxlength:5},
+		   r_id:{maxlength:5},
+		   menu_key:{required:true,
+					 remote:{
+						url: "$!webPath/weixin_menukey_verify",     //后台处理程序
+						type: "post",               //数据发送方式
+						dataType: "json",           //接受数据格式   
+						data: {                     //要传递的数据
+							  "menu_key": function(){return jQuery("#menu_key").val();},
+							  "store_id":"$!store.id",
+							  "menu_id":function(){return jQuery("#menu_id").val();}
+						      }
+						     }
+			         }
+	   },
+	   messages:{
+	       menu_name:{required:"菜单名称不能为空"},
+		   reply_id:{maxlength:"不能超过5条"},
+		   r_id:{maxlength:"不能超过5条"},
+		   menu_key:{required:"菜单Key不能为空",remote:"菜单Key已存在"}
+	   }
+	});
+	jQuery('#beginTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+	jQuery(":radio").click(function(){
+	   var menu_type=jQuery(this).val()
+	   if(menu_type=="click"){
+	     jQuery("#menu_key_info").show();
+		 jQuery("#tr_menu_key_content").show();
+		 jQuery("#menu_url_info").hide();
+	   }
+	   if(menu_type=="view"){
+	     jQuery("#menu_key_info").hide();
+		 jQuery("#tr_menu_key_content").hide();
+		 jQuery("#menu_url_info").show();	   
+	   }
+	});
+	#if($!obj.menu_type=="click")
+	     jQuery("#menu_key_info").show();
+		  jQuery("#tr_menu_key_content").show();
+		 jQuery("#menu_url_info").hide();	
+	#end
+	#if($!obj.menu_type=="view")
+	     jQuery("#menu_key_info").hide();
+		  jQuery("#tr_menu_key_content").hide();
+		 jQuery("#menu_url_info").show();	
+	#end	
+	jQuery(":radio[value=$!{obj.menu_type}]").attr("checked",true);
+	
+	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  jQuery("#keycontent").mouseover(function(){
+		jQuery(".weixin_ques").show();								 
+					 });
+
+jQuery("#keycontent").mouseout(function(){
+		jQuery(".weixin_ques").hide();										
+										});
+});
+function menu_remove(){
+  if(confirm('删除菜单会同步删除下级，确定删除？')){
+     window.location.href='$!webPath/weixin_menu_delete?menu_id=$!obj.id';
+  }
+}
+function s1(){//url事件
+    jQuery("#s2").hide();//消息类型
+	jQuery("#s1").show();//菜单内容
+	jQuery("#ss_1").hide();//标题查询
+	jQuery("#ss_3").hide();//图文
+	jQuery("#ss_2").hide();//纯文本
+	jQuery("#s3").hide();//查询到的消息
+}
+function s2(){//点击事件
+    jQuery("#s1").hide();//菜单内容
+	jQuery("#s2").show();//消息类型
+	jQuery("#ss_1").show();//标题查询
+	jQuery("#s3").hide();//查询到的消息
+}
+function s2_way1(){//纯文本
+    jQuery("#ss_3").hide();//图文
+    jQuery("#ss_2").show();//纯文本
+	jQuery("#ss_1").show();//标题查询
+	jQuery("#s1").hide();//消息
+	jQuery("#s3").hide();//查询到的消息
+}
+function s2_way2(){//图文
+    jQuery("#ss_2").hide();//纯文本
+    jQuery("#ss_3").show();//图文
+	jQuery("#ss_1").show();//标题查询
+	jQuery("#s1").hide();//消息
+	jQuery("#s3").hide();//查询到的消息
+	
+}
+
+function saveForm(){
+	
+	#if($!list && $!size>0)
+	   #foreach($!adv in $!list)
+		 var way=jQuery(":radio[value=$!{adv.way}]").val();
+		 
+	    #end
+	 #else
+	   var way="";
+       var radio=document.getElementsByName("way");
+       for(var i=0;i<radio.length;i++){
+              if(radio[i].checked==true){
+              way=radio[i].value;
+               break;
+             }
+        }
+		
+	 #end
+	
+	    var info = jQuery("#info").val();	 
+		var endTime=jQuery("#endTime").val();
+		
+		var beginTime=jQuery("#beginTime").val();
+		
+	     jQuery.ajax({
+                  type: 'POST',
+                  url: '$!webPath/weixin_menu_ajax',
+                  data: {
+			         "info": info,
+					 "way":way,
+					 "endTime":endTime,
+					 "beginTime":beginTime
+                  },
+				  dataType:"json",
+                  beforeSend: function() {
+					  
+					  },
+		          success: function(data) {
+					    //document.getElementById("r_id").options.length=0;
+						jQuery("#r_id").empty();
+						if(data!=""){
+					       jQuery("#ss_2").hide();//纯文本
+                           jQuery("#ss_3").hide();//图文
+						   jQuery("#s1").hide();//消息
+						   
+						   jQuery(data).each(function(index,item){	
+                              jQuery("#r_id").append("<option value='"+item.id+"'>"
+									        +item.title+"</option>");
+							  jQuery("#s3").show();			
+                           });
+				        }else{
+						    jQuery("#s3").hide();
+						    alert("没有相关消息，请重新输入！");
+							
+					     }
+
+				  }       
+               });
+   }
+			
+		
+
+function plat_menu_save(){
+	jQuery("#theForm").submit();
+}
+function del(){
+	var id = jQuery("#rid").val();
+	if(confirm("确定删除当前素材？")){
+		window.location.href="$!webPath/weixin_menu_delete?id="+id;
+	}
+}
+</script>
+<form action="$!webPath/weixin_menu_save" method="post" id="theForm">
+  <div class="edit">
+    <div class="editul setcont">
+      <ul class="set1">
+        <li class="setcont_bg"><b style="color:#F00">*</b>&nbsp;&nbsp;菜单名称：</li>
+        <li><span class="size200">
+          <input name="menu_name" type="text" id="menu_name" value="$!obj.menu_name"  />
+          <input name="menu_id" type="hidden" id="menu_id" value="$!obj.id" />
+          <input name="pmenu_id" type="hidden" id="pmenu_id" value="$!pmenu_id" />
+          </span> </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><b style="color:#F00">*</b>&nbsp;&nbsp;菜单序号：</li>
+        <li><span class="size200">
+          <input name="menu_sequence" type="text" id="menu_sequence" value="$!obj.menu_sequence" style="width:200px;" />
+          </span>  <span id="nothis"><strong class="q"></strong><strong class="w">正序排列</strong><strong class="c"></strong></span> </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">菜单类型：</li>
+        <li>
+          <label > <span class="use_code"><strong>
+            <input type="radio" name="menu_type" id="menu_type" value="view" checked="checked" onclick="s1()"/>
+            </strong><strong class="usecode"> URL请求</strong></span> </label>
+          <label > <span class="use_code"><strong>
+            <input name="menu_type" type="radio" id="menu_type" value="click" onclick="s2()" />
+            </strong><strong class="usecode"> 点击事件</strong></span> </label>
+            <span id="nothis"><strong class="q"></strong><strong class="w">不添加素材，点击事件可直接回复key内容</strong><strong class="c"></strong></span>
+           
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">菜单URL：</li>
+        <li><span class="size200">
+          <input name="menu_url" type="text" id="menu_url" value="$!obj.menu_url"  />
+          </span> </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><b style="color:#F00">*</b>&nbsp;&nbsp;菜单Key：</li>
+        <li><span class="size200">
+          <input name="menu_key" type="text" id="menu_key" value="$!obj.menu_key" />
+          </span> </li>
+      </ul>
+      <ul class="set1" id="s2" >
+        <li class="setcont_bg">消息类型：</li>
+        <li >
+          <label onclick="s2_way1()"> <span class="use_code"><strong>
+            <input type="radio" name="way" id="way" value="0"  checked/>
+            </strong><strong class="usecode"> 纯文本&nbsp;</strong></span> </label>
+            
+          <label onclick="s2_way2()"> <span class="use_code"><strong>
+            <input name="way" type="radio" id="way" value="1"  />
+            </strong><strong class="usecode"> 图文</strong></span> </label>
+          &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="$!webPath/reply_content_add" class="this" id="site_base" ><b>+ 新增素材</b></a> </li>
+        <script>
+		jQuery(document).ready(function(){
+			#foreach($!adv in $!list)
+             jQuery(":radio[value=$!{adv.way}]").attr("checked",true);
+			 #end
+		});
+        </script>
+      </ul>
+      <ul class="set1" id="s1" >
+        <li class="setcont_bg">菜单Key内容：</li>
+        <li >
+          <span><textarea name="menu_key_content" type="text" id="menu_key_content" style="width:200px; height:80px" >$!obj.menu_key_content</textarea></span>
+           <span id="nothis"><strong class="q"></strong><strong class="w" id="keycontent">Key内容填写说明</strong><strong class="c"></strong></span>
+        </li>
+        <style>
+	  .weixin_ques {
+		position:absolute;
+		left:375px;
+		margin-top:26px;
+		border:3px solid #60AFFF;
+		z-index:999;
+		}
+	  </style>
+      <div class="weixin_ques" style="display:none">
+      URL:当菜单类型为URL请求时，为了更好的用户体验，请将内容填写与URL地址一致，这样用户每次点击菜单都会成为登录状态,点击事件：若不添加素材,直接回复的消息内容
+      </div>
+      </ul>
+      <ul class="set1" id="ss_1" style="display:none">
+        <li class="setcont_bg" >请输入标题：</li>
+        <li><span ><input name="info" type="text" id="info" value="$!info" style=" height:21px; margin-top:2px;" size="13" /></span> </li>
+         <li><span>创建时间：</span></li>
+         <li><span ><input name="beginTime"  style=" height:21px; margin-top:2px;" type="text" id="beginTime" value="$!beginTime" size="10"/></span></li>
+         <li><span>-</span></li>
+         <li><span ><input  name="endTime"  style=" height:21px; margin-top:2px;" type="text" id="endTime" value="$!endTime" size="10" /></span></li>
+        <li>
+          <span><input name="save" type="button" class="base_button" style=" width:60px; height:25px; border:1px solid #3872CB; border-radius:2px; color:#fff; cursor:pointer; background:#54b3eb;" id="save" onclick="saveForm();" value="查询"/></span>
+         <span id="nothis"><strong class="q"></strong><strong class="w">若已添加,查询相同类型</strong><strong class="c"></strong></span> 
+        </li>
+      </ul>
+      <ul class="set1" id="ss_2" style="display:none">
+        <li class="setcont_bg" >请选择纯文本消息：</li>
+        <li > <span>
+          <select style="height:75px; width:200px;"  id="reply_id" name="reply_id"  multiple="multiple">
+            
+                   #foreach($!adv in $!replylist)
+                   
+            <option name="" value="$!adv.id">$!adv.title </option>
+            
+                   #end
+                
+          </select>
+          </span> <span id="nothis"><strong class="q"></strong><strong class="w">按住Ctrl可实现多选，最多5条</strong><strong class="c"></strong></span> </li>
+      </ul>
+      <ul class="set1" id="ss_3" style="display:none">
+        <li class="setcont_bg" >请选择图文消息：</li>
+        <li> <span>
+          <select style="height:75px; width:200px;"  id="rc_id" name="rc_id"  multiple="multiple">
+          
+                    #foreach($!adv in $!rc_list)
+                    
+            <option name="" value="$!adv.id">$!adv.title</option>
+            
+                    #end
+                 
+          </select>
+          </span> <span id="nothis"><strong class="q"></strong><strong class="w">按住Ctrl可实现多选，最多5条</strong><strong class="c"></strong></span> </li>
+      </ul>
+      <ul class="set1" id="s3" style="display:none">
+        <li class="setcont_bg" >请选择消息：</li>
+        <li> <span>
+          <select style="height:57px; width:200px;"  id="r_id" name="r_id" size="2" multiple="multiple">
+          
+          </select>
+          </span> <span id="nothis"><strong class="q"></strong><strong class="w">按住Ctrl可实现多选，最多5条,若已添加，请选择相同类型</strong><strong class="c"></strong></span> </li>
+      </ul>
+      #if($!edit && $!size>0)
+      <ul class="set1" >
+        <li class="setcont_bg" >已添加的消息：</li>
+        <li > <span>
+          <select style="height:57px; width:200px;"   id="rid" name="rid"  multiple="multiple">
+            
+                   #foreach($!adv in $!list)
+                   
+            <option name="" value="$!adv.id" ondblclick="del()">$!adv.title </option>
+            
+                   #end
+                
+          </select>
+          </span> <span id="nothis"><strong class="q"></strong><strong class="w">已添加的消息,双击可删除</strong><strong class="c"></strong></span> </li>
+      </ul>
+      #end
+      <div class="submit"><span class="pad120">
+        <input type="button" onclick="plat_menu_save()" value="保存" style="cursor:pointer;"/>
+        <input name="按钮" onclick="menu_remove();" type="button" style="cursor:pointer;" value="删除"/>
+        </span></div>
+    </div>
+  </div>
+</form>

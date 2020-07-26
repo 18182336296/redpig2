@@ -1,0 +1,1237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoodsMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Goods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="seo_keywords" property="seo_keywords" jdbcType="VARCHAR"/>
+		<result column="seo_description" property="seo_description" jdbcType="VARCHAR"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="goods_price" property="goods_price" jdbcType="DECIMAL"/>
+		<result column="store_price" property="store_price" jdbcType="DECIMAL"/>
+		<result column="goods_inventory" property="goods_inventory" jdbcType="INTEGER"/>
+		<result column="inventory_type" property="inventory_type" jdbcType="VARCHAR"/>
+		<result column="goods_salenum" property="goods_salenum" jdbcType="INTEGER"/>
+		<result column="goods_serial" property="goods_serial" jdbcType="VARCHAR"/>
+		<result column="goods_weight" property="goods_weight" jdbcType="DECIMAL"/>
+		<result column="goods_volume" property="goods_volume" jdbcType="DECIMAL"/>
+		<result column="goods_fee" property="goods_fee" jdbcType="VARCHAR"/>
+		<result column="goods_details" property="goods_details" jdbcType="VARCHAR"/>
+		<result column="goods_details_mobile" property="goods_details_mobile" jdbcType="VARCHAR"/>
+		<result column="pack_details" property="pack_details" jdbcType="VARCHAR"/>
+		<result column="goods_service" property="goods_service" jdbcType="VARCHAR"/>
+		<result column="store_recommend" property="store_recommend" jdbcType="BIT"/>
+		<result column="store_recommend_time" property="store_recommend_time" jdbcType="TIMESTAMP"/>
+		<result column="goods_recommend" property="goods_recommend" jdbcType="BIT"/>
+		<result column="goods_click" property="goods_click" jdbcType="INTEGER"/>
+		<result column="goods_collect" property="goods_collect" jdbcType="INTEGER"/>
+		<result column="goods_cod" property="goods_cod" jdbcType="INTEGER"/>
+		<result column="goods_status" property="goods_status" jdbcType="INTEGER"/>
+		<result column="publish_goods_status" property="publish_goods_status" jdbcType="INTEGER"/>
+		<result column="goods_seller_time" property="goods_seller_time" jdbcType="TIMESTAMP"/>
+		<result column="goods_transfee" property="goods_transfee" jdbcType="INTEGER"/>
+		<result column="goods_property" property="goods_property" jdbcType="VARCHAR"/>
+		<result column="goods_inventory_detail" property="goods_inventory_detail" jdbcType="VARCHAR"/>
+		<result column="ztc_status" property="ztc_status" jdbcType="INTEGER"/>
+		<result column="ztc_pay_status" property="ztc_pay_status" jdbcType="INTEGER"/>
+		<result column="ztc_price" property="ztc_price" jdbcType="INTEGER"/>
+		<result column="ztc_dredge_price" property="ztc_dredge_price" jdbcType="INTEGER"/>
+		<result column="ztc_apply_time" property="ztc_apply_time" jdbcType="TIMESTAMP"/>
+		<result column="ztc_begin_time" property="ztc_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ztc_gold" property="ztc_gold" jdbcType="INTEGER"/>
+		<result column="ztc_click_num" property="ztc_click_num" jdbcType="INTEGER"/>
+		<result column="ztc_admin_content" property="ztc_admin_content" jdbcType="VARCHAR"/>
+		<result column="group_buy" property="group_buy" jdbcType="INTEGER"/>
+		<result column="nuke_buy" property="nuke_buy" jdbcType="INTEGER"/>
+		<result column="collage_buy" property="collage_buy" jdbcType="INTEGER"/>
+		<result column="evaluate_count" property="evaluate_count" jdbcType="INTEGER"/>
+		<result column="goods_choice_type" property="goods_choice_type" jdbcType="INTEGER"/>
+		<result column="activity_status" property="activity_status" jdbcType="INTEGER"/>
+		<result column="activity_goods_id" property="activity_goods_id" jdbcType="BIGINT"/>
+		<result column="goods_current_price" property="goods_current_price" jdbcType="DECIMAL"/>
+		<result column="combin_status" property="combin_status" jdbcType="INTEGER"/>
+		<result column="combin_suit_id" property="combin_suit_id" jdbcType="BIGINT"/>
+		<result column="combin_parts_id" property="combin_parts_id" jdbcType="BIGINT"/>
+		<result column="mail_trans_fee" property="mail_trans_fee" jdbcType="DECIMAL"/>
+		<result column="express_trans_fee" property="express_trans_fee" jdbcType="DECIMAL"/>
+		<result column="ems_trans_fee" property="ems_trans_fee" jdbcType="DECIMAL"/>
+		<result column="description_evaluate" property="description_evaluate" jdbcType="DECIMAL"/>
+		<result column="well_evaluate" property="well_evaluate" jdbcType="DECIMAL"/>
+		<result column="middle_evaluate" property="middle_evaluate" jdbcType="DECIMAL"/>
+		<result column="bad_evaluate" property="bad_evaluate" jdbcType="DECIMAL"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_hot" property="mobile_hot" jdbcType="INTEGER"/>
+		<result column="mobile_hotTime" property="mobile_hotTime" jdbcType="TIMESTAMP"/>
+		<result column="enough_reduce" property="enough_reduce" jdbcType="INTEGER"/>
+		<result column="direct_selling" property="direct_selling" jdbcType="INTEGER"/>
+		
+		<result column="order_enough_reduce_id" property="order_enough_reduce_id" jdbcType="VARCHAR"/>
+		<result column="order_enough_give_status" property="order_enough_give_status" jdbcType="INTEGER"/>
+		<result column="order_enough_if_give" property="order_enough_if_give" jdbcType="INTEGER"/>
+		<result column="buyGift_amount" property="buyGift_amount" jdbcType="DECIMAL"/>
+		<result column="buyGift_id" property="buyGift_id" jdbcType="BIGINT"/>
+		<result column="tax_invoice" property="tax_invoice" jdbcType="INTEGER"/>
+		<result column="f_sale_type" property="f_sale_type" jdbcType="INTEGER"/>
+		<result column="goods_f_code" property="goods_f_code" jdbcType="VARCHAR"/>
+		<result column="advance_sale_type" property="advance_sale_type" jdbcType="INTEGER"/>
+		<result column="advance_date" property="advance_date" jdbcType="TIMESTAMP"/>
+		<result column="goods_warn_inventory" property="goods_warn_inventory" jdbcType="INTEGER"/>
+		<result column="warn_inventory_status" property="warn_inventory_status" jdbcType="INTEGER"/>
+		<result column="goods_top_format_id" property="goods_top_format_id" jdbcType="BIGINT"/>
+		<result column="goods_top_format_content" property="goods_top_format_content" jdbcType="VARCHAR"/>
+		<result column="goods_bottom_format_id" property="goods_bottom_format_id" jdbcType="BIGINT"/>
+		<result column="goods_bottom_format_content" property="goods_bottom_format_content" jdbcType="VARCHAR"/>
+		<result column="qr_img_path" property="qr_img_path" jdbcType="VARCHAR"/>
+		<result column="price_history" property="price_history" jdbcType="DECIMAL"/>
+		<result column="delivery_area" property="delivery_area" jdbcType="VARCHAR"/>
+		<result column="delivery_area_id" property="delivery_area_id" jdbcType="BIGINT"/>
+		<result column="whether_free" property="whether_free" jdbcType="INTEGER"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_hot" property="weixin_hot" jdbcType="INTEGER"/>
+		<result column="weixin_hotTime" property="weixin_hotTime" jdbcType="TIMESTAMP"/>
+		<result column="goods_specs_info" property="goods_specs_info" jdbcType="VARCHAR"/>
+		<result column="advance_sale_info" property="advance_sale_info" jdbcType="VARCHAR"/>
+		<result column="goods_limit" property="goods_limit" jdbcType="INTEGER"/>
+		<result column="goods_limit_count" property="goods_limit_count" jdbcType="INTEGER"/>
+		<result column="goods_ad_words" property="goods_ad_words" jdbcType="VARCHAR"/>
+		<result column="goods_color_json" property="goods_color_json" jdbcType="VARCHAR"/>
+		<result column="goods_tags" property="goods_tags" jdbcType="VARCHAR"/>
+		<result column="recommand_goods" property="recommand_goods" jdbcType="VARCHAR"/>
+		<result column="inventory_set" property="inventory_set" jdbcType="INTEGER"/>
+		<result column="refuse_info" property="refuse_info" jdbcType="VARCHAR"/>
+		<result column="merchantService_info" property="merchantService_info" jdbcType="VARCHAR"/>
+		<association property="goods_store" column="goods_store_id" select="com.redpigmall.dao.StoreMapper.selectByPrimaryKey"/>
+		<association property="gc" column="gc_id" select="com.redpigmall.dao.GoodsClassMapper.selectByPrimaryKey"/>
+		<association property="goods_main_photo" column="goods_main_photo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="goods_brand" column="goods_brand_id" select="com.redpigmall.dao.GoodsBrandMapper.selectByPrimaryKey"/>
+		<association property="ztc_admin" column="ztc_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="group" column="group_id" select="com.redpigmall.dao.GroupMapper.selectByPrimaryKey"/>
+		<association property="limitSelling" column="limitSelling_id" select="com.redpigmall.dao.LimitSellingMapper.selectByPrimaryKey"/>
+		<association property="nuke" column="nuke_id" select="com.redpigmall.dao.NukeMapper.selectByPrimaryKey"/>
+		<association property="collage" column="collage_id" select="com.redpigmall.dao.CollageBuyMapper.selectByPrimaryKey"/>
+		<association property="transport" column="transport_id" select="com.redpigmall.dao.TransportMapper.selectByPrimaryKey"/>
+		<association property="user_admin" column="user_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<collection property="goods_photos" column="id" select="com.redpigmall.dao.AccessoryMapper.getGoodsPhotosByAccessoryId"/>
+		<collection property="goods_ugcs" column="id" select="com.redpigmall.dao.UserGoodsClassMapper.getGoodsUgcsByGoodsId"/>
+		<collection property="goods_specs" column="id" select="com.redpigmall.dao.GoodsSpecPropertyMapper.getGoodsSpecsByGoodsId"/>
+		<collection property="group_goods_list" column="id" select="com.redpigmall.dao.GroupGoodsMapper.getGgGoodsByGoodsId"/>
+		<collection property="evaluates" column="id" select="com.redpigmall.dao.EvaluateMapper.getEvaluateGoodsByGoodsId"/>
+		<collection property="ag_goods_list" column="id" select="com.redpigmall.dao.ActivityGoodsMapper.getAgGoodsByGoodsId"/>
+		<collection property="carts" column="id" select="com.redpigmall.dao.GoodsCartMapper.getGoodsByGoodsId"/>
+		<collection property="cgs" column="id" select="com.redpigmall.dao.ComplaintGoodsMapper.getGoodsByGoodsId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Goods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="seo_keywords" property="seo_keywords" jdbcType="VARCHAR"/>
+		<result column="seo_description" property="seo_description" jdbcType="VARCHAR"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="goods_price" property="goods_price" jdbcType="DECIMAL"/>
+		<result column="store_price" property="store_price" jdbcType="DECIMAL"/>
+		<result column="goods_inventory" property="goods_inventory" jdbcType="INTEGER"/>
+		<result column="inventory_type" property="inventory_type" jdbcType="VARCHAR"/>
+		<result column="goods_salenum" property="goods_salenum" jdbcType="INTEGER"/>
+		<result column="goods_serial" property="goods_serial" jdbcType="VARCHAR"/>
+		<result column="goods_weight" property="goods_weight" jdbcType="DECIMAL"/>
+		<result column="goods_volume" property="goods_volume" jdbcType="DECIMAL"/>
+		<result column="goods_fee" property="goods_fee" jdbcType="VARCHAR"/>
+		<result column="goods_details" property="goods_details" jdbcType="VARCHAR"/>
+		<result column="goods_details_mobile" property="goods_details_mobile" jdbcType="VARCHAR"/>
+		<result column="pack_details" property="pack_details" jdbcType="VARCHAR"/>
+		<result column="goods_service" property="goods_service" jdbcType="VARCHAR"/>
+		<result column="store_recommend" property="store_recommend" jdbcType="BIT"/>
+		<result column="store_recommend_time" property="store_recommend_time" jdbcType="TIMESTAMP"/>
+		<result column="goods_recommend" property="goods_recommend" jdbcType="BIT"/>
+		<result column="goods_click" property="goods_click" jdbcType="INTEGER"/>
+		<result column="goods_collect" property="goods_collect" jdbcType="INTEGER"/>
+		<result column="goods_cod" property="goods_cod" jdbcType="INTEGER"/>
+		<result column="goods_status" property="goods_status" jdbcType="INTEGER"/>
+		<result column="publish_goods_status" property="publish_goods_status" jdbcType="INTEGER"/>
+		<result column="goods_seller_time" property="goods_seller_time" jdbcType="TIMESTAMP"/>
+		<result column="goods_transfee" property="goods_transfee" jdbcType="INTEGER"/>
+		<result column="goods_property" property="goods_property" jdbcType="VARCHAR"/>
+		<result column="goods_inventory_detail" property="goods_inventory_detail" jdbcType="VARCHAR"/>
+		<result column="ztc_status" property="ztc_status" jdbcType="INTEGER"/>
+		<result column="ztc_pay_status" property="ztc_pay_status" jdbcType="INTEGER"/>
+		<result column="ztc_price" property="ztc_price" jdbcType="INTEGER"/>
+		<result column="ztc_dredge_price" property="ztc_dredge_price" jdbcType="INTEGER"/>
+		<result column="ztc_apply_time" property="ztc_apply_time" jdbcType="TIMESTAMP"/>
+		<result column="ztc_begin_time" property="ztc_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ztc_gold" property="ztc_gold" jdbcType="INTEGER"/>
+		<result column="ztc_click_num" property="ztc_click_num" jdbcType="INTEGER"/>
+		<result column="ztc_admin_content" property="ztc_admin_content" jdbcType="VARCHAR"/>
+		<result column="group_buy" property="group_buy" jdbcType="INTEGER"/>
+		<result column="nuke_buy" property="nuke_buy" jdbcType="INTEGER"/>
+		<result column="collage_buy" property="collage_buy" jdbcType="INTEGER"/>
+		<result column="evaluate_count" property="evaluate_count" jdbcType="INTEGER"/>
+		<result column="goods_choice_type" property="goods_choice_type" jdbcType="INTEGER"/>
+		<result column="activity_status" property="activity_status" jdbcType="INTEGER"/>
+		<result column="activity_goods_id" property="activity_goods_id" jdbcType="BIGINT"/>
+		<result column="goods_current_price" property="goods_current_price" jdbcType="DECIMAL"/>
+		<result column="combin_status" property="combin_status" jdbcType="INTEGER"/>
+		<result column="combin_suit_id" property="combin_suit_id" jdbcType="BIGINT"/>
+		<result column="combin_parts_id" property="combin_parts_id" jdbcType="BIGINT"/>
+		<result column="mail_trans_fee" property="mail_trans_fee" jdbcType="DECIMAL"/>
+		<result column="express_trans_fee" property="express_trans_fee" jdbcType="DECIMAL"/>
+		<result column="ems_trans_fee" property="ems_trans_fee" jdbcType="DECIMAL"/>
+		<result column="description_evaluate" property="description_evaluate" jdbcType="DECIMAL"/>
+		<result column="well_evaluate" property="well_evaluate" jdbcType="DECIMAL"/>
+		<result column="middle_evaluate" property="middle_evaluate" jdbcType="DECIMAL"/>
+		<result column="bad_evaluate" property="bad_evaluate" jdbcType="DECIMAL"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_hot" property="mobile_hot" jdbcType="INTEGER"/>
+		<result column="mobile_hotTime" property="mobile_hotTime" jdbcType="TIMESTAMP"/>
+		<result column="enough_reduce" property="enough_reduce" jdbcType="INTEGER"/>
+		<result column="direct_selling" property="direct_selling" jdbcType="INTEGER"/>
+		
+		<result column="order_enough_reduce_id" property="order_enough_reduce_id" jdbcType="VARCHAR"/>
+		<result column="order_enough_give_status" property="order_enough_give_status" jdbcType="INTEGER"/>
+		<result column="order_enough_if_give" property="order_enough_if_give" jdbcType="INTEGER"/>
+		<result column="buyGift_amount" property="buyGift_amount" jdbcType="DECIMAL"/>
+		<result column="buyGift_id" property="buyGift_id" jdbcType="BIGINT"/>
+		<result column="tax_invoice" property="tax_invoice" jdbcType="INTEGER"/>
+		<result column="f_sale_type" property="f_sale_type" jdbcType="INTEGER"/>
+		<result column="goods_f_code" property="goods_f_code" jdbcType="VARCHAR"/>
+		<result column="advance_sale_type" property="advance_sale_type" jdbcType="INTEGER"/>
+		<result column="advance_date" property="advance_date" jdbcType="TIMESTAMP"/>
+		<result column="goods_warn_inventory" property="goods_warn_inventory" jdbcType="INTEGER"/>
+		<result column="warn_inventory_status" property="warn_inventory_status" jdbcType="INTEGER"/>
+		<result column="goods_top_format_id" property="goods_top_format_id" jdbcType="BIGINT"/>
+		<result column="goods_top_format_content" property="goods_top_format_content" jdbcType="VARCHAR"/>
+		<result column="goods_bottom_format_id" property="goods_bottom_format_id" jdbcType="BIGINT"/>
+		<result column="goods_bottom_format_content" property="goods_bottom_format_content" jdbcType="VARCHAR"/>
+		<result column="qr_img_path" property="qr_img_path" jdbcType="VARCHAR"/>
+		<result column="price_history" property="price_history" jdbcType="DECIMAL"/>
+		<result column="delivery_area" property="delivery_area" jdbcType="VARCHAR"/>
+		<result column="delivery_area_id" property="delivery_area_id" jdbcType="BIGINT"/>
+		<result column="whether_free" property="whether_free" jdbcType="INTEGER"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_hot" property="weixin_hot" jdbcType="INTEGER"/>
+		<result column="weixin_hotTime" property="weixin_hotTime" jdbcType="TIMESTAMP"/>
+		<result column="goods_specs_info" property="goods_specs_info" jdbcType="VARCHAR"/>
+		<result column="advance_sale_info" property="advance_sale_info" jdbcType="VARCHAR"/>
+		<result column="goods_limit" property="goods_limit" jdbcType="INTEGER"/>
+		<result column="goods_limit_count" property="goods_limit_count" jdbcType="INTEGER"/>
+		<result column="goods_ad_words" property="goods_ad_words" jdbcType="VARCHAR"/>
+		<result column="goods_color_json" property="goods_color_json" jdbcType="VARCHAR"/>
+		<result column="goods_tags" property="goods_tags" jdbcType="VARCHAR"/>
+		<result column="recommand_goods" property="recommand_goods" jdbcType="VARCHAR"/>
+		<result column="inventory_set" property="inventory_set" jdbcType="INTEGER"/>
+		<result column="refuse_info" property="refuse_info" jdbcType="VARCHAR"/>
+		<result column="merchantService_info" property="merchantService_info" jdbcType="VARCHAR"/>
+		<association property="gc" column="gc_id" select="com.redpigmall.dao.GoodsClassMapper.selectByPrimaryKey"/>
+		<association property="goods_main_photo" column="goods_main_photo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="user_admin" column="user_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="goods_brand" column="goods_brand_id" select="com.redpigmall.dao.GoodsBrandMapper.selectByPrimaryKey"/>
+		
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,
+		addTime,
+		deleteStatus,
+		seo_keywords,
+		seo_description,
+		goods_name,
+		goods_price,
+		store_price,goods_inventory,inventory_type,goods_salenum,goods_serial,goods_weight,goods_volume,goods_fee,
+		goods_details,goods_details_mobile,pack_details,goods_service,store_recommend,store_recommend_time,goods_recommend,
+		goods_click,goods_collect,goods_cod,goods_store_id,goods_status,publish_goods_status,goods_seller_time,goods_transfee,
+		gc_id,goods_main_photo_id,goods_brand_id,goods_property,goods_inventory_detail,ztc_status,ztc_pay_status,ztc_price,
+		ztc_dredge_price,ztc_apply_time,ztc_begin_time,ztc_gold,ztc_click_num,ztc_admin_id,ztc_admin_content,group_id,limitSelling_id,
+		nuke_id,collage_id,group_buy,nuke_buy,collage_buy,
+		evaluate_count,goods_choice_type,activity_status,activity_goods_id,goods_current_price,combin_status,combin_suit_id,
+		combin_parts_id,mail_trans_fee,express_trans_fee,ems_trans_fee,transport_id,description_evaluate,well_evaluate,
+		middle_evaluate,bad_evaluate,goods_type,user_admin_id,mobile_recommend,mobile_recommendTime,mobile_hot,mobile_hotTime,
+		enough_reduce,direct_selling,order_enough_reduce_id,order_enough_give_status,order_enough_if_give,buyGift_amount,buyGift_id,tax_invoice,
+		f_sale_type,goods_f_code,advance_sale_type,advance_date,goods_warn_inventory,warn_inventory_status,goods_top_format_id,
+		goods_top_format_content,goods_bottom_format_id,goods_bottom_format_content,qr_img_path,price_history,delivery_area,
+		delivery_area_id,whether_free,weixin_recommend,weixin_recommendTime,weixin_hot,weixin_hotTime,goods_specs_info,
+		advance_sale_info,goods_limit,goods_limit_count,goods_ad_words,goods_color_json,goods_tags,recommand_goods,inventory_set,
+		refuse_info,merchantService_info
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		
+		<if test="ids !=null and ids.size() &gt; 0">
+			and obj.id in
+			<foreach collection="ids" index="index" item="item" separator="," open="(" close=")"> 
+	            #{item}
+	    	</foreach>
+		</if>
+		
+		<if test="ids_no !=null and ids_no.size()&gt;0">
+			and obj.id not in
+			<foreach collection="ids_no" index="index" item="item" separator="," open="(" close=")"> 
+	            #{item}
+	    	</foreach>
+		</if>
+		
+		<if test="redpig_g_id !=null">and id!=#{redpig_g_id,jdbcType=BIGINT}</if>
+		<if test="id_no !=null">and id !=#{id_no,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		
+		<if test="date_format_addTime != null">and <![CDATA[ DATE_FORMAT(addTime,'%Y-%m-%d')=#{date_format_addTime,jdbcType=TIMESTAMP} ]]></if>
+		
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="seo_keywords != null">and seo_keywords = #{seo_keywords,jdbcType=VARCHAR}</if>
+		<if test="seo_description != null">and seo_description = #{seo_description,jdbcType=VARCHAR}</if>
+		<if test="goods_name != null">and goods_name = #{goods_name,jdbcType=VARCHAR}</if>
+		<if test="redpig_goods_name != null">and goods_name like concat(concat('%',#{redpig_goods_name}),'%')</if>
+		
+		<if test="goods_name_no != null">and goods_name is not null</if>
+		
+		<if test="goods_price != null">and goods_price = #{goods_price,jdbcType=DECIMAL}</if>
+		<if test="store_price != null">and store_price = #{store_price,jdbcType=DECIMAL}</if>
+		<if test="goods_inventory != null">and goods_inventory = #{goods_inventory,jdbcType=INTEGER}</if>
+		
+		<if test="goods_inventory_more_than != null">and goods_inventory <![CDATA[ > ]]> #{goods_inventory_more_than,jdbcType=INTEGER}</if>
+		
+		<if test="inventory_type != null">and inventory_type = #{inventory_type,jdbcType=VARCHAR}</if>
+		<if test="goods_salenum != null">and goods_salenum = #{goods_salenum,jdbcType=INTEGER}</if>
+		<if test="goods_serial != null">and goods_serial = #{goods_serial,jdbcType=VARCHAR}</if>
+		<if test="goods_weight != null">and goods_weight = #{goods_weight,jdbcType=DECIMAL}</if>
+		<if test="goods_volume != null">and goods_volume = #{goods_volume,jdbcType=DECIMAL}</if>
+		<if test="goods_fee != null">and goods_fee = #{goods_fee,jdbcType=VARCHAR}</if>
+		<if test="goods_details != null">and goods_details = #{goods_details,jdbcType=VARCHAR}</if>
+		<if test="goods_details_mobile != null">and goods_details_mobile = #{goods_details_mobile,jdbcType=VARCHAR}</if>
+		<if test="pack_details != null">and pack_details = #{pack_details,jdbcType=VARCHAR}</if>
+		<if test="goods_service != null">and goods_service = #{goods_service,jdbcType=VARCHAR}</if>
+		<if test="store_recommend != null">and store_recommend = #{store_recommend,jdbcType=BIT}</if>
+		<if test="store_recommend_time != null">and store_recommend_time = #{store_recommend_time,jdbcType=TIMESTAMP}</if>
+		<if test="goods_recommend != null">and goods_recommend = #{goods_recommend,jdbcType=BIT}</if>
+		<if test="goods_click != null">and goods_click = #{goods_click,jdbcType=INTEGER}</if>
+		<if test="goods_collect != null">and goods_collect = #{goods_collect,jdbcType=INTEGER}</if>
+		<if test="goods_cod != null">and goods_cod = #{goods_cod,jdbcType=INTEGER}</if>
+		<if test="goods_status != null">and goods_status = #{goods_status,jdbcType=INTEGER}</if>
+		<if test="redpig_goods_status != null"> <![CDATA[ and goods_status > #{redpig_goods_status,jdbcType=INTEGER} ]]>   </if>
+		<if test="publish_goods_status != null">and publish_goods_status = #{publish_goods_status,jdbcType=INTEGER}</if>
+		<if test="goods_seller_time != null">and goods_seller_time = #{goods_seller_time,jdbcType=TIMESTAMP}</if>
+		<if test="goods_transfee != null">and goods_transfee = #{goods_transfee,jdbcType=INTEGER}</if>
+		<if test="goods_property != null">and goods_property = #{goods_property,jdbcType=VARCHAR}</if>
+		
+		<if test="gtp_names != null and gtp_names.size() >0 ">
+			and 
+			<foreach collection="gtp_names" index="index" item="item" separator="or" open="(" close=")"> 
+		           goods_property like concat(concat('%',#{item}),'%')
+		    </foreach>
+		</if>
+		
+		<if test="gtp_values != null and gtp_values.size() >0 ">
+			and 
+			<foreach collection="gtp_values" index="index" item="item" separator="or" open="(" close=")"> 
+		           goods_property like concat(concat('%',#{item}),'%')
+		    </foreach>
+		</if>
+		
+		<if test="goods_inventory_detail != null">and goods_inventory_detail = #{goods_inventory_detail,jdbcType=VARCHAR}</if>
+		<if test="ztc_status != null">and ztc_status = #{ztc_status,jdbcType=INTEGER}</if>
+		
+		<if test="ztc_status_more_than_equal != null">and ztc_status <![CDATA[ >= ]]> #{ztc_status_more_than_equal,jdbcType=INTEGER}</if>
+		<if test="ztc_status_less_than_equal != null">and ztc_status <![CDATA[ <= ]]> #{ztc_status_less_than_equal,jdbcType=INTEGER}</if>
+		
+		<if test="ztc_status_1 != null and ztc_status_2 != null">
+			and (ztc_status <![CDATA[ <= ]]> #{ztc_status_1,jdbcType=INTEGER} or ztc_status <![CDATA[ >= ]]> #{ztc_status_2,jdbcType=INTEGER})
+		</if>
+		
+		<if test="ztc_pay_status != null">and ztc_pay_status = #{ztc_pay_status,jdbcType=INTEGER}</if>
+		<if test="ztc_price != null">and ztc_price = #{ztc_price,jdbcType=INTEGER}</if>
+		<if test="ztc_dredge_price != null">and ztc_dredge_price = #{ztc_dredge_price,jdbcType=INTEGER}</if>
+		<if test="ztc_apply_time != null">and ztc_apply_time = #{ztc_apply_time,jdbcType=TIMESTAMP}</if>
+		<if test="ztc_begin_time != null">and ztc_begin_time = #{ztc_begin_time,jdbcType=TIMESTAMP}</if>
+		
+		<if test="ztc_begin_time_more_than_equal != null">and ztc_begin_time <![CDATA[ >= ]]> #{ztc_begin_time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="ztc_begin_time_less_than_equal != null">and ztc_begin_time <![CDATA[ <= ]]> #{ztc_begin_time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="ztc_gold != null">and ztc_gold = #{ztc_gold,jdbcType=INTEGER}</if>
+		
+		<if test="ztc_gold_more_than != null">and ztc_gold <![CDATA[ > ]]> #{ztc_gold_more_than,jdbcType=INTEGER}</if>
+		
+		<if test="ztc_click_num != null">and ztc_click_num = #{ztc_click_num,jdbcType=INTEGER}</if>
+		<if test="ztc_admin_content != null">and ztc_admin_content = #{ztc_admin_content,jdbcType=VARCHAR}</if>
+		<if test="group_buy != null">and group_buy = #{group_buy,jdbcType=INTEGER}</if>
+		<if test="nuke_buy != null">and nuke_buy = #{nuke_buy,jdbcType=INTEGER}</if>
+		<if test="collage_buy != null">and collage_buy = #{collage_buy,jdbcType=INTEGER}</if>
+		<if test="evaluate_count != null">and evaluate_count = #{evaluate_count,jdbcType=INTEGER}</if>
+		<if test="goods_choice_type != null">and goods_choice_type = #{goods_choice_type,jdbcType=INTEGER}</if>
+		<if test="activity_status != null">and activity_status = #{activity_status,jdbcType=INTEGER}</if>
+		<if test="activity_goods_id != null">and activity_goods_id = #{activity_goods_id,jdbcType=BIGINT}</if>
+		<if test="goods_current_price != null">and goods_current_price = #{goods_current_price,jdbcType=DECIMAL}</if>
+		
+		<if test="goods_current_price_more_than_equal != null">and goods_current_price <![CDATA[ >= ]]> #{goods_current_price_more_than_equal,jdbcType=DECIMAL}</if>
+		<if test="goods_current_price_less_than_equal != null">and goods_current_price <![CDATA[ <= ]]> #{goods_current_price_less_than_equal,jdbcType=DECIMAL}</if>
+		
+		<if test="combin_status != null">and combin_status = #{combin_status,jdbcType=INTEGER}</if>
+		<if test="combin_suit_id != null">and combin_suit_id = #{combin_suit_id,jdbcType=BIGINT}</if>
+		<if test="combin_parts_id != null">and combin_parts_id = #{combin_parts_id,jdbcType=BIGINT}</if>
+		<if test="combin_suit_id1 ==-1 and combin_parts_id2 == -1">and (combin_suit_id is null or combin_parts_id is null)</if>
+		<if test="mail_trans_fee != null">and mail_trans_fee = #{mail_trans_fee,jdbcType=DECIMAL}</if>
+		<if test="express_trans_fee != null">and express_trans_fee = #{express_trans_fee,jdbcType=DECIMAL}</if>
+		<if test="ems_trans_fee != null">and ems_trans_fee = #{ems_trans_fee,jdbcType=DECIMAL}</if>
+		<if test="description_evaluate != null">and description_evaluate = #{description_evaluate,jdbcType=DECIMAL}</if>
+		<if test="well_evaluate != null">and well_evaluate = #{well_evaluate,jdbcType=DECIMAL}</if>
+		<if test="middle_evaluate != null">and middle_evaluate = #{middle_evaluate,jdbcType=DECIMAL}</if>
+		<if test="bad_evaluate != null">and bad_evaluate = #{bad_evaluate,jdbcType=DECIMAL}</if>
+		<if test="goods_type != null">and goods_type = #{goods_type,jdbcType=INTEGER}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=INTEGER}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="mobile_hot != null">and mobile_hot = #{mobile_hot,jdbcType=INTEGER}</if>
+		<if test="mobile_hotTime != null">and mobile_hotTime = #{mobile_hotTime,jdbcType=TIMESTAMP}</if>
+		<if test="enough_reduce != null">and enough_reduce = #{enough_reduce,jdbcType=INTEGER}</if>
+		<if test="direct_selling != null">and direct_selling = #{direct_selling,jdbcType=INTEGER}</if>
+		<if test="order_enough_reduce_id != null">and order_enough_reduce_id = #{order_enough_reduce_id,jdbcType=VARCHAR}</if>
+		
+		<if test="order_enough_reduce_id_or_not != null">and (order_enough_reduce_id = #{order_enough_reduce_id_or_not,jdbcType=VARCHAR} or order_enough_reduce_id is null)</if>
+		
+		<if test="order_enough_give_status != null">and order_enough_give_status = #{order_enough_give_status,jdbcType=INTEGER}</if>
+		<if test="order_enough_if_give != null">and order_enough_if_give = #{order_enough_if_give,jdbcType=INTEGER}</if>
+		<if test="buyGift_amount != null">and buyGift_amount = #{buyGift_amount,jdbcType=DECIMAL}</if>
+		<if test="buyGift_id != null">and buyGift_id = #{buyGift_id,jdbcType=BIGINT}</if>
+		<if test="tax_invoice != null">and tax_invoice = #{tax_invoice,jdbcType=INTEGER}</if>
+		<if test="f_sale_type != null">and f_sale_type = #{f_sale_type,jdbcType=INTEGER}</if>
+		<if test="goods_f_code != null">and goods_f_code = #{goods_f_code,jdbcType=VARCHAR}</if>
+		<if test="advance_sale_type != null">and advance_sale_type = #{advance_sale_type,jdbcType=INTEGER}</if>
+		<if test="advance_date != null">and advance_date = #{advance_date,jdbcType=TIMESTAMP}</if>
+		<if test="goods_warn_inventory != null">and goods_warn_inventory = #{goods_warn_inventory,jdbcType=INTEGER}</if>
+		<if test="warn_inventory_status != null">and warn_inventory_status = #{warn_inventory_status,jdbcType=INTEGER}</if>
+		<if test="goods_top_format_id != null">and goods_top_format_id = #{goods_top_format_id,jdbcType=BIGINT}</if>
+		<if test="goods_top_format_content != null">and goods_top_format_content = #{goods_top_format_content,jdbcType=VARCHAR}</if>
+		<if test="goods_bottom_format_id != null">and goods_bottom_format_id = #{goods_bottom_format_id,jdbcType=BIGINT}</if>
+		<if test="goods_bottom_format_content != null">and goods_bottom_format_content = #{goods_bottom_format_content,jdbcType=VARCHAR}</if>
+		<if test="qr_img_path != null">and qr_img_path = #{qr_img_path,jdbcType=VARCHAR}</if>
+		<if test="price_history != null">and price_history = #{price_history,jdbcType=DECIMAL}</if>
+		<if test="delivery_area != null">and delivery_area = #{delivery_area,jdbcType=VARCHAR}</if>
+		<if test="delivery_area_id != null">and delivery_area_id = #{delivery_area_id,jdbcType=BIGINT}</if>
+		<if test="whether_free != null">and whether_free = #{whether_free,jdbcType=INTEGER}</if>
+		<if test="weixin_recommend != null">and weixin_recommend = #{weixin_recommend,jdbcType=INTEGER}</if>
+		<if test="weixin_recommendTime != null">and weixin_recommendTime = #{weixin_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="weixin_hot != null">and weixin_hot = #{weixin_hot,jdbcType=INTEGER}</if>
+		<if test="weixin_hotTime != null">and weixin_hotTime = #{weixin_hotTime,jdbcType=TIMESTAMP}</if>
+		<if test="goods_specs_info != null">and goods_specs_info = #{goods_specs_info,jdbcType=VARCHAR}</if>
+		<if test="advance_sale_info != null">and advance_sale_info = #{advance_sale_info,jdbcType=VARCHAR}</if>
+		<if test="goods_limit != null">and goods_limit = #{goods_limit,jdbcType=INTEGER}</if>
+		<if test="goods_limit_count != null">and goods_limit_count = #{goods_limit_count,jdbcType=INTEGER}</if>
+		<if test="goods_ad_words != null">and goods_ad_words = #{goods_ad_words,jdbcType=VARCHAR}</if>
+		<if test="goods_color_json != null">and goods_color_json = #{goods_color_json,jdbcType=VARCHAR}</if>
+		<if test="goods_tags != null">and goods_tags = #{goods_tags,jdbcType=VARCHAR}</if>
+		<if test="recommand_goods != null">and recommand_goods = #{recommand_goods,jdbcType=VARCHAR}</if>
+		<if test="inventory_set != null">and inventory_set = #{inventory_set,jdbcType=INTEGER}</if>
+		<if test="refuse_info != null">and refuse_info = #{refuse_info,jdbcType=VARCHAR}</if>
+		<if test="merchantService_info != null">and merchantService_info = #{merchantService_info,jdbcType=VARCHAR}</if>
+		
+		<if test="goods_store_id !=null">and goods_store_id=#{goods_store_id,jdbcType=BIGINT}</if>
+		<if test="goods_brand_id !=null">and goods_brand_id=#{goods_brand_id,jdbcType=BIGINT}</if>
+		
+		<if test="goods_brand_ids !=null and goods_brand_ids.size() > 0 ">
+			and 
+			<foreach collection="goods_brand_ids" index="index" item="item" separator="or" open="(" close=")"> 
+		           goods_brand_id = #{item}
+		    </foreach>
+		</if>
+		
+		<if test="user_admin_id !=null">and user_admin_id=#{user_admin_id,jdbcType=BIGINT}</if>
+		<if test="ztc_gold_more_than !=null">and ztc_gold <![CDATA[ > ]]> #{ztc_gold_more_than,jdbcType=INTEGER}  </if>
+		<if test="transport_id !=null">and transport_id=#{transport_id,jdbcType=BIGINT}</if>
+		<if test="gc_id !=null">and gc_id=#{gc_id,jdbcType=BIGINT}</if>
+		
+		<if test="gc_ids !=null and gc_ids.size() &gt; 0">
+			and gc_id in 
+			<foreach collection="gc_ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+		</if>
+		
+		<if test="goods_main_photo_id !=null">and goods_main_photo_id=#{goods_main_photo_id,jdbcType=BIGINT}</if>
+		<if test="ztc_admin_id !=null">and ztc_admin_id=#{ztc_admin_id,jdbcType=BIGINT}</if>
+		<if test="group_id !=null">and group_id=#{group_id,jdbcType=BIGINT}</if>
+		<if test="limitSelling_id !=null and limitSelling_id != -1">and limitSelling_id=#{limitSelling_id,jdbcType=BIGINT}</if>
+		<if test="limitSelling_id !=null and limitSelling_id == -1">and limitSelling_id is not null</if>
+
+		<if test="nuke_id !=null and nuke_id != -1">and nuke_id=#{nuke_id,jdbcType=BIGINT}</if>
+		<if test="nuke_id !=null and nuke_id == -1">and nuke_id is not null</if>
+
+		<if test="collage_id !=null and collage_id != -1">and collage_id=#{collage_id,jdbcType=BIGINT}</if>
+		<if test="collage_id !=null and collage_id == -1">and collage_id is not null</if>
+		
+		<if test="user_admin_id !=null">and user_admin_id=#{user_admin_id,jdbcType=BIGINT}</if>
+		<if test="redpig_tag1 !=null or redpig_tag2 !=null">
+			and (goods_tags like concat(concat('%',#{redpig_tag1}),'%') or goods_tags like concat(concat('%',#{redpig_tag2}),'%') )
+		</if>
+		
+		<if test="id_no_in !=null and id_no_in.size() &gt; 0">
+			and id not in 
+			<foreach collection="id_no_in" index="index" item="item" separator="," open="(" close=")"> 
+		            #{item}
+		    </foreach>
+		</if>
+		
+		<if test="goods_name_like !=null">
+			and goods_name like concat(concat('%',#{goods_name_like}),'%') 
+		</if>
+		
+		
+		
+		<if test="goods_status_ids !=null and goods_status_ids.size() &gt; 0">
+			and obj.goods_status in
+			<foreach collection="goods_status_ids" index="index" item="item" separator="," open="(" close=")"> 
+	            #{item}
+	    	</foreach>
+		</if>
+		
+		<if test="gc_ids !=null and gc_ids.size() &gt; 0">
+			and obj.gc_id in
+			<foreach collection="gc_ids" index="index" item="item" separator="," open="(" close=")"> 
+	            #{item}
+	    	</foreach>
+		</if>
+		
+		<if test="goods_type_id_goods_inventory !=null ">
+			(and  goods_type = #{rgoods_type1,jdbcType=INTEGER} and id in 
+				<foreach collection="rids" index="index" item="item" separator="," open="(" close=")"> 
+		            #{item}
+		    	</foreach>
+	    	) or 
+	    	(and  goods_type = #{rgoods_type2,jdbcType=INTEGER} 
+	    		and goods_inventory <![CDATA[ > ]]> #{rgoods_inventory_more_than,jdbcType=TIMESTAMP}
+	    	)
+		</if>
+		
+		<if test="combin_suit_id_or_combin_parts_id !=null and combin_suit_id_or_combin_parts_id==-1">
+			and (combin_suit_id is null or combin_parts_id is null)
+		</if>
+		
+		<if test="ids_or !=null and ids_or.size() &gt; 0">
+			or obj.id in
+			<foreach collection="ids_or" index="index" item="item" separator="," open="(" close=")"> 
+	            #{item}
+	    	</foreach>
+		</if>
+		
+	</sql>
+	<sql id="ifStatement">
+		seo_keywords= #{seo_keywords},
+		seo_description= #{seo_description},
+		goods_name= #{goods_name},
+		goods_price= #{goods_price},
+		store_price= #{store_price},
+		goods_inventory= #{goods_inventory},
+		inventory_type= #{inventory_type},
+		goods_salenum= #{goods_salenum},
+		goods_serial= #{goods_serial},
+		goods_weight= #{goods_weight},
+		goods_volume= #{goods_volume},
+		goods_fee= #{goods_fee},
+		goods_details= #{goods_details},
+		goods_details_mobile= #{goods_details_mobile},
+		pack_details= #{pack_details},
+		goods_service= #{goods_service},
+		store_recommend= #{store_recommend},
+		store_recommend_time= #{store_recommend_time},
+		goods_recommend= #{goods_recommend},
+		goods_click= #{goods_click},
+		goods_collect= #{goods_collect},
+		goods_cod= #{goods_cod},
+		<if test="goods_store == null or goods_store.id == null">goods_store_id = null,</if>
+		<if test="goods_store != null and goods_store.id != null">goods_store_id = #{goods_store.id,jdbcType=BIGINT},</if>
+		goods_status= #{goods_status},
+		publish_goods_status= #{publish_goods_status},
+		goods_seller_time= #{goods_seller_time},
+		goods_transfee= #{goods_transfee},
+		<if test="gc == null or gc.id == null">gc_id = null,</if>
+		<if test="gc != null and gc.id != null">gc_id = #{gc.id,jdbcType=BIGINT},</if>
+		<if test="goods_main_photo == null or goods_main_photo.id == null">goods_main_photo_id = null,</if>
+		<if test="goods_main_photo != null and goods_main_photo.id != null">goods_main_photo_id = #{goods_main_photo.id,jdbcType=BIGINT},</if>
+		<if test="goods_brand == null or goods_brand.id == null">goods_brand_id = null,</if>
+		<if test="goods_brand != null and goods_brand.id != null">goods_brand_id = #{goods_brand.id,jdbcType=BIGINT},</if>
+		goods_property= #{goods_property},
+		goods_inventory_detail= #{goods_inventory_detail},
+		ztc_status= #{ztc_status},
+		ztc_pay_status= #{ztc_pay_status},
+		ztc_price= #{ztc_price},
+		ztc_dredge_price= #{ztc_dredge_price},
+		ztc_apply_time= #{ztc_apply_time},
+		ztc_begin_time= #{ztc_begin_time},
+		ztc_gold= #{ztc_gold},
+		ztc_click_num= #{ztc_click_num},
+		<if test="ztc_admin == null or ztc_admin.id == null">ztc_admin_id = null,</if>
+		<if test="ztc_admin != null and ztc_admin.id != null">ztc_admin_id = #{ztc_admin.id,jdbcType=BIGINT},</if>
+		ztc_admin_content= #{ztc_admin_content},
+		<if test="group == null or group.id == null">group_id = null,</if>
+		<if test="group != null and group.id != null">group_id = #{group.id,jdbcType=BIGINT},</if>
+		<if test="limitSelling == null or limitSelling.id == null">limitSelling_id = null,</if>
+		<if test="limitSelling != null and limitSelling.id != null">limitSelling_id = #{limitSelling.id,jdbcType=BIGINT},</if>
+		<if test="nuke == null or nuke.id == null">nuke_id = null,</if>
+		<if test="nuke != null and nuke.id != null">nuke_id = #{nuke.id,jdbcType=BIGINT},</if>
+		<if test="collage == null or collage.id == null">collage_id = null,</if>
+		<if test="collage != null and collage.id != null">collage_id = #{collage.id,jdbcType=BIGINT},</if>
+		group_buy= #{group_buy},
+		nuke_buy= #{nuke_buy},
+		collage_buy= #{collage_buy},
+		evaluate_count= #{evaluate_count},
+		goods_choice_type= #{goods_choice_type},
+		activity_status= #{activity_status},
+		activity_goods_id= #{activity_goods_id},
+		goods_current_price= #{goods_current_price},
+		combin_status= #{combin_status},
+		combin_suit_id= #{combin_suit_id},
+		combin_parts_id= #{combin_parts_id},
+		mail_trans_fee= #{mail_trans_fee},
+		express_trans_fee= #{express_trans_fee},
+		ems_trans_fee= #{ems_trans_fee},
+		<if test="transport == null or transport.id == null">transport_id = null,</if>
+		<if test="transport != null and transport.id != null">transport_id = #{transport.id,jdbcType=BIGINT},</if>
+		description_evaluate= #{description_evaluate},
+		well_evaluate= #{well_evaluate},
+		middle_evaluate= #{middle_evaluate},
+		bad_evaluate= #{bad_evaluate},
+		goods_type= #{goods_type},
+		<if test="user_admin == null or user_admin.id == null">user_admin_id = null,</if>
+		<if test="user_admin != null and user_admin.id != null">user_admin_id = #{user_admin.id,jdbcType=BIGINT},</if>
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+		mobile_hot= #{mobile_hot},
+		mobile_hotTime= #{mobile_hotTime},
+		enough_reduce= #{enough_reduce},
+		direct_selling= #{direct_selling},
+		order_enough_reduce_id= #{order_enough_reduce_id},
+		order_enough_give_status= #{order_enough_give_status},
+		order_enough_if_give= #{order_enough_if_give},
+		buyGift_amount= #{buyGift_amount},
+		buyGift_id= #{buyGift_id},
+		tax_invoice= #{tax_invoice},
+		f_sale_type= #{f_sale_type},
+		goods_f_code= #{goods_f_code},
+		advance_sale_type= #{advance_sale_type},
+		advance_date= #{advance_date},
+		goods_warn_inventory= #{goods_warn_inventory},
+		warn_inventory_status= #{warn_inventory_status},
+		goods_top_format_id= #{goods_top_format_id},
+		goods_top_format_content= #{goods_top_format_content},
+		goods_bottom_format_id= #{goods_bottom_format_id},
+		goods_bottom_format_content= #{goods_bottom_format_content},
+		qr_img_path= #{qr_img_path},
+		price_history= #{price_history},
+		delivery_area= #{delivery_area},
+		delivery_area_id= #{delivery_area_id},
+		whether_free= #{whether_free},
+		weixin_recommend= #{weixin_recommend},
+		weixin_recommendTime= #{weixin_recommendTime},
+		weixin_hot= #{weixin_hot},
+		weixin_hotTime= #{weixin_hotTime},
+		goods_specs_info= #{goods_specs_info},
+		advance_sale_info= #{advance_sale_info},
+		goods_limit= #{goods_limit},
+		goods_limit_count= #{goods_limit_count},
+		goods_ad_words= #{goods_ad_words},
+		goods_color_json= #{goods_color_json},
+		goods_tags= #{goods_tags},
+		recommand_goods= #{recommand_goods},
+		inventory_set= #{inventory_set},
+		refuse_info= #{refuse_info},
+		merchantService_info= #{merchantService_info},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" useCache="true" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goods 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_goods obj 
+		
+		<if test="goods_store_user_userName !=null">
+			JOIN redpigmall_store s ON s.id = obj.goods_store_id
+			JOIN redpigmall_user u ON s.id = u.store_id
+			AND u.userName = #{goods_store_user_userName,jdbcType=VARCHAR} 
+		</if>
+		
+		<if test="ugc_id !=null">
+			JOIN redpigmall_goods_ugc ugc ON obj.id = ugc.goods_id and ugc.class_id=#{ugc_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="goods_store_user_id !=null">
+			JOIN redpigmall_store s ON obj.goods_store_id = s.id
+			JOIN redpigmall_user u ON u.store_id = s.id
+		</if>
+		
+		<if test="goods_ugcs_ugc_ids !=null ">
+			JOIN redpigmall_goods_ugc gu ON obj.id = gu.goods_id AND
+			<foreach collection="goods_ugcs_ugc_ids" index="index" item="item" open="(" separator="or" close=")"> 
+	           gu.class_id=#{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		
+		<if test="goodsSpecPropertyIds !=null and goodsSpecPropertyIds.size() >0">
+			JOIN redpigmall_goods_spec gs on obj.id = gs.goods_id
+			JOIN redpigmall_goodsspecproperty gsp on gsp.id = gs.spec_id and
+			<foreach collection="goodsSpecPropertyIds" index="index" item="item" open="(" separator="or" close=")"> 
+	            gs.spec_id = #{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		
+		where 1=1 
+		
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+					order by ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM  redpigmall_goods obj
+		<if test="redPig_store_name != null">
+			JOIN redpigmall_store store ON (obj.goods_store_id = store.id and store.store_name LIKE concat(concat('%',#{redPig_store_name}),'%'))
+		</if>
+		<if test="rgc_id !=null and rgc_parent_id !=null and rgc_parent_parent_id !=null">
+			JOIN redpigmall_goodsclass gc ON gc.id = obj.gc_id
+			JOIN redpigmall_goodsclass gc_parent ON gc.parent_id = gc_parent.id
+			AND (
+				obj.gc_id = #{rgc_id,jdbcType=BIGINT} 
+				OR gc.parent_id = #{rgc_parent_id,jdbcType=BIGINT} 
+				OR gc_parent.parent_id = #{rgc_parent_parent_id,jdbcType=BIGINT} 
+			)
+		</if>
+		
+		<if test="ugc_id !=null">
+			JOIN redpigmall_goods_ugc ugc ON obj.id = ugc.goods_id and ugc.class_id=#{ugc_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="goods_store_user_userName !=null">
+			JOIN redpigmall_store s ON s.id = obj.goods_store_id
+			JOIN redpigmall_user u ON s.id = u.store_id
+			AND u.userName = #{goods_store_user_userName,jdbcType=VARCHAR} 
+		</if>
+		<if test="goods_store_user_id !=null">
+			JOIN redpigmall_store s ON obj.goods_store_id = s.id
+			JOIN redpigmall_user u ON u.store_id = s.id and u.id =  #{goods_store_user_id,jdbcType=BIGINT} 
+		</if>
+		<if test="goods_ugcs_ugc_ids !=null ">
+			JOIN redpigmall_goods_ugc gu ON obj.id = gu.goods_id AND
+			<foreach collection="goods_ugcs_ugc_ids" index="index" item="item" open="(" separator="or" close=")"> 
+	           gu.class_id=#{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		<if test="goodsSpecPropertyIds !=null and goodsSpecPropertyIds.size() >0">
+			JOIN redpigmall_goods_spec gs on obj.id = gs.goods_id
+			JOIN redpigmall_goodsspecproperty gsp on gsp.id = gs.spec_id and
+			<foreach collection="goodsSpecPropertyIds" index="index" item="item" open="(" separator="or" close=")"> 
+	            gs.spec_id = #{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType !=null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<!-- 和queryPages一样,只不过 resultMap="BaseResultMap2"不一样-->
+	<select id="queryPages2" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap2" parameterType="map">
+		SELECT obj.* FROM  redpigmall_goods obj
+		<if test="redPig_store_name != null">
+			JOIN redpigmall_store store ON (obj.goods_store_id = store.id and store.store_name LIKE concat(concat('%',#{redPig_store_name}),'%'))
+		</if>
+		<if test="rgc_id !=null and rgc_parent_id !=null and rgc_parent_parent_id !=null">
+			JOIN redpigmall_goodsclass gc ON gc.id = obj.gc_id
+			JOIN redpigmall_goodsclass gc_parent ON gc.parent_id = gc_parent.id
+			AND (
+				obj.gc_id = #{rgc_id,jdbcType=BIGINT} 
+				OR gc.parent_id = #{rgc_parent_id,jdbcType=BIGINT} 
+				OR gc_parent.parent_id = #{rgc_parent_parent_id,jdbcType=BIGINT} 
+			)
+		</if>
+		
+		<if test="ugc_id !=null">
+			JOIN redpigmall_goods_ugc ugc ON obj.id = ugc.goods_id and ugc.class_id=#{ugc_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="goods_store_user_userName !=null">
+			JOIN redpigmall_store s ON s.id = obj.goods_store_id
+			JOIN redpigmall_user u ON s.id = u.store_id
+			AND u.userName = #{goods_store_user_userName,jdbcType=VARCHAR} 
+		</if>
+		<if test="goods_store_user_id !=null">
+			JOIN redpigmall_store s ON obj.goods_store_id = s.id
+			JOIN redpigmall_user u ON u.store_id = s.id and u.id =  #{goods_store_user_id,jdbcType=BIGINT} 
+		</if>
+		<if test="goods_ugcs_ugc_ids !=null ">
+			JOIN redpigmall_goods_ugc gu ON obj.id = gu.goods_id AND
+			<foreach collection="goods_ugcs_ugc_ids" index="index" item="item" open="(" separator="or" close=")"> 
+	           gu.class_id=#{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		<if test="goodsSpecPropertyIds !=null and goodsSpecPropertyIds.size() >0">
+			JOIN redpigmall_goods_spec gs on obj.id = gs.goods_id
+			JOIN redpigmall_goodsspecproperty gsp on gsp.id = gs.spec_id and
+			<foreach collection="goodsSpecPropertyIds" index="index" item="item" open="(" separator="or" close=")"> 
+	            gs.spec_id = #{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType !=null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="getGoodsUgcsByUserGoodsClassId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT Goods.* FROM redpigmall_goods Goods 
+		JOIN redpigmall_goods_ugc ftn ON ftn.goods_id = Goods.id AND ftn.class_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryGoodsByGoodsClassIds" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goods obj 
+		<where>
+			gc_id in
+			<foreach collection="gc_ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+		</where>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_goods obj 
+		<if test="redPig_store_name != null">
+			JOIN redpigmall_store store ON (obj.goods_store_id = store.id and store.store_name like concat(concat('%',#{redPig_store_name}),'%'))
+		</if>
+		<if test="rgc_id !=null and rgc_parent_id !=null and rgc_parent_parent_id !=null">
+			JOIN redpigmall_goodsclass gc  ON  gc.id = obj.gc_id
+			JOIN redpigmall_goodsclass gc_parent ON gc.parent_id = gc_parent.id 
+			AND 
+				(	obj.gc_id = #{rgc_id,jdbcType=BIGINT} 
+				or 
+					gc.parent_id=#{rgc_parent_id,jdbcType=BIGINT} 
+				or 
+					gc_parent.parent_id=#{rgc_parent_parent_id,jdbcType=BIGINT} 
+				)
+		</if>
+		<if test="goods_store_user_userName !=null">
+			JOIN redpigmall_store s ON s.id = obj.goods_store_id
+			JOIN redpigmall_user u ON s.id = u.store_id AND u.userName=#{goods_store_user_userName,jdbcType=VARCHAR} 
+		</if>
+		<if test="goods_store_user_id !=null">
+			JOIN redpigmall_store s ON obj.goods_store_id = s.id
+			JOIN redpigmall_user u ON u.store_id = s.id
+		</if>
+		<if test="goods_ugcs_ugc_ids !=null ">
+			JOIN redpigmall_goods_ugc gu ON obj.id = gu.goods_id AND
+			<foreach collection="goods_ugcs_ugc_ids" index="index" item="item" open="(" separator="or" close=")"> 
+	           gu.class_id=#{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		<if test="goodsSpecPropertyIds !=null and goodsSpecPropertyIds.size() >0">
+			JOIN redpigmall_goods_spec gs on obj.id = gs.goods_id
+			JOIN redpigmall_goodsspecproperty gsp on gsp.id = gs.spec_id and
+			<foreach collection="goodsSpecPropertyIds" index="index" item="item" open="(" separator="or" close=")"> 
+	            gs.spec_id = #{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		where 
+		1=1
+		<include refid="whereStatement"/>
+	</select>
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from redpigmall_goods where id=#{id,jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="batchDeleteGoodsPhotos" parameterType="map">
+		delete from redpigmall_goods_photo where 
+		<foreach collection="goodsPhotos" index="index" item="item" separator="or"> 
+            (goods_id=#{goodsId} and photo_id = #{item.id}) 
+        </foreach>
+	</delete>
+	
+	<delete id="batchDeleteUserGoodsClass" parameterType="map">
+		delete from redpigmall_goods_ugc where 
+		<foreach collection="ugcs" index="index" item="item" separator="or"> 
+            (goods_id=#{goodsId} and class_id = #{item.id}) 
+        </foreach>
+	</delete>
+	<delete id="batchDeleteGoodsSpecProperty" parameterType="map">
+		delete from redpigmall_goods_spec where 
+		<foreach collection="gsps" index="index" item="item" separator="or"> 
+            (goods_id=#{goodsId} and spec_id = #{item.id}) 
+        </foreach>
+	</delete>
+	<update id="deleteGoodsMainPhoto" parameterType="java.lang.Long">
+		update redpigmall_goods set goods_main_photo_id = null where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="update" parameterType="com.redpigmall.domain.Goods">
+		update redpigmall_goods 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="removeGoodsBrandByGoodsBrandId" parameterType="map">
+		update 
+			redpigmall_goods
+		set
+			goods_brand_id=null
+		where goods_brand_id = #{goods_brand_id,jdbcType=BIGINT}
+	</update>
+	<select id="getGoodsStoreByStoreId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			goods_store_id = #{goods_store_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGcByGoodsClassId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			gc_id = #{gc_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getGoodsSpecsByGoodsSpecPropertyId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT Goods.* FROM redpigmall_goods Goods 
+		JOIN redpigmall_goods_spec ftn ON ftn.goods_id = Goods.id AND ftn.spec_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getGoodsMainPhotoByAccessoryId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			goods_main_photo_id = #{goods_main_photo_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getGoodsListsByAccessoryId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT goods.* FROM redpigmall_goods goods
+		JOIN redpigmall_goods_photo gp ON gp.goods_id = goods.id AND gp.photo_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getGoodsBrandByGoodsBrandId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			goods_brand_id = #{goods_brand_id,jdbcType=BIGINT}
+	</select>
+	<select id="getZtcAdminByUserId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			ztc_admin_id = #{ztc_admin_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGroupByGroupId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			group_id = #{group_id,jdbcType=BIGINT}
+	</select>
+
+	<select id="getTransportByTransportId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			transport_id = #{transport_id,jdbcType=BIGINT}
+	</select>
+	<select id="getUserAdminByUserId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			user_admin_id = #{user_admin_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getGoodsByLimitSellingId" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where
+			limitSelling_id = #{limitSelling_id,jdbcType=BIGINT}
+	</select>
+	
+	<insert id="batchInsertGoodsPhotos" parameterType="map">  
+	    insert ignore into  redpigmall_goods_photo (goods_id,photo_id)   
+	    values  
+		<foreach collection="goods_photos" item="item" index="index" separator=",">  
+	        (#{goods_id},#{item.id})  
+	    </foreach>  
+	</insert>
+	
+	<insert id="batchInsertGoodsSpecs" parameterType="map">  
+	    insert ignore into redpigmall_goods_spec (goods_id,spec_id)   
+	    values  
+		<foreach collection="gsps" item="item" index="index" separator=",">  
+	        (#{goods_id},#{item})  
+	    </foreach>  
+	</insert>
+	
+	<insert id="batchInsertGoodsSpecs2" parameterType="map">  
+	    insert ignore into redpigmall_goods_spec (goods_id,spec_id) values  
+		<foreach collection="gsps" item="item" index="index" separator=",">  
+	        (#{goods_id},#{item.id})  
+	    </foreach>  
+	</insert>
+	
+	<insert id="saveGoodsUserGoodsClass" parameterType="map">  
+	    INSERT INTO redpigmall_goods_ugc (goods_id,class_id) values  
+		<foreach collection="goods_ugcs" item="item" index="index" separator=",">  
+	        (#{goods_id},#{item.id})  
+	    </foreach>  
+	</insert>
+	
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Goods" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_goods(
+	addTime,deleteStatus,seo_keywords,seo_description,goods_name,goods_price,store_price,goods_inventory,inventory_type,
+	goods_salenum,goods_serial,goods_weight,goods_volume,goods_fee,goods_details,goods_details_mobile,pack_details,goods_service,
+	store_recommend,store_recommend_time,goods_recommend,goods_click,goods_collect,goods_cod,goods_status,publish_goods_status,
+	goods_seller_time,goods_transfee,goods_property,goods_inventory_detail,ztc_status,ztc_pay_status,ztc_price,ztc_dredge_price,
+	ztc_apply_time,ztc_begin_time,ztc_gold,ztc_click_num,ztc_admin_content,group_buy,nuke_buy,collage_buy,evaluate_count,goods_choice_type,activity_status,
+	activity_goods_id,goods_current_price,combin_status,combin_suit_id,combin_parts_id,mail_trans_fee,express_trans_fee,ems_trans_fee,
+	description_evaluate,well_evaluate,middle_evaluate,bad_evaluate,goods_type,mobile_recommend,mobile_recommendTime,mobile_hot,
+	mobile_hotTime,enough_reduce,direct_selling,order_enough_reduce_id,order_enough_give_status,order_enough_if_give,buyGift_amount,buyGift_id,
+	tax_invoice,f_sale_type,goods_f_code,advance_sale_type,advance_date,goods_warn_inventory,warn_inventory_status,goods_top_format_id,
+	goods_top_format_content,goods_bottom_format_id,goods_bottom_format_content,qr_img_path,price_history,delivery_area,delivery_area_id,
+	whether_free,weixin_recommend,weixin_recommendTime,weixin_hot,weixin_hotTime,goods_specs_info,advance_sale_info,goods_limit,
+	goods_limit_count,goods_ad_words,goods_color_json,goods_tags,recommand_goods,inventory_set,refuse_info,merchantService_info,
+	goods_store_id,gc_id,goods_main_photo_id,goods_brand_id,ztc_admin_id,group_id,limitSelling_id,nuke_id,collage_id,transport_id,user_admin_id)
+	 values(
+	 	#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},
+	 	#{seo_keywords,jdbcType=VARCHAR},#{seo_description,jdbcType=VARCHAR},
+	 	#{goods_name,jdbcType=VARCHAR},#{goods_price,jdbcType=DECIMAL},
+	 	#{store_price,jdbcType=DECIMAL},#{goods_inventory,jdbcType=INTEGER},
+	 	#{inventory_type,jdbcType=VARCHAR},#{goods_salenum,jdbcType=INTEGER},
+	 	#{goods_serial,jdbcType=VARCHAR},#{goods_weight,jdbcType=DECIMAL},
+	 	#{goods_volume,jdbcType=DECIMAL},#{goods_fee,jdbcType=VARCHAR},
+	 	#{goods_details,jdbcType=VARCHAR},#{goods_details_mobile,jdbcType=VARCHAR},
+	 	#{pack_details,jdbcType=VARCHAR},#{goods_service,jdbcType=VARCHAR},
+	 	#{store_recommend,jdbcType=BIT},#{store_recommend_time,jdbcType=TIMESTAMP},
+	 	#{goods_recommend,jdbcType=BIT},#{goods_click,jdbcType=INTEGER},
+	 	#{goods_collect,jdbcType=INTEGER},#{goods_cod,jdbcType=INTEGER},
+	 	#{goods_status,jdbcType=INTEGER},#{publish_goods_status,jdbcType=INTEGER},
+	 	#{goods_seller_time,jdbcType=TIMESTAMP},#{goods_transfee,jdbcType=INTEGER},
+	 	#{goods_property,jdbcType=VARCHAR},#{goods_inventory_detail,jdbcType=VARCHAR},
+	 	#{ztc_status,jdbcType=INTEGER},#{ztc_pay_status,jdbcType=INTEGER},
+	 	#{ztc_price,jdbcType=INTEGER},#{ztc_dredge_price,jdbcType=INTEGER},
+	 	#{ztc_apply_time,jdbcType=TIMESTAMP},#{ztc_begin_time,jdbcType=TIMESTAMP},
+	 	#{ztc_gold,jdbcType=INTEGER},#{ztc_click_num,jdbcType=INTEGER},
+	 	#{ztc_admin_content,jdbcType=VARCHAR},#{group_buy,jdbcType=INTEGER},
+		#{nuke_buy,jdbcType=INTEGER},
+		#{collage_buy,jdbcType=INTEGER},
+	 	#{evaluate_count,jdbcType=INTEGER},#{goods_choice_type,jdbcType=INTEGER},
+	 	#{activity_status,jdbcType=INTEGER},#{activity_goods_id,jdbcType=BIGINT},
+	 	#{goods_current_price,jdbcType=DECIMAL},#{combin_status,jdbcType=INTEGER},
+	 	#{combin_suit_id,jdbcType=BIGINT},#{combin_parts_id,jdbcType=BIGINT},
+	 	#{mail_trans_fee,jdbcType=DECIMAL},#{express_trans_fee,jdbcType=DECIMAL},
+	 	#{ems_trans_fee,jdbcType=DECIMAL},#{description_evaluate,jdbcType=DECIMAL},
+	 	#{well_evaluate,jdbcType=DECIMAL},#{middle_evaluate,jdbcType=DECIMAL},
+	 	#{bad_evaluate,jdbcType=DECIMAL},#{goods_type,jdbcType=INTEGER},
+	 	#{mobile_recommend,jdbcType=INTEGER},#{mobile_recommendTime,jdbcType=TIMESTAMP},
+	 	#{mobile_hot,jdbcType=INTEGER},#{mobile_hotTime,jdbcType=TIMESTAMP},
+	 	#{enough_reduce,jdbcType=INTEGER},#{direct_selling,jdbcType=INTEGER},#{order_enough_reduce_id,jdbcType=VARCHAR},
+	 	#{order_enough_give_status,jdbcType=INTEGER},#{order_enough_if_give,jdbcType=INTEGER},
+	 	#{buyGift_amount,jdbcType=DECIMAL},#{buyGift_id,jdbcType=BIGINT},#{tax_invoice,jdbcType=INTEGER},
+	 	#{f_sale_type,jdbcType=INTEGER},#{goods_f_code,jdbcType=VARCHAR},#{advance_sale_type,jdbcType=INTEGER},
+	 	#{advance_date,jdbcType=TIMESTAMP},#{goods_warn_inventory,jdbcType=INTEGER},
+	 	#{warn_inventory_status,jdbcType=INTEGER},#{goods_top_format_id,jdbcType=BIGINT},
+	 	#{goods_top_format_content,jdbcType=VARCHAR},#{goods_bottom_format_id,jdbcType=BIGINT},
+	 	#{goods_bottom_format_content,jdbcType=VARCHAR},#{qr_img_path,jdbcType=VARCHAR},
+	 	#{price_history,jdbcType=DECIMAL},#{delivery_area,jdbcType=VARCHAR},
+	 	#{delivery_area_id,jdbcType=BIGINT},#{whether_free,jdbcType=INTEGER},
+	 	#{weixin_recommend,jdbcType=INTEGER},#{weixin_recommendTime,jdbcType=TIMESTAMP},
+	 	#{weixin_hot,jdbcType=INTEGER},#{weixin_hotTime,jdbcType=TIMESTAMP},
+	 	#{goods_specs_info,jdbcType=VARCHAR},#{advance_sale_info,jdbcType=VARCHAR},
+	 	#{goods_limit,jdbcType=INTEGER},#{goods_limit_count,jdbcType=INTEGER},
+	 	#{goods_ad_words,jdbcType=VARCHAR},#{goods_color_json,jdbcType=VARCHAR},
+	 	#{goods_tags,jdbcType=VARCHAR},#{recommand_goods,jdbcType=VARCHAR},#{inventory_set,jdbcType=INTEGER},
+	 	#{refuse_info,jdbcType=VARCHAR},#{merchantService_info,jdbcType=VARCHAR},#{goods_store.id,jdbcType=BIGINT},
+	 	#{gc.id,jdbcType=BIGINT},#{goods_main_photo.id,jdbcType=BIGINT},#{goods_brand.id,jdbcType=BIGINT},
+	 	#{ztc_admin.id,jdbcType=BIGINT},#{group.id,jdbcType=BIGINT},#{limitSelling.id,jdbcType=BIGINT},
+	 	#{nuke.id,jdbcType=BIGINT},#{collage.id,jdbcType=BIGINT},#{transport.id,jdbcType=BIGINT},
+	 	#{user_admin.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Goods">
+		update redpigmall_goods
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_goods where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap2" parameterType="map">
+		select obj.* from  redpigmall_goods obj
+		<if test="redPig_store_name != null">
+			JOIN redpigmall_store store ON (obj.goods_store_id = store.id and store.store_name like concat(concat('%',#{redPig_store_name}),'%'))
+		</if>
+		<if test="goods_store_user_id !=null">
+			JOIN redpigmall_store s ON obj.goods_store_id = s.id
+			JOIN redpigmall_user u ON u.store_id = s.id
+		</if>
+		<if test="goods_ugcs_ugc_ids !=null ">
+			JOIN redpigmall_goods_ugc gu ON obj.id = gu.goods_id AND
+			<foreach collection="goods_ugcs_ugc_ids" index="index" item="item" open="(" separator="or" close=")"> 
+	           gu.class_id=#{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		<if test="goodsSpecPropertyIds !=null and goodsSpecPropertyIds.size() >0">
+			JOIN redpigmall_goods_spec gs on obj.id = gs.goods_id
+			JOIN redpigmall_goodsspecproperty gsp on gsp.id = gs.spec_id and
+			<foreach collection="goodsSpecPropertyIds" index="index" item="item" open="(" separator="or" close=")"> 
+	            gs.spec_id = #{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType !=null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap2" parameterType="map">
+		select obj.* from redpigmall_goods obj
+		<if test="redPig_store_name != null">
+			JOIN redpigmall_store store ON (obj.goods_store_id = store.id and store.store_name like concat(concat('%',#{redPig_store_name}),'%'))
+		</if>
+		<if test="rgc_id !=null and rgc_parent_id !=null and rgc_parent_parent_id !=null">
+			JOIN redpigmall_goodsclass gc  ON  gc.id = obj.gc_id
+			JOIN redpigmall_goodsclass gc_parent ON gc.parent_id = gc_parent.id 
+			AND 
+				(	obj.gc_id = #{rgc_id,jdbcType=BIGINT} 
+				or 
+					gc.parent_id=#{rgc_parent_id,jdbcType=BIGINT} 
+				or 
+					gc_parent.parent_id=#{rgc_parent_parent_id,jdbcType=BIGINT} 
+				)
+		</if>
+		<if test="goods_store_user_userName !=null">
+			JOIN redpigmall_store s ON s.id = obj.goods_store_id
+			JOIN redpigmall_user u ON s.id = u.store_id AND u.userName=#{goods_store_user_userName,jdbcType=VARCHAR} 
+		</if>
+		<if test="goodsSpecPropertyIds !=null and goodsSpecPropertyIds.size() >0">
+			JOIN redpigmall_goods_spec gs on obj.id = gs.goods_id
+			JOIN redpigmall_goodsspecproperty gsp on gsp.id = gs.spec_id and
+			<foreach collection="goodsSpecPropertyIds" index="index" item="item" open="(" separator="or" close=")"> 
+	            gs.spec_id = #{item,jdbcType=BIGINT}
+	        </foreach>
+		</if>
+		where 1=1 
+		
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+					order by ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Goods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	<select id="queryGoodsList" parameterType="map" resultType="map">
+		select goods.id, goods.goods_collect, goods.goods_current_price,goods.goods_name,goods.goods_salenum,goods.goods_type,
+		goods.bad_evaluate, acc.path,acc.name
+		<!-- id,当天收藏次数，当前价格， 商品名称，销量, 商品类型(0为自营商品，1为第三方经销商),差评率-->
+		from redpigmall_goods as goods, redpigmall_accessory as acc
+		where 1 = 1
+		<if test="gc_id != null">
+		and goods.gc_id = #{gc_id}
+		</if>
+		<if test="deleteStatus != null">
+		and goods.deleteStatus = #{deleteStatus}
+		</if>
+		<if test="goods_status != null">
+		and goods.goods_status = #{goods_status}
+		</if>
+		<if test="goods_brand_id !=null">
+		and goods.goods_brand_id = #{goods_brand_id}
+		</if>
+		and goods.goods_main_photo_id = acc.id
+		<if test="orderBy != null and orderType !=null">
+		order by goods.${orderBy} ${orderType}
+		</if>
+		<if test="start != null and count !=null">
+		limit #{start}, #{count}
+		</if>
+	</select>
+
+	<select id="selectGoodsById" resultType="map"  parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goods
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+</mapper>

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="no">
+<meta name="format-detection" content="telephone=no,address=no">
+<title>$!store.store_name - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+ jQuery("#store_class").html(jQuery("#store_class").html()+" -店铺活动");
+ jQuery(".more").click(function(){
+		if(jQuery(".down").css("display")=="none"){
+			jQuery(".down").show();
+			jQuery(".black_bg").show();
+		}else{
+			jQuery(".down").hide();
+			jQuery(".black_bg").hide();
+		}
+	})
+   jQuery(document).click(function(e){   
+   var tar = jQuery(e.target);
+   if(!"mo_img"==tar.attr("id") || !tar.attr("id")){
+	   jQuery(".down").css("display","none");
+	   jQuery(".black_bg").css("display","none");
+   }
+	});
+})
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main"> 
+  <!--店铺首页-->
+  <div class="store_index">
+    <div class="shop_hd" style="float:none"> <a class="fl" href="$!webPath/wap/store?id=$!store.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_icon.png"></a> <span id="store_class">$!store.store_name</span>
+      <div class="fr" id="fr"> <a class="more" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_more.png" id="mo_img"></a>
+        <div class="down" style="display:none"><a class="car" href="$!webPath/wap/goods_cart1">购物车</a><a class="home" href="$!webPath/wap/index">首页</a><i></i></div>
+        <div class="black_bg" style="display:none"></div>
+      </div>
+    </div>
+    #if($!objs.size()>0)
+    #foreach($obj in $objs)
+    <div class="store_floor floor_one"> <a href="$!webPath/wap/activity_goods_list?id=$!store.id&act_id=$!obj.id">
+      <div class="activity_pic"><img src="$!imageWebServer/$!obj.ac_acc.path/$!obj.ac_acc.name" width="100%"/></div>
+      </a> </div>
+    #end
+    #else
+    <div class="error_page1"> <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+      <p>暂无店铺活动！</p>
+    </div>
+    #end </div>
+</div>
+<div class="mt50"></div>
+</body>
+</html>

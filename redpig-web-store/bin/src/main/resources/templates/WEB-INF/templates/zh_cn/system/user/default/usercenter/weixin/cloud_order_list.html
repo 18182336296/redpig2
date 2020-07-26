@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>云购记录 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!records.size()>0)
+   var begin_count =12;
+   var ret=true;
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret) {
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/buyer/cloud_order_list',
+				  data:{"begin_count":begin_count,"type":"ajax","status":"$!{status}"},
+				beforeSend:function(){
+					ret = false;
+				  begin_count = begin_count +12;
+				},
+			   success:function(data){
+	             if(data){ 
+				  jQuery(".record_items").find(".record_item").last().after(data);
+				   ret = true;
+			 	 }else{
+					  jQuery("#loading_none").show();
+					 }  
+              	}
+	    });
+	 }
+	});		
+   #end
+});
+function show_numb(arg){
+	var num  = jQuery(arg).attr("num");
+	var code  = jQuery(arg).attr("code");
+	var goods_name = jQuery(arg).attr("goods_name");
+	jQuery("#name").html(goods_name);
+	jQuery("#price").html("参与"+num+"人次，夺宝号码:"+code);
+	jQuery(".look_number").show();
+}
+</script>
+</head>
+
+<body>
+<div class="phone_hd">
+    <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png"></a>
+    云购记录
+    <a class="menu home" href="$!webPath/wap/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png"></a>
+</div>
+
+<div class="nav_items" style="margin-top:2rem;">
+	<ul id="nav_items">
+    	<li #if(!$!status) class="this" #end><a href="$!webPath/wap/buyer/cloud_order_list">进行中</a></li>
+        <li status="will" #if($!status=="will") class="this" #end><a href="$!webPath/wap/buyer/cloud_order_list?status=will">即将揭晓</a></li>
+        <li status="end" #if($!status=="end") class="this" #end><a href="$!webPath/wap/buyer/cloud_order_list?status=end">已揭晓</a></li>
+    </ul>
+</div>
+#if($!records.size()>0)
+<div class="record_items">
+    #foreach($record in $records)
+    #if($!record.cloudPurchaseLottery.status==15)
+	<div class="record_item"><!--已揭晓的夺宝记录，循环此div-->
+    	<div class="pic">
+        	<a href="$!webPath/wap/cloudpurchase_items?id=$!record.cloudPurchaseLottery.id"><img src="$!record.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo"></a>
+        </div>
+        <div class="text">
+        	<p class="name">$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</p>
+            <p>总需：$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_price人次</p>
+            <p>期号：$!record.cloudPurchaseLottery.period</p>
+            <p>获得者：<b class="blue">$!record.cloudPurchaseLottery.lucky_username</b>本期共参与$!record.cloudPurchaseLottery.lucky_usertimes人次</p>
+            <p>幸运号码：<b class="red">$!record.cloudPurchaseLottery.lucky_code</b></p>
+            <p>揭晓时间：$!CommUtil.formatLongDate($!record.cloudPurchaseLottery.announced_date)</p>
+            <p>本期参与：<b class="red">$!record.purchased_times</b>人次&nbsp;<a href="javascript:void(0);" onClick="show_numb(this);" class="blue" num="$!record.purchased_times" code="$!record.purchased_codes" goods_name="$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_name">查看我的号码</a></p>
+            #if($!record.status==1)
+            #if($!record.cloudPurchaseLottery.delivery_status==-1)
+            <p class="win_address">
+            	恭喜您中奖！
+              <a href="$!webPath/wap/choose_address?type=$!webPath/wap/buyer/cloud_order_list?status=$!status&cloudPurchaseLottery_id=$!record.cloudPurchaseLottery.id">填写收货地址</a>
+
+            </p>
+            #end
+             #if($!record.cloudPurchaseLottery.delivery_status==0)
+            <p class="win_address">
+            	未发货
+                 <a href="$!webPath/wap/choose_address?type=$!webPath/wap/buyer/cloud_order_list?status=$!status&cloudPurchaseLottery_id=$!record.cloudPurchaseLottery.id">修改地址</a>
+            </p>
+            #end
+             #if($!record.cloudPurchaseLottery.delivery_status==1)
+            <p class="win_address">
+            	已发货
+                <a href= "javascript:void(0);" onClick="javascript:if(confirm('是否已经收货，确认收货？')){window.location.href='$!webPath/wap/buyer/cloud_order_confirm?id=$!record.cloudPurchaseLottery.id&status=$!status'}">确认收货</a>
+            </p>
+            #end
+             #if($!record.cloudPurchaseLottery.delivery_status==2)
+            <p class="win_address">
+            	已收货
+            </p>
+            #end
+            #end
+        </div>
+    </div>
+    #else
+	<div class="record_item"><!--正在进行中的夺宝记录，循环此div-->
+    	<div class="pic">
+        	<a href="$!webPath/wap/cloudpurchase_items?id=$!record.cloudPurchaseLottery.id"><img src="$!record.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo"></a>
+        </div>
+        <div class="text">
+        	<p class="name">$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</p>
+            <p>总需：$!record.cloudPurchaseLottery.cloudPurchaseGoods.goods_price人次</p>
+            <p>期号：$!record.cloudPurchaseLottery.period</p>
+        </div>
+    </div>
+    #end
+    #end
+    
+</div>
+#else
+<div class="error_page1" style="margin-top:100px;">
+        <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/nothing.png"></span>
+        <p>暂无夺宝记录！</p>
+    </div>
+#end
+<div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+  <div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>
+<div class="look_number" style="display:none;"><!--点击查看我的号码时弹出框显示-->
+	<div class="number_text" style="left:7.5%; top:34%;">
+        <div class="n_text">
+            <p class="name" id="name"></p>
+            <p id="price" class="num_items"></p>
+        </div>
+        <a href="javascript:void(0);" class="sure_btn" onClick="jQuery('.look_number').hide();">确定</a>
+        <a href="javascript:void(0);" class="del_btn" onClick="jQuery('.look_number').hide();"></a>
+    </div>
+    <div class="cover_floor"></div>
+</div>
+</body>
+</html>

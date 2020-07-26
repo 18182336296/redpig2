@@ -1,0 +1,140 @@
+<link href="$!cdnServer/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<!--选择拼团规格页面-->
+<script>
+jQuery(document).ready(function(){
+
+});
+// 绑定列表选中商品事件
+jQuery('#goods_list').bind("change",function () {
+    // 获取id,请求获取商品实体,此处要动态加载商品的规格
+    jQuery.ajax({
+        async:false,
+        type: 'POST',
+        url: "$!webPath/getGoodsById",
+        data: {"goods_id":jQuery(this).val()},
+        success: function(data){
+            console.log(data.get(""));
+            // 遍历goods
+
+        },error:function(){
+            //console.log(data);
+        },
+        dataType: "text"
+    });
+})
+// 选择商品规格
+function goods_spec_set(obj){
+    var spec=jQuery(obj).find("a").attr("spec");
+    var gsp=jQuery(obj).find("a").attr("gsp");
+    var gsp_this;
+    // 遍历所有a标签，查看用户选择的属（选择点亮的li标签）
+    jQuery("a[spec="+spec+"]").each(function(){
+        // 获取父节点li的点击属性
+        var temp =jQuery(this).parent("[class='this']").find("a").attr("gsp");
+        if(temp){
+            gsp_this=temp;
+        }
+    })
+    /*if(gsp==gsp_this)return;*/
+    jQuery("a[spec="+spec+"][gsp="+gsp_this+"]").parent().removeAttr("class");
+    // 给当前的规格点亮
+    jQuery(obj).addClass("this");
+    var gsps="";
+    jQuery(".box_table ul").each(function(){
+        // 选择所有点亮的商品规格属性，拼接成goods_inventory_detail的id
+        jQuery.each(jQuery(this).find("li[class=this]"),function(){
+            gsps=jQuery(this).find("a").attr("gsp")+"_"+gsps;
+        });
+    })
+    get_goods_inventory(gsps);
+}
+// 根据用户选择查找库存、价格信息
+function get_goods_inventory(gsp){
+    var inventory_detail='$!obj.goods_inventory_detail';
+    var goods_inventory_detail=eval("("+inventory_detail+")");
+    jQuery("#inventory_detail ul").remove();
+    jQuery.each(goods_inventory_detail, function(index,item){
+        if ((gsp)==item.id.toString()){
+            jQuery("#inventory_detail").append("<ul id='"+item.id+" ' algin='left'><li>"+"价格："+item.price+"</li><li>"+"库存："+item.count+"</li></ul>")
+            jQuery("#origin_price").val(item.price);
+        }
+    });
+
+    jQuery("#goods_inventory").attr("goods_inventory","100");
+    var city_id =jQuery("#city_info").find("span").eq(2).attr("city_id");
+    var city_name =jQuery("#city_info").find("span").eq(1).html();
+    jQuery.ajax({type:'POST',url:'$!current_webPath/goods_inventory',dataType:'json',data:{"city_name":city_name,"goods_id":"$!{obj.id}","city_id":city_id,"gsp":gsp},
+        success:function(json){
+            alert(123);
+            goods_inventory = json.inventory;
+            jQuery("#goods_inventory").attr("goods_inventory",goods_inventory);
+            var count = jQuery("#goods_count").val();
+            if(count>goods_inventory){
+                jQuery("#goods_count").val(goods_inventory);
+            }
+            jQuery("#goods_inventory").html(json.inventory);
+        }
+    });
+}
+// 确认用户选择的商品规格
+function collage_goods_specs_sel(){
+    if("$!obj.inventory_type"=="all"){
+        jQuery("#specs_name").val("统一规格");
+        jQuery("#goods_spec_id").val("统一规格");
+        jQuery("#collage_goods_spec").remove();
+        return;
+    }
+    // 获取当前商品的规格id
+    var specs_id=jQuery("#inventory_detail ul:first").attr("id");
+    var price = jQuery("#inventory_detail li:first").text();
+    var inventory = jQuery("#inventory_detail li:eq(1)").text();
+    if(goods_id!=null){
+        jQuery("#specs_name").val(specs_id);
+        jQuery("#goods_spec_id").val(specs_id);
+        jQuery("#store_price_info").text(price.split("：")[1]);
+        jQuery("#store_inventory_info").text(inventory.split("：")[1]);
+        // 移除窗口id为collage_goods_spec的窗口
+        jQuery("#collage_goods_spec").remove();
+    }else{
+        alert("请选择一种规格");
+    }
+}
+</script>
+  <table style="float:left;" width="390" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td align="right" valign="top">选择：</td>
+        <td align="left">
+          #foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+          <h4>$!{spec.name}：</h4>
+          <ul>
+            #set($index=1)
+            #foreach($gsp in $obj.goods_specs)
+            #if($!{gsp.spec.id}==$!spec.id)
+            #if($index==1)
+            #if($!spec.type=="img") <li class="this" mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);"  sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"><img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="29" height="29" />$!gsp.value</a></li>#end
+            #if($!spec.type=="text") <li class="this" mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);" onClick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">$!gsp.value</a></li>#end
+
+            #else
+            #if($!spec.type=="img") <li mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"><img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="29" height="29" />$!gsp.value</a></li>#end
+            #if($!spec.type=="text") <li mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);"  sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">$!gsp.value</a></li>#end
+            #end
+            #set($index=$index+1)
+            #end
+            #end
+          </ul>
+          #end
+        </td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">商品信息</td>
+      <td align="left" id="inventory_detail">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center">
+      <span class="setsub">
+        <input name="按钮" type="button" style="cursor: pointer;border: none;padding: 5px 20px;background: #2aaaf3;color: #fff;border-radius: 3px;" value="确定"  onclick="collage_goods_specs_sel();" />
+      </span>
+      </td>
+    </tr>
+  </table>

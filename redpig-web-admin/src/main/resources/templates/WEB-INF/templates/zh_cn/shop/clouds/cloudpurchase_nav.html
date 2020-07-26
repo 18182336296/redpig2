@@ -1,0 +1,45 @@
+<!----------nav---------->
+<script>
+jQuery(document).ready(function(){
+  if(typeof(index) != "undefined"&&index=="index"){
+	  jQuery(".cloud_index_nav_c_right").find("li[tag=index]").addClass("this");
+  }else{
+	  if(typeof(index) != "undefined"){
+		  if(index=="ten"){
+			  jQuery(".cloud_index_nav_c_right").find("li[tag=ten]").addClass("this");
+		  }else if(index=="results"){
+			  jQuery(".cloud_index_nav_c_right").find("li[tag=results]").addClass("this");
+		  }
+	  }
+	  jQuery("#cloudclass_list").hide();
+	  jQuery("#cloudclass_tag").live("mouseover",function(){
+		  jQuery("#cloudclass_list").show();
+	  });
+	  jQuery("#cloudclass_tag").live("mouseleave",function(){
+		  jQuery("#cloudclass_list").hide();
+	  });
+  }
+});
+</script>
+
+<div class="cloud_index_nav">
+  <div class="cloud_index_nav_c f_clear">
+    <div class="cloud_index_nav_c_left" id="cloudclass_tag">
+      <div class="cloud_index_nav_c_left_title" >商品分类</div>
+      <div class="cloud_index_nav_c_left_list" id="cloudclass_list">
+        <ul>
+          <li><a href="$!webPath/cloudbuy/list">全部商品</a></li>
+          #foreach($class in $classes)
+          <li><a href="$!webPath/cloudbuy/list?class_id=$!class.id">$class.class_name</a></li>
+          #end
+        </ul>
+      </div>
+    </div>
+    <div class="cloud_index_nav_c_right">
+      <ul>
+        <li tag="index"><a href="$!webPath/cloudbuy/index">首页</a></li>
+        <li tag="ten" class="last"><a href="$!webPath/cloudbuy/ten">十元专区</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

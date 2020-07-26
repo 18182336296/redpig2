@@ -1,0 +1,44 @@
+#if($!objs.size()>0)
+    #foreach($obj in $!objs)
+    #if($!obj.status == 0)
+    	<div class="sale_red sale_list">
+        <section>
+            <span class="sale_left">优惠券</span>
+            <div class="sale_box">
+            <h3>￥ $!obj.coupon.coupon_amount<sub>元</sub></h3>
+            <span>购物满 $!obj.coupon.coupon_order_amount 立减 $!obj.coupon.coupon_amount 元现金</span>
+            <p>使用期限:$!CommUtil.formatShortDate($!obj.coupon.coupon_begin_time)~$!CommUtil.formatShortDate($!obj.coupon.coupon_end_time)
+            </p>
+            </div>
+            <span class="sale_right">可以兑换</span>
+        </section>
+        </div>
+    #elseif($!obj.status == 1) 
+    	<div class="sale_gray sale_list">
+        <section>
+            <span class="sale_left">优惠券</span>
+            <div class="sale_box">
+            <h3>￥ $!obj.coupon.coupon_amount<sub>元</sub></h3>
+            <span>购物满 $!obj.coupon.coupon_order_amount 立减 $!obj.coupon.coupon_amount 元现金</span>
+            <p>使用期限:$!CommUtil.formatShortDate($!obj.coupon.coupon_begin_time)~$!CommUtil.formatShortDate($!obj.coupon.coupon_end_time)
+            </p>
+            </div>
+            <span class="sale_right">已使用</span>
+        </section>
+        </div>
+    #else
+    	<div class="sale_gray sale_list">
+        <section>
+            <span class="sale_left">优惠券</span>
+            <div class="sale_box">
+            <h3>￥ $!obj.coupon.coupon_amount<sub>元</sub></h3>
+            <span>购物满 $!obj.coupon.coupon_order_amount 立减 $!obj.coupon.coupon_amount 元现金</span>
+            <p>使用期限:$!CommUtil.formatShortDate($!obj.coupon.coupon_begin_time)~$!CommUtil.formatShortDate($!obj.coupon.coupon_end_time)
+            </p>
+            </div>
+            <span class="sale_right">已过期</span>
+        </section>
+        </div>
+    #end   
+    #end  
+#end

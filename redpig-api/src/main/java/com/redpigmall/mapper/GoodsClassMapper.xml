@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoodsClassMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoodsClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="className" property="className" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="BIGINT"/>
+		<result column="level" property="level" jdbcType="BIGINT"/>
+		<result column="display" property="display" jdbcType="BIT"/>
+		<result column="recommend" property="recommend" jdbcType="BIT"/>
+		<result column="seo_keywords" property="seo_keywords" jdbcType="VARCHAR"/>
+		<result column="seo_description" property="seo_description" jdbcType="VARCHAR"/>
+		<result column="icon_type" property="icon_type" jdbcType="BIGINT"/>
+		<result column="icon_sys" property="icon_sys" jdbcType="VARCHAR"/>
+		<result column="commission_rate" property="commission_rate" jdbcType="DECIMAL"/>
+		<result column="guarantee" property="guarantee" jdbcType="DECIMAL"/>
+		<result column="description_evaluate" property="description_evaluate" jdbcType="DECIMAL"/>
+		<result column="service_evaluate" property="service_evaluate" jdbcType="DECIMAL"/>
+		<result column="ship_evaluate" property="ship_evaluate" jdbcType="DECIMAL"/>
+		<result column="gc_advert" property="gc_advert" jdbcType="VARCHAR"/>
+		<result column="gb_info" property="gb_info" jdbcType="VARCHAR"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="BIGINT"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="app_icon" property="app_icon" jdbcType="VARCHAR"/>
+		<result column="gc_color" property="gc_color" jdbcType="VARCHAR"/>
+		<result column="wx_icon" property="wx_icon" jdbcType="VARCHAR"/>
+		<result column="showClass_id" property="showClass_id" jdbcType="BIGINT"/>
+		<association property="parent" column="parent_id" select="com.redpigmall.dao.GoodsClassMapper.selectByPrimaryKey"/>
+		<association property="goodsType" column="goodsType_id" select="com.redpigmall.dao.GoodsTypeMapper.selectByPrimaryKey"/>
+		<association property="icon_acc" column="icon_acc_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<collection property="childs" column="id" select="com.redpigmall.dao.GoodsClassMapper.getChildsByGoodsClassId"/>
+		<collection property="spec_detail" column="id" select="com.redpigmall.dao.GoodsSpecificationMapper.getSpecGoodsClassDetailByGoodsClassId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoodsClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="className" property="className" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="BIGINT"/>
+		<result column="level" property="level" jdbcType="BIGINT"/>
+		<result column="display" property="display" jdbcType="BIT"/>
+		<result column="recommend" property="recommend" jdbcType="BIT"/>
+		<result column="seo_keywords" property="seo_keywords" jdbcType="VARCHAR"/>
+		<result column="seo_description" property="seo_description" jdbcType="VARCHAR"/>
+		<result column="icon_type" property="icon_type" jdbcType="BIGINT"/>
+		<result column="icon_sys" property="icon_sys" jdbcType="VARCHAR"/>
+		<result column="commission_rate" property="commission_rate" jdbcType="DECIMAL"/>
+		<result column="guarantee" property="guarantee" jdbcType="DECIMAL"/>
+		<result column="description_evaluate" property="description_evaluate" jdbcType="DECIMAL"/>
+		<result column="service_evaluate" property="service_evaluate" jdbcType="DECIMAL"/>
+		<result column="ship_evaluate" property="ship_evaluate" jdbcType="DECIMAL"/>
+		<result column="gc_advert" property="gc_advert" jdbcType="VARCHAR"/>
+		<result column="gb_info" property="gb_info" jdbcType="VARCHAR"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="BIGINT"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="app_icon" property="app_icon" jdbcType="VARCHAR"/>
+		<result column="gc_color" property="gc_color" jdbcType="VARCHAR"/>
+		<result column="wx_icon" property="wx_icon" jdbcType="VARCHAR"/>
+		<result column="showClass_id" property="showClass_id" jdbcType="BIGINT"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,className,parent_id,sequence,level,display,recommend,goodsType_id,seo_keywords,seo_description,icon_type,icon_sys,icon_acc_id,commission_rate,guarantee,description_evaluate,service_evaluate,ship_evaluate,gc_advert,gb_info,mobile_recommend,mobile_recommendTime,app_icon,gc_color,wx_icon,showClass_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="ids != null and ids.size() &gt; 0">
+			and id in
+			<foreach collection="ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+		</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="className != null">and className = #{className,jdbcType=VARCHAR}</if>
+		<if test="className_like != null">and className like CONCAT('%',#{className_like},'%') </if>
+		<if test="sequence != null">and sequence = #{sequence,jdbcType=BIGINT}</if>
+		<if test="level != null">and level = #{level,jdbcType=BIGINT}</if>
+		
+		<if test="level_more_than != null">and level <![CDATA[ > ]]> #{level_more_than,jdbcType=BIGINT}</if>
+		<if test="level_less_than != null">and level <![CDATA[ < ]]> #{level_less_than,jdbcType=BIGINT}</if>
+		
+		<if test="display != null">and display = #{display,jdbcType=BIT}</if>
+		<if test="recommend != null">and recommend = #{recommend,jdbcType=BIT}</if>
+		<if test="seo_keywords != null">and seo_keywords = #{seo_keywords,jdbcType=VARCHAR}</if>
+		
+		<if test="seo_description != null">and seo_description = #{seo_description,jdbcType=VARCHAR}</if>
+		<if test="icon_type != null">and icon_type = #{icon_type,jdbcType=BIGINT}</if>
+		<if test="icon_sys != null">and icon_sys = #{icon_sys,jdbcType=VARCHAR}</if>
+		<if test="commission_rate != null">and commission_rate = #{commission_rate,jdbcType=DECIMAL}</if>
+		<if test="guarantee != null">and guarantee = #{guarantee,jdbcType=DECIMAL}</if>
+		<if test="description_evaluate != null">and description_evaluate = #{description_evaluate,jdbcType=DECIMAL}</if>
+		<if test="service_evaluate != null">and service_evaluate = #{service_evaluate,jdbcType=DECIMAL}</if>
+		<if test="ship_evaluate != null">and ship_evaluate = #{ship_evaluate,jdbcType=DECIMAL}</if>
+		<if test="gc_advert != null">and gc_advert = #{gc_advert,jdbcType=VARCHAR}</if>
+		<if test="gb_info != null">and gb_info = #{gb_info,jdbcType=VARCHAR}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=BIGINT}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="app_icon != null">and app_icon = #{app_icon,jdbcType=VARCHAR}</if>
+		<if test="gc_color != null">and gc_color = #{gc_color,jdbcType=VARCHAR}</if>
+		<if test="wx_icon != null">and wx_icon = #{wx_icon,jdbcType=VARCHAR}</if>
+		<if test="showClass_id != null">and showClass_id = #{showClass_id,jdbcType=BIGINT}</if>
+		<if test="showClass_ids != null and showClass_ids.size() &gt; 0">
+			and showClass_id in
+			<foreach collection="showClass_ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+		</if>
+		<if test="parent == -1">and parent_id is null</if>
+		<if test="parent_id == -1">and parent_id is null</if>
+		<if test="parent_id != -1 and parent_id !=null">and parent_id=#{parent_id,jdbcType=BIGINT}</if>
+		<if test="parent != -1 and parent!=null">and parent_id=#{parent_id,jdbcType=BIGINT}</if>
+		<if test="redpig_id != null">and id != #{redpig_id,jdbcType=BIGINT}</if>
+		<if test="goodsType_id != null">and goodsType_id = #{goodsType_id,jdbcType=BIGINT}</if>
+		<if test="icon_acc_id != null">and icon_acc_id = #{icon_acc_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		className= #{className},
+		<if test="parent == null or parent.id == null">parent_id = null,</if>
+		<if test="parent != null and parent.id != null">parent_id = #{parent.id,jdbcType=BIGINT},</if>
+		sequence= #{sequence},
+		level= #{level},
+		display= #{display},
+		recommend= #{recommend},
+		<if test="goodsType == null or goodsType.id == null">goodsType_id = null,</if>
+		<if test="goodsType != null and goodsType.id != null">goodsType_id = #{goodsType.id,jdbcType=BIGINT},</if>
+		seo_keywords= #{seo_keywords},
+		seo_description= #{seo_description},
+		icon_type= #{icon_type},
+		icon_sys= #{icon_sys},
+		<if test="icon_acc != null and icon_acc.id != null">icon_acc_id = #{icon_acc.id,jdbcType=BIGINT},</if>
+		<if test="icon_acc == null or icon_acc.id == null">icon_acc_id = null,</if>
+		commission_rate= #{commission_rate},
+		guarantee= #{guarantee},
+		description_evaluate= #{description_evaluate},
+		service_evaluate= #{service_evaluate},
+		ship_evaluate= #{ship_evaluate},
+		gc_advert= #{gc_advert},
+		gb_info= #{gb_info},
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+		app_icon= #{app_icon},
+		gc_color= #{gc_color},
+		wx_icon= #{wx_icon},
+		showClass_id= #{showClass_id},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsclass 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsclass obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and  orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_goodsclass obj 
+		<where>
+			1=1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and  orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryGoodsClassByIds" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsclass obj 
+		<where>
+		 obj.id in 
+			<foreach collection="gc_ids" index="index" item="item" separator="," open="(" close=")"> 
+		            #{item}
+		    </foreach>
+		</where>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_goodsclass obj 
+		<where>
+			1=1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and  orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoodsClass" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_goodsclass(
+		addTime,
+		deleteStatus,
+		className,
+		sequence,
+		level,
+		display,
+		recommend,
+		seo_keywords,
+		seo_description,
+		icon_type,
+		icon_sys,
+		commission_rate,
+		guarantee,
+		description_evaluate,
+		service_evaluate,
+		ship_evaluate,
+		gc_advert,
+		gb_info,
+		mobile_recommend,
+		mobile_recommendTime,
+		app_icon,
+		gc_color,
+		wx_icon,
+		showClass_id
+		)
+		values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{className,jdbcType=VARCHAR},#{sequence,jdbcType=BIGINT},#{level,jdbcType=BIGINT},#{display,jdbcType=BIT},#{recommend,jdbcType=BIT},#{seo_keywords,jdbcType=VARCHAR},#{seo_description,jdbcType=VARCHAR},#{icon_type,jdbcType=BIGINT},#{icon_sys,jdbcType=VARCHAR},#{commission_rate,jdbcType=DECIMAL},#{guarantee,jdbcType=DECIMAL},#{description_evaluate,jdbcType=DECIMAL},#{service_evaluate,jdbcType=DECIMAL},#{ship_evaluate,jdbcType=DECIMAL},#{gc_advert,jdbcType=VARCHAR},#{gb_info,jdbcType=VARCHAR},#{mobile_recommend,jdbcType=BIGINT},#{mobile_recommendTime,jdbcType=TIMESTAMP},#{app_icon,jdbcType=VARCHAR},#{gc_color,jdbcType=VARCHAR},#{wx_icon,jdbcType=VARCHAR},#{showClass_id,jdbcType=BIGINT}
+	)</insert>
+	<update id="update" parameterType="com.redpigmall.domain.GoodsClass">
+		update redpigmall_goodsclass 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="removeGoodsType" parameterType="map">
+		update redpigmall_goodsclass 
+		set goodsType_id=null
+		where id = #{goods_id,jdbcType=BIGINT}
+	</update>
+	<delete id="removeGoodsSpecification" parameterType="map">
+		delete from redpigmall_spec_gc_detail where spec_id=#{spec_id,jdbcType=BIGINT} and spec_gc_id=#{spec_gc_id,jdbcType=BIGINT}
+	</delete>
+	<delete id="removeClilds" parameterType="map">
+		delete from redpigmall_goodsclass where parent_id=#{goods_id,jdbcType=BIGINT}
+	</delete>
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from redpigmall_goodsclass where id=#{id,jdbcType=BIGINT}
+	</delete>
+	
+	<select id="getChildsByGoodsClassId" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsclass
+		where
+			parent_id = #{parent_id,jdbcType=BIGINT}
+		order by id
+	</select>
+	
+	<select id="queryPageListByParentIsNull" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsclass
+		where
+			 parent_id is null
+	</select>
+	<select id="getGoodsTypeByGoodsTypeId" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsclass
+		where
+			goodsType_id = #{goodsType_id,jdbcType=BIGINT}
+	</select>
+	<select id="getIconAccByAccessoryId" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsclass
+		where
+			icon_acc_id= #{icon_acc_id,jdbcType=BIGINT}
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.GoodsClass" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_goodsclass(addTime,deleteStatus,className,sequence,level,display,recommend,seo_keywords,seo_description,icon_type,icon_sys,commission_rate,guarantee,description_evaluate,service_evaluate,ship_evaluate,gc_advert,gb_info,mobile_recommend,mobile_recommendTime,app_icon,gc_color,wx_icon,showClass_id,parent_id,goodsType_id,icon_acc_id)
+	 values(
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{className,jdbcType=VARCHAR},
+		#{sequence,jdbcType=BIGINT},
+		#{level,jdbcType=BIGINT},
+		#{display,jdbcType=BIT},
+		#{recommend,jdbcType=BIT},
+		#{seo_keywords,jdbcType=VARCHAR},
+		#{seo_description,jdbcType=VARCHAR},
+		#{icon_type,jdbcType=BIGINT},
+		#{icon_sys,jdbcType=VARCHAR},
+		#{commission_rate,jdbcType=DECIMAL},
+		#{guarantee,jdbcType=DECIMAL},
+		#{description_evaluate,jdbcType=DECIMAL},
+		#{service_evaluate,jdbcType=DECIMAL},
+		#{ship_evaluate,jdbcType=DECIMAL},
+		#{gc_advert,jdbcType=VARCHAR},
+		#{gb_info,jdbcType=VARCHAR},
+		#{mobile_recommend,jdbcType=BIGINT},
+		#{mobile_recommendTime,jdbcType=TIMESTAMP},
+		#{app_icon,jdbcType=VARCHAR},
+		#{gc_color,jdbcType=VARCHAR},
+		#{wx_icon,jdbcType=VARCHAR},
+		#{showClass_id,jdbcType=BIGINT},
+		#{parent.id,jdbcType=BIGINT},
+		#{goodsType.id,jdbcType=BIGINT},
+		#{icon_acc.id,jdbcType=BIGINT})
+	</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoodsClass">
+		update redpigmall_goodsclass
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_goodsclass where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_goodsclass where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsclass obj 
+		<where>
+		1 = 1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and  orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsclass obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsclass
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_goodsclass where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<select id="getSpecGoodsClassDetailByGoodsSpecificationId" resultType="com.redpigmall.domain.GoodsClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT gc.* FROM redpigmall_goodsclass gc 
+		JOIN redpigmall_spec_gc_detail ftn ON ftn.spec_gc_id = gc.id AND ftn.spec_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryListWithNoRelations" parameterType="map" resultType="map">
+		select gc.showClass_id, gc.className, acc.path, acc.name from redpigmall_goodsclass gc, redpigmall_accessory acc
+		where 1 = 1
+		<if test="deleteStatus !=null">
+		and gc.deleteStatus = #{deleteStatus}
+		</if>
+		<if test="showClass_id != null">
+		and gc.showClass_id = #{showClass_id}
+		</if>
+		and gc.app_icon = acc.id
+		<if test="orderBy != null and  orderType != null">
+		order by ${orderBy} ${orderType}
+		</if>
+	</select>
+</mapper>

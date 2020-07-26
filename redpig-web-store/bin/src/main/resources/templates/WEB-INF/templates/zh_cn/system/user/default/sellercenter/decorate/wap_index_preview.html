@@ -1,0 +1,142 @@
+#foreach($floor in $json_list)
+<div class='android_floor_01'>
+  <div class='and_oper'><a href='javascript:void(0);' onclick='del_floor($!floor.id)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_del.png' /></a><a href='javascript:void(0);' onclick='edit_floor($!floor.id)'><img src='$!cdnServer/resources/style/system/manage/blue/images/and_edit.png' /></a></div>
+   #if($!floor.edit_mo=="1")
+     #set($floor_show=$!weixinstoreViewTools.getfloor_info("$!floor.line_info"))
+     #foreach($fs in $!floor_show)
+     <div class="store_floor floor_one">
+     <a #if($!fs.click_type=="goods") href="$!webPath/wap/items?id=$!fs.goods_id" #end
+        #if($!fs.click_type=="url") href="$!fs.url" #end>
+     <img src="$!imageWebServer/$!fs.img_src" width="100%" /></a></div>
+     #end
+   #end
+   #if($!floor.edit_mo=="2")
+     #set($floor_show=$!weixinstoreViewTools.getfloor_info("$!floor.line_info"))
+            #foreach($fs in $!floor_show)
+            #if($!fs.po=="1")
+            #set($fs1=$fs)
+            #end
+            #if($!fs.po=="2")
+            #set($fs2=$fs)
+            #end
+            #end 
+     <div class="store_floor floor_two">
+    		#if($!floor.title) 
+        	<h1>$!floor.title</h1>
+            #end
+            <ul><li><a #if($!fs1.click_type=="goods") href="$!webPath/wap/items?id=$!fs1.goods_id" #end #if($!fs1.click_type=="url") href="$!fs1.url" #end><img src="$!imageWebServer/$!fs1.img_src" /></a></li><li><a #if($!fs2.click_type=="goods") href="$!webPath/wap/items?id=$!fs2.goods_id" #end
+#if($!fs2.click_type=="url") href="$!fs2.url" #end><img src="$!imageWebServer/$!fs2.img_src" /></a></li></ul>
+     </div>
+      <script>
+/*     jQuery(".web_img_goods img").each(function(i){
+   jQuery(this).height(parseFloat(jQuery(this).width()));
+       })
+ 
+   jQuery(window).resize(function(){
+ 		jQuery(".web_img_goods img").each(function(i){
+    jQuery(this).height(parseFloat(jQuery(this).width()));
+    })
+    }) */
+      </script>
+	#set($fs1="")
+    #set($fs2="")
+    #end
+	 #if($!floor.edit_mo=="5")
+     #set($floor_show=$!weixinstoreViewTools.getslide("$!floor.line_info"))
+     <!--幻灯-->
+     #set($floor_id=$!{floor.id})     
+     <div class="store_focusBox" id="store_touch_$!{floor_id}">
+        	<div class="touch">
+            <ul class="pic" id="pic">
+                #foreach($fs in $!floor_show)
+                    <li><a #if($!fs.click_type=="goods") href="$!webPath/wap/items?id=$!fs.goods_id" #end #if($!fs.click_type=="url") href="$!fs.url" #end><img src="$!imageWebServer/$!fs.img_src" /></a></li>
+                #end
+            </ul>
+            <ul class="hd">
+            	#set($!mark = 1)
+                #foreach($fs in $!floor_show)
+                <li>1</li>
+                #set($!mark=$!mark + 1)
+                #end
+            </ul>
+        </div>
+     </div>
+<!--        <script type="text/javascript">
+		TouchSlide({ 
+			slideCell:"#store_touch_$!{floor_id}",
+			mainCell:".pic", 
+			effect:"left",
+			autoPlay:true,//自动播放			
+			switchLoad:"_src" //切换加载，真实图片路径为"_src" 
+		});
+        </script>-->
+         <script type="text/javascript">
+            jQuery("#store_touch_$!{floor_id}").slide({ mainCell:".pic",effect:"left", autoPlay:true, delayTime:300});
+        </script>
+     #end
+     #if($!floor.edit_mo=="6")
+        <div class="store_hot">
+        	<h1>$!floor.title</h1>
+            #set($floor_show=$!weixinstoreViewTools.getfloor_info("$!floor.line_info"))
+            #foreach($fs in $!floor_show)
+            #if($!fs.po=="1")
+            #set($fs1=$fs)
+            #end
+            #if($!fs.po=="2")
+            #set($fs2=$fs)
+            #end
+            #if($!fs.po=="3")
+            #set($fs3=$fs)
+            #end
+            #end 
+            <dl>
+            	<dt>
+                	<ul>
+                    	<li><img src="$!imageWebServer/$!fs1.img_src"/></li>
+                        <li class="name">$!fs1.goods_name</li>
+                    </ul>
+                </dt>
+                <dd>
+                	<ul>
+                    	<li><p><img src="$!imageWebServer/$!fs2.img_src" height="87" /></p><p class="name">$!fs2.goods_name</p></li>
+                        <li><p><img src="$!imageWebServer/$!fs3.img_src" height="87" /></p><p class="name">$!fs3.goods_name</p></li>
+                    </ul>
+                </dd>
+            </dl> 
+        </div>
+     #set($fs1="")
+     #set($fs2="")
+     #set($fs3="") 
+     #end
+     #if($!floor.edit_mo=="7")  
+     #set($floor_show=$!weixinstoreViewTools.getgoods("$!floor.line_info"))
+        <div class="store_list">
+        	#if($!floor.title!="")
+        	<h1>- $!floor.title -</h1>
+            #end
+            <ul class="store_ul">
+            #foreach($fs in $!floor_show)
+            #if($!fs.goods_main_photo)
+        	#set($goods_c_photo="$!imageWebServer/$!fs.goods_main_photo.path/$!fs.goods_main_photo.name")
+        	#else
+        	#set($goods_c_photo="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name")
+        	#end
+                <li class="web_img_goods"><a href="$!webPath/wap/items?id=$!fs.id"><img src="$!goods_c_photo" /><p class="name">$!fs.goods_name</p><p class="price">¥$!fs.store_price</p></a></li>
+            #end  
+            </ul>
+        </div>
+     #end 
+     <script>
+     jQuery(".web_img_goods img").each(function(i){
+   jQuery(this).height(parseFloat(jQuery(this).width()));
+ })
+ 
+jQuery(window).resize(function(){
+ jQuery(".web_img_goods img").each(function(i){
+   jQuery(this).height(parseFloat(jQuery(this).width()));
+})
+}) 
+</script>
+</div>
+<!--<div class='android_floor_add'><a href='javascript:void(0)'  onclick='add_line($!obj.id)'>添加楼层</a></div>-->
+#end

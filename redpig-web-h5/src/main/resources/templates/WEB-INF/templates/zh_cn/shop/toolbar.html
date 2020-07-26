@@ -1,0 +1,174 @@
+<script>
+ jQuery(".right_nav_r_left ul li").live("hover",function(i){
+	   jQuery(this).find("span").show()
+ });
+ jQuery("body").live("click",function(i){ 
+      var s=jQuery(".right_nav_r,.list_contrast");
+	  if(!jQuery(i.target).parents(".right_nav_r,.list_contrast").first().is(s)){
+		  s.find(".right_nav_r_r").animate({ width:'1px'});
+		  jQuery(".right_nav_r_r div").animate({ width:'1px'});
+		  jQuery("#car").attr("class","buy_car");
+	      jQuery("#re").attr("class","read");
+		  jQuery("#coll").attr("class","collect");
+		  jQuery("#gc").attr("class","right_compare");
+		  jQuery("#rt").attr("class","right_ticket")
+		  jQuery("#re").attr("class","read");
+		  }
+	  });
+jQuery(".right_nav_r_r_top h3 a").live("click",function(){
+	   jQuery(".right_nav_r_r").animate({ width:'1px'});
+	   jQuery(".right_nav_r_r div").animate({ width:'1px'});
+	   jQuery("#coll").attr("class","collect");
+	   jQuery("#re").attr("class","read");
+	   jQuery("#car").attr("class","buy_car");
+	   jQuery("#gc").attr("class","right_compare");
+	   jQuery("#center").attr("class","img");
+	   jQuery("#rt").attr("class","right_ticket");
+       
+	})
+jQuery(".right_nav_r_left ul li").live("click",function(){
+  var i=jQuery(this).attr("mark");
+  jQuery("#coll").attr("class","collect");
+  jQuery("#re").attr("class","read");
+  jQuery("#center").attr("class","img");
+  jQuery("#rt").attr("class","right_ticket");
+  jQuery("#car").attr("class","buy_car");
+  jQuery("#gc").attr("class","right_compare");
+  
+  jQuery(".right_t_stor").css("opacity","0");
+   #if(!$!store_id)
+  jQuery("#youhuiquan").css("opacity","0");
+  jQuery("#youhuiquan").show();
+  #end
+  if(jQuery("#"+i).width()==1){
+	#if($!user)
+	if(i=="img"){
+	jQuery.post("$!webPath/personal","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text)
+						
+					},"text");
+    }
+	if(i=="right_ticket"){
+		#if(!$!store_id)
+		   jQuery.post("$!webPath/coupon?goods_id=$!{goods_id}","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text)
+						
+					},"text");}
+		#else
+		   jQuery.post("$!webPath/coupon?store_id=$!{store_id}","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text)
+						
+					},"text");}
+		#end
+	if(i=="collect"){
+	jQuery.post("$!webPath/collect","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+						
+					},"text");}
+	if(i=="read"){
+	jQuery.post("$!webPath/user_footer","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+					},"text");
+	jQuery("#span").html("我的足迹");
+	}
+	jQuery("."+i).attr("class",i+" this");
+	jQuery(".right_nav_r_r").show().animate({ width:'280px'});
+    jQuery("#"+i).show().animate({ width:'274px'}).siblings().animate({ width:'1px'});
+	#end
+	if(i=="buy_car"){
+	jQuery.post("$!webPath/cart_load","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+		            },"text");
+					jQuery(".buy_car").attr("class","buy_car this");
+					jQuery(".right_nav_r_r").show().animate({ width:'280px'});
+                    jQuery("#buy_car").show().animate({ width:'274px'}).siblings().animate({ width:'1px'});
+    }
+	if(i=="right_compare"){
+	jQuery.post("$!webPath/goods_com","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+						jQuery(".right_compare").attr("class","right_compare this");
+	 jQuery(".right_nav_r_r").show().animate({ width:'280px'});
+     jQuery("#right_compare").show().animate({ width:'274px'}).siblings().animate({ width:'1px'});
+					},"text");
+    }
+  }else{
+	jQuery(".right_nav_r_r").animate({ width:'1px'});
+	jQuery("#"+i).animate({ width:'1px'});
+	jQuery("."+i).attr("class",i);
+	jQuery("."+i+" span").hide();
+  }
+  	
+});
+jQuery("#toTop").click(function(){
+	jQuery('body,html').animate({scrollTop:0},1000);
+       return false;
+    });
+
+	   
+</script>
+<!--右侧大导航 --> 
+<div class="right_nav_r" style="display:;">
+
+  <div class="right_nav_r_left">
+    <ul>
+     #set($user_photo="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+        #if($!user && $!user.photo)
+          #set($user_photo="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+        #end
+      <li mark="img" id="center" class="img"><a href="javascript:void(0);" #if(!$!user) dialog_uri="$!current_webPath/user_dialog_login" dialog_title="您尚未登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn" id="add_car_g" #end><img src="$user_photo" /><span>个人中心</span></a>
+  </li>
+      <li mark="buy_car" id="car" class="buy_car"><a href="javascript:void(0);" >购<br />
+        物<br />
+        车<b>$!carts.size()</b></a></li>
+      <li mark="collect" id="coll" class="collect"><i style="display:none">+1</i><a href="javascript:void(0);" #if(!$!user) dialog_uri="$!current_webPath/user_dialog_login" dialog_title="您尚未登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn" id="add_car_g" #end></a><span >我的收藏</span></li>
+      <li mark="read" id="re" class="read"><a href="javascript:void(0);" #if(!$!user) dialog_uri="$!current_webPath/user_dialog_login" dialog_title="您尚未登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn" id="add_car_g" #end></a><span >最近浏览</span></li>
+      <li mark="right_ticket" id="rt" class="right_ticket"><a href="javascript:void(0);" #if(!$!user) dialog_uri="$!current_webPath/user_dialog_login" dialog_title="您尚未登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn" id="add_car_g" #end></a>
+      
+      #if($!goods_id && $!{user} && $!size && $!size>0)
+      <span class="right_t_stor">
+      	<i>该店铺可领优惠券</i>
+        <a class="stor" href="javascript:void(0);" #if(!$!user) dialog_uri="$!current_webPath/user_dialog_login" dialog_title="您尚未登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn" id="add_car_g" #end>立即领取</a>
+      </span>
+      #else
+      <span>优惠券</span>
+      #end
+      #if(!$!store_id)
+      <span id="youhuiquan" style="opacity:0">优惠券</span>
+      #end
+      </li>
+     <li mark="right_compare" id="gc" class="right_compare" #if($!goods_compare_list.size()>0)#end onclick="jQuery('.contrast_center').show();jQuery('.contrast_center_nothing').hide();"><a href="javascript:void(0);" ></a><span>商品对比</span></li>
+    </ul>
+    
+    <div class="right_nav_r_left_home"><a href="$!webPath/index" target="_blank"></a></div>
+    <div id="toTop" class="right_nav_r_left_b"><a href="javascript:void(0);"></a></div>
+  </div>
+  
+  <!--右侧大导航 右侧详细 -->
+  <div class="right_nav_r_r">
+  <div class="right_nav_r_r_center" id="img" style="display:none"></div>
+  
+    <!-- 购物车 -->
+    <div class="right_nav_r_r_car" id="buy_car" style="display:none"> </div>
+    
+    <!-- 我的收藏 -->
+    <div class="favorites" id="collect" style="display:none"> </div>
+    
+    <!-- 我的足迹 -->
+    <div class="right_footer" id="read" style="display:none"> </div>
+     <!--优惠券 -->
+    <div class="right_nav_coupon" id="right_ticket" style="display:none"></div>
+    
+    
+    <div class="right_nav_r_r_center" id="right_compare" style="display:none">
+
+    </div>
+
+  </div>
+</div>

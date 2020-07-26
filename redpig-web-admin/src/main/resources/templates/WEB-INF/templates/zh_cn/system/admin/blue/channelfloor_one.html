@@ -1,0 +1,286 @@
+<script>
+jQuery(document).ready(function(){
+	jQuery("#gc_id").load("$!webPath/goodsclass_loading_asyn");
+	var type = "$!obj.type";
+	if(type!=""){
+	jQuery("li[id^=img_adv_]").hide();
+	  jQuery("li[id^=goods_adv_]").hide();
+	   jQuery("li[id^=system_adv_]").hide();
+	 if(type=="img"){
+	  jQuery("li[id^=img_adv_]").show();
+	 }
+	 if(type=="adv"){
+	  jQuery("li[id^=system_adv_]").show();
+	 }
+	 if(type=="goods"){
+	   jQuery("li[id^=goods_adv_]").show();
+	 }
+	}
+   jQuery("#channel_goods_info").sortable({containment:"#channel_goods_info",opacity:0.9,cursor:"crosshair"});
+   jQuery("#channel_goods_info").disableSelection();
+  jQuery(":radio").click(function(){
+     var val=jQuery(this).val();
+	  jQuery("li[id^=img_adv_]").hide();
+	  jQuery("li[id^=goods_adv_]").hide();
+	   jQuery("li[id^=system_adv_]").hide();
+	 if(val=="img"){
+	  jQuery("li[id^=img_adv_]").show();
+	 }
+	 if(val=="adv"){
+	  jQuery("li[id^=system_adv_]").show();
+	 }
+	 if(val=="goods"){
+	   jQuery("li[id^=goods_adv_]").show();
+	 }
+  });
+  //
+  jQuery("#img").change(function(){
+     jQuery("#file_val").val(jQuery(this).val());
+  });
+  // 
+   jQuery("#theForm").validate({		
+	 ignore: "",						   
+     rules:{
+	   img:{accept:"$!config.imageSuffix"},
+	   adv_url:{url:true}
+	 },
+	messages:{
+	  img:{accept:'图片格式不正确'},
+	  adv_url:{url:"广告链接格式不正确"}
+	}
+  });
+  jQuery("#adv_id").change(function(){
+	  var adv_id=jQuery(this).val();
+	  if(adv_id!="" && adv_id!=null){
+		 jQuery.ajax({
+			 type:'POST',
+			 url:'$!webPath/channel_style_load',
+			 data:{"adv_id":adv_id,"type":"2"},
+			 success:function(data){
+	           if(data!=null && data!=""){
+		         jQuery("#system_adv_ap").remove();
+	             jQuery("#system_adv_info").after(data);
+	           }
+	         }
+		  }); 
+	  }
+  });
+  jQuery("#logoShow").hover(function(){
+		jQuery("#logoImg").show();							   
+	},function(){
+		jQuery("#logoImg").hide();	
+		});
+  });
+  function save_form(){
+	 var value=jQuery("input[name='aps_type']:checked").val();
+     if(value=="img"){//直接上传图片
+	    var img=jQuery("#img").val();
+		if(img!=null && img!=""){
+			jQuery("#adv_type").val("img");
+		    jQuery("#theForm").submit();
+	    }else{
+		   alert("请上传广告图片！");
+		}  
+	 }else if(value=="adv"){//选择商城广告
+		 var adv=jQuery("#adv_id").val();
+		 if(adv!=undefined && adv!=null && adv!=""){
+		    jQuery("#adv_type").val("adv");
+			jQuery("#theForm").submit();
+		 }else{
+		    alert("请选择商城广告信息！");
+		 }
+	 }else{//商品
+	    var goods_id="";
+        jQuery(".floor_box_pls ul").each(function(){
+           goods_id=jQuery(this).attr("goods_id"); 
+        });
+		if(goods_id!=undefined && goods_id!=null && goods_id!=""){
+		    jQuery("#adv_type").val("goods");
+			jQuery("#goods_id").val(goods_id); 
+			jQuery("#theForm").submit();
+		 }else{
+		    alert("请选择商品信息！");
+		 }
+	 }
+  }
+function ajaxPage(url,page,obj){
+ var params=jQuery("#queryForm").serialize();
+ params = params+"&currentPage="+page;
+ jQuery.ajax({type:'POST',url:url,data:params,
+			  success:function(data){
+					jQuery("#floor_goods_list").empty().append(data);																											               }																																		    });
+}
+function channel_floor_goods_load(){
+  var params=jQuery("#queryForm").serialize();	
+  jQuery.ajax({type:'POST',url:'$!webPath/channel_floor_goods_load',data:params,
+			  success:function(data){
+					jQuery("#floor_goods_list").empty().append(data);																											               }																																		      });
+}
+function goods_list_set(obj){
+  var img=jQuery(obj).attr("img_uri");
+  var goods_id=jQuery(obj).attr("goods_id"); 
+  var goods_name=jQuery(obj).attr("goods_name");
+  var count=jQuery(".floor_box_pls ul").length;
+  var add=0; 
+  if(count>0){
+	  alert("最多只能添加1件商品！");
+	  add=1;
+  }else{
+  jQuery(".floor_box_pls ul").each(function(){
+     if(jQuery(this).attr("goods_id")==goods_id){
+	   alert("已经存在该商品");
+	   add=2;
+	 }
+  });
+  }
+  if(add==0){
+  var s="<ul ondblclick='jQuery(this).remove();' class='floor_pro' goods_id='"+goods_id+"'><li class='floor_pro_img' style='width:95px; padding-top:0;'><img src='"+img+"' width='100' height='100' /></li></ul>";
+  jQuery(".floor_box_pls").append(s);
+  }
+}
+function save_form(){
+ var ids="";
+ jQuery(".floor_box_pls ul").each(function(){
+   ids=ids+","+jQuery(this).attr("goods_id"); 
+ });
+ jQuery("#ids").val(ids);
+ jQuery("#theForm").submit();
+}
+</script>
+<div class="box_floor">
+  <div class="floor_advertisment">
+   <em class="floor_warning">注释：可以上传图片和商品。商品上传只能选择1件商品，双击删除已选商品信息</em>
+    <ul class="floor_adv">
+    <form action="$!webPath/chennelfloor_one_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+  <input name="position" type="hidden" id="position" value="$!position">
+  <input type="hidden" name="ids" id="ids">
+  <input name="cf_id" type="hidden" id="cf_id" value="$!cf_id">
+  <input name="channel_id" type="hidden" id="channel_id" value="$!channel_id">
+      <li>
+       <b class="left">
+       选择类型：</b> 
+      <span class="floor_adv_sp">
+      <i>
+          <label>
+            <input name="type" type="radio" id="type" value="img" #if(!$!obj||$!obj.type=="img") checked="checked" #end/>
+            图片上传</label>
+          </i> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="goods" #if($!obj.type=="goods") checked="checked" #end />
+            商品上传
+          </label>
+          </i> 
+      </span> 
+      </li>
+      <li id="img_adv_img"> 
+      <b class="left">广告上传：</b> 
+      <span class="floor_adv_sp">
+        <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+          <input name="button" type="button" class="floor_file_btn" value=""/>
+          <input  type="file"  size="33" class="flooor_file" id="img" name="img"/>
+      </span>
+       <span class="preview" style="float:left;"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="20" height="20"  id="logoShow" style="cursor:help"/> </span>  <i class="floor_adv_node">&nbsp;&nbsp;建议上传#if($!cf.cf_type==0 && $!position==2) 266*316 #end
+	   #if($!cf.cf_type==0)
+       #if($!position==1) 
+       430*615 
+       #else 
+       266*316 
+       #end
+       #end
+       #if($!cf.cf_type==1)
+       #if($!position==1) 
+       430*615 
+       #else 
+       266*316
+       #end
+       #end
+       #if($!cf.cf_type==2)
+       #if($!position==1) 
+       395*580 
+       #else 
+       200*290
+       #end
+       #end
+       #if($!cf.cf_type==3)
+       #if($!position==1) 
+       360*550 
+       #else 
+       210*275
+       #end
+       #end
+       #if($!cf.cf_type==4)
+       #if($!position==1) 
+       220*540
+       #end
+       #if($!position==2)
+       490*270 
+       #end 
+	   #if($!position!=1 && $!position!=2)
+       245*270 
+       #end 
+       #end
+       #if($!cf.cf_type==5)
+       #if($!position==1) 
+       280*450 
+       #else 
+       300*225
+       #end
+       #end
+       像素图片</i> 
+        <i class="floor_adv_node"></i> 
+        <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer$!obj.photo_url" width="200" height="80" /> </div>
+      </li>
+      <li id="img_adv_url"> <b class="left">广告链接：</b>
+       <span class="floor_adv_sp">
+        <input name="img_url" type="text"class="floor_file_txt2" id="img_url" value="$!obj.img_url" />
+        </span> <i class="floor_adv_node">格式为:http://www.xxx.com</i>
+      </li>
+      </form>
+       <li id="goods_adv_info" style="display:none;">
+       <div class="box_floor_six">
+    <span class="floor_choose">已选推荐商品：</span>
+    <div class="box_floor_prodel" style="width:597px">
+      <div class="floor_box_pls" id="channel_goods_info">
+       	  #if($!goods)
+        	<ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+          		<li class="floor_pro_img" style="width:95px; padding-top:0; border:none;"><img src="$!imageWebServer/$!goods.goods_main_photo.path/$!goods.goods_main_photo.name" width="100" height="100" title="$!goods.name"/></li>
+                <!--<li style="width: 95px; height:10px; overflow:hidden;float: left;padding-top: 5px; border:none;">阿卡还是地方卡啥的哈市弗拉丁十分卡萨丁</li>-->
+        	</ul>
+      	  #end 
+        </div>
+    </div>
+    <form id="queryForm" name="queryForm" action="" method="post">
+    <span class="channel_goods_choose" style="display:block; clear:both;font-weight:bold;color: #666;">选择要展示的商品：</span>
+    <div class="channel_goods_choose_box" style="width:620px; float:left; border:solid 1px #ddd; margin-top:10px; padding-top:20px; padding-bottom:10px;">
+     <div style="width:530px; float:left;">
+         <span class="channel_goods_search_sp">
+        <input name="goods_name" type="text" id="goods_name" placeholder="商品名称关键字" class="channal_goods_name"/>
+          <select name="gc_id" id="gc_id" class="channal_goods_select">
+            <option value="">请选择商品分类...</option>
+          </select>
+          <select name="activity_name" id="activity_name" class="channal_goods_select">
+             <option value="">全部商品...</option>
+              <option value="group_buy">团购商品</option>
+              <option value="combin_status">组合销售商品</option>
+              <option value="enough_reduce">满就减商品</option>
+              <option value="order_enough_give_status">满就送商品</option>
+              <option value="order_enough_if_give">满就送赠品</option>
+              <option value="f_sale_type">F码商品</option>
+              <option value="advance_sale_type">预售</option>
+              <option value="activity_status">商城促销</option>
+          </select>
+          </span>
+           <input type="button" class="channel_sear_btn" value="搜索" onclick="channel_floor_goods_load();" style="background: transparent url('$!cdnServer/resources/style/system/manage/blue/images/flsearch.jpg') no-repeat scroll 0% 0%;
+width: 52px;height: 25px;border: 0px none;cursor: pointer;margin-left: 5px;margin-top: 15px;" />
+       </div>
+     <div id="floor_goods_list" style="clear:both; padding-top:10px;"></div>
+    </div>
+    </form>
+  </div> 
+      </li>
+    </ul>
+  </div>
+  <div class="submit">
+      <input name="按钮" type="button" value="保存" onClick="save_form();" />
+    </div>
+</div>

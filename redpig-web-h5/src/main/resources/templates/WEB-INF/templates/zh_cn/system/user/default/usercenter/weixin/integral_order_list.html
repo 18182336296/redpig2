@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>积分订单列表 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+function order_pay(id){
+	window.location.href="$!webPath/integral/order_pay_view?id="+id;
+}
+function order_cofirm(id){
+	WapshowDialog(2,"确认收货",me);
+	function me(){
+		window.location.href="$!webPath/buyer/integral_order_cofirm_save?id="+id;
+	}
+}
+jQuery(document).ready(function(){
+	var igo_status = "$!igo_status";
+   if(igo_status==""){
+		igo_status = "al";	   
+   }
+   jQuery(" li[id^=order_status]").each(function(index, element) {
+    jQuery(element).removeClass("this");
+	});
+	jQuery("#order_status_"+igo_status).addClass("this");
+	var currentPage = 2;
+	var ret = 1;
+	var totalPage = "$!totalPage";
+	if(totalPage>1){
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+		if(currentPage<=totalPage){
+		jQuery("#loading_none").hide();
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/buyer/integral_order_list',
+				  data:{"currentPage":currentPage,"igo_status":"$!{igo_status}","type":"$!type"},
+				beforeSend:function(){
+					 ret = 2;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				 
+				},
+			   success:function(data){
+				  jQuery("#loading").hide();
+				  currentPage = currentPage+1;		 
+				  ret = 1;
+	             if(data){ 
+				  jQuery(".order_page").append(data);
+			 	 }else{
+				 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+	 }else{
+		jQuery("#loading").hide();
+		jQuery("#loading_none").show();
+	 }
+	 }
+	});
+   }
+});<!--end-->
+</script>
+</head>
+
+<body class="user_bg" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+	<div class="user_c_title">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>积分订单列表
+		<a class="per_c_icon" href="$!webPath/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a>
+	</div>
+
+	<div class="order_page" style="margin-top:5px; padding-bottom:0px;">
+		<div class="order_hd">
+			<ul>
+				<li id="order_status_al"><a
+					href="$!webPath/buyer/integral_order_list">全 部</a></li>
+				<li id="order_status_0"><a
+					href="$!webPath/buyer/integral_order_list?igo_status=0">待付款</a></li>
+				<li id="order_status_20"><a
+					href="$!webPath/buyer/integral_order_list?igo_status=20">待发货</a></li>
+				<li id="order_status_30"><a
+					href="$!webPath/buyer/integral_order_list?igo_status=30">待收货</a></li>
+				<li id="order_status_40"><a
+					href="$!webPath/buyer/integral_order_list?igo_status=40">已收货</a></li>
+			</ul>
+		</div>
+		 
+		#if($!objs.size()>0) #foreach($order in $objs)
+		#if($!order.igo_status==0) #set($status="待付款") #end
+		#if($!order.igo_status==20) #set($status="已付款") #end
+		#if($!order.igo_status==30) #set($status="已发货") #end
+		#if($!order.igo_status==40) #set($status="已收货") #end
+		#if($!order.igo_status==-1) #set($status="已取消") #end
+		<div class="order_page_box">
+			<h1 style="border-bottom: 1px solid #EEE;">
+				<span class="fl">订单号：$!order.igo_order_sn</span><span class="fr">$!status</span>
+			</h1>
+			
+			 
+			#set($igo_gcs=$!orderFormTools.query_integral_goodsinfo("$!order.goods_info"))
+			#if($!igo_gcs.size()>1)
+			<div class="order_goods" style="border-bottom: 1px solid #EEE;">
+                #foreach($gc in $igo_gcs)
+               
+                <div class="order_goods" style=" border-bottom: 1px solid #EEE;">
+				<div class="dt">
+					<a href="javascript:void(0);"
+						onClick="url('$!webPath/buyer/integral_order_view?id=$!{order.id}')"><img
+						src="$!gc.ig_goods_img" width="50" height="50" /></a>
+				</div>
+				<ul>
+					<li><b> #if($!gc.ig_goods_integral)消耗积分：$!gc.ig_goods_integral#end</b></li>
+					<li>数量：$!gc.ig_goods_count</li>
+				</ul>
+				<div class="dd">
+					<a href="javascript:void(0);">$!gc.ig_goods_name</a>
+				</div>
+				
+			</div>
+            #end	
+			</div>
+			#else
+	
+			<div class="order_goods" style=" border-bottom: 1px solid #EEE;">
+				#foreach($gc in $igo_gcs)
+	
+				<div class="dt">
+					<a href="javascript:void(0);"
+						onClick="url('$!webPath/buyer/integral_order_view?id=$!{order.id}')"><img
+						src="$!gc.ig_goods_img" width="50" height="50" /></a>
+				</div>
+				<ul>
+					<li><b> #if($!gc.ig_goods_integral)消耗积分：$!gc.ig_goods_integral#end</b></li>
+					<li>数量：$!gc.ig_goods_count</li>
+				</ul>
+				<div class="dd">
+					<a href="javascript:void(0);">$!gc.ig_goods_name</a>
+				</div>
+				#end
+			</div>
+			#end
+			<div class="order_total" style="border-bottom: 1px solid #EEE;">
+				共 $!orderFormTools.query_integral_count("$!order.id") 件商品 实付：<b>¥
+					$!{order.igo_trans_fee}</b> 积分：<b>$!{order.igo_total_integral}</b>
+			</div>
+			<div class="order_box_bt">
+				<a href="javascript:void(0);"
+					onClick="url('$!webPath/buyer/integral_order_view?id=$!{order.id}')">查看订单</a>
+					#if($!order.igo_status==30 || $!order.igo_status==40)
+                   
+				<a href="javascript:void(0);"
+					onClick="url('$!webPath/buyer/integral_ship_detail?order_id=$!{order.id}')">查看物流</a>
+					#end
+				#if($!order.igo_status==30) <a class="bg_orange"
+					href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a>
+				#elseif($!order.igo_status < 11 && $!order.igo_status > 0) <a class="bg_orange"
+					href="javascript:void(0);" onClick="order_pay($!{order.id})">付款</a>
+				#end
+			</div>
+		</div>
+		#end #else
+		<div class="main">
+			<div class="mt50" style="height: 49px;"></div>
+			<div class="error_page1">
+				<span class="error_img"><img
+					src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+				<p>暂无记录！</p>
+			</div>
+		</div>
+		#end
+		</div>
+		<script>
+function url(url){
+	var type = jQuery("#url").val();
+	window.location.href=url;
+}
+</script>
+<div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+<div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>  
+</div>
+</body>
+</html>

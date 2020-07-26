@@ -1,0 +1,207 @@
+<script src="$!cdnServer/resources/js/wap/iscroll-lite.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+//电话号码验证 
+jQuery.validator.addMethod("isTel", function(value, element) { 
+  var tel = /^\d{3,4}-?\d{7,9}$/; //电话号码格式010-12345678 
+  return this.optional(element) || (tel.test(value)); 
+}, "请正确填写您的电话号码"); 
+//邮政编码验证 
+jQuery.validator.addMethod("isZipCode", function(value, element) { 
+  var tel = /^[0-9]{6}$/; 
+  return this.optional(element) || (tel.test(value)); 
+}, "请正确填写您的邮政编码"); 
+jQuery(document).ready(function(){  
+	jQuery("input").mousemove(function(){
+	jQuery(this).siblings("label").hide();	
+	})
+	jQuery("#theForm").validate({
+	errorPlacement:function(error, element) {
+        var display =jQuery("#error label").css("display");
+		if(display=="none"){
+			        jQuery("#error").html(error);
+					jQuery(element).focus()	
+					}	
+      },
+	rules: {
+		trueName:{
+			required:true
+		},
+		mobile:{
+			required:true,
+			isTel:true 
+		
+		},
+		areaView:{
+			required:true
+		},
+		area_info:{
+			required:true
+		},
+		zip:{
+			required:true,
+			isZipCode:true
+		},
+	},
+	messages: {
+		trueName:{
+			required:"收货人姓名不能为空"
+			
+		},
+		mobile:{
+			required:"手机号码不能为空",
+			isTel:"手机号码格式不正确" 		
+		},
+		areaView:{
+			required:"所在区域不能为空"
+		},
+		area_info:{
+			required:"详细地址不能为空"
+		},	
+		zip:{
+			required:"邮政编码不能为空",
+			isZipCode:"请正确填写邮政编码"	
+		},	
+	},		
+	});
+});
+var myScroll;
+            function show_areas(){
+				load_area();
+				
+             }
+             function load_area(){
+				jQuery.ajax({type:'POST',
+        	            url:'$!webPath/area_list',
+        			   data:{"pid":""},
+        			   success:function(data){
+						  jQuery(".pop_nav").remove(); 
+						  jQuery(".all_list_right").show();
+						  jQuery(".black_bg").show(); 
+        				  jQuery("#g_detail_model_mask").after(data);
+						   new_scroll();
+						   jQuery(".pop_nav").animate({ left: "10%" });
+						   jQuery('html,body').addClass('ovfHiden');
+        			   }
+        	        });
+            }
+             function load_area_second(obj){
+				 jQuery(obj).siblings("li").attr("class","");
+             	jQuery(obj).attr("class","this");
+             	var pid = jQuery(obj).attr("id");
+             	var level = jQuery(obj).attr("level");
+             	if(level==2){
+						hideClass();
+              			query_address_data(pid);				
+              			return;
+             	}
+             	jQuery.ajax({type:'POST',
+        	            url:'$!webPath/load_area',
+        			   data:{"pid":pid},
+        			   success:function(data){
+        				   var obj = jQuery.parseJSON(data);
+        				   var text ="";
+        				   jQuery.each(obj, function(index,item){
+                          text=text+"<li style='height:45px; line-height:45px; background:#fff;' onclick='load_area_second(this);' id="+item.id+" level="+item.level+">"+item.areaName+"</li>";	
+                        });
+                        if(text!=""&&level==0){
+							jQuery("#first_child_list").hide();
+							jQuery("#three_child_list").hide();
+							jQuery("#second_child_list").html(text).show();
+							new_scroll();
+                        }else{
+							 jQuery("#first_child_list").hide();
+							 jQuery("#second_child_list").hide();
+							 jQuery("#three_child_list").html(text).show();
+							 new_scroll();
+                        }
+        			   }
+        	        });
+             }
+			 /*隐藏地区选择框*/
+             function hideClass(){
+ 			 jQuery(".pop_nav").hide();
+ 			 jQuery(".all_list_right").hide();
+			 jQuery(".black_bg").hide();
+			 jQuery("html,body").attr("class","");
+			 }       
+             function area_back(){
+            	 var level = 0;
+            	 jQuery("#scroller2 ul").each(function(){
+            		if(jQuery(this).css("display")=="block"){
+						level=jQuery(this).attr("level");
+					}
+            	 })
+            	 if(level==0){
+            		 	hideClass();
+            	 }else if(level==1){
+							jQuery("#second_child_list").hide();
+							jQuery("#three_child_list").hide();
+							jQuery("#first_child_list").show();
+							new_scroll();
+            	 }else if(level==2){
+          					jQuery("#first_child_list").hide();
+							jQuery("#three_child_list").hide();
+							jQuery("#second_child_list").show();
+							new_scroll();
+            	 }
+             }
+			  function new_scroll(){
+				  	var text1 = jQuery("#scroller2").html();
+					var text2 = "<div class='pop_nav_left' id='wrapper2'  style='width:100%;'><div id='scroller2' style='width:100%;'>"+text1+"</div></div>";
+					jQuery(".pop_nav_left").remove();
+					jQuery("#pop_nav_top").after(text2);
+					myScroll = new IScroll('#wrapper2', {
+							scrollbars: false,
+							mouseWheel: true,
+							interactiveScrollbars: true,
+							shrinkScrollbars: 'scale',
+							click: true,
+							fadeScrollbars: true
+							});
+				  }
+</script>
+<div class="top">
+			<form method="post" name="theForm" id="theForm"
+		action="$!webPath/buyer/address_save">
+				<a href="javascript:void(0);" class="finish" onclick="saveForm();">完成</a>
+				<ul class="info">
+					<li><span>收货人姓名</span><input id="trueName" name="trueName"
+						value="$!obj.trueName">
+                       <!--如果出现该提示，则此li的margin-bottom值为0px；-->
+                        </li>
+					<li><span>手机号码</span><input type="tel" id="mobile" name="mobile"
+						value="$!obj.mobile"></li>
+					<li class="area"><span>所在区域 </span> #if($!obj) <a
+						href="javascript:void(0)"
+						onClick="show_areas()">
+						<input value="$!areaViewTools.generic_area_info("$!obj.area.id")" readonly="readonly" unselectable="true">
+					</a> #else <a href="javascript:void(0)"
+						onClick="show_areas()">
+                        <input
+							value="$!areaViewTools.generic_area_info('$!bj.id')" id="areaView" name="areaView" readonly="readonly" unselectable="true"></a>
+						#end</li>
+					<input id="return_free_apply" name="return_free_apply" value="$!return_free_apply"
+						type="hidden">
+						<input id="integarl_url" name="integarl_url" value="$!integarl_url"
+						type="hidden">
+						<input id="area_id" name="area_id" value="$!obj.area.id"
+						type="hidden">
+					<input id="id" name="id" value="$!obj.id" type="hidden">
+					<input id="type" name="type" value="$!type" type="hidden">
+					<li><span>详细地址</span><input id="area_info" name="area_info"
+						value="$!obj.area_info"></li>
+					<li><span>邮政编码</span><input id="zip" name="zip"
+						value="$!obj.zip" ></li>
+				</ul>
+                <div id="error" class="info_lab">
+                <label  style="display:none;"></label>
+                </div>
+			</div>
+			<div class="bottom">
+		<a href="javascript:void(0)"class="close" onclick="backmain(this)"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/address_close.png"></a>
+	</div>
+    <div class="g_detail_model_mask" id="g_detail_model_mask"></div>
+    <div class="all_list_right" onClick="hideClass();" style="left:-4px; display:none"><a class="back_top" href="javascript:void(0);"><ul><li>点</li><li>击</li><li>此</li><li>处</li><li>返</li><li>回</li><li><img style="-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);-ms-transform:rotate(180deg);-o-transform:rotate(180deg);transform:rotate(180deg);" src="$!cdnServer/resources/style/system/front/default/images/weixin/back_left.png" /></li></ul></a></div>
+    <div class="black_bg" style="display:none"></div>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.CloudPurchaseLotteryMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.CloudPurchaseLottery">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="period" property="period" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="purchased_times" property="purchased_times" jdbcType="INTEGER"/>
+		<result column="purchased_left_times" property="purchased_left_times" jdbcType="INTEGER"/>
+		<result column="soldout_date" property="soldout_date" jdbcType="TIMESTAMP"/>
+		<result column="announced_date" property="announced_date" jdbcType="TIMESTAMP"/>
+		<result column="user_time_num_count" property="user_time_num_count" jdbcType="DECIMAL"/>
+		<result column="lottery_num" property="lottery_num" jdbcType="DECIMAL"/>
+		<result column="expect" property="expect" jdbcType="VARCHAR"/>
+		<result column="change_code" property="change_code" jdbcType="VARCHAR"/>
+		<result column="lucky_code" property="lucky_code" jdbcType="BIGINT"/>
+		<result column="lucky_userid" property="lucky_userid" jdbcType="VARCHAR"/>
+		<result column="lucky_username" property="lucky_username" jdbcType="VARCHAR"/>
+		<result column="lucky_truename" property="lucky_truename" jdbcType="VARCHAR"/>
+		<result column="lucky_userbuytime" property="lucky_userbuytime" jdbcType="VARCHAR"/>
+		<result column="lucky_userphoto" property="lucky_userphoto" jdbcType="VARCHAR"/>
+		<result column="lucky_usertimes" property="lucky_usertimes" jdbcType="VARCHAR"/>
+		<result column="lucky_address" property="lucky_address" jdbcType="VARCHAR"/>
+		<result column="lucky_phone" property="lucky_phone" jdbcType="VARCHAR"/>
+		<result column="delivery_status" property="delivery_status" jdbcType="INTEGER"/>
+		<association property="cloudPurchaseGoods" column="cloudPurchaseGoods_id" select="com.redpigmall.dao.CloudPurchaseGoodsMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.CloudPurchaseLottery">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="period" property="period" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="purchased_times" property="purchased_times" jdbcType="INTEGER"/>
+		<result column="purchased_left_times" property="purchased_left_times" jdbcType="INTEGER"/>
+		<result column="soldout_date" property="soldout_date" jdbcType="TIMESTAMP"/>
+		<result column="announced_date" property="announced_date" jdbcType="TIMESTAMP"/>
+		<result column="user_time_num_count" property="user_time_num_count" jdbcType="DECIMAL"/>
+		<result column="lottery_num" property="lottery_num" jdbcType="DECIMAL"/>
+		<result column="expect" property="expect" jdbcType="VARCHAR"/>
+		<result column="change_code" property="change_code" jdbcType="VARCHAR"/>
+		<result column="lucky_code" property="lucky_code" jdbcType="BIGINT"/>
+		<result column="lucky_userid" property="lucky_userid" jdbcType="VARCHAR"/>
+		<result column="lucky_username" property="lucky_username" jdbcType="VARCHAR"/>
+		<result column="lucky_truename" property="lucky_truename" jdbcType="VARCHAR"/>
+		<result column="lucky_userbuytime" property="lucky_userbuytime" jdbcType="VARCHAR"/>
+		<result column="lucky_userphoto" property="lucky_userphoto" jdbcType="VARCHAR"/>
+		<result column="lucky_usertimes" property="lucky_usertimes" jdbcType="VARCHAR"/>
+		<result column="lucky_address" property="lucky_address" jdbcType="VARCHAR"/>
+		<result column="lucky_phone" property="lucky_phone" jdbcType="VARCHAR"/>
+		<result column="delivery_status" property="delivery_status" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,goods_id,period,status,purchased_times,purchased_left_times,soldout_date,announced_date,user_time_num_count,lottery_num,expect,change_code,lucky_code,cloudPurchaseGoods_id,lucky_userid,lucky_username,lucky_truename,lucky_userbuytime,lucky_userphoto,lucky_usertimes,lucky_address,lucky_phone,delivery_status
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+		<if test="period != null">and period = #{period,jdbcType=VARCHAR}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="purchased_times != null">and purchased_times = #{purchased_times,jdbcType=INTEGER}</if>
+		<if test="purchased_left_times != null">and purchased_left_times = #{purchased_left_times,jdbcType=INTEGER}</if>
+		<if test="soldout_date != null">and soldout_date = #{soldout_date,jdbcType=TIMESTAMP}</if>
+		<if test="announced_date != null">and announced_date = #{announced_date,jdbcType=TIMESTAMP}</if>
+		
+		<if test="announced_date_less_than_equal != null">and announced_date <![CDATA[ <= ]]> #{announced_date_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="user_time_num_count != null">and user_time_num_count = #{user_time_num_count,jdbcType=DECIMAL}</if>
+		<if test="lottery_num != null">and lottery_num = #{lottery_num,jdbcType=DECIMAL}</if>
+		<if test="expect != null">and expect = #{expect,jdbcType=VARCHAR}</if>
+		<if test="change_code != null">and change_code = #{change_code,jdbcType=VARCHAR}</if>
+		<if test="lucky_code != null">and lucky_code = #{lucky_code,jdbcType=BIGINT}</if>
+		<if test="lucky_userid != null">and lucky_userid = #{lucky_userid,jdbcType=VARCHAR}</if>
+		<if test="lucky_username != null">and lucky_username = #{lucky_username,jdbcType=VARCHAR}</if>
+		<if test="lucky_truename != null">and lucky_truename = #{lucky_truename,jdbcType=VARCHAR}</if>
+		<if test="lucky_userbuytime != null">and lucky_userbuytime = #{lucky_userbuytime,jdbcType=VARCHAR}</if>
+		<if test="lucky_userphoto != null">and lucky_userphoto = #{lucky_userphoto,jdbcType=VARCHAR}</if>
+		<if test="lucky_usertimes != null">and lucky_usertimes = #{lucky_usertimes,jdbcType=VARCHAR}</if>
+		<if test="lucky_address != null">and lucky_address = #{lucky_address,jdbcType=VARCHAR}</if>
+		<if test="lucky_phone != null">and lucky_phone = #{lucky_phone,jdbcType=VARCHAR}</if>
+		<if test="delivery_status != null">and delivery_status = #{delivery_status,jdbcType=INTEGER}</if>
+		<if test="cloudPurchaseGoods_id != null">and cloudPurchaseGoods_id = #{cloudPurchaseGoods_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		goods_id= #{goods_id},
+		period= #{period},
+		status= #{status},
+		purchased_times= #{purchased_times},
+		purchased_left_times= #{purchased_left_times},
+		soldout_date= #{soldout_date},
+		announced_date= #{announced_date},
+		user_time_num_count= #{user_time_num_count},
+		lottery_num= #{lottery_num},
+		expect= #{expect},
+		change_code= #{change_code},
+		lucky_code= #{lucky_code},
+		<if test="cloudPurchaseGoods == null or cloudPurchaseGoods.id == null">cloudPurchaseGoods_id = null,</if>
+		<if test="cloudPurchaseGoods != null and cloudPurchaseGoods.id != null">cloudPurchaseGoods_id = #{cloudPurchaseGoods.id,jdbcType=BIGINT},</if>
+		lucky_userid= #{lucky_userid},
+		lucky_username= #{lucky_username},
+		lucky_truename= #{lucky_truename},
+		lucky_userbuytime= #{lucky_userbuytime},
+		lucky_userphoto= #{lucky_userphoto},
+		lucky_usertimes= #{lucky_usertimes},
+		lucky_address= #{lucky_address},
+		lucky_phone= #{lucky_phone},
+		delivery_status= #{delivery_status},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.CloudPurchaseLottery" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_cloud_purchase_lottery 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.CloudPurchaseLottery" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from redpigmall_cloud_purchase_lottery obj 
+		<if test="cloudPurchaseGoods_goods_name_like !=null">
+			JOIN redpigmall_cloud_purchase_lottery cpl on obj.id=cpl.cloudPurchaseGoods_id 
+			and cpl.goods_name like CONCAT('%',#{cloudPurchaseGoods_goods_name_like},'%')
+		</if>
+		
+		<if test="cloudPurchaseGoods_class_id !=null">
+			JOIN redpigmall_cloud_purchase_goods cpg1 on obj.cloudPurchaseGoods_id = cpg1.id and cpg1.class_id = #{cloudPurchaseGoods_class_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="cloudPurchaseGoods_goodsNum_more_than != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg2 ON obj.cloudPurchaseGoods_id = cpg2.id and cpg2.goodsNum <![CDATA[ > ]]> #{cloudPurchaseGoods_goodsNum_more_than,jdbcType=INTEGER}
+		</if>
+		
+		<if test="cloudPurchaseGoods_least_rmb != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg3 ON obj.cloudPurchaseGoods_id = cpg3.id and cpg3.least_rmb = #{cloudPurchaseGoods_least_rmb,jdbcType=INTEGER}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_cloud_purchase_lottery obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getCloudPurchaseGoodsByCloudPurchaseGoodsId" resultType="com.redpigmall.domain.CloudPurchaseLottery" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_cloud_purchase_lottery
+		where
+			cloudPurchaseGoods_id = #{cloudPurchaseGoods_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.CloudPurchaseLottery" resultMap="BaseResultMap" parameterType="map">
+		select
+		obj.*
+		from redpigmall_cloud_purchase_lottery obj 			
+		<if test="cloudPurchaseGoods_goods_name_like !=null">
+			JOIN redpigmall_cloud_purchase_lottery cpl on obj.id=cpl.cloudPurchaseGoods_id 
+			and cpl.goods_name like CONCAT('%',#{cloudPurchaseGoods_goods_name_like},'%')
+		</if>
+		
+		<if test="cloudPurchaseGoods_class_id !=null">
+			JOIN redpigmall_cloud_purchase_goods cpg1 on obj.cloudPurchaseGoods_id = cpg1.id and cpg1.class_id = #{cloudPurchaseGoods_class_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="cloudPurchaseGoods_goodsNum_more_than != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg2 ON obj.cloudPurchaseGoods_id = cpg2.id and cpg2.goodsNum <![CDATA[ > ]]> #{cloudPurchaseGoods_goodsNum_more_than,jdbcType=INTEGER}
+		</if>
+		
+		<if test="cloudPurchaseGoods_least_rmb != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg3 ON obj.cloudPurchaseGoods_id = cpg3.id and cpg3.least_rmb = #{cloudPurchaseGoods_least_rmb,jdbcType=INTEGER}
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.CloudPurchaseLottery" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_cloud_purchase_lottery(addTime,deleteStatus,goods_id,period,status,purchased_times,purchased_left_times,soldout_date,announced_date,user_time_num_count,lottery_num,expect,change_code,lucky_code,lucky_userid,lucky_username,lucky_truename,lucky_userbuytime,lucky_userphoto,lucky_usertimes,lucky_address,lucky_phone,delivery_status,cloudPurchaseGoods_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{goods_id,jdbcType=BIGINT},#{period,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{purchased_times,jdbcType=INTEGER},#{purchased_left_times,jdbcType=INTEGER},#{soldout_date,jdbcType=TIMESTAMP},#{announced_date,jdbcType=TIMESTAMP},#{user_time_num_count,jdbcType=DECIMAL},#{lottery_num,jdbcType=DECIMAL},#{expect,jdbcType=VARCHAR},#{change_code,jdbcType=VARCHAR},#{lucky_code,jdbcType=BIGINT},#{lucky_userid,jdbcType=VARCHAR},#{lucky_username,jdbcType=VARCHAR},#{lucky_truename,jdbcType=VARCHAR},#{lucky_userbuytime,jdbcType=VARCHAR},#{lucky_userphoto,jdbcType=VARCHAR},#{lucky_usertimes,jdbcType=VARCHAR},#{lucky_address,jdbcType=VARCHAR},#{lucky_phone,jdbcType=VARCHAR},#{delivery_status,jdbcType=INTEGER},#{cloudPurchaseGoods.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.CloudPurchaseLottery">
+		update redpigmall_cloud_purchase_lottery
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_cloud_purchase_lottery where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_cloud_purchase_lottery where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.CloudPurchaseLottery" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_cloud_purchase_lottery obj 			
+		<if test="cloudPurchaseGoods_goods_name_like !=null">
+			JOIN redpigmall_cloud_purchase_lottery cpl on obj.id=cpl.cloudPurchaseGoods_id 
+			and cpl.goods_name like CONCAT('%',#{cloudPurchaseGoods_goods_name_like},'%')
+		</if>
+		
+		<if test="cloudPurchaseGoods_class_id !=null">
+			JOIN redpigmall_cloud_purchase_goods cpg1 on obj.cloudPurchaseGoods_id = cpg1.id and cpg1.class_id = #{cloudPurchaseGoods_class_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="cloudPurchaseGoods_goodsNum_more_than != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg2 ON obj.cloudPurchaseGoods_id = cpg2.id and cpg2.goodsNum <![CDATA[ > ]]> #{cloudPurchaseGoods_goodsNum_more_than,jdbcType=INTEGER}
+		</if>
+		
+		<if test="cloudPurchaseGoods_least_rmb != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg3 ON obj.cloudPurchaseGoods_id = cpg3.id and cpg3.least_rmb = #{cloudPurchaseGoods_least_rmb,jdbcType=INTEGER}
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.CloudPurchaseLottery" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_cloud_purchase_lottery obj 			
+		<if test="cloudPurchaseGoods_goods_name_like !=null">
+			JOIN redpigmall_cloud_purchase_lottery cpl on obj.id=cpl.cloudPurchaseGoods_id 
+			and cpl.goods_name like CONCAT('%',#{cloudPurchaseGoods_goods_name_like},'%')
+		</if>
+		
+		<if test="cloudPurchaseGoods_class_id !=null">
+			JOIN redpigmall_cloud_purchase_goods cpg1 on obj.cloudPurchaseGoods_id = cpg1.id and cpg1.class_id = #{cloudPurchaseGoods_class_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="cloudPurchaseGoods_goodsNum_more_than != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg2 ON obj.cloudPurchaseGoods_id = cpg2.id and cpg2.goodsNum <![CDATA[ > ]]> #{cloudPurchaseGoods_goodsNum_more_than,jdbcType=INTEGER}
+		</if>
+		
+		<if test="cloudPurchaseGoods_least_rmb != null ">
+			JOIN redpigmall_cloud_purchase_goods cpg3 ON obj.cloudPurchaseGoods_id = cpg3.id and cpg3.least_rmb = #{cloudPurchaseGoods_least_rmb,jdbcType=INTEGER}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.CloudPurchaseLottery" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_cloud_purchase_lottery
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_cloud_purchase_lottery where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

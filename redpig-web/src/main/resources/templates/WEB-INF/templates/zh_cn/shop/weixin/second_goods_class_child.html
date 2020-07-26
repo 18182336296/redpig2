@@ -1,0 +1,11 @@
+<li class="pli">
+          <div class="pop_item">
+            <ul>
+            #foreach($gc2 in $!showClassTools.getSclist($CommUtil.null2Long($!id)))
+              <li> <a href="javascript:void(0);" onClick="window.location.href='$!webPath/wap/class_items?gc_id=$!{gc2.id}'">
+                <div class="pop_item_img"> #if($!gc2.wx_icon) #set($wx_img=$!imageTools.queryImg($!gc2.wx_icon))<img src="$!imageWebServer/$!wx_img.path/$!wx_img.name"> #end</div>
+                <b class="pop_item_name" gc_id="$!{gc2.id}">$!gc2.className</b> </a> </li>
+            #end 
+            </ul>
+          </div>
+</li>

@@ -1,0 +1,40 @@
+  <script>
+   jQuery(".contrast_b_clear").click(function(){
+     jQuery.ajax({type:'POST',url:'$!webPath/remove_all_goods_compare_cart',data:"",
+					  success:function(){
+		                   jQuery("#goods_compare_cart").empty();        
+                           jQuery(".contrast_b_yes a").attr("href","javascript:void(0);").removeAttr("target").css("background","#CCC");
+						   jQuery(".contrast").show();
+						   jQuery(".contrast_off").hide();
+						   jQuery(".contrast_center_center_nothing").show();
+		               }
+	   });
+   });
+  </script>
+    <div class="right_nav_r_r_top">
+      <h3><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/backe.png" /></a></h3>
+      <span id="span">商品对比</span> </div>
+    <div class="contrast_center_center">
+     <div id="goods_compare_cart"> #foreach($goods_compare in $goods_compare_list)
+        
+          <dl>
+            #if($!goods_compare.goods_main_photo)
+            #set($small_img="$!imageWebServer/$!{goods_compare.goods_main_photo.path}/$!{goods_compare.goods_main_photo.name}_small.$!{goods_compare.goods_main_photo.ext}")
+            #else
+            #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+            #end
+            <dt><a href="$!webPath/items_$!{goods_compare.id}" target="_blank"><img src="$!small_img" /></a></dt>
+            <span class="contrast_center_center_close" goods_id="$!goods_compare.id">X</span>
+            <dd><a href="$!webPath/items_$!{goods_compare.id}" target="_blank">$!goods_compare.goods_name</a></dd>
+          </dl>
+          #end </div>
+        <div class="contrast_center_center_nothing"  #if($!goods_compare_list.size()>0) style="display:none;" #end></div>
+        <!--没有数据 display:none -->
+        <div class="contrast_b"> #if($goods_compare_list.size()>1)
+          <div class="contrast_b_yes"><a href="$!webPath/goods_compare" target="_blank">对比</a></div>
+          #else
+          <div class="contrast_b_yes"><a href="javascript:void(0);" style="background:#CCC;">对比</a></div>
+          #end
+          <div class="contrast_b_clear"><a href="javascript:void(0);">清空</a></div>
+        </div>
+      </div>

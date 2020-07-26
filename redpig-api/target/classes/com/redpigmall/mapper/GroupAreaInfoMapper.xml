@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GroupAreaInfoMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GroupAreaInfo">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gai_name" property="gai_name" jdbcType="VARCHAR"/>
+		<result column="gai_type" property="gai_type" jdbcType="INTEGER"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="gai_lng" property="gai_lng" jdbcType="DOUBLE"/>
+		<result column="gai_lat" property="gai_lat" jdbcType="DOUBLE"/>
+		<association property="area" column="area_id" select="com.redpigmall.dao.AreaMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GroupAreaInfo">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gai_name" property="gai_name" jdbcType="VARCHAR"/>
+		<result column="gai_type" property="gai_type" jdbcType="INTEGER"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="gai_lng" property="gai_lng" jdbcType="DOUBLE"/>
+		<result column="gai_lat" property="gai_lat" jdbcType="DOUBLE"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,gai_name,area_id,gai_type,store_id,gai_lng,gai_lat
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="gai_name != null">and gai_name = #{gai_name,jdbcType=VARCHAR}</if>
+		<if test="gai_type != null">and gai_type = #{gai_type,jdbcType=INTEGER}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="gai_lng != null">and gai_lng = #{gai_lng,jdbcType=DOUBLE}</if>
+		<if test="gai_lat != null">and gai_lat = #{gai_lat,jdbcType=DOUBLE}</if>
+		<if test="area_id != null">and area_id = #{area_id,jdbcType=BIGINT}</if>
+		
+		<if test="area_ids != null">
+			and area_id in 
+			<foreach collection="area_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+	</sql>
+	
+	<sql id="ifStatement">
+		gai_name= #{gai_name},
+		<if test="area == null or area.id == null">area_id = null,</if>
+		<if test="area != null and area.id != null">area_id = #{area.id,jdbcType=BIGINT},</if>
+		gai_type= #{gai_type},
+		store_id= #{store_id},
+		gai_lng= #{gai_lng},
+		gai_lat= #{gai_lat},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GroupAreaInfo" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_group_areainfo 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GroupAreaInfo" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_group_areainfo obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_group_areainfo obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getAreaByAreaId" resultType="com.redpigmall.domain.GroupAreaInfo" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_areainfo
+		where
+			area_id = #{area_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.GroupAreaInfo" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_areainfo obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GroupAreaInfo" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_group_areainfo(addTime,deleteStatus,gai_name,gai_type,store_id,gai_lng,gai_lat,area_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{gai_name,jdbcType=VARCHAR},#{gai_type,jdbcType=INTEGER},#{store_id,jdbcType=BIGINT},#{gai_lng,jdbcType=DOUBLE},#{gai_lat,jdbcType=DOUBLE},#{area.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GroupAreaInfo">
+		update redpigmall_group_areainfo
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_group_areainfo where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_group_areainfo where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GroupAreaInfo" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_areainfo obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GroupAreaInfo" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_group_areainfo obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GroupAreaInfo" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_areainfo
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_group_areainfo where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

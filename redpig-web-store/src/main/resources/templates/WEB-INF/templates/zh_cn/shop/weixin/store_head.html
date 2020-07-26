@@ -1,0 +1,29 @@
+﻿<script>
+jQuery(document).ready(function(){
+	jQuery(".more").click(function(){
+		if(jQuery(".down").css("display")=="none"){
+			jQuery(".down").show();
+			jQuery(".black_bg").show();
+		}else{
+			jQuery(".down").hide();
+			jQuery(".black_bg").hide();
+		}
+	})
+   jQuery(document).click(function(e){   
+   var tar = jQuery(e.target);
+   if(!"mo_img"==tar.attr("id") || !tar.attr("id")){
+	   jQuery(".down").css("display","none");
+	   jQuery(".black_bg").css("display","none");
+   }
+	});
+})
+</script>
+<div class="shop_hd"> 
+	<a class="fl" href="$!webPath/wap/store?id=$!store.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_icon.png"></a>
+    <span id="store_class">$!store.store_name</span>
+    <div class="fr" id="fr">
+    	<a class="more" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_more.png" id="mo_img"></a>
+        <div class="down" style="display:none"><a class="car" href="$!webPath/wap/goods_cart1">购物车</a><a class="home" href="$!webPath/wap/index">首页</a><i></i></div>
+        <div class="black_bg" style="display:none"></div>
+    </div>
+</div>

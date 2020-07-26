@@ -1,0 +1,30 @@
+<div class="activity_item_1" style="display:none;">
+            	<h4 class="item_title">赠品专区</h4>
+                #foreach($map in $!CommUtil.Json2List("$!obj.gift_info"))
+                #set($goods_name = "$!{map.get('goods_name')}")
+                #set($goods_id = "$!{map.get('goods_id')}")
+                #set($goods_price = "$!{map.get('goods_price')}")
+                #set($goods_mainphoto_path = "$!{map.get('big_goods_main_photo')}")
+                <div class="present_box">
+                	<a href="$!webPaht/wap/items?id=$!goods_id">
+                        <ul class="item">
+                            <li class="pic"><img src="$!imageWebServer/$!goods_mainphoto_path"></li>
+                            <li class="text">
+                                <dl>
+                                    <dt>$!goods_name</dt>
+                                    <dd><span>原价：￥$goods_price </span><span> 现价：￥0.00</span></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </a>
+                </div>
+                #end
+            </div>
+ <div class="activity_item_2" style="display:none;">
+            	<h4 class="item_title">$!er.ertitle</h4>
+                <ul>
+                	<li class="info">$!er.ertag</li>
+                    <li class="time"><span>活动时间：</span>$!CommUtil.formatShortDate($!er.erbegin_time)至$!CommUtil.formatShortDate($!er.erend_time)</li>
+                    <li class="intro"><span>活动说明：</span>$!er.ercontent</li>
+                </ul>
+</div>

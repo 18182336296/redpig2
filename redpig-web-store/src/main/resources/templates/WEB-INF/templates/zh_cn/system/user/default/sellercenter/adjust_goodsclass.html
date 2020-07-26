@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-经营类目调整-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function() {
+	init_data();
+    jQuery("#grade").live("click",function(){
+		jQuery("#grade_l").show();
+		jQuery(this).css("box-shadow","0px 2px 0px 1px #969696");
+	});
+	jQuery("#grade_l").parent().mouseleave(function(){
+	    jQuery("#grade_l").hide();
+		jQuery("#grade").css("box-shadow","");
+	});
+	jQuery("#grade_l").children().find("li").click(function(){
+		var g_id=jQuery(this).attr("g_id");
+		jQuery("#grade").text(jQuery(this).html());
+		jQuery("#grade_l").hide();
+		jQuery("#gc").parent().parent().show();
+		jQuery("#store_grade").val(g_id);
+	});
+	jQuery("#gc").live("click",function(){
+		jQuery("#gc_l").show();
+		jQuery(this).css("box-shadow","0px 2px 0px 1px #969696");
+	});
+	jQuery("#gc_l").parent().mouseleave(function(){
+	    jQuery("#gc_l").hide();
+		jQuery("#gc").css("box-shadow","");
+	});
+	jQuery("#gc_l").children().find("li").click(function(){
+		jQuery("#gc").text(jQuery(this).html());
+		jQuery("#gc_l").hide();
+		jQuery(".seller_list_new_b_r").show();
+		jQuery("#gc_main").val(jQuery(this).attr("gc_id"));
+		jQuery(".seller_list_button").show();
+		init_data();
+	});
+	jQuery("#gc_details1").change(function(){
+		jQuery("div[id^='gc_details2_']").hide();
+		var gc_id = jQuery(this).val();
+		jQuery("#gc_details2_"+gc_id).show();
+	});
+	
+});<!--end-->
+function add_GC_detail(){
+	var grade_id = jQuery("#store_grade").val();
+	var gc_main_id = jQuery("#gc_main").val();
+	jQuery.ajax({type:'POST',
+	             url:'$!webPath/add_gc_detail',
+				 data:{"gc_main_id":gc_main_id,"grade_id":grade_id},
+				 success:function(data){
+					 if(data!=''){
+						 jQuery(".adjust_bg").show();
+						 jQuery("#gc_main_id").attr("disabled",true);
+						 jQuery("#settled_box_pop_limit").show();
+						 jQuery("#gc_details_limit").html("");
+						 jQuery.each(eval(data),function(index,item){
+						 	 jQuery("#gc_details_limit").append("<span class='settled_check'><label style='cursor:pointer'><input name='gc_id' type='checkbox' value="+item.id+" id='gc_id'/>"+item.name+"</label></span>");
+						 })
+					 }else{
+						 jQuery(".adjust_bg").show();
+					 	 jQuery("#settled_box_pop").show();
+					 }
+				 }
+	});
+}
+//取消添加详细类目
+function cancel_GC_detail(){
+	jQuery(".settled_box_pop").hide();
+	jQuery(".adjust_bg").hide();
+	jQuery("#gc_details1").val("");
+	jQuery("input[name='gc_id']").each(function() {
+    	jQuery(this).attr("checked",false);
+    });
+	jQuery("div[id^='gc_details2_']").hide();
+}
+function sava_GC_detail(){
+	var ids = "";
+	var gc_detail_info = jQuery("#gc_detail_info").val();
+	jQuery("input[name='gc_id']:checked").each(function(){
+        ids = jQuery(this).val()+","+ids;
+    });
+	jQuery.ajax({type:'POST',
+	             url:'$!webPath/adjust_gc_save',
+				 data:{"ids":ids,"gc_detail_info":gc_detail_info},
+				 success:function(data){
+					jQuery(".settled_box_pop").hide();
+					redraw_GC_detail_info(data);
+					jQuery("#gc_detail_info").val(data);  
+					jQuery("#gc_details1").val("");
+					jQuery("input[name='gc_id']").each(function() {
+        				jQuery(this).attr("checked",false);
+    				});
+					jQuery("div[id^='gc_details2_']").hide();
+				 }
+	});
+	jQuery(".adjust_bg").hide();
+}
+function del_GC_detail(id){
+	var gc_detail_info = jQuery("#gc_detail_info").val();
+	jQuery.ajax({type:'POST',
+	             url:'$!webPath/adjust_gc_del',
+				 data:{"id":id,"gc_detail_info":gc_detail_info},
+				 success:function(data){
+					jQuery(".settled_box_pop").hide();
+					redraw_GC_detail_info(data);
+					jQuery("#gc_detail_info").val(data);
+				 }
+	});
+	redraw_GC_detail_info();
+}
+//重绘详细经营类目
+function redraw_GC_detail_info(data){
+
+	jQuery("#gc_li").html("");
+	jQuery.map(eval("("+data+")"),function(value,key){
+		jQuery("#gc_li").append("<li title="+value.gc_id+"><span>"+value.parent_name+"</span><span>"+value.gc_name+"</span><span><a href='javascript:void(0)' onclick='del_GC_detail("+value.gc_id+")'>删除</a></span></li>");
+	});
+	if(jQuery("#gc_li li").length>0){
+	  jQuery("#gc_class_list").show();
+	}else{
+	  jQuery("#gc_class_list").hide();
+	}
+}
+function init_data(){
+    jQuery("#gc_li li").remove();
+	jQuery("#gc_class_list").hide();
+	jQuery("#gc_detail_info").val("");
+	jQuery("#gc_details1").val("");
+	jQuery("input[name='gc_id']").each(function() {
+        jQuery(this).attr("checked",false);
+    });
+}
+function saveForm(){
+	var gc_ids="";
+	jQuery("ul[id='gc_li'] li").each(function(){
+		var g_id=jQuery(this).attr("title");
+        gc_ids = gc_ids+","+g_id;
+    });
+	jQuery("#gc_ids").val(gc_ids);
+    jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+<div class="store_main">
+  <div class="seller_center"> $!httpInclude.include("/nav?op=adjust_goodsClass")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/index">商家中心</a></b>><b>商品管理</b> > <b>经营类目调整</b></span></div>
+      
+      <!--修改类目 -->
+          <form action="$!webPath/adjust_apply_save" method="post" name="theForm" id="theForm">
+        <div class="seller_list_new">
+        	<div class="seller_list_new_top">
+				<div class="seller_list_new_main"><span></span><b>$!store.grade.gradeName #if($!{store.grade.content}!="")（ $!{store.grade.content} ）#end</b></div>
+            	<div class="seller_list_new_type"><span></span><b>$!main_gc.className</b></div>
+            	<div class="seller_list_new_list"><span></span><b>#if($!detail_gcs.size()>0)#foreach($gc in $detail_gcs) $!gc.className #if($!velocityCount!=$!{detail_gcs.size()})、#end #end #else 暂无详细类目 #end</b></div>
+            </div>	
+            <ul>
+            <div class="seller_list_new_bottom">
+            	<div class="seller_list_new_b_l">
+                	<div class="seller_list_new_b_l_left" >店铺类型：</div>
+                    <div class="seller_list_new_b_l_right">
+            			<div class="seller_list_new_bottom_list" id="grade">请选择店铺等级</div>
+                		<div  id="grade_l" class="seller_list_new_bottom_list_l" style="display:none">
+                	<ul>
+                    #foreach($grade in $grades)
+                    	<li g_id="$!grade.id">$!grade.gradeName</li>
+                     #end
+                	</ul>
+                </div>
+                	</div>
+                </div>
+                <div class="seller_list_new_b_l" style="display:none">
+                	<div class="seller_list_new_b_l_left">主营类目：</div>
+                    <div class="seller_list_new_b_l_right">
+            			<div class="seller_list_new_bottom_list" id="gc">请选择主营类目</div>
+                		<div class="seller_list_new_bottom_list_l" id="gc_l" style="display:none">
+                	<ul>
+                    	#foreach($gc in $goodsClass)
+                        <li gc_id="$!gc.id">$!{gc.className}</li>
+                        #end
+                	</ul>
+                </div>
+                	</div>
+                </div>
+                <div class="seller_list_new_b_r" style="display:none">
+                	<div class="seller_list_new_b_l_left">详细类目：</div>
+                    <div class="seller_list_new_b_b"><a href="javascript:void(0)" onclick="add_GC_detail()">添加详细类目</a></div>
+                </div>
+                <!--列表start -->
+				<div class="seller_list_b_r_list" style="display:none" id="gc_class_list">
+                	<div class="seller_list_new_b_l_left" >已选类目：</div>
+                    <div class="seller_list_b_r_list_c">
+                    	<div class="seller_list_b_r_list_c_top">
+                        	<span>一级类目</span>
+                            <span>二级类目</span>
+                            <span>操作</span>
+                        </div>
+                        <div class="seller_list_b_r_list_c_b">
+                        	<ul id="gc_li">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="adjust_bg" style=" display:none;"></div>
+                <div class="settled_box_pop" style="display:none" id="settled_box_pop">
+                <h4><a href="javascript:void(0)" class="settled_pop_close" onclick="cancel_GC_detail()"></a></h4>
+                <div class="settled_pop_inbox">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td width="70" align="left" valign="top">一级类目</td>
+                    <td align="left" width="230">
+                        <select name="goodsClass" id="gc_details1">
+                            <option value="">请选择</option>
+                        #foreach($gc in $goodsClass)
+                            <option value="$!gc.id">$!{gc.className}</option>
+                        #end
+                        </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" valign="top" width="80">二级类目</td>
+                    <td align="left">
+                        #foreach($gc in $goodsClass)
+                        <div class="settled_gc" id="gc_details2_$!{gc.id}" style="display:none">
+                        #foreach($child in $gc.childs)
+                            <span class="settled_check">
+                            <label style="cursor:pointer">
+                              <input name="gc_id" type="checkbox" value="$!child.id" id="gc_id" />$!child.className
+                            </label>
+                            </span>
+                        #end
+                        </div>
+                        #end
+                    </td>
+                  </tr>
+                </table>
+                </div>
+                <div class="settled_pop_btn"><span><a href="javascript:void(0)" class="setable_add" onclick="sava_GC_detail()">添加</a><a href="javascript:void(0)" class="setable_add" onclick="cancel_GC_detail()">取消</a></span></div>  
+            </div>
+                <div class="settled_box_pop"  style="display:none" id="settled_box_pop_limit">
+                <h4><a href="javascript:void(0)" class="settled_pop_close" onclick="cancel_GC_detail()"></a></h4>
+                <div class="settled_pop_inbox">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td align="left" valign="top" width="80">二级类目</td>
+                    <td align="left">
+                        <div class="settled_gc" id="gc_details_limit">
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+                </div>
+                <div class="settled_pop_btn" ><span><a href="javascript:void(0)" class="setable_add" onclick="sava_GC_detail()">添加</a><a href="javascript:void(0)" class="setable_add" onclick="cancel_GC_detail()">取消</a></span></div>
+             </div>
+                <div class="seller_list_button" style="display:none">
+                    <a href="javascript:void(0)" class="all_right" onclick="saveForm();">提交</a>
+                </div>
+            </div>
+            <input type="hidden" name="gc_ids" id="gc_ids" />
+            <input type="hidden" name="gc_main" id="gc_main" value="$!gc_main" />
+            <input type="hidden" name="store_grade" id="store_grade" value="$!store_grade" />
+    </div>
+          </form>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

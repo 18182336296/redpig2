@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.NukeClassMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.NukeClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="nc_name" property="nc_name" jdbcType="VARCHAR"/>
+		<result column="nk_sequence" property="nk_sequence" jdbcType="INTEGER"/>
+		<result column="nk_recommend" property="nk_recommend" jdbcType="INTEGER"/>
+		<result column="nk_level" property="nk_level" jdbcType="INTEGER"/>
+		
+		<collection property="ngs" column="id" select="com.redpigmall.dao.NukeGoodsMapper.getNukeGoodsByNukeClassId"/>
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.NukeClass">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="nc_name" property="nc_name" jdbcType="VARCHAR"/>
+		<result column="nk_sequence" property="nk_sequence" jdbcType="INTEGER"/>
+		<result column="nk_recommend" property="nk_recommend" jdbcType="INTEGER"/>
+		<result column="nk_level" property="nk_level" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,nc_name,nk_sequence,nk_recommend,nk_level
+	</sql>
+	
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="ids != null and ids.size() &gt; 0">
+			and id in 
+			<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="id_no != null">and id != #{id_no,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="nc_name != null">and nc_name = #{nc_name,jdbcType=VARCHAR}</if>
+		<if test="nk_sequence != null">and nk_sequence = #{nk_sequence,jdbcType=INTEGER}</if>
+		<if test="nk_recommend != null">and nk_recommend = #{nk_recommend,jdbcType=INTEGER}</if>
+		<if test="nk_level != null">and nk_level = #{nk_level,jdbcType=INTEGER}</if>
+	</sql>
+	
+	<sql id="ifStatement">
+		nc_name= #{nc_name},
+		nk_sequence= #{nk_sequence},
+		nk_recommend= #{nk_recommend},
+		nk_level= #{nk_level},
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.NukeClass" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_nuke_class 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.NukeClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_nuke_class obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_nuke_class obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.NukeClass" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM redpigmall_nuke_class obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.NukeClass" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_nuke_class(addTime,deleteStatus,nc_name,nk_sequence,nk_recommend,nk_level)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{nc_name,jdbcType=VARCHAR},#{nk_sequence,jdbcType=INTEGER},#{nk_recommend,jdbcType=INTEGER},#{nk_level,jdbcType=INTEGER}
+	)</insert>
+	
+	<update id="updateById" parameterType="com.redpigmall.domain.NukeClass">
+		update redpigmall_nuke_class
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_nuke_class where id=#{id,jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_nuke_class where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.NukeClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_nuke_class obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.NukeClass" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_nuke_class obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.NukeClass" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_nuke_class
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_nuke_class where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+</mapper>

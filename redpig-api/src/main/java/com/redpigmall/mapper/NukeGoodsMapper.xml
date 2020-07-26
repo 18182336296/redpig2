@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.NukeGoodsMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.NukeGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="ng_name" property="ng_name" jdbcType="VARCHAR"/>
+		<result column="origin_price" property="origin_price" jdbcType="DECIMAL"/>
+		<result column="ng_price" property="ng_price" jdbcType="DECIMAL"/>
+		<result column="ng_count" property="ng_count" jdbcType="INTEGER"/>
+		<result column="ng_nuke_count" property="ng_nuke_count" jdbcType="INTEGER"/>
+		<result column="ng_selled_count" property="ng_selled_count" jdbcType="INTEGER"/>
+		<result column="ng_rebate" property="ng_rebate" jdbcType="DECIMAL"/>
+		<result column="ng_status" property="ng_status" jdbcType="INTEGER"/>
+		<result column="ng_audit_time" property="ng_audit_time" jdbcType="TIMESTAMP"/>
+		<result column="ng_recommend" property="ng_recommend" jdbcType="BIT"/>
+		<result column="ng_recommend_time" property="ng_recommend_time" jdbcType="TIMESTAMP"/>
+		<result column="ng_content" property="ng_content" jdbcType="VARCHAR"/>
+		<result column="weixin_shop_recommend" property="weixin_shop_recommend" jdbcType="BIT"/>
+		<result column="weixin_shop_recommendTime" property="weixin_shop_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="goods_spec_id" property="goods_spec_id" jdbcType="VARCHAR"/>
+		<result column="limit_number" property="limit_number" jdbcType="INTEGER"/>
+
+		<association property="nuke" column="nuke_id" select="com.redpigmall.dao.NukeMapper.selectByPrimaryKey"/>
+		<association property="ng_nc" column="ng_nc_id" select="com.redpigmall.dao.NukeClassMapper.selectByPrimaryKey"/>
+		<association property="ng_goods" column="ng_goods_id" select="com.redpigmall.dao.GoodsMapper.selectByPrimaryKey"/>
+		<association property="ng_img" column="ng_img_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.NukeGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="ng_name" property="ng_name" jdbcType="VARCHAR"/>
+		<result column="origin_price" property="origin_price" jdbcType="DECIMAL"/>
+		<result column="ng_price" property="ng_price" jdbcType="DECIMAL"/>
+		<result column="ng_count" property="ng_count" jdbcType="INTEGER"/>
+		<result column="ng_nuke_count" property="ng_nuke_count" jdbcType="INTEGER"/>
+		<result column="ng_selled_count" property="ng_selled_count" jdbcType="INTEGER"/>
+		<result column="ng_rebate" property="ng_rebate" jdbcType="DECIMAL"/>
+		<result column="ng_status" property="ng_status" jdbcType="INTEGER"/>
+		<result column="ng_audit_time" property="ng_audit_time" jdbcType="TIMESTAMP"/>
+		<result column="ng_recommend" property="ng_recommend" jdbcType="BIT"/>
+		<result column="ng_recommend_time" property="ng_recommend_time" jdbcType="TIMESTAMP"/>
+		<result column="ng_content" property="ng_content" jdbcType="VARCHAR"/>
+		<result column="weixin_shop_recommend" property="weixin_shop_recommend" jdbcType="BIT"/>
+		<result column="weixin_shop_recommendTime" property="weixin_shop_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="limit_number" property="limit_number" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,nuke_id,beginTime,endTime,ng_nc_id,ng_name,
+		ng_goods_id,origin_price,ng_price,ng_count,ng_nuke_count,ng_selled_count,ng_rebate,
+		ng_status,ng_audit_time,ng_recommend,ng_recommend_time,ng_content,ng_img_id,
+		weixin_shop_recommend,weixin_shop_recommendTime,mobile_recommend,mobile_recommendTime,
+		weixin_recommend,weixin_recommendTime,goods_spec_id,limit_number
+	</sql>
+	
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		
+		<if test="beginTime_more_than_equal != null">and beginTime <![CDATA[ <= ]]> #{beginTime_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="endTime_less_than_equal != null">and endTime <![CDATA[ >= ]]> #{endTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="beginTime != null">and beginTime = #{beginTime,jdbcType=TIMESTAMP}</if>
+		<if test="endTime != null">and endTime = #{endTime,jdbcType=TIMESTAMP}</if>
+		
+		<if test="ng_name != null">and ng_name = #{ng_name,jdbcType=VARCHAR}</if>
+		<if test="ng_name_like != null">and ng_name like CONCAT('%',#{ng_name_like},'%')</if>
+		<if test="origin_price != null">and origin_price = #{origin_price,jdbcType=DECIMAL}</if>
+		<if test="ng_price != null">and ng_price = #{ng_price,jdbcType=DECIMAL}</if>
+		
+		<if test="ng_price_more_than_equal != null">and ng_price <![CDATA[ >= ]]> #{ng_price_more_than_equal,jdbcType=DECIMAL}</if>
+		<if test="ng_price_less_than_equal != null">and ng_price <![CDATA[ <= ]]> #{ng_price_less_than_equal,jdbcType=DECIMAL}</if>
+		
+		<if test="ng_count != null">and ng_count = #{ng_count,jdbcType=INTEGER}</if>
+		<if test="ng_nuke_count != null">and ng_nuke_count = #{ng_nuke_count,jdbcType=INTEGER}</if>
+		<if test="ng_selled_count != null">and ng_selled_count = #{ng_selled_count,jdbcType=INTEGER}</if>
+		<if test="ng_rebate != null">and ng_rebate = #{ng_rebate,jdbcType=DECIMAL}</if>
+		<if test="ng_status != null">and ng_status = #{ng_status,jdbcType=INTEGER}</if>
+		<if test="ng_status_no != null">and ng_status != #{ng_status_no,jdbcType=INTEGER}</if>
+		<if test="ng_audit_time != null">and ng_audit_time = #{ng_audit_time,jdbcType=TIMESTAMP}</if>
+		<if test="ng_recommend != null">and ng_recommend = #{ng_recommend,jdbcType=BIT}</if>
+		<if test="ng_recommend_time != null">and ng_recommend_time = #{ng_recommend_time,jdbcType=TIMESTAMP}</if>
+		<if test="ng_content != null">and ng_content = #{ng_content,jdbcType=VARCHAR}</if>
+		<if test="weixin_shop_recommend != null">and weixin_shop_recommend = #{weixin_shop_recommend,jdbcType=BIT}</if>
+		<if test="weixin_shop_recommendTime != null">and weixin_shop_recommendTime = #{weixin_shop_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=INTEGER}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="weixin_recommend != null">and weixin_recommend = #{weixin_recommend,jdbcType=INTEGER}</if>
+		<if test="weixin_recommendTime != null">and weixin_recommendTime = #{weixin_recommendTime,jdbcType=TIMESTAMP}</if>
+        <if test="limit_number != null">and limit_number = #{limit_number,jdbcType=INTEGER}</if>
+
+        <if test="nuke_id != null">and nuke_id = #{nuke_id,jdbcType=TIMESTAMP}</if>
+		<if test="ng_nc_id != null">and ng_nc_id = #{ng_nc_id,jdbcType=BIGINT}</if>
+		
+		<if test="ng_goods_id != null">and ng_goods_id = #{ng_goods_id,jdbcType=BIGINT}</if>
+		<if test="ng_img_id != null">and ng_img_id = #{ng_img_id,jdbcType=BIGINT}</if>
+		<if test="goods_spec_id != null">and goods_spec_id = #{goods_spec_id,jdbcType=VARCHAR}</if>
+		<if test="ng_status_more_than_equal != null">and ng_status <![CDATA[ >= ]]> #{ng_status_more_than_equal,jdbcType=INTEGER}</if>
+	</sql>
+	
+	<sql id="ifStatement">
+		<if test="nuke == null or nuke.id == null">nuke_id = null,</if>
+		<if test="nuke != null and nuke.id != null">nuke_id = #{nuke.id,jdbcType=BIGINT},</if>
+		beginTime= #{beginTime},
+		endTime= #{endTime},
+		<if test="ng_nc == null or ng_nc.id == null">ng_nc_id = null,</if>
+		<if test="ng_nc != null and ng_nc.id != null">ng_nc_id = #{ng_nc.id,jdbcType=BIGINT},</if>
+		
+		ng_name= #{ng_name},
+		<if test="ng_goods == null or ng_goods.id == null">ng_goods_id = null,</if>
+		<if test="ng_goods != null and ng_goods.id != null">ng_goods_id = #{ng_goods.id,jdbcType=BIGINT},</if>
+		origin_price= #{origin_price},
+		ng_price= #{ng_price},
+		ng_count= #{ng_count},
+		ng_nuke_count= #{ng_nuke_count},
+		ng_selled_count= #{ng_selled_count},
+		ng_rebate= #{ng_rebate},
+		ng_status= #{ng_status},
+		ng_audit_time= #{ng_audit_time},
+		ng_recommend= #{ng_recommend},
+		ng_recommend_time= #{ng_recommend_time},
+		ng_content= #{ng_content},
+		<if test="ng_img != null and ng_img.id != null">ng_img_id = #{ng_img.id,jdbcType=BIGINT},</if>
+		<if test="ng_img == null or ng_img.id == null">ng_img_id = null,</if>
+		weixin_shop_recommend= #{weixin_shop_recommend},
+		weixin_shop_recommendTime= #{weixin_shop_recommendTime},
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+		weixin_recommend= #{weixin_recommend},
+		weixin_recommendTime= #{weixin_recommendTime},
+		goods_spec_id= #{goods_spec_id},
+        limit_number= #{limit_number},
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_nuke_goods 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_nuke_goods obj 
+		<if test="ng_goods_goods_store_id !=null">
+			JOIN redpigmall_goods g1 ON obj.ng_goods_id = g1.id
+			JOIN redpigmall_store s1 ON g1.goods_store_id = s1.id and s1.id=#{ng_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_store_user_id !=null ">
+			JOIN redpigmall_goods g2 ON obj.ng_goods_id = g2.id
+			JOIN redpigmall_store s2 ON g2.goods_store_id = s2.id
+			JOIN redpigmall_user u2 ON u2.store_id = s2.id AND u2.id = #{ng_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_status !=null ">
+			JOIN redpigmall_goods g3 ON obj.ng_goods_id = g3.id AND g3.goods_status=#{ng_goods_goods_status}
+		</if>
+		
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPageListOrderByNgSelledCount" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		obj.*
+		from redpigmall_nuke_goods obj 
+		<if test="ng_goods_goods_store_id !=null">
+			JOIN redpigmall_goods g1 ON obj.ng_goods_id = g1.id
+			JOIN redpigmall_store s1 ON g1.goods_store_id = s1.id and s1.id=#{ng_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_store_user_id !=null ">
+			JOIN redpigmall_goods g2 ON obj.ng_goods_id = g2.id
+			JOIN redpigmall_store s2 ON g2.goods_store_id = s2.id
+			JOIN redpigmall_user u2 ON u2.store_id = s2.id AND u2.id = #{ng_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_status !=null ">
+			JOIN redpigmall_goods g3 ON obj.ng_goods_id = g3.id AND g3.goods_status=#{ng_goods_goods_status}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_nuke_goods obj 
+		<if test="ng_goods_goods_store_id !=null">
+			JOIN redpigmall_goods g1 ON obj.ng_goods_id = g1.id
+			JOIN redpigmall_store s1 ON g1.goods_store_id = s1.id and s1.id=#{ng_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_store_user_id !=null ">
+			JOIN redpigmall_goods g2 ON obj.ng_goods_id = g2.id
+			JOIN redpigmall_store s2 ON g2.goods_store_id = s2.id
+			JOIN redpigmall_user u2 ON u2.store_id = s2.id AND u2.id = #{ng_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_status !=null ">
+			JOIN redpigmall_goods g3 ON obj.ng_goods_id = g3.id AND g3.goods_status=#{ng_goods_goods_status}
+		</if>
+		
+		where 1 = 1
+		<include refid="whereStatement"/> 
+	</select>
+	
+	<select id="getNukeByNukeId" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_nuke_goods
+		where
+			nuke_id = #{nuke_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getNukeGoodsByNukeClassId" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_nuke_goods
+		where
+			ng_nc_id = #{ng_nc_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getNgGoodsByGoodsId" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_nuke_goods
+		where
+			ng_goods_id = #{ng_goods_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getNgImgByAccessoryId" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_nuke_goods
+		where
+			ng_img_id= #{ng_img_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_nuke_goods obj 
+		<if test="ng_goods_goods_store_id !=null">
+			JOIN redpigmall_goods g1 ON obj.ng_goods_id = g1.id
+			JOIN redpigmall_store s1 ON g1.goods_store_id = s1.id and s1.id=#{ng_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_store_user_id !=null ">
+			JOIN redpigmall_goods g2 ON obj.ng_goods_id = g2.id
+			JOIN redpigmall_store s2 ON g2.goods_store_id = s2.id
+			JOIN redpigmall_user u2 ON u2.store_id = s2.id AND u2.id = #{ng_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>	
+		
+		<if test="ng_goods_goods_status !=null ">
+			JOIN redpigmall_goods g3 ON obj.ng_goods_id = g3.id AND g3.goods_status=#{ng_goods_goods_status}
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.NukeGoods" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_nuke_goods(addTime,deleteStatus,beginTime,endTime,ng_name,origin_price,ng_price,ng_count,
+	ng_nuke_count,ng_selled_count,ng_rebate,ng_status,ng_audit_time,ng_recommend,ng_recommend_time,ng_content,
+	weixin_shop_recommend,weixin_shop_recommendTime,mobile_recommend,mobile_recommendTime,weixin_recommend,
+	weixin_recommendTime,nuke_id,ng_nc_id,ng_goods_id,ng_img_id,goods_spec_id,limit_number)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{beginTime,jdbcType=TIMESTAMP},
+	 #{endTime,jdbcType=TIMESTAMP},#{ng_name,jdbcType=VARCHAR},#{origin_price,jdbcType=DECIMAL},#{ng_price,jdbcType=DECIMAL},
+	 #{ng_count,jdbcType=INTEGER},
+	 #{ng_nuke_count,jdbcType=INTEGER},#{ng_selled_count,jdbcType=INTEGER},#{ng_rebate,jdbcType=DECIMAL},
+	 #{ng_status,jdbcType=INTEGER},#{ng_audit_time,jdbcType=TIMESTAMP},#{ng_recommend,jdbcType=BIT},
+	 #{ng_recommend_time,jdbcType=TIMESTAMP},#{ng_content,jdbcType=VARCHAR},#{weixin_shop_recommend,jdbcType=BIT},
+	 #{weixin_shop_recommendTime,jdbcType=TIMESTAMP},#{mobile_recommend,jdbcType=INTEGER},#{mobile_recommendTime,jdbcType=TIMESTAMP},
+	 #{weixin_recommend,jdbcType=INTEGER},#{weixin_recommendTime,jdbcType=TIMESTAMP},#{nuke.id,jdbcType=BIGINT},
+	 #{ng_nc.id,jdbcType=BIGINT},#{ng_goods.id,jdbcType=BIGINT},#{ng_img.id,jdbcType=BIGINT},#{goods_spec_id,jdbcType=VARCHAR},
+	 #{limit_number,jdbcType=INTEGER}
+	)</insert>
+	
+	<update id="updateById" parameterType="com.redpigmall.domain.NukeGoods">
+		update redpigmall_nuke_goods
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_nuke_goods where id=#{id,jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_nuke_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_nuke_goods obj 
+		<if test="ng_goods_goods_store_id !=null">
+			JOIN redpigmall_goods g1 ON obj.ng_goods_id = g1.id
+			JOIN redpigmall_store s1 ON g1.goods_store_id = s1.id and s1.id=#{ng_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_store_user_id !=null ">
+			JOIN redpigmall_goods g2 ON obj.ng_goods_id = g2.id
+			JOIN redpigmall_store s2 ON g2.goods_store_id = s2.id
+			JOIN redpigmall_user u2 ON u2.store_id = s2.id AND u2.id = #{ng_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>	
+		
+		<if test="ng_goods_goods_status !=null ">
+			JOIN redpigmall_goods g3 ON obj.ng_goods_id = g3.id AND g3.goods_status=#{ng_goods_goods_status}
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_nuke_goods obj 
+		<if test="ng_goods_goods_store_id !=null">
+			JOIN redpigmall_goods g1 ON obj.ng_goods_id = g1.id
+			JOIN redpigmall_store s1 ON g1.goods_store_id = s1.id and s1.id=#{ng_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_store_user_id !=null ">
+			JOIN redpigmall_goods g2 ON obj.ng_goods_id = g2.id
+			JOIN redpigmall_store s2 ON g2.goods_store_id = s2.id
+			JOIN redpigmall_user u2 ON u2.store_id = s2.id AND u2.id = #{ng_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ng_goods_goods_status !=null ">
+			JOIN redpigmall_goods g3 ON obj.ng_goods_id = g3.id AND g3.goods_status=#{ng_goods_goods_status}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_nuke_goods
+		where 1 = 1
+		<include refid="whereStatement"/>
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_nuke_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,63 @@
+
+ #if(!$!show)
+ <script>
+ jQuery(document).ready(function(){
+  //改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+ 
+ 
+   jQuery("#gc_id_two").change(function(){						   
+	  var gc_id=jQuery(this).val();
+	  if(gc_id!=null){
+         jQuery.ajax({
+			  type:'POST',
+			  url:'$!webPath/channel_style_load',
+			  data:{"gc_id":gc_id,"effect":"show"},
+			  success:function(data){
+	             if(jQuery(".box_edit_class .box_edit_li").length>0){
+	                  jQuery(".box_edit_class .box_edit_li:last").after(data);
+	             }else{
+		              jQuery(".box_edit_class").append(data);
+	             }
+			  }
+	      });
+	   }
+    });
+	
+ });
+ </script>
+  <div class="box_floor_class" id="goods_class_two"><b>选择二级类目：</b>
+   #if(!$!child)
+     <span> <select name="gc_id_two" id="gc_id_two">
+        <option value="">请选择二级类目...</option>
+      #foreach($gc in $gcs)
+        <option value="$!gc.id">$!gc.className</option>
+       #foreach($c_gc in $gc.childs)
+        <option value="$!c_gc.id">&nbsp;&nbsp;&nbsp;$!c_gc.className</option>
+       #end
+      #end
+      </select></span>
+   #else
+   <span id="nothis"><strong class="q"></strong><strong class="w">请选择拥有二级类目的分类信息</strong><strong class="c"></strong></span>
+   #end
+    </div>
+    #else
+    <li class="box_edit_li">
+  <h6><a href="javascript:void(0);" ondblclick="javascript:jQuery(this.parentNode.parentNode).remove();" pid="$!goodsClass.id">$!goodsClass.className</a></h6>
+  <span>
+  #foreach($c_gc in $goodsClass.childs)
+  <a href="javascript:void(0);" ondblclick="javascript:jQuery(this).remove();" gc_id="$!c_gc.id" parent="$!goodsClass.id">$!c_gc.className</a>
+  #end
+  </span>
+</li>
+    #end

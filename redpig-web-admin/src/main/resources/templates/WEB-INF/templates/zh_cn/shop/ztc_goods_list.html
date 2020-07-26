@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>更多推广 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/integral.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+</head>
+<script>
+jQuery(document).ready(function(){
+	 jQuery(".pro_them_team b").mouseover(function(){
+      var img_id="#"+jQuery(this).attr("goods_id")+"_main_img";
+	  var middle_img=jQuery(this).attr("middle_img");
+	  jQuery(img_id).attr("src",middle_img);
+	  jQuery(this).parent().find("b").removeClass("this_b");
+	  jQuery(this).addClass("this_b");
+	  jQuery(this).parent().find(".team_san").hide();
+	  jQuery(this).find(".team_san").show();
+  });
+  jQuery(".img_cspan img").lazyload({effect:"fadeIn",width:210,height:210});
+  jQuery(".pro_them_team img").lazyload({effect:"fadeIn",width:30,height:30});   
+})
+</script>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="group_bg">
+  <style>
+.pro_list .pro_list_one {width: 230px;margin-left: 0px;margin-right: 11px;}
+.pro_list {width: 1215px;}
+.pro_list .pro_list_one ul .pro_list_img span {width: 216px;height: 216px;}
+
+</style>
+  <div class="main">
+    <div class="auction_center_top">全部推广</div>
+    <form action="$!webPath/ztc_goods_list" method="post" id="ListForm">
+    <input name="gc_id" value="$!gc_id" type="hidden" />
+      <div class="pro_list"> #foreach($obj in $objs)
+        <div class="pro_list_one" data-bind="$!obj.id">
+          <ul class="">
+            <li class="pro_list_img"> #if($!obj.goods_main_photo)
+              
+              #set($small_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+              #set($middle_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_middle.$!{obj.goods_main_photo.ext}")
+              #else
+              #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #set($middle_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end 
+              
+              #set($goods_url="$!webPath/items_$!{obj.id}")
+              #if($!config.second_domain_open && $!obj.goods_type==1 && $!obj.goods_store.store_second_domain!="")
+              #set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.id}")
+              #end <a href="$!goods_url" target="_blank"><span class="img_cspan">
+              <p><img id="$!{obj.id}_main_img" src="$!cdnServer/resources/style/common/images/loader.gif" original="$!middle_img" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" data-bind="$!obj.id" /></p>
+              </span></a></li>
+            <li class="pro_them">
+              <div class="pro_them_team">
+                <p style="position:absolute; width:700px; left:0px;display:block;"> <b class="pro_team_b this_b" goods_id="$!{obj.id}" middle_img="$!middle_img"> <img src="$!cdnServer/resources/style/common/images/loader.gif" original="$!small_img"  width="28" height="28"   onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';"/> <i class="team_san"></i></b> #foreach($img in $obj.goods_photos) <b  class="pro_team_b" goods_id="$!{obj.id}" middle_img="$!imageWebServer/$!{img.path}/$!{img.name}_middle.$!{img.ext}"> <img original="$!imageWebServer/$!img.path/$!{img.name}_small.$!{img.ext}" src="$!cdnServer/resources/style/common/images/loader.gif"   onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" /> <i class="team_san" style="display:none"></i></b> #end </p>
+              </div>
+            </li>
+            <li class="pro_list_name"><a href="$!goods_url" target="_blank">$!{obj.goods_name}</a></li>
+            <li class="pro_list_price"><b>¥$!{obj.goods_current_price}</b>
+          </ul>
+        </div>
+        #end </div>
+      <div class="fenye"><span>$!gotoPageFormHTML</span></div>
+      <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+      <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+      <input type="hidden" name="currentPage" id="currentPage" />
+      #if($!keyword)
+      <input type="hidden" name="keyword" id="keyword" value="$!keyword" />
+      #end
+    </form>
+  </div>
+</div>
+</div>
+<div class="main"> $!httpInclude.include("/footer") </div>
+</body>
+</html>

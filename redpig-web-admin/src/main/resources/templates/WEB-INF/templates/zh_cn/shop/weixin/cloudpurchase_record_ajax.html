@@ -1,0 +1,9 @@
+#foreach($record in $records)
+<li>
+<a class="avatar" href="javascript:void(0);"><img src="$!user_photo"></a>
+<div class="info_text">
+<a class="w_name" href="javascript:void(0);">$!record.user_name</a>
+<p>参与了<em class="num">$!record.purchased_times</em>人次 $!CommUtil.formatLongDate($!{record.addTime})</p>
+</div>
+</li>
+#end

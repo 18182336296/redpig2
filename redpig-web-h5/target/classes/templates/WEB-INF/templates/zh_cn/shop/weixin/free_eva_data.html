@@ -1,0 +1,5 @@
+#foreach($obj in $free_objs)
+        	<dl>
+                <dd><p><span class="fl">$!{obj.freegoods_name}</span><span class="fr">$!CommUtil.formatShortDate($!obj.evaluate_time)</span></p><p>评价：$!{obj.use_experience}</p></dd>
+            </dl>
+#end

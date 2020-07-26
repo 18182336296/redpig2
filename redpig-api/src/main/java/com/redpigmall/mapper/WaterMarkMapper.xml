@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.WaterMarkMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.WaterMark">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="wm_image_open" property="wm_image_open" jdbcType="BIT"/>
+		<result column="wm_image_alpha" property="wm_image_alpha" jdbcType="INTEGER"/>
+		<result column="wm_image_pos" property="wm_image_pos" jdbcType="INTEGER"/>
+		<result column="wm_text_open" property="wm_text_open" jdbcType="BIT"/>
+		<result column="wm_text" property="wm_text" jdbcType="VARCHAR"/>
+		<result column="wm_text_pos" property="wm_text_pos" jdbcType="INTEGER"/>
+		<result column="wm_text_font_size" property="wm_text_font_size" jdbcType="INTEGER"/>
+		<result column="wm_text_font" property="wm_text_font" jdbcType="VARCHAR"/>
+		<result column="wm_text_color" property="wm_text_color" jdbcType="VARCHAR"/>
+		<association property="store" column="store_id" select="com.redpigmall.dao.StoreMapper.selectByPrimaryKey"/>
+		<association property="wm_image" column="wm_image_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="user" column="user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.WaterMark">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="wm_image_open" property="wm_image_open" jdbcType="BIT"/>
+		<result column="wm_image_alpha" property="wm_image_alpha" jdbcType="INTEGER"/>
+		<result column="wm_image_pos" property="wm_image_pos" jdbcType="INTEGER"/>
+		<result column="wm_text_open" property="wm_text_open" jdbcType="BIT"/>
+		<result column="wm_text" property="wm_text" jdbcType="VARCHAR"/>
+		<result column="wm_text_pos" property="wm_text_pos" jdbcType="INTEGER"/>
+		<result column="wm_text_font_size" property="wm_text_font_size" jdbcType="INTEGER"/>
+		<result column="wm_text_font" property="wm_text_font" jdbcType="VARCHAR"/>
+		<result column="wm_text_color" property="wm_text_color" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,store_id,wm_image_open,wm_image_id,wm_image_alpha,wm_image_pos,wm_text_open,wm_text,wm_text_pos,wm_text_font_size,wm_text_font,wm_text_color,user_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="wm_image_open != null">and wm_image_open = #{wm_image_open,jdbcType=BIT}</if>
+		<if test="wm_image_alpha != null">and wm_image_alpha = #{wm_image_alpha,jdbcType=INTEGER}</if>
+		<if test="wm_image_pos != null">and wm_image_pos = #{wm_image_pos,jdbcType=INTEGER}</if>
+		<if test="wm_text_open != null">and wm_text_open = #{wm_text_open,jdbcType=BIT}</if>
+		<if test="wm_text != null">and wm_text = #{wm_text,jdbcType=VARCHAR}</if>
+		<if test="wm_text_pos != null">and wm_text_pos = #{wm_text_pos,jdbcType=INTEGER}</if>
+		<if test="wm_text_font_size != null">and wm_text_font_size = #{wm_text_font_size,jdbcType=INTEGER}</if>
+		<if test="wm_text_font != null">and wm_text_font = #{wm_text_font,jdbcType=VARCHAR}</if>
+		<if test="wm_text_color != null">and wm_text_color = #{wm_text_color,jdbcType=VARCHAR}</if>
+		<if test="user_id!=null">and user_id=#{user_id,jdbcType=BIGINT}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="wm_image_id != null">and wm_image_id = #{wm_image_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		<if test="store != null and store.id != null">store_id = #{store.id,jdbcType=BIGINT},</if>
+		<if test="store == null or store.id == null">store_id = null,</if>
+		wm_image_open= #{wm_image_open},
+		<if test="wm_image != null and wm_image.id != null">wm_image_id = #{wm_image.id,jdbcType=BIGINT},</if>
+		<if test="wm_image == null or wm_image.id == null">wm_image_id = null,</if>
+		wm_image_alpha= #{wm_image_alpha},
+		wm_image_pos= #{wm_image_pos},
+		wm_text_open= #{wm_text_open},
+		wm_text= #{wm_text},
+		wm_text_pos= #{wm_text_pos},
+		wm_text_font_size= #{wm_text_font_size},
+		wm_text_font= #{wm_text_font},
+		wm_text_color= #{wm_text_color},
+		<if test="user != null and user.id != null">user_id = #{user.id,jdbcType=BIGINT},</if>
+		<if test="user == null or user.id == null">user_id = null,</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_watermark 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_watermark obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_watermark obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getStoreByStoreId" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_watermark
+		where
+			store_id= #{store_id,jdbcType=BIGINT}
+	</select>
+	<select id="getWmImageByAccessoryId" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_watermark
+		where
+			wm_image_id= #{wm_image_id,jdbcType=BIGINT}
+	</select>
+	<select id="getUserByUserId" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_watermark
+		where
+			user_id= #{user_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_watermark obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.WaterMark" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_watermark(addTime,deleteStatus,wm_image_open,wm_image_alpha,wm_image_pos,wm_text_open,wm_text,wm_text_pos,wm_text_font_size,wm_text_font,wm_text_color,store_id,wm_image_id,user_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{wm_image_open,jdbcType=BIT},#{wm_image_alpha,jdbcType=INTEGER},#{wm_image_pos,jdbcType=INTEGER},#{wm_text_open,jdbcType=BIT},#{wm_text,jdbcType=VARCHAR},#{wm_text_pos,jdbcType=INTEGER},#{wm_text_font_size,jdbcType=INTEGER},#{wm_text_font,jdbcType=VARCHAR},#{wm_text_color,jdbcType=VARCHAR},#{store.id,jdbcType=BIGINT},#{wm_image.id,jdbcType=BIGINT},#{user.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.WaterMark">
+		update redpigmall_watermark
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_watermark where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_watermark where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_watermark obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_watermark obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.WaterMark" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_watermark
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_watermark where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

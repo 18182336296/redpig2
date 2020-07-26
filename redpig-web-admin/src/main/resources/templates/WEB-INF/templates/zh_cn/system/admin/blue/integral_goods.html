@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(function(){
+	jQuery("#ig_show").val("ig_show");
+})
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/integral_goods_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+} 
+
+function ajax_update2(id,fieldName,obj){
+	   var val=jQuery(obj).attr("value");
+	    jQuery.ajax({type:'POST',
+		              url:'$!webPath/integral_goods_ajax',
+					  data:{"id":id,"fieldName":fieldName,"value":val},
+					beforeSend:function(){
+					  
+					},
+				   success:function(data){
+					   if(data=="true"){
+						   jQuery(obj).attr("value","false");
+					   }else if(data=="false"){
+						   jQuery(obj).attr("value","true");
+					   }
+					   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+data+".png");
+	              }
+		    });
+	} 
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">积分商城</h1>
+  <div class="nav_list">
+
+  <ul>
+  <li> <a href="$!webPath/integral_items"  class="this"><b>礼品列表</b></a></li>
+   <li>  <a href="$!webPath/integral_goods_add" ><b>新增礼品</b></a></li>
+     <li>  <a href="$!webPath/integral_order"><b>兑换列表</b></a></li>
+      </ul> 
+     
+      </div>
+  <form method="post" id="queryForm">
+  <div class="search">
+ <span>礼品名称</span><span class="size150">
+        <input name="ig_goods_name" type="text" id="ig_goods_name" value="$!ig_goods_name" />
+        </span> 
+  <span>礼品编号</span><span class="size150">
+        <input name="ig_goods_sn" type="text" id="ig_goods_sn" value="$!ig_goods_sn" />
+        </span>       
+        <span>
+        <select name="ig_show" id="ig_show">
+          <option value="">状态</option>
+          <option value="true">上架</option>
+          <option value="false">下架</option>
+        </select>
+        </span> <span>
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+        </span> 
+
+  </div>
+  </form>
+  <form method="post" id="ListForm" name="ListForm" action="$!webPath/integral_items">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="4%">&nbsp;</th>
+        <th width="15%"><span class="form_btna">礼品名称</span></th>
+        <th width="8%" align="center"><span class="form_btna">礼品编号</span></th>
+        <th width="8%" align="center"><span class="form_btna">兑换积分</span></th>
+        <th width="8%" align="center"><span class="form_btna">限制等级</span></th>
+        <th width="8%" align="center"><span class="form_btna">礼品原价</span></th>
+        <th width="8%" align="center"><span class="form_btna">库存</span></th>
+        <th width="8%" align="center"><span class="form_btna">浏览</span></th>
+        <th width="8%" align="center"><span class="form_btna">兑出</span></th>
+        <th width="8%" align="center"><span class="form_btna">上架</span></th>
+        <th width="8%" align="center"><span class="form_btna">推荐</span></th>
+        <th  align="center">操作</th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center"><label for="ids_$!obj.id"><input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl" /></label></td>
+        <td align="center"><a href="$!config.indexUrl/integral/view_$!{obj.id}" target="_blank">$!{obj.ig_goods_name}</a></td>
+        <td align="center">$!{obj.ig_goods_sn}</td>
+        <td align="center">$!{obj.ig_goods_integral}</td>
+       #set($level_map = $!integralViewTools.query_level("$!obj.ig_user_Level"))
+        <td align="center">$!{level_map.name}专享</td>
+        <td align="center">$!{obj.ig_goods_price}</td>
+        <td align="center">$!{obj.ig_goods_count}</td>
+        <td align="center">$!{obj.ig_click_count}</td>
+        <td align="center">$!{obj.ig_exchange_count}</td>
+        <td align="center"><img src="$!cdnServer/resources/style/system/manage/blue/images/$!{obj.ig_show}.png" width="21" height="23" onclick="ajax_update('$!obj.id','ig_show',this)" style="cursor:pointer;" title="可编辑"/></td>
+        <td align="center"><img src="$!cdnServer/resources/style/system/manage/blue/images/$!{obj.ig_recommend}.png" width="21" height="23"  onclick="ajax_update('$!obj.id','ig_recommend',this)"  style="cursor:pointer;" title="推荐后会在积分商城首页显示"/></td>
+        <td align="center"  class="hui oprate_con"><a href="$!webPath/integral_goods_edit?id=$!obj.id&currentPage=$!currentPage" class="blue">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="$!webPath/integral_goods_del?mulitId=$!obj.id&currentPage=$!currentPage" class="blue">删除</a></td>
+      </tr>
+      #end
+            #else
+<tr>
+	<td colspan="12">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+  </div>
+#if($!objs.size()>0)
+
+<div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/integral_goods_del')">删除</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye">
+    	<input name="ig_show" type="hidden" id="ig_show" value="$!ig_show" />
+    <input name="ig_goods_name" type="hidden" id="ig_goods_name" value="$!ig_goods_name" />
+        <input name="ig_goods_sn" type="hidden" id="ig_goods_sn" value="$!ig_goods_sn" />
+<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input type="hidden" name="mulitId" id="mulitId" />
+      	$!gotoPageFormHTML
+    </div>
+            </div>
+        </div>
+   
+ #end
+  </form>
+  
+</div>
+</body>
+</html>

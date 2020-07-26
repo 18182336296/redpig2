@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="no">
+<meta name="format-detection" content="telephone=no,address=no">
+<title>$!store.store_name - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/TouchSlide.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.wap.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+ var fc = "$!store.favorite_count";   //粉丝过万改变显示
+ if(fc>=10000){
+ 	 var num = (fc/10000).toFixed(1);
+ 	 jQuery("#s_fc").html(num+"万粉丝");
+ };
+  if("$!all_col"=="1"){
+	jQuery("#collect_store").hide();
+	jQuery("#collect_store_g").show();		 
+ };
+ 	jQuery(".more").click(function(){
+		if(jQuery(".down").css("display")=="none"){
+			jQuery(".down").show();
+			jQuery(".black_bg").show();
+		}else{
+			jQuery(".down").hide();
+			jQuery(".black_bg").hide();
+		}
+	});
+var store_nav = jQuery("#store_nav").offset().top;
+jQuery(window).scroll(function(){     
+var top = jQuery(document).scrollTop();
+/*var store_nav=jQuery("#store_nav").offset().top;*/
+  if(top > store_nav && "store_nav"==jQuery("#store_nav").attr("class")){
+	 jQuery(".store_nav").attr("class","store_nav store_nav_fixed");
+  }
+  if(top < store_nav){
+	 jQuery(".store_nav").attr("class","store_nav"); 
+  }
+})
+jQuery(".s_collect a").click(function(){
+	   jQuery.post("$!current_webPath/wap/add_store_favorite",{"id":"$!store.id"},function(data){
+		   
+		 var jd = jQuery.parseJSON(data);
+		 if(jd.ret==0){
+			 var fc = jd.count;
+			  if(fc>=10000){
+ 	            var num = (fc/10000).toFixed(1);
+ 	                jQuery("#s_fc").html(num+"万粉丝");
+ 				}else{
+					jQuery("#s_fc").html(fc+"粉丝");
+				}
+				jQuery("#collect_store").hide();
+				jQuery("#collect_store_g").show();	
+		 }
+		 if(jd.ret==1){
+			 var fc = jd.count;
+			  if(fc>=10000){
+ 	           var num = (fc/10000).toFixed(1);
+ 	           jQuery("#s_fc").html(num+"万粉丝");
+ 				}
+			jQuery("#s_fc").html(fc+"粉丝");
+			jQuery("#collect_store_g").hide();	
+			jQuery("#collect_store").show();		
+		 }
+		 if(jd.ret==2){
+			window.location.href="$!webPath/wap/login";
+		 }
+		 if(jd.ret==2){
+			alert("不能收藏自己的店铺！");
+		 }
+	   },"text");
+});	
+jQuery("#keyword").click(function(){
+    window.location.href="$!webPath/wap/store_class_list?id=$!store.id";
+});	
+})		
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+	<!--店铺首页-->
+    <div class="store_index">
+      #if($!store.store_banner)
+      #set($bg="$!imageWebServer/$!store.store_banner.path/$!store.store_banner.name")
+      #else
+      #set($bg="$!cdnServer/resources/style/system/front/default/images/weixin/store_bg.jpg")
+      #end
+    	<div class="store_hd" style="background:url($!bg) no-repeat top center">
+        	#set($store_logo="$!cdnServer/resources/style/shop/images/store_default/logo.jpg")
+            #if($!config.storeImage)
+            #set($store_logo="$!imageWebServer/$!config.storeImage.path/$!config.storeImage.name")
+            #end
+            #if($!store.store_logo)
+            #set($store_logo="$!imageWebServer/$!store.store_logo.path/$!store.store_logo.name")
+            #end
+            <span class="store_logo">
+            <img src="$!store_logo" width="130" height="50" /></span>
+            <div class="store_hd_right">
+            	<p class="store_name">$!store.store_name</p>
+                <p class="store_type"><span>$!store.grade.gradeName</span></p>
+            </div>
+            <div class="s_collect">
+            <a  id="collect_store" #if(!$!user) href="$!webPath/wap/login" #else href="javascript:void(0);" #end><i><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_collect.png"/></i>收藏</a>
+            <a href="javascript:void(0);" id="collect_store_g" class="s_collect_gray" style="display:none">已收藏</a>
+            <span class="num" id="s_fc">$!store.favorite_count粉丝</span></div>
+        </div>
+
+        <div class="shop_in_c" id="fr"> <a class="more" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_more.png"></a>
+      <div class="down" style="display:none"><a class="car" href="$!webPath/wap/goods_cart1">购物车</a><a class="home" href="$!webPath/wap/index">首页</a><i></i></div>
+      <div class="black_bg" style="display:none"></div>
+    </div>
+    </div>
+</div>
+<div class="store_nav" id="store_nav">
+    <ul>
+        <li class="this"><a href="$!webPath/wap/store?id=$!store.id"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_01_this.png" /></p><p class="name">首页</p></a></li>
+        <li><a href="$!webPath/wap/store_items?store_id=$!store.id&submit_type=store&all=all"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_02.png"/></p><p class="name">全部商品</p></a></li>
+        <li><a href="$!webPath/wap/store_goods_new?id=$!store.id"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_03.png"/></p><p class="name">上新</p></a></li>
+        <li><a href="$!webPath/wap/store_activity?id=$!store.id"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_04.png"/></p><p class="name">店铺活动</p></a></li>
+    </ul>
+</div>
+<div class="store_nav store_nav_fixed" id="store_nav_fixed" style="display:none">
+    <ul>
+        <li class="this"><a href="$!webPath/wap/store?id=$!store.id"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_01_this.png" /></p><p class="name">首页</p></a></li>
+        <li><a href="$!webPath/wap/store_items?store_id=$!store.id&submit_type=store&all=all"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_02.png"/></p><p class="name">全部商品</p></a></li>
+        <li><a href="$!webPath/wap/store_goods_new?id=$!store.id"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_03.png" /></p><p class="name">上新</p></a></li>
+        <li><a href="$!webPath/wap/store_activity?id=$!store.id"><p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/storenav_04.png" /></p><p class="name">店铺活动</p></a></li>
+    </ul>
+</div>
+<div class="phone_main">        
+     <div class="store_search"id="keyword" style="">在店铺内搜索</div>
+#foreach($floor in $json_list)
+	 #if($!floor.status=="true")
+     #if($!floor.edit_mo=="1")
+     #set($floor_show=$!weixinstoreViewTools.getfloor_info("$!floor.line_info"))
+     #foreach($fs in $!floor_show)
+     <div class="store_floor floor_one">
+     <a #if($!fs.click_type=="goods") href="$!webPath/wap/items?id=$!fs.goods_id" #end
+        #if($!fs.click_type=="url") href="$!fs.url" #end
+     >     
+     <img src="$!imageWebServer/$!fs.img_src" width="100%" /></a></div>
+     #end
+     #end
+     #if($!floor.edit_mo=="2")
+     #set($floor_show=$!weixinstoreViewTools.getfloor_info("$!floor.line_info"))
+            #foreach($fs in $!floor_show)
+            #if($!fs.po=="1")
+            #set($fs1=$fs)
+            #end
+            #if($!fs.po=="2")
+            #set($fs2=$fs)
+            #end
+            #end 
+     <div class="store_floor floor_two">
+    		#if($!floor.title) 
+        	<h1>$!floor.title</h1>
+            #end
+            <ul><li><a #if($!fs1.click_type=="goods") href="$!webPath/wap/items?id=$!fs1.goods_id" #end
+        #if($!fs1.click_type=="url") href="$!fs1.url" #end
+     ><img src="$!imageWebServer/$!fs1.img_src" /></a></li><li><a #if($!fs2.click_type=="goods") href="$!webPath/wap/items?id=$!fs2.goods_id" #end
+        #if($!fs2.click_type=="url") href="$!fs2.url" #end
+     ><img src="$!imageWebServer/$!fs2.img_src" /></a></li></ul>
+    </div>
+	#set($fs1="")
+    #set($fs2="")
+    #end
+	#if($!floor.edit_mo=="5")
+    #set($floor_show=$!weixinstoreViewTools.getslide("$!floor.line_info"))
+     <!--幻灯-->
+    #set($floor_id=$!{floor.id})     
+     <div class="store_focusBox" id="store_touch_$!{floor_id}">
+        	<div class="touch">
+            <ul class="pic" id="pic">
+            		#foreach($fs in $!floor_show)
+                    <li><a #if($!fs.click_type=="goods") href="$!webPath/wap/items?id=$!fs.goods_id" #end #if($!fs.click_type=="url") href="$!fs.url" #end><img src="$!imageWebServer/$!fs.img_src" /></a></li>
+                    #end
+            </ul>
+            <ul class="hd">
+            	#set($!mark = 1)
+                #foreach($fs in $!floor_show)
+                <li>1</li>
+                #set($!mark=$!mark + 1)
+                #end
+            </ul>
+        </div>
+     </div>
+        <script type="text/javascript">
+		TouchSlide({ 
+			slideCell:"#store_touch_$!{floor_id}",
+			mainCell:".pic", 
+			effect:"left",
+			autoPlay:true,//自动播放			
+			switchLoad:"_src" //切换加载，真实图片路径为"_src" 
+		});
+       <!----> jQuery(".store_focusBox").slide({ mainCell:".pic",effect:"left", autoPlay:true, delayTime:300});
+        </script>
+     #end
+     #if($!floor.edit_mo=="6")
+        <div class="store_hot">
+        	<h1>$!floor.title</h1>
+            #set($floor_show=$!weixinstoreViewTools.getfloor_info("$!floor.line_info"))
+            #foreach($fs in $!floor_show)
+            #if($!fs.po=="1")
+            #set($fs1=$fs)
+            #end
+            #if($!fs.po=="2")
+            #set($fs2=$fs)
+            #end
+            #if($!fs.po=="3")
+            #set($fs3=$fs)
+            #end
+            #end 
+            <dl>
+            	<dt>
+                	<ul>
+                    	<li><a #if($!fs1.click_type=="goods") href="$!webPath/wap/items?id=$!fs1.goods_id" #end #if($!fs1.click_type=="url") href="$!fs1.url" #end><img src="$!imageWebServer/$!fs1.img_src" width="100%" id="bey_1"/></a></li>
+                        <li class="name">$!fs1.goods_name</li>
+                       <!-- <li class="red">¥<b>$!fs1.goods_id</b><span class="gray">¥</span></li>-->
+                    </ul>
+                </dt>
+                <dd>
+                	<ul id="bey_img">
+                    	<li><p><a #if($!fs2.click_type=="goods") href="$!webPath/wap/items?id=$!fs2.goods_id" #end #if($!fs2.click_type=="url") href="$!fs2.url" #end><img src="$!imageWebServer/$!fs2.img_src" /></a></p><p class="name">$!fs2.goods_name</p><!--<p class="red">¥<b>109.00</b><span class="gray">¥119</span></p>--></li>
+                        <li><p><a #if($!fs3.click_type=="goods") href="$!webPath/wap/items?id=$!fs3.goods_id" #end #if($!fs3.click_type=="url") href="$!fs3.url" #end><img src="$!imageWebServer/$!fs3.img_src" /></a></p><p class="name">$!fs3.goods_name</p><!--<p class="red">¥<b>109.00</b><span class="gray">¥119</span></p>--></li>
+                    </ul>
+                </dd>
+            </dl> 
+           
+        </div>
+     #set($fs1="")
+     #set($fs2="")
+     #set($fs3="") 
+    
+     #end
+     #if($!floor.edit_mo=="7")  
+     #set($goods_list=$!weixinstoreViewTools.getgoods("$!floor.line_info"))
+        <div class="store_list" style="float:none;">
+        	#if($!floor.title!="")
+        	<h1>- $!floor.title -</h1>
+            #end
+            <ul class="store_ul">
+            #foreach($fs in $!goods_list)
+             #if($!fs.goods_main_photo)
+        #set($goods_c_photo="$!imageWebServer/$!fs.goods_main_photo.path/$!fs.goods_main_photo.name")
+        #else
+        #set($goods_c_photo="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name")
+        #end
+            	
+                <li class="web_img_goods"><a href="$!webPath/wap/items?id=$!fs.id"><img src="$!goods_c_photo" /><p class="name">$!fs.goods_name</p><p class="price">¥$!fs.store_price</p></a></li>
+            #end  
+            </ul>
+        </div>
+        
+     #end 
+  #end    
+  #end
+  <div class="store_allgoods"><a href="$!webPath/wap/store_items?store_id=$!store.id&submit_type=store&all=all">显示全部商品</a></div> 
+  </div>
+<div class="mt50" style="height:2.5rem;"></div>
+$!httpInclude.include("/wap/store_foot?id=$!{store.id}")
+</body>
+</html>

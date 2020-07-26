@@ -1,0 +1,60 @@
+<script>
+  function group_sel(val){
+     jQuery("#gc_id").val(val);
+     jQuery("#ListForm").submit();
+  }
+</script>
+<form id="ListForm" name="ListForm" action="$!webPath/grouplife/search?type=life" method="post">
+<input name="gc_id" id="gc_id" type="hidden" value="$!gc_id"/>
+#foreach($gf in $!gf_list)
+  <div class="group_floor">
+    	<div class="gtitle_box">
+        	<dl class="group_title">
+            	<dt>
+                	<i>$!{velocityCount}F</i>
+            		<span><a href="javascript:void(0);">$!gf.gf_name</a></span>
+                </dt>
+                <dd>
+                   #foreach($child_gc in $!groupViewTools.getChild_GroupClass("$!gf.gf_group_class_id"))
+                    #if($!{velocityCount}<=5)
+                	<a href="javascript:void(0);" onclick="group_sel('$!{child_gc.id}')">$!child_gc.gc_name</a>
+                    #end
+                   #end
+                    <a href="javascript:void(0);" onclick="group_sel('')">更多 > </a>
+                </dd>
+            </dl>
+        </div>
+        
+        <div class="group_floor_product">
+        	<ul>
+               #foreach($gfg in $!groupViewTools.getGroupFloor_LifeGoods("$!group_area_id","$!gf.gf_group_class_id"))
+               #if($!{velocityCount}<=8)
+            	<li>
+                    <div class="p_img">
+                    	<a href="$!webPath/grouplife/view_$!{gfg.id}" target="_blank"><img src="$!imageWebServer/$!gfg.group_acc.path/$!gfg.group_acc.name"></a>
+                    </div>
+                    <div class="p_name">
+                         #set($storeName=$!groupViewTools.getStoreName("$!gfg.id"))
+                    	<a href="javascript:;">$!storeName</a>
+                    </div>
+                    <div class="p_text">
+                    	<p><a href="$!webPath/grouplife/view_$!{gfg.id}" target="_blank">$!gfg.gg_name</a></p>
+                    </div>
+                    <div class="p_price">
+                    	<div class="left">
+                        	<span class="size" style="display:block; float:left;"><i>￥</i>$!gfg.group_price</span>
+                            <span class="discount" style="display:block; float:left;">
+                            	<span>$!gfg.gg_rebate折</span><br>
+                            	<del>￥$!gfg.cost_price</del>
+                            </span>
+                        </div>
+                        <div class="right">$!gfg.selled_count人已买</div>
+                    </div>
+                </li>
+                #end
+                #end
+            </ul>
+        </div>       
+    </div>  
+#end
+</form>

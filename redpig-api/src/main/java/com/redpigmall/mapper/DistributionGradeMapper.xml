@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.DistributionGradeMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.DistributionGrade">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="grade" property="grade" jdbcType="VARCHAR"/>
+		<result column="count_user" property="count_user" jdbcType="INTEGER"/>
+		<result column="count_price" property="count_price" jdbcType="DECIMAL"/>
+		<result column="down_count_price" property="down_count_price" jdbcType="DECIMAL"/>
+		<result column="inner_rebate" property="inner_rebate" jdbcType="INTEGER"/>
+		<result column="out_rebate" property="out_rebate" jdbcType="INTEGER"/>
+		<result column="update_time" property="update_time" jdbcType="INTEGER"/>
+		<result column="operator" property="operator" jdbcType="BIGINT"/>
+		<association property="operator" column="operator" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,grade,count_user,count_price,down_count_price,inner_rebate,out_rebate,addTime,update_time,operator
+	</sql>
+
+	<sql id="ifStatement">
+		grade= #{grade},
+		count_user= #{count_user},
+		count_price= #{count_price},
+		down_count_price= #{down_count_price},
+		inner_rebate= #{inner_rebate},
+		out_rebate= #{out_rebate},
+		update_time= #{update_time},
+		operator= #{operator},
+	</sql>
+
+	<sql id="whereStatement">
+		<if test="id!=null">and id =#{id,jdbcType=BIGINT}</if>
+	</sql>
+
+	<!--主键查询-->
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.DistributionGrade" resultMap="BaseResultMap" useCache="true" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_distribution_grade
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!--分页查询-->
+	<select id="queryPageList" resultType="com.redpigmall.domain.DistributionGrade" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_distribution_grade obj
+		where 1=1
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+				order by ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+				order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize}
+		</if>
+	</select>
+
+    <select id="queryPages" resultType="com.redpigmall.domain.DistributionGrade" resultMap="BaseResultMap" parameterType="map">
+        SELECT obj.* FROM  redpigmall_distribution_grade obj
+        <where>
+            1=1
+            <choose>
+                <when test="orderBy != null and orderType !=null">
+                    ORDER BY ${orderBy} ${orderType}
+                </when>
+                <otherwise>
+                    ORDER BY obj.addTime desc
+                </otherwise>
+            </choose>
+        </where>
+        <if test="currentPage !=null and pageSize !=null">
+            LIMIT #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <!--统计-->
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from redpigmall_distribution_grade obj
+    </select>
+
+	<!--插入语句-->
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.DistributionGrade" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_distribution_grade(
+				grade,count_user,count_price,down_count_price,inner_rebate,out_rebate,addTime,operator)
+				values (
+				#{grade,jdbcType=VARCHAR},#{count_user,jdbcType=INTEGER},
+				#{count_price,jdbcType=DECIMAL},#{down_count_price,jdbcType=DECIMAL},
+				#{inner_rebate,jdbcType=INTEGER},#{out_rebate,jdbcType=INTEGER},
+				#{addTime,jdbcType=TIMESTAMP},#{operator,jdbcType=BIGINT}
+				)
+	</insert>
+	<!--更新-->
+	<update id="updateById" parameterType="com.redpigmall.domain.DistributionGrade">
+		update redpigmall_distribution_grade
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="queryByCondition" resultType="com.redpigmall.domain.DistributionGrade"  parameterType="map">
+		SELECT * from redpigmall_distribution_grade WHERE count_user<![CDATA[ <= ]]>#{count_user} || count_price<![CDATA[ <= ]]>#{count_price} || down_count_price<![CDATA[ <= ]]> #{down_count_price} ORDER BY inner_rebate desc,out_rebate desc LIMIT 0,1
+	</select>
+
+
+</mapper>

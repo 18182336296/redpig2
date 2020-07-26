@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!cdnServer/resources/style/application/css/applicationIndex.css" type="text/css" rel="stylesheet" />
+<title>店铺信息</title>
+</head>
+
+<body>
+ <div class="seller_info"> 
+                <span class="seller_info_img">
+                      <strong><img src="$!webPath/$!logo.path/$!logo.name"></strong>
+                      <em></em>
+                </span>
+                <ul class="seller_text">
+                    <li class="seller_info_h"><strong><b>3G时代广场</b></strong></li>
+                       <li class="seller_info_con">
+                        <span>用户名称：<b>$!user.username</b></span>
+                        <span>店主姓名：<b>$!user.trueName</b></span>
+                        <span>商家类型：<b>$!store.grade.gradeName</b></span>
+                        <span>最后登录：<b>#if($!user.seller_application_loginTime)$!CommUtil.formatLongDate($!user.seller_application_loginTime)#else 第一次登录 #end</b></span>
+                        <span>店铺到期：<b>#if($!{user.store.validity}) $!CommUtil.formatShortDate($!{user.store.validity})#else 永久#end</b></span>
+                    </li>
+                </ul>
+        </div>
+</body>
+</html>

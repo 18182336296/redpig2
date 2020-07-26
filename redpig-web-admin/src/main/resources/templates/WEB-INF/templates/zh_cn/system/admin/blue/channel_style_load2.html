@@ -1,0 +1,40 @@
+ <script>
+ jQuery(document).ready(function(){
+  //改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+ 
+  jQuery("#adv_id_ap").change(function(){						   
+	  var ad_id=jQuery(this).val();
+	  if(ad_id!=null){
+         jQuery("#ad_id").val(ad_id);
+	   }
+    });
+	
+ });
+ </script>
+ 
+ <li id="system_adv_ap"> <b class="left">广告选择：</b>
+  #if(!$!child)
+       <span class="floor_adv_sp">
+       <input name="ad_id" id="ad_id" type="hidden">
+       <select name="adv_id_ap" id="adv_id_ap">
+       #foreach($a in $ap)
+       <option value="$!a.id">$!{a.ad_title}</option>
+       #end
+       </select>
+        </span>
+        <i class="floor_adv_i">仅支持$!{width}×$!{height}图片广告位</i>
+        #else
+        <span id="nothis"><strong class="q"></strong><strong class="w">请选择拥有广告的广告位信息</strong><strong class="c"></strong></span>
+        #end 
+      </li>

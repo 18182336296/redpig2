@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/nuke_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+function removes(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery("#ListForm").find(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId+=jQuery(this).val()+",";
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("只能将尚无进行中的秒杀活动删除，是否继续？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">秒杀管理</h1>
+  
+  <div class="nav_list">
+ 
+  <ul>
+  <li><a href="$!webPath/nuke_list" class="this"><b>秒杀列表</b></a> </li>
+  <li> <a href="$!webPath/nuke_add"><b>新增秒杀</b></a> </li>
+  </ul>
+
+  </div>
+  
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>先添加秒杀活动，再添加商品，允许添加多个商品</li>
+      <li>同一时间段只能有一个秒杀活动，如18:00~19:00场</li>
+      <!--<li>尚有正在进行的商品购或生活购无法关闭或删除</li>-->
+    </ul>
+  </div>
+
+  <form method="post" id="ListForm" action="$!webPath/nuke_list">
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="4%"></th>
+        <th width="20%" align="center"><span class="form_btna">秒杀名称</span></th>
+        <th width="12%" align="center"><span class="form_btna">类型</span></th>
+        <th width="10%" align="center"><span class="form_btna">开始时间</span></th>
+        <th align="center" width="10%"><span class="form_btna">结束时间</span></td>
+        <th align="center" width="10%"><span class="form_btna">每人限购份数</span></td>
+        <!--<th  align="center" width="10%"><span class="form_btna">报名截止日期</span></th>-->
+        <th  align="center" width="8%"><span class="form_btna">状态</span></th>
+        <th  align="center"><span class="form_btna">操作</span></th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr id="column_$!{obj.id}">
+        <td class="check_position">
+        <label for="ids_$!obj.id">
+        <input class="ace" name="ids_$!obj.id" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl"></span></label></td>
+        
+        <td  align="center">
+	        <ul class="addclass">
+	          <li class="ac2">
+	          	<span class="num">
+	            	<input style="width:200px;" type="text" name="$!obj.nuke_name" id="$!obj.nuke_name"  value="$!obj.nuke_name"  onblur="ajax_update('$!obj.id','nuke_name',this)" title="可编辑"/>
+	          	</span>
+	          </li>
+	        </ul>
+        </td>
+        
+        <td align="center">#if($!obj.nuke_type==0) 商品类秒杀 #else 生活类秒杀 #end</td>
+        <td align="center">$!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss ",$!obj.beginTime)</td>
+        <td align="center">$!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss",$!obj.endTime)</td>
+        <td align="center">$!obj.limit_number</td>
+        #if($!obj.status==0)
+          #set($status="正常")
+        #end
+        #if($!obj.status==-1)
+          #set($status="关闭")
+        #end
+        #if($!obj.status==-2)
+          #set($status="已结束")
+        #end
+        #if($!obj.status==1)
+          #set($status="未开始")
+        #end
+        <td align="center">$!status</td>
+        #set($type = "goods")
+        #if($!obj.nuke_type==1)
+        #set($type = "life")
+        #end
+        <td  align="center" class="hui oprate_con">
+	        <a href="$!webPath/nuke_goods?nuke_id=$!obj.id&type=$!type" class="blue">秒杀商品</a>|
+	        #if($!obj.status==-1)
+	        <a href="javascript:void(0);" onclick="if(confirm('是否确认开启该秒杀活动？'))window.location.href='$!webPath/update_status?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">开启</a>| 
+	        #end
+	        #if($!obj.status==0)
+	        <a href="javascript:void(0);" onclick="if(confirm('是否确认关闭该秒杀活动？'))window.location.href='$!webPath/update_status?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">关闭</a>| 
+	        #end
+	        
+	        <a href="$!webPath/nuke_edit?id=$!obj.id"  class="blue">编辑</a>|
+	        <a href="javascript:void(0);" onclick="if(confirm('删除秒杀将同时删此秒杀下的商品，是否删除？'))window.location.href='$!webPath/nuke_del?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a>
+        </td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="7">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+    #if($!objs.size()>0)
+    <div class="operation_box">
+        <div class="operation_left">
+        <ul>
+            <li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+            <li><a href="javascript:void(0);" onclick="removes('$!webPath/nuke_del');">删除</a></li>
+        </ul>
+        </div>
+        <div class="operation_right">
+            <!--<div class="fenye">
+              <input name="endTime" type="hidden" id="endTime" value="$!endTime" />
+              <input name="beginTime" type="hidden" id="beginTime" value="$!beginTime" />
+              <input name="ac_status" type="hidden" id="ac_status" value="$!ac_status" />
+              <input name="q_ac_title" type="hidden" id="q_ac_title" value="$!q_ac_title" />
+              <input type="hidden" name="mulitId" id="mulitId" />
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              $!gotoPageFormHTML
+            </div>-->
+            <div class="fenye">
+            <span id="queryCondition" style="display:none">
+            </span>
+                <input name="mulitId" type="hidden" id="mulitId" />
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML
+            </div>
+        </div>
+    </div>
+    
+    
+ #end
+  </div>
+  </form>
+
+</div>
+</body>
+</html>

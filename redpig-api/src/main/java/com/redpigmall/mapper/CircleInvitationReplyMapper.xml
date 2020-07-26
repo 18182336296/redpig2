@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.CircleInvitationReplyMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.CircleInvitationReply">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="level_count" property="level_count" jdbcType="INTEGER"/>
+		<result column="parent_id" property="parent_id" jdbcType="BIGINT"/>
+		<result column="invitation_id" property="invitation_id" jdbcType="BIGINT"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="user_photo" property="user_photo" jdbcType="VARCHAR"/>
+		<result column="reply_count" property="reply_count" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.CircleInvitationReply">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="level_count" property="level_count" jdbcType="INTEGER"/>
+		<result column="parent_id" property="parent_id" jdbcType="BIGINT"/>
+		<result column="invitation_id" property="invitation_id" jdbcType="BIGINT"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="user_photo" property="user_photo" jdbcType="VARCHAR"/>
+		<result column="reply_count" property="reply_count" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,content,level_count,parent_id,invitation_id,user_id,user_name,user_photo,reply_count
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="content != null">and content = #{content,jdbcType=VARCHAR}</if>
+		<if test="level_count != null">and level_count = #{level_count,jdbcType=INTEGER}</if>
+		<if test="parent_id != null">and parent_id = #{parent_id,jdbcType=BIGINT}</if>
+		<if test="invitation_id != null">and invitation_id = #{invitation_id,jdbcType=BIGINT}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="user_photo != null">and user_photo = #{user_photo,jdbcType=VARCHAR}</if>
+		<if test="reply_count != null">and reply_count = #{reply_count,jdbcType=INTEGER}</if>
+	</sql>
+	<sql id="ifStatement">
+		content= #{content},
+		level_count= #{level_count},
+		parent_id= #{parent_id},
+		invitation_id= #{invitation_id},
+		user_id= #{user_id},
+		user_name= #{user_name},
+		user_photo= #{user_photo},
+		reply_count= #{reply_count},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.CircleInvitationReply" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_invitation_replys 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.CircleInvitationReply" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_invitation_replys obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_invitation_replys obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.CircleInvitationReply" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_invitation_replys obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.CircleInvitationReply" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_invitation_replys(addTime,deleteStatus,content,level_count,parent_id,invitation_id,user_id,user_name,user_photo,reply_count)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{content,jdbcType=VARCHAR},#{level_count,jdbcType=INTEGER},#{parent_id,jdbcType=BIGINT},#{invitation_id,jdbcType=BIGINT},#{user_id,jdbcType=BIGINT},#{user_name,jdbcType=VARCHAR},#{user_photo,jdbcType=VARCHAR},#{reply_count,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.CircleInvitationReply">
+		update redpigmall_invitation_replys
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_invitation_replys where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_invitation_replys where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.CircleInvitationReply" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_invitation_replys obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.CircleInvitationReply" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_invitation_replys obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.CircleInvitationReply" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_invitation_replys
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_invitation_replys where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

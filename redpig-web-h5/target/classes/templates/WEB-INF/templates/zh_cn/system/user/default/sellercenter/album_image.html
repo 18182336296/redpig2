@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片空间 - $!{config.poweredby}</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.ad-gallery.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+	var number=0;
+    jQuery(".photo_manage_close").live("click",function(){
+		location.reload();
+		jQuery(".picture_opre_bg").hide();
+		jQuery(".photo_manage").hide();
+	 })				
+   //
+});
+function showBig(obj){
+	number=jQuery(obj).attr("number")-1;
+   	jQuery(".picture_opre_bg").show();
+	jQuery(".photo_manage").show();
+	var img=jQuery(obj).attr("o");
+	var path=jQuery(obj).attr("pa");
+	var name=jQuery(obj).attr("na");
+	var h=jQuery(obj).attr("h");
+	jQuery(".picture_opre_img table td img").attr("src","$!webPath/"+path+"/"+name);
+	jQuery('.ad-gallery').adGallery({
+		loader_image:"$!cdnServer/resources/style/system/front/default/images/waiting.gif",
+		splitTitle:'slide-vert',	
+		start_at_index:number,							  
+		slideshow:{							  
+		 enable: false,//是否启用开始和暂停功能
+		 autostart: false,//是否自动播放
+		 speed: 5000,//切换时间
+		 start_label: '播放',//开始按钮显示的内容，可以为图片按钮
+		 stop_label: '停止'//停止按钮显示的内容，可以为图片按钮 
+    }
+  });
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/seller/top")
+<div class="main">
+  <div class="seller_center"> $!httpInclude.include("/seller/nav?op=album")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index">商家中心</a></b>><b>图片空间</b>><b>图片列表</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li><i></i><a href="$!webPath/seller/album">我的相册</a></li>
+            <li class="this"><i></i><a href="javascript:void(0);">图片列表</a></li>
+            <li><i></i><a href="$!webPath/seller/watermark">水印管理</a></li>
+          </ul>
+        </div>
+        <form method="post" name="ListForm" id="ListForm">
+          <input id="mulitId" value="" name="mulitId" type="hidden"/>
+          <div class="userlist_allop">
+            <div class="operation_box">
+              <div class="operation_left">
+                <ul>
+                  <li>
+                    <label for="currentAll">
+                      <input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this);" />
+                      <span class="lbl"> 全选</span></label>
+                  </li>
+                  <li><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/album_img_del?album_id=$!{album.id}&currentPage=$!{currentPage}')"  class="">删除</a></li>
+                  <li><a href="javascript:void(0);" dialog_uri="$!webPath/seller/album_transfer?album_id=$!{album.id}&currentPage=$!{currentPage}" dialog_title="转移相册" dialog_width="400" dialog_height="100" dialog_id="album_add">转移相册</a> </li>
+                  <li><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/album_watermark?album_id=$!{album.id}&currentPage=$!{currentPage}')" class="">添加水印</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          #if($!objs.size()>0)
+          <div class="seller_list_box">
+            <div class="picture_opre"> #foreach($obj in $objs)
+              <div class="pictrue_one"> <i> <span><a number="$!velocityCount" pa="$!obj.path"  na="$!{obj.name}" h="$!{obj.height}" href="javascript:void(0);" onclick="showBig(this);"><img src="$!imageWebServer/$!obj.path/$!{obj.name}_small.$!{obj.ext}" width="125" height="125" /></a></span>
+                <label>
+                  <input  class="ace"  name="ids" id="ids_$!obj.id" type="checkbox" value="$!obj.id"  />
+                  <strong style="position:absolute; background:#fff; right:5px; bottom:5px" class="lbl"></strong></label>
+                </i>
+                <ul>
+                  <li>上传时间:$!CommUtil.formatShortDate($!obj.addTime)</li>
+                  <li>原图尺寸:$!{obj.width}X$!{obj.height}</li>
+                  <li><a href="javascript:void(0);" dialog_uri="$!webPath/seller/album_transfer?album_id=$!obj.album.id&id=$!obj.id&currentPage=$!currentPage" dialog_title="转移相册" dialog_width="400" dialog_height="100" dialog_id="album_add"><b class="changepic"></b>转移相册</a></li>
+                  <li><a href="$!webPath/seller/album_cover?id=$!obj.id&album_id=$!obj.album.id&currentPage=$!currentPage"><b class="setm"></b>设为封面</a></li>
+                  <li><a href="javascript:void(0);" onclick="showDialog('msg_info','','删除图片后不可恢复，是否继续?',1,'question',3,function(){window.location.href='$!webPath/seller/album_img_del?mulitId=$!obj.id&album_id=$!album.id&currentPage=$!currentPage'});"><b class="delpic"></b>删除图片</a></li>
+                </ul>
+              </div>
+              #end </div>
+          </div>
+          <script type="text/javascript">
+			var rDrag = {
+			 o:null,
+			 init:function(o){
+			  o.onmousedown = this.start;
+			 },
+			 start:function(e){
+			  var o;
+			  e = rDrag.fixEvent(e);
+						   e.preventDefault && e.preventDefault();
+						   rDrag.o = o = this;
+			  o.x = e.clientX - rDrag.o.offsetLeft;
+							o.y = e.clientY - rDrag.o.offsetTop;
+			  document.onmousemove = rDrag.move;
+			  document.onmouseup = rDrag.end;
+			 },
+			 move:function(e){
+			  e = rDrag.fixEvent(e);
+			  var oLeft,oTop;
+			  oLeft = e.clientX - rDrag.o.x;
+			  oTop = e.clientY - rDrag.o.y;
+			  rDrag.o.style.left = oLeft + 'px';
+			  rDrag.o.style.top = oTop + 'px';
+			 },
+			 end:function(e){
+			  e = rDrag.fixEvent(e);
+			  rDrag.o = document.onmousemove = document.onmouseup = null;
+			 },
+				fixEvent: function(e){
+					if (!e) {
+						e = window.event;
+						e.target = e.srcElement;
+						e.layerX = e.offsetX;
+						e.layerY = e.offsetY;
+					}
+					return e;
+				}
+			}
+			window.onload = function(){
+					var obj = document.getElementById('photo_manage');
+			 rDrag.init(obj);
+			}
+			</script>
+          <div class="picture_opre_bg" style="display:none;"></div>
+          <div id="photo_manage" class="photo_manage" style="display:none;">
+            <div class="photo_manage_close"></div>
+            <div id="gallery" class="ad-gallery">
+              <div class="ad-image-wrapper"> </div>
+              <div class="ad-nav">
+                <div class="ad-thumbs">
+                  <ul class="ad-thumb-list">
+                    #foreach($photo in $objs)
+                    <li><a href="$!webPath/$!{photo.path}/$!{photo.name}"> <img src="$!imageWebServer/$!{photo.path}/$!{photo.name}_small.$!{photo.ext}" width="50" height="50" img_width="$!{photo.width}" img_height="$!{photo.height}" 
+            img_ext="$!{photo.ext}"  img_small="$!imageWebServer/$!{photo.path}/$!{photo.name}_small.$!{photo.ext}" 
+            img_big="$!imageWebServer/$!{photo.path}/$!{photo.name}"/> </a> </li>
+                    #end
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="userlist_allop">
+            <div class="seller_list_page"><span class="seller_page_sp">$!gotoPageFormHTML</span> </div>
+          </div>
+          #else
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table">
+            <tr>
+              <td colspan="7" align="center"><div class="seller_center_nothing">
+                  <div class="seller_center_nothing_left"><img src="$!cdnServer/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                  <div class="seller_center_nothing_right">暂时没有数据</div>
+                </div></td>
+            </tr>
+          </table>
+          #end
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

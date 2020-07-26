@@ -1,0 +1,72 @@
+<script>
+function search_form(){
+  var keyword=arguments[0];
+  var type=arguments[1];
+  if(keyword!=""&&keyword!=undefined){
+   jQuery("#keyword").val(keyword);
+  }
+  if(type!=""&&type!=undefined){
+    jQuery("#type").val(type);
+  }
+  jQuery("#searchForm").submit();	
+  jQuery("#keyword").val("");
+}
+</script>
+<div class="header-wrap">
+  <header class="public-head-layout wrapper">
+    <h1 class="site-logo">
+    	<a href="$!webPath">
+  #if($!config.websiteLogo)
+    #set($img="$!imageWebServer/$!{config.websiteLogo.path}/$!{config.websiteLogo.name}")
+  #else
+    #set($img="$!cdnServer/resources/style/system/front/default/images/logo.png")
+  #end
+    		<img src="$!img" class="pngFix">
+    	</a>
+    </h1>
+        <div class="head-app"><span class="pic"></span>
+      <div class="download-app">
+       <div class="qrcode"><img src="$!cdnServer/resources/platform/data/upload/shop/common/mb_app.png"></div>
+        <div class="hint">
+          <h4>扫描二维码</h4>
+          下载手机客户端</div>
+        <div class="addurl">
+           <a href="javascript:void(0);" target="_blank"><i class="icon-android"></i>Android</a>
+           <a href="javascript:void(0);" target="_blank"><i class="icon-apple"></i>iPhone</a>
+                        </div>
+      </div>
+    </div>
+        
+    <div id="search" class="head-search-bar">
+	<!--商品和店铺-->
+
+      <form class="search-form" action="$!webPath/search" method="post" target="_blank" id="searchForm">
+       <input name="config" type="hidden" id="config" value="$!config.hotSearch" />
+       <input name="type" type="hidden" id="type" value="$!type" />
+       
+         <input placeholder="请输入您要搜索的商品关键字" name="keyword" id="keyword" class="input-text" value="" maxlength="60" x-webkit-speech="" onwebkitspeechchange="foo()" x-webkit-grammar="builtin:search" lang="zh-CN" type="text">
+        <input id="button" value="搜索" class="input-submit" type="submit">
+      </form>
+	  <!--搜索关键字-->
+      <div class="keyword">
+      	#if($!config.hotSearch!="")
+      	热门搜索：        <ul>
+      	#foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+        		#if($!velocityCount!=1)
+                    <li><a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a></li>
+                #end
+        #end
+                  </ul>
+        #end
+      </div>
+    </div>
+    <div class="head-user-menu">
+      <dl class="my-mall">
+        <dt><span class="ico"></span>我的商城</dt>
+      </dl>
+      <dl class="my-cart">
+        <dt><span class="ico"></span>购物车结算</dt>
+      </dl>
+    </div>
+  </header>
+</div>

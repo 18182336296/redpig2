@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+  #if($!user)
+<script>
+	  window.location.href="$!webPath/index";
+	</script>
+    #end
+</head>
+<body>
+$!httpInclude.include("/top")
+<!--head-->
+
+<!--head-->
+<!--nav-->
+<div class="login_head">
+  <h1><span>#if($!config.websiteLogo) <a href="$!webPath/index"> <img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /> </a> #else <a href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/logo.jpg"  /> </a> #end</span><strong>欢迎注册</strong></h1>
+</div>
+<!--nav-->
+<div class="main">
+<div class="mail_mian">
+    <div class="mail_register">
+        <div class="mail_register_m">
+        #if($!id)
+             <div class="mail_register_m_ok" style="display:;">
+                <div class="mail_register_m_left"><Img src="../resources/style/system/front/default/images/login/mail_register_ok.png" /></div>
+                <div class="mail_register_m_right">
+                	<h3>恭喜您，注册成功</h3>
+                	<span><a href="$!webPath/register_login?id=$!{id}">立即登录</a></span>
+                </div>
+            </div>
+            #else
+            <div class="mail_register_m_fail">
+                <div class="mail_register_m_left"><Img src="../resources/style/system/front/default/images/login/mail_register_fail.png" /></div>
+                <div class="mail_register_m_right">
+                #if($!type=="send_false")
+                    <h3 style="color:#f00">很抱歉，注册失败，请重新注册</h3>
+                    <span><a href="$!webPath/register">点击注册</a></span>
+                #else
+                	<h3 style="color:#f00">很抱歉，该连接已失效</h3>
+                #end
+                   
+                </div>
+               
+            </div>
+            #end
+        </div>
+        
+    </div>
+</div>
+ $!httpInclude.include("/footer") 
+</div>
+
+</body>
+</html>

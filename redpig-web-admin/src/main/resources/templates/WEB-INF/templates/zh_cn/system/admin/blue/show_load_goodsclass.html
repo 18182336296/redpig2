@@ -1,0 +1,27 @@
+﻿<script>
+jQuery.each(jQuery("#gd_ul li"),function(index, value) {
+        var lid = jQuery(this).attr("lid");
+		if (lid != "") {
+            jQuery("#goods_cl_"+lid).addClass("this");
+        }
+    });
+</script>
+		#if($!gcs.size()>0)
+    	#foreach($gc in $gcs)
+        <dl>
+        	<dt><i class="icon minus" onclick="c_li(this);"></i><a href="javascript:void(0);" id="goods_cl_$!gc.id" gc ="$!gc.id" onclick="addgcs($!gc.id);">$!gc.ClassName</a></dt>
+             #foreach($child in $gc.childs)
+            <dd class="pl20" ><i class="icon minus" onclick="cc_li('$!child.id',this);"></i><a href="javascript:void(0);" id="goods_cl_$!child.id" gc ="$!child.id" onclick="addgcs($!child.id);">$!child.ClassName</a></dd>
+            #if($!child.childs.size()>0)
+            <dd class="pl40" id="cc_li_$!child.id"><i class="icon nobg"></i>
+            	#foreach($c in $child.childs)
+            		<a href="javascript:void(0);" id="goods_cl_$!c.id" gc ="$!c.id" onclick="addgcs($!c.id);">$!c.ClassName</a>
+            	#end
+            </dd>
+            #end
+            #end
+        </dl>
+        #end
+        #else
+        <div style="padding-top:50px;"><img src="$!cdnServer/resources/style/system/manage/blue/images/phone_noting.jpg" /></div>
+        #end

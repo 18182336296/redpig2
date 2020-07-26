@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>1元云购 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/TouchSlide.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.wap.common.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/parabola.js"></script>
+<script>
+jQuery(document).ready(function(){
+   var begin_count =12;
+   var ret=true;
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret) {
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/cloudpurchase_index_ajax',
+				  data:{"begin_count":begin_count},
+				beforeSend:function(){
+					ret = false;
+				  begin_count = begin_count +12;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+	             if(data){ 
+				  jQuery(".c_items").find(".cw_item").last().after(data);
+				   ret = true;
+			 	 }else{
+				 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+	 }
+	});
+
+   jQuery("a[id^=add_cart_]").on("click",function(e){
+	var goods_img=jQuery(this).attr("goods_img");
+	var id = jQuery(this).attr("lottery_id");
+	 var left=jQuery(this).offset().left+30;
+	  var top=jQuery(this).offset().top-80;
+	   jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/add_cloudpurchase_cart',
+				  data:{"id":id},
+				beforeSend:function(){
+					
+				},
+			   success:function(data){
+				 var offset = jQuery('.minicar').offset(), flyer = jQuery('<img style="z-index:101" width="30px" height="30" class="u-flyer" src="'+goods_img+'"/>');              
+								flyer.fly({
+									start: {
+										left: left-jQuery(document).scrollLeft(),
+										top: top-jQuery(document).scrollTop()
+									},
+									end: {
+										left: offset.left-jQuery(document).scrollLeft(),
+										top: offset.top-jQuery(document).scrollTop(),
+										width: 10,
+										height: 10
+                                    },onEnd: function(){
+										jQuery('.minicar b').show().html(data);
+										jQuery(".u-flyer").remove();
+								
+									
+										} 
+								});												  
+ 
+              	}
+	    });
+												  
+												});
+   
+});
+</script>
+</head>
+
+<body>
+<div class="phone_hd">
+    <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png"></a>
+    1元云购
+    <a class="menu home" href="$!webPath/wap/buyer/center"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/snatch_person.png"></a>
+</div>
+    
+    <ul class="snatch_nav"><!--选中的选项在li中加this-->
+    <li class="this"><a href="$!webPath/wap/cloudpurchase_index">首页</a></li>
+    <li><a href="$!webPath/wap/cloudpurchase_goods_list">全部商品</a></li>
+    </ul>
+<!--幻灯开始-->
+<div class="phone_main">	
+<div class="m_banner">
+    <script src="$!webPath/wap/advert_invoke?id=29"></script>
+</div>
+<!--最新揭晓开始-->    
+#if($!newsLottery.size()>0)
+	<div class="new_publish">
+    	<h3 class="title_h">最新揭晓</h3>
+        <div class="index_model">
+            <ul class="items_box">
+            #foreach($l in $newsLottery)
+                <li class="item_li">
+                    <a href="$!webPath/wap/cloudpurchase_items?id=$!l.id">
+                        <img src="$!l.cloudPurchaseGoods.primary_photo">
+                        <p>恭喜<span>$!l.lucky_username</span>获得</p>
+                    </a>
+                </li>
+             #end
+            </ul>
+        </div>
+    </div>
+#end
+#if($!objs.size()>0)
+<!--上架新品开始-->        
+    <div class="new_publish">
+    	<h3 class="title_h">上架新品<a href="$!webPath/wap/cloudpurchase_goods_list?orderby=zuixin" class="more_btn">更多</a></h3>
+        <div class="index_model">
+            <ul class="items_box">
+            #foreach($obj in $objs)
+                <li class="item_li">
+                    <a href="$!webPath/wap/cloudpurchase_items?id=$!obj.id">
+                        <img src="$!obj.cloudPurchaseGoods.primary_photo">
+                        <p>$!obj.cloudPurchaseGoods.goods_name</p>
+                    </a>
+                </li>
+             #end
+            </ul>
+        </div>
+    </div>
+#end
+#if($!cpls.size()>0)
+<!--今日热门商品开始-->  
+	<div class="hot_div">
+    	<h3 class="title_h">热门商品<a href="$!webPath/wap/cloudpurchase_goods_list" class="more_btn">更多</a></h3>
+        <div class="index_model">
+        	<ul class="model_g_box">
+             #foreach($cpl in $cpls)
+            	<li class="model_g_item">
+                    <div class="model_info_box">
+                        <div class="goods_pic"><a href="$!webPath/wap/cloudpurchase_items?id=$!cpl.id"><img src="$!cpl.cloudPurchaseGoods.primary_photo" ></a></div>
+                        <div class="goods_info">
+                            <p class="w_text">$!cpl.cloudPurchaseGoods.goods_name</p>
+                            <div class="w_progressBar">
+                            #set($p = 100*$!cpl.purchased_times/$!cpl.cloudPurchaseGoods.goods_price)
+                                <p class="pro_text">开奖进度<strong>$!{p}%</strong></p>
+                                <p class="w_line">
+                                    <span class="w_bar" style="width:$!{p}%"><!--进度条由百分比控制-->
+                                        <i class="color"></i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <a  #if(!$!user) href="$!webPath/wap/login" #else href="javascript:void(0);" id="add_cart_$!{cpl.cloudPurchaseGoods.id}" lottery_id="$!cpl.id"  goods_img="$!cpl.cloudPurchaseGoods.primary_photo"   #end><div class="goods_shortFunc"></div></a>
+                         #if($!cpl.cloudPurchaseGoods.least_rmb==10) <div class="ten_area"></div>#end
+                    </div>
+           		 </li>
+               #end
+            </ul>
+        </div>
+    </div>
+</div> 
+#end
+<div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+  <div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>
+<a href="$!webPath/wap/cloudpurchase_cart" class="minicar">
+	<b class="cart_count" #if($!count&&$!count>0) style="display:block;" #else style="display:none;"  #end>$!count</b><!--数量大于0时显示-->  
+</a>
+</body>
+</html>

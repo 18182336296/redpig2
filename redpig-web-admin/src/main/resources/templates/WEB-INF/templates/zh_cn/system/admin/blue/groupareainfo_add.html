@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=E2ef3f76a60f9aa4defb7cdcff2d46d5"></script>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/CityList/1.2/src/CityList_min.js"></script>
+ <style type="text/css">
+        body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+        #allmap{height:500px;width:100%;}
+        #r-result{width:100%; font-size:14px;}
+    </style>
+<script>
+jQuery(document).ready(function(){
+	
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  gai_name:{
+	    required :true,
+	   },
+	   area2:{
+		required:true   
+		}
+	 },
+	messages:{
+	  gai_name:{required:"详细地址不能为空"},
+		area2:{required:"区域必须选择"}
+	}
+  });	
+  //
+  jQuery("#pid").val("$!obj.parent.id");
+});
+jQuery(document).ready(function(){
+	 jQuery("select[id!='area2']").change(function(){
+     var level=jQuery(this).attr("level");
+	 var id=jQuery(this).val();
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	    jQuery.each(data, function(index,item){
+		  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+		  jQuery("#area"+level).show();
+		});
+	  },"json");
+	 }else{
+	   for(var i=level;i<=3;i++){
+	    jQuery("#area"+i).empty();
+	    jQuery("#area"+i).hide();
+	   }
+	 }
+  });
+	});
+	function saveArea(val){
+		var areaId=jQuery(val).val();
+		jQuery.post("$!webPath/saveArea",{"areaId":areaId},function(data){
+			if(data){
+				jQuery("#id").val(data);	
+			}else{
+				alert("请稍后再试!")
+			}
+			},"json");	
+		}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">团购区域</h1>
+  <div class="nav_list">
+    <ul>
+        	<li><a href="$!webPath/group_self"><b>商品类团购列表</b></a></li>
+            <li><a href="$!webPath/grouplife_self"><b>生活类团购列表</b></a></li>
+            <li><a href="$!webPath/group_self_add?type=goods"><b>新增商品类团购商品</b></a></li>
+            <li><a href="$!webPath/group_self_add?type=life"><b>新增生活类团购商品</b></a></li>
+            <li><a href="$!webPath/grouplife_selforder"><b>生活购订单列表</b></a></li>
+              <li><a href="$!webPath/groupareainfo_list" ><b>常用地区列表</b></a> </li>
+  <li><a href="$!webPath/groupareainfo_add" class="this"><b>常用地区新增</b></a>  </li>
+    </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/groupareainfo_save" method=post>
+     <input type="hidden" id="id" name="id" value="$!obj.id" />
+     <input type="hidden" id="lng" name="lng" value="$!obj.gg_gai.gai_lng"/>
+     <input type="hidden" id="lat" name="lat" value="$!obj.gg_gai.gai_lat"/>
+    <div class="edit">
+      <div class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg">所属区域</li>
+          <li><span class="webnamesec sizese">
+            <select name="area0" id="area0" level="1" style="float:left; margin-right:5px;">
+          			<option value="">请选择</option>
+          				#foreach($area in $objs)           
+                    <option value="$!area.id" #if($!area.id==$!obj.area.parent.parent.id) selected="true" #end>$!area.areaName</option>
+           				#end          
+                  </select>
+                  <select name="area1" id="area1" level="2" style="float:left; margin-right:5px;">
+          			<option value="">请选择</option>  
+                     #foreach($area in $obj.area.parent.parent.childs)                     
+          			<option value="$!area.id" #if($!area.id==$!obj.area.parent.id) selected="true"#end>$!area.areaName</option>
+         			#end         
+                  </select>
+                  <select name="area2" id="area2" level="3" style="float:left; margin-right:5px;" onchange="saveArea(this)"/>
+          			<option value="">请选择</option> 
+                    #foreach($area in $$obj.area.parent.childs)                     
+          			<option value="$!area.id" #if($!area.id==$!obj.area.id) selected="true"#end>$!area.areaName</option>
+         			#end          
+                  </select>
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">详细地址</li>
+          <li><span class="webname">
+            <input name="gai_name" type="text" id="gai_name" value="$!obj.gai_name" size="40" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg">搜索</li>
+          <li><span class="size100">
+            <input name="txtarea" type="text" id="txtarea"  />
+            <input id="areaSearch" type="button" value="搜索" style="cursor: pointer;width: 50px;margin-left: 20px;background: rgb(80, 175, 255) none repeat scroll 0% 0%;border: medium none;color: rgb(255, 255, 255);"/>
+            </span><span style="padding-left:30px; color:#949494;">请在地图上选择一个位置</span></li>
+        </ul>
+        <div style="width: 620px; height: 440px; border: 1px solid gray; float: left; margin:10px 0 10px 150px;" id="container"></div>
+      </div>
+    </div>
+  
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="submit" value="提交"/>
+    </span> </div>
+  </form>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    var map = new BMap.Map("container");
+   	#if($!obj)
+	 map.centerAndZoom(new BMap.Point($!obj.gai_lng,$!obj.gai_lat), 18)
+	 var pointMarker = new BMap.Point($!obj.gai_lng,$!obj.gai_lat); // 创建标注的坐标
+     addMarker(pointMarker);
+	#else
+	map.centerAndZoom(new BMap.Point(117.10,43.13), 5);
+	#end
+	map.addControl(new BMap.NavigationControl());
+    map.addControl(new BMap.ScaleControl());
+    map.addControl(new BMap.OverviewMapControl());
+    map.addControl(new BMap.MapTypeControl());
+    //搜索
+    document.getElementById("areaSearch").onclick = function () {
+        var myGeo = new BMap.Geocoder();
+        var searchTxt =document.getElementById("txtarea").value;
+        myGeo.getPoint(searchTxt, function (point) {
+            if (point) {
+                map.centerAndZoom(point, 12);
+                document.getElementById("lat").value = point.lat;
+               	document.getElementById("lng").value = point.lng;
+                var pointMarker = new BMap.Point(point.lng, point.lat);
+                geocodeSearch(pointMarker);
+				var myIcon = new BMap.Icon("$!cdnServer/resources/style/system/front/default/images/position.png", new BMap.Size(40, 40),
+                { offset: new BMap.Size(40, 40),
+                    imageOffset: new BMap.Size(0, 0)
+                });
+        		var marker = new BMap.Marker(point, { icon: myIcon });
+				map.clearOverlays();
+        		map.addOverlay(marker);
+            }
+            else
+                alert("搜索不到结果");
+        }, "全国");
+    }
+       
+	   document.getElementById("area2").onchange=function(){
+			var sel=document.getElementById("area1"); 
+			var index=sel.selectedIndex; 
+			var initArea= sel.options[index].text; 
+			sel=document.getElementById("area2"); 
+			var index=sel.selectedIndex;// 
+			initArea+= sel.options[index].text;
+		if(initArea){
+			 var myGeo1 = new BMap.Geocoder();
+       		 myGeo1.getPoint(initArea, function (point) {
+            	if (point) {
+                map.centerAndZoom(point,12);
+                document.getElementById("lat").value = point.lat;
+               	document.getElementById("lng").value = point.lng;
+                var pointMarker = new BMap.Point(point.lng, point.lat);
+                geocodeSearch(pointMarker);
+
+                map.addOverlay(new BMap.Marker(point));
+            }
+            else
+                alert("搜索不到结果");
+        }, "全国");
+		}
+	}
+    map.enableScrollWheelZoom();
+
+    map.addEventListener("click", function (e) {
+        document.getElementById("lat").value = e.point.lat;
+        document.getElementById("lng").value = e.point.lng;
+        map.clearOverlays();
+        var pointMarker = new BMap.Point(e.point.lng, e.point.lat); // 创建标注的坐标
+        addMarker(pointMarker);
+        geocodeSearch(pointMarker);
+    });
+
+    function addMarker(point) {
+        var myIcon = new BMap.Icon("$!cdnServer/resources/style/system/front/default/images/position.png", new BMap.Size(40, 40),
+                { offset: new BMap.Size(40, 40),
+                    imageOffset: new BMap.Size(0, 0)
+                });
+        var marker = new BMap.Marker(point, { icon: myIcon });
+        map.addOverlay(marker);
+    }
+    function geocodeSearch(pt) {
+        var myGeo = new BMap.Geocoder();
+    }
+</script>

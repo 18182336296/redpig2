@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>订单支付 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+jQuery("input[type='radio']:first").attr("checked","checked");	
+	jQuery("ul[ty=pay]").click(function(){
+		var index = jQuery(this).index("ul[ty=pay]");
+		jQuery("input[name=payType]").get(index).checked=true;
+	});
+	 if(isWeiXin()){
+       jQuery("#wx").show();
+     }else{
+		 jQuery("#ali").show();
+		 }
+});<!--end-->
+var type="goods";
+#if($!of.order_cat==2)
+type = "group";
+#end
+function order_pay(){
+	if(jQuery("input[type='radio']:checked").val()=="wx_pay"){
+		var or_id=jQuery("#order_id").val();
+		var href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=$!{appid}&redirect_uri=$!config.h5Url/catchopenid&response_type=code&scope=snsapi_userinfo&state=order_"+or_id+"_"+type+"#wechat_redirect";
+		alert(href);
+		window.location.href= href;
+		
+	}else{
+		jQuery("#theForm").submit();
+		}
+	
+}
+function isWeiXin(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        return true;
+    }else{
+        return false;
+    }
+}
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>订单支付<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="pd5">
+  <div class="payment">
+    <div class="pay_detail">
+      <dl>
+        <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/dun.png" width="62"></dt>
+        <dd>
+          <ul>
+            <li style="font-size:20px; margin-bottom:10px;">订单支付</li>
+            #set($order_total_price=$!orderFormTools.query_order_pay_price("$!order.id"))
+            <li>应付金额：<span class="red">¥$!{order_total_price}</span></li>
+            <li></li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+    <form id="theForm" method="post" action="$!webPath/order_pay">
+    <input type="hidden" name="order_id" id="order_id" value="$!order.id">
+    <div class="payfor">
+      <h1>请选择支付方式：</h1>
+      #set($alipay_wap_install=$!paymentTools.queryShopPayment("alipay_wap").get("install"))
+	  #set($wx_pay_install=$!paymentTools.queryShopPayment("wx_pay").get("install"))
+      #set($unionpay_install=$!paymentTools.queryShopPayment("unionpay").get("install"))
+      #if($!alipay_wap_install==true||$!wx_pay_install==true)
+      <table class="pay_table">
+        <tbody>
+          <tr>
+            <td colspan="2"><span style="border-bottom:1px solid #F00">在线支付</span></td>
+          </tr>
+        #if($!alipay_wap_install==true)
+        <tr id="ali"   class="pay_tr" ty="pay">
+          <td width="12%" align="center"><input type="radio" name="payType" id="payType" value="alipay_wap"></td>
+          <td>
+          <!--<div class="pay_style"><a href="javascript:void(0)">支付宝</a></div>-->
+          <ul class="pay_method" ty="pay">
+            	<li class="pay_img"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/payment_1.png"></li>
+                <li class="pay_text">
+                	<p class="name">支付宝</p>
+                    <p class="name_des">推荐已安装支付宝客户端的用户使用</p>
+                </li>
+            </ul>
+          </td>
+        </tr>
+        #end  
+        #if($!wx_pay_install==true)
+        <tr id="wx"  class="pay_tr" ty="pay">
+          <td width="12%" align="center"><input type="radio" name="payType" id="payType" value="wx_pay"></td>
+          <td><!--<div class="pay_style"><a href="javascript:void(0)">微信支付</a></div>-->
+          	<ul class="pay_method" ty="pay">
+            	<li class="pay_img"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/payment_2.png"></li>
+                <li class="pay_text">
+                	<p class="name">微信</p>
+                    <p class="name_des">推荐已安装微信客户端的用户使用</p>
+                </li>
+            </ul>
+          </td>
+        </tr>
+        #end
+        #if($!unionpay_install==true)
+        <tr id="un"  class="pay_tr" ty="pay">
+          <td width="12%" align="center"><input type="radio" name="payType" id="payType" value="unionpay"></td>
+          <td><!--<div class="pay_style"><a href="javascript:void(0)">银联支付</a></div>-->
+          	<ul class="pay_method" ty="pay">
+            	<li class="pay_img"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/payment_3.png"></li>
+                <li class="pay_text">
+                	<p class="name">银联</p>
+                    <p class="name_des">推荐开通银联的用户使用</p>
+                </li>
+            </ul>
+          </td>
+        </tr>
+         #end
+      </table>
+      #end
+      #set($install=$!paymentTools.queryShopPayment("payafter").get("install"))
+      #if($!install==true)
+      <table class="pay_table">
+        <tbody>
+          <tr >
+            <td colspan="2"><span style="border-bottom:1px solid #F00">货到付款</span></td>
+          </tr>
+          <tr >
+            <td width="12%" align="center"><input type="radio" name="payType"  value="payafter"></td>
+            <td><div class="pay_style"><a href="javascript:void(0)">货到付款</a></div></td>
+          </tr>
+        </tbody>
+      </table>
+      #end
+      #set($install=$!paymentTools.queryShopPayment("balance").get("install"))
+      #if($!install==true)
+      <table class="pay_table">
+        <tbody>
+          <tr  class="pay_tr" >
+            <td colspan="2"><span style="border-bottom:1px solid #F00">预存款支付</span></td>
+          </tr>
+          <tr >
+            <td width="12%" align="center"><input type="radio" name="payType"  value="balance"></td>
+            <td><!--<div class="pay_style"><a href="javascript:void(0)">预存款</a></div>-->
+            <ul class="pay_method" ty="pay">
+            	<li class="pay_img"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/payment_4.png"></li>
+                <li class="pay_text">
+                	<p class="name">预存款</p>
+                    <p class="name_des">预存款支付，方便快捷</p>
+                </li>
+            </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      #end </div>
+    </form>
+    <div class="pay_btn"><a href="javascript:void(0)" onClick="order_pay()">马上支付</a></div>
+  </div>
+</div>
+
+</body>
+</html>

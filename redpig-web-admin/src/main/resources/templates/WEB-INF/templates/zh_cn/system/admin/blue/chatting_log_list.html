@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [-1..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <h3 class="seth">自营客服记录</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/chatting_log_list" class="this"><b>客服记录</b></a></li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/chatting_log_list" method="post">
+    <div class="search"> <span>客服用户名</span><span class="size100">
+      <input name="chatting_name" type="text" id="chatting_name" value="$!chatting_name" />
+      </span><span>客服绑定管理员名</span><span class="size100">
+      <input name="chatting_user_name" type="text" id="chatting_user_name" value="$!chatting_user_name" />
+      </span><span>
+      <input name="" type="button"  value="搜索" style="cursor:pointer;" onclick="query_form()" class="search_btn"/>
+      </span> </div>
+    <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>记录所有自营客服聊天记录，不可删除，永久保存；</li>
+      </ul>
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="10%"><span class="form_btna">该记录用户发言人</span></th>
+          <th width="12%"><span class="form_btna">服务时间</span></th>
+          <th align="center">聊天内容</th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        #set($small="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name")
+        #if($!obj.goods_main_photo)
+        #set($bigimg="$!imageWebServer/$!obj.goods_main_photo.path/$!obj.goods_main_photo.name")
+        #set($small="$!{bigimg}_small.$!{obj.goods_main_photo.ext}")
+        #end
+        <tr>
+          <td align="center">$!obj.user_name</td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+          <td align="center">$!obj.content</td>
+        </tr>
+        #end
+        #else
+        <tr>
+          <td colspan="4"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+        </tr>
+        #end
+      </table>
+      <!--操作-start--> 
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        <div class="operation_right">
+          <div class="fenye"> <span id="queryCondition" style="display:none"> #foreach($sm in $sms)
+            <input name="chatting_user_id" id="chatting_user_id" type="hidden" value="$!chatting_user_id"/>
+            #end </span>
+            <input name="mulitId" type="hidden" id="mulitId" />
+            <input name="uncheck_mulitId" type="hidden" id="uncheck_mulitId" />
+            <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+            $!gotoPageFormHTML </div>
+        </div>
+      </div>
+      #end 
+      <!--操作-end--> 
+    </div>
+  </form>
+</div>
+</body>
+</html>

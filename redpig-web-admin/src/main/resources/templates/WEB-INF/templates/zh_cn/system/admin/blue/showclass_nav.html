@@ -1,0 +1,173 @@
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id"> #if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end 
+<script>
+jQuery(document).ready(function(){
+	jQuery("#theForm").validate({								   
+       rules:{
+	    rc_on:{digits:true}
+	   },
+	   messages:{
+	   rc_on:{digits:"请填写正整数否则将自动排序"}
+	   }
+});	
+jQuery(function(){
+	var cf_id =jQuery("#cf_id").val();
+	jQuery.ajax({
+        type: 'POST',
+        url: '$!webPath/channel_floor_rc_ajax',
+        data: {
+            "currentPage": 1,
+			"cf_id": cf_id
+        },
+        beforeSend: function() {},
+        success: function(data) {
+            jQuery("#img_adv_img").empty().append(data);	
+        }
+    })
+	
+});	
+  jQuery(":radio").click(function(){
+     var val=jQuery(this).val();
+	 jQuery("li[id^=goods_adv_]").hide();
+	 jQuery("li[id^=user_adv_]").hide();
+	 jQuery("li[id^=system_adv_]").hide();
+	 if(val=="goods"){
+	  jQuery("li[id^=goods_adv_]").show();
+	 }
+	 if(val=="img"){
+	  jQuery("li[id^=user_adv_]").show();
+	 }
+	 if(val=="adv"){
+	  jQuery("li[id^=system_adv_]").show();
+	 }
+  });
+});
+//ajax刷新		
+	function ajaxPage(url,currentPage,obj){
+    var cf_id =jQuery("#cf_id").val();
+	jQuery.ajax({
+        type: 'POST',
+        url: '$!webPath/channel_floor_rc_ajax',
+        data: {
+            "currentPage": currentPage,
+			"cf_id":cf_id
+        },
+        success: function(data){
+            jQuery("#img_adv_img").empty().append(data);
+        }
+    })
+}
+function save_rc(){
+   var rc_name=jQuery("#rc_name").val();
+   var rc_url=jQuery("#rc_url").val();
+   var cf_id =jQuery("#cf_id").val();
+   var rc_on =jQuery("#rc_on").val();
+   jQuery.ajax({type:'POST',url:'$!webPath/channel_floor_rc_save',data:{"rc_name":rc_name,"rc_url":rc_url,"cf_id":cf_id,"rc_on":rc_on},   
+			  success:function(data){
+				  jQuery("#img_adv_img").empty().append(data);
+				  alert("保存成功请到列表编辑");
+			  }
+		});
+}
+function rc_del(rc_id,currentPage){
+   var cf_id =jQuery("#cf_id").val();
+   jQuery.ajax({type:'POST',url:'$!webPath/channel_floor_rc_del',data:{"cf_id":cf_id,"rc_id":rc_id,"currentPage": currentPage},
+			  success:function(data){
+				 jQuery("#img_adv_img").empty().append(data);
+			}																														      });
+}
+function ajax_update(rc_id,show,obj){
+	var val=jQuery(obj).val();
+   var cf_id=jQuery("#cf_id").val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/channel_floor_rc_update',
+				  data:{"cf_id":cf_id,"rc_id":rc_id,"show":show,"value":val},
+				beforeSend:function(){},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+
+<form action="$!webPath/channelfloor_style2_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+  <div class="box_floor">
+    <div class="floor_advertisment"> <em class="floor_warning">注释：您可以选择右上角楼层品牌/分类名</em>
+      <ul class="floor_adv">
+        <li> <b>
+          <input name="cf_id" type="hidden" id="cf_id" value="$!cf.id">
+          <input name="channel_id" type="hidden" id="channel_id" value="$!channel_id">
+          <input name="channelfloor_id" type="hidden" id="channelfloor_id" value="$!channelfloor_id">
+          <input name="module_id" type="hidden" id="module_id" value="$!module_id" />
+          选择类型：</b> <span class="floor_adv_sp"> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="goods" checked="checked" />
+            品牌/分类列表 </label>
+          </i> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="img" />
+            品牌/分类添加</label>
+          </i> </span> </li>
+        <li id="goods_adv_img">
+          <div class="tableBox" id="img_adv_img" >
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tbody id="rc_info">
+                <tr class="table_title" >
+                  <th width="5%">排序</th>
+                  <th width="25%">名称</th>
+                  <th width="40%">链接</th>
+                  <th width="8%">是否显示</th>
+                  <th width="20%">操作</th>
+                </tr>
+              #if($!map_list.size()>0)
+              #foreach($obj in $map_list)
+              <tr id="rc_list_$!obj.id">
+                <td><span>
+                  <input type="text" value="$!obj.on" onblur="ajax_update('$!obj.id','c_id',this)">
+                  </span></td>
+                <td><span>
+                  <input type="text" value="$!obj.name" onblur="ajax_update('$!obj.id','c_name',this)">
+                  </span></td>
+                <td><span>
+                  <input type="text" value="$!obj.url" onblur="ajax_update('$!obj.id','c_url',this)">
+                  </span></td>
+                <td align="center"><img src="$!cdnServer/resources/style/system/manage/blue/images/$!{obj.show}.png" width="21" height="23" onclick="ajax_update('$!obj.id','display',this)" style="cursor:pointer;" title=""></td>
+                <td><a href="javascript:void(0);" onclick="rc_del($!obj.id,$!currentPage);">删除</a></td>
+              </tr>
+              #end
+              #else
+              <tr id="rc_list_no">
+                <td colspan="5"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+              </tr>
+              #end
+                </tbody>
+              
+            </table>
+          </div>
+        </li>
+        <li id="user_adv_url" style="display:none;"> <b>品牌/分类序号：</b> <span class="floor_adv_sp">
+          <input name="rc_on" type="text"class="floor_file_txt2" id="rc_on" value="$!obj.rc_on" />
+          </span> </li>
+        <li id="user_adv_url" style="display:none;"> <b>品牌/分类名称：</b> <span class="floor_adv_sp">
+          <input name="rc_name" type="text"class="floor_file_txt2" id="rc_name" value="$!obj.href_url" />
+          </span> </li>
+        <li id="user_adv_url" style="display:none;"> <b>品牌/分类链接：</b> <span class="floor_adv_sp">
+          <input name="rc_url" type="text"class="floor_file_txt2" id="rc_url" value="$!obj.href_url" />
+          </span> <i class="floor_adv_node">格式为:http://www.xxx.com</i>
+          <input name="" type="button" value="保存品牌/分类信息" onclick="save_rc();" />
+      </ul>
+    </div>
+    <div class="submit">
+      <input name="" type="submit" value="保存" />
+    </div>
+  </div>
+</form>

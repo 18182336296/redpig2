@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.VatInvoiceMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.VatInvoice">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="companyName" property="companyName" jdbcType="VARCHAR"/>
+		<result column="registerAddress" property="registerAddress" jdbcType="VARCHAR"/>
+		<result column="taxpayerCode" property="taxpayerCode" jdbcType="VARCHAR"/>
+		<result column="registerPhone" property="registerPhone" jdbcType="VARCHAR"/>
+		<result column="registerbankName" property="registerbankName" jdbcType="VARCHAR"/>
+		<result column="registerbankAccount" property="registerbankAccount" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+		<association property="user_license" column="user_license_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="tax_reg_card" column="tax_reg_card_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="tax_general_card" column="tax_general_card_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="bank_permit_image" column="bank_permit_image_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.VatInvoice">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="companyName" property="companyName" jdbcType="VARCHAR"/>
+		<result column="registerAddress" property="registerAddress" jdbcType="VARCHAR"/>
+		<result column="taxpayerCode" property="taxpayerCode" jdbcType="VARCHAR"/>
+		<result column="registerPhone" property="registerPhone" jdbcType="VARCHAR"/>
+		<result column="registerbankName" property="registerbankName" jdbcType="VARCHAR"/>
+		<result column="registerbankAccount" property="registerbankAccount" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,companyName,registerAddress,taxpayerCode,registerPhone,registerbankName,registerbankAccount,status,user_license_id,tax_reg_card_id,tax_general_card_id,bank_permit_image_id,user_id,user_name,remark
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="companyName != null">and companyName = #{companyName,jdbcType=VARCHAR}</if>
+		<if test="registerAddress != null">and registerAddress = #{registerAddress,jdbcType=VARCHAR}</if>
+		<if test="taxpayerCode != null">and taxpayerCode = #{taxpayerCode,jdbcType=VARCHAR}</if>
+		<if test="registerPhone != null">and registerPhone = #{registerPhone,jdbcType=VARCHAR}</if>
+		<if test="registerbankName != null">and registerbankName = #{registerbankName,jdbcType=VARCHAR}</if>
+		<if test="registerbankAccount != null">and registerbankAccount = #{registerbankAccount,jdbcType=VARCHAR}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="remark != null">and remark = #{remark,jdbcType=VARCHAR}</if>
+		<if test="user_license_id != null">and user_license_id = #{user_license_id,jdbcType=BIGINT}</if>
+		<if test="tax_reg_card_id != null">and tax_reg_card_id = #{tax_reg_card_id,jdbcType=BIGINT}</if>
+		<if test="tax_general_card_id != null">and tax_general_card_id = #{tax_general_card_id,jdbcType=BIGINT}</if>
+		<if test="bank_permit_image_id != null">and bank_permit_image_id = #{bank_permit_image_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		companyName= #{companyName},
+		registerAddress= #{registerAddress},
+		taxpayerCode= #{taxpayerCode},
+		registerPhone= #{registerPhone},
+		registerbankName= #{registerbankName},
+		registerbankAccount= #{registerbankAccount},
+		status= #{status},
+		<if test="user_license != null and user_license.id != null">user_license_id = #{user_license.id,jdbcType=BIGINT},</if>
+		<if test="user_license == null or user_license.id == null">user_license_id = null,</if>
+		<if test="tax_reg_card != null and tax_reg_card.id != null">tax_reg_card_id = #{tax_reg_card.id,jdbcType=BIGINT},</if>
+		<if test="tax_reg_card == null or tax_reg_card.id == null">tax_reg_card_id = null,</if>
+		<if test="tax_general_card != null and tax_general_card.id != null">tax_general_card_id = #{tax_general_card.id,jdbcType=BIGINT},</if>
+		<if test="tax_general_card == null or tax_general_card.id == null">tax_general_card_id = null,</if>
+		<if test="bank_permit_image != null and bank_permit_image.id != null">bank_permit_image_id = #{bank_permit_image.id,jdbcType=BIGINT},</if>
+		<if test="bank_permit_image == null or bank_permit_image.id == null">bank_permit_image_id = null,</if>
+		user_id= #{user_id},
+		user_name= #{user_name},
+		remark= #{remark},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_vatinvoice 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_vatinvoice obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_vatinvoice obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getUserLicenseByAccessoryId" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_vatinvoice
+		where
+			user_license_id= #{user_license_id,jdbcType=BIGINT}
+	</select>
+	<select id="getTaxRegCardByAccessoryId" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_vatinvoice
+		where
+			tax_reg_card_id= #{tax_reg_card_id,jdbcType=BIGINT}
+	</select>
+	<select id="getTaxGeneralCardByAccessoryId" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_vatinvoice
+		where
+			tax_general_card_id= #{tax_general_card_id,jdbcType=BIGINT}
+	</select>
+	<select id="getBankPermitImageByAccessoryId" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_vatinvoice
+		where
+			bank_permit_image_id= #{bank_permit_image_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_vatinvoice obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.VatInvoice" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_vatinvoice(addTime,deleteStatus,companyName,registerAddress,taxpayerCode,registerPhone,registerbankName,registerbankAccount,status,user_id,user_name,remark,user_license_id,tax_reg_card_id,tax_general_card_id,bank_permit_image_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{companyName,jdbcType=VARCHAR},#{registerAddress,jdbcType=VARCHAR},#{taxpayerCode,jdbcType=VARCHAR},#{registerPhone,jdbcType=VARCHAR},#{registerbankName,jdbcType=VARCHAR},#{registerbankAccount,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{user_id,jdbcType=BIGINT},#{user_name,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{user_license.id,jdbcType=BIGINT},#{tax_reg_card.id,jdbcType=BIGINT},#{tax_general_card.id,jdbcType=BIGINT},#{bank_permit_image.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.VatInvoice">
+		update redpigmall_vatinvoice
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_vatinvoice where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_vatinvoice where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_vatinvoice obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_vatinvoice obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.VatInvoice" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_vatinvoice
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_vatinvoice where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

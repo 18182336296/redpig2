@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#theForm").validate({
+    	 rules:{
+			  apiKey:{required:true},
+			  secretKey:{required:true}
+		 },
+		messages:{
+	          apiKey:{required:"apiKey不能为空"},
+			  secretKey:{required:"secretKey不能为空"}
+	     }
+ });
+ //
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">手机端推送</h1>
+  <div class="nav_list">
+    <ul>
+      <li> <a href="$!webPath/mobile_push"><b>消息推送列表</b></a></li>
+      <li> <a href="$!webPath/mobile_push_add"><b>新增消息推送</b></a></li>
+      <li><a href="$!webPath/mobile_push_set" class="this"><b>推送设置</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/mobile_push_set_save" method="post" id="theForm">
+    <div class="edit">
+      <div class="editul setcont">
+        
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>买家API Key</li>
+          <li><span class="webname">
+            <input name="app_push_buyer_apiKey" type="text" id="app_push_buyer_apiKey" value="$!config.app_push_buyer_apiKey" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w"><a href="http://redpigmall.net" target="_blank">请向RedPigMall购买</a></strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>买家Secret Key</li>
+          <li><span class="webname">
+            <input name="app_push_buyer_secretKey" type="text" id="app_push_buyer_secretKey" value="$!config.app_push_buyer_secretKey" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>卖家API Key</li>
+          <li><span class="webname">
+            <input name="app_push_seller_apiKey" type="text" id="app_push_seller_apiKey" value="$!config.app_push_seller_apiKey" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>卖家Secret Key</li>
+          <li><span class="webname">
+            <input name="app_push_seller_secretKey" type="text" id="app_push_seller_secretKey" value="$!config.app_push_seller_secretKey" />
+            </span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit"> <span class="pad120">
+      <input name="" type="submit" value="提交" />
+      <input name="id" type="hidden" id="id" value="$!config.id" />
+      </span> </div>
+  </form>
+</div>
+</body>
+</html>

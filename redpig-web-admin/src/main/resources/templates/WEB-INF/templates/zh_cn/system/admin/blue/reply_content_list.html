@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>素材管理列表</title>
+<link href="$!cdnServer/resources/style/system/manage/blue/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<script>
+jQuery(document).ready(function(){
+	 jQuery("#way_info").val("$!way_info");
+	jQuery("#title_info").val("$!title_info");
+});
+
+</script>
+<body>
+<div class="cont">
+    <h1 class="seth">微信素材管理</h1>
+    <div class="nav_list"> 
+    <ul>
+    <li><a href="$!webPath/reply_content_list"  class="this" id="site_base"><b>素材列表</b></a></li>
+     <li><a href="$!webPath/reply_content_add"  id="site_base"><b>添加素材</b></a></li>
+    </ul
+  ></div>
+  <form name="queryForm" id="queryForm"  action="$!webPath/reply_content_list" method="post">
+   <div class="search">
+    <ul>
+      <li> <span>标题</span> <span class="size150">
+        <input name="title_info" type="text" id="title_info"  value="$!title_info"/>
+        </span> <span>素材类型</span> <span>
+        <select name="way_info" id="way_info">
+		  <option value="">请选择...</option>
+		  <option value="0">纯文本</option>
+          <option value="1">图文</option>
+        </select>
+        </span>  
+        <span>
+        <input name="" type="submit"  value="查询" style="cursor:pointer;" class="search_btn"/>
+        </span> </li>
+    </ul>
+   </div>
+   </form>
+    <form name="ListForm" id="ListForm"  action="$!webPath/reply_content_list" method="post">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="10%"><span class="form_btna">序列号</span></th>
+        <th width="10%"><span class="form_btna">素材类型</span></th>
+        <th width="15%" ><span class="form_btna">素材标题</span></th>
+        <th width="15%"><span class="form_btna">素材作者</span></th>
+        <th width="15%"><span class="form_btna">创建时间</span></th>
+        <th width="20%"><span class="form_btna">素材摘要</span></th>
+        <th width="15%"><span class="form_btnb">操作</span></th>
+      </tr>
+      #if($!objs.size()>0)
+	  #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.sequence</td>
+         #if($!obj.way==0)
+        <td align="center">纯文本</td>
+        #else
+        <td align="center">图文</td>
+        #end
+        <td align="center">$!obj.title</td>
+        <td align="center">$!obj.author</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td> 
+        <td align="center">$obj.digest</td>
+        <td align="center" class="hui oprate_con">
+        	<a href="$!webPath/reply_content_edit?way=$!obj.way&id=$!obj.id&currentPage=$!currentPage&digest=$!obj.digest&img=$!obj.img.name" class="blue">编辑</a>
+            <a href="$!webPath/reply_content_del?id=$!obj.id&currentPage=$!currentPage" class="blue">删除</a>
+        </td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="7">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+   </div>
+  #if($!objs.size()>0)
+  <div class="operate_bar">
+    <div class="fenye">
+      <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  <input name="mulitId" type="hidden" id="mulitId" />
+      $!gotoPageFormHTML
+    </div> 
+ </div>
+ #end
+ 
+ </form>
+ 
+</div>
+</body>
+</html>

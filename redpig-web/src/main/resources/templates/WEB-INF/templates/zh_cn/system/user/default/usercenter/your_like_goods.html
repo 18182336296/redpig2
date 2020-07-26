@@ -1,0 +1,42 @@
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script>
+jQuery(document).ready(function(){	
+  jQuery(".user_guess_box_like").slide({
+	   mainCell:'.guess_like_box_like',
+	   autoPlay:true,
+	   effect:'left', 
+	   vis:6, scroll:2, 
+	   autoPage:true,
+	   interTime:3000,
+	   prevCell:"#like_goods_left",
+	   nextCell:"#like_goods_right"
+	   });
+ });
+</script>
+<div class="user_guess_b">
+        <h3><strong>猜您喜欢</strong></h3>
+        <div class="user_guess_box_like"> <span class="guess_left"  style="cursor:pointer" id="like_goods_left"></span>
+          <div class="guess_like_box_like" id="like_goods_box">
+           #foreach($goods in $your_like_goods)
+              #if($!goods.goods_main_photo)
+              #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_middle.$!{goods.goods_main_photo.ext}")
+              #else
+              #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+              #end
+              
+              #set($goods_url="$!webPath/items_$!{goods.id}")
+              #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+              #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+              #end
+              <ul class="guess_like_one">
+                <li class="guess_img"><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                  <p><img src="$!{img}" width="150" height="150" /></p>
+                  </span></a></li>
+                <li class="guess_name"><a href="$!goods_url" target="_blank">$!goods.goods_name</a></li>
+                <li class="guess_price">商城价：<strong>￥$!{goods.goods_current_price}</strong></li>
+              </ul>
+            #end
+          </div>
+          <span class="guess_right" style="cursor:pointer" id="like_goods_right"></span> </div>
+    </div>

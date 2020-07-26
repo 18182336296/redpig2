@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.AdvertPositionMapper">
+     
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.AdvertPosition">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ap_title" property="ap_title" jdbcType="VARCHAR"/>
+		<result column="ap_content" property="ap_content" jdbcType="VARCHAR"/>
+		<result column="ap_type" property="ap_type" jdbcType="VARCHAR"/>
+		<result column="ap_status" property="ap_status" jdbcType="INTEGER"/>
+		<result column="ap_use_status" property="ap_use_status" jdbcType="INTEGER"/>
+		<result column="ap_width" property="ap_width" jdbcType="INTEGER"/>
+		<result column="ap_height" property="ap_height" jdbcType="INTEGER"/>
+		<result column="ap_price" property="ap_price" jdbcType="INTEGER"/>
+		<result column="ap_sys_type" property="ap_sys_type" jdbcType="INTEGER"/>
+		<result column="ap_show_type" property="ap_show_type" jdbcType="INTEGER"/>
+		<result column="ap_sale_type" property="ap_sale_type" jdbcType="INTEGER"/>
+		<result column="ap_text" property="ap_text" jdbcType="VARCHAR"/>
+		<result column="ap_acc_url" property="ap_acc_url" jdbcType="VARCHAR"/>
+		<result column="ap_code" property="ap_code" jdbcType="VARCHAR"/>
+		<result column="ap_location" property="ap_location" jdbcType="VARCHAR"/>
+		<association property="ap_acc" column="ap_acc_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<collection property="advs" column="id" select="com.redpigmall.dao.AdvertMapper.getAdApByAdvertPositionId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.AdvertPosition">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ap_title" property="ap_title" jdbcType="VARCHAR"/>
+		<result column="ap_content" property="ap_content" jdbcType="VARCHAR"/>
+		<result column="ap_type" property="ap_type" jdbcType="VARCHAR"/>
+		<result column="ap_status" property="ap_status" jdbcType="INTEGER"/>
+		<result column="ap_use_status" property="ap_use_status" jdbcType="INTEGER"/>
+		<result column="ap_width" property="ap_width" jdbcType="INTEGER"/>
+		<result column="ap_height" property="ap_height" jdbcType="INTEGER"/>
+		<result column="ap_price" property="ap_price" jdbcType="INTEGER"/>
+		<result column="ap_sys_type" property="ap_sys_type" jdbcType="INTEGER"/>
+		<result column="ap_show_type" property="ap_show_type" jdbcType="INTEGER"/>
+		<result column="ap_sale_type" property="ap_sale_type" jdbcType="INTEGER"/>
+		<result column="ap_text" property="ap_text" jdbcType="VARCHAR"/>
+		<result column="ap_acc_url" property="ap_acc_url" jdbcType="VARCHAR"/>
+		<result column="ap_code" property="ap_code" jdbcType="VARCHAR"/>
+		<result column="ap_location" property="ap_location" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ap_title,ap_content,ap_type,ap_status,ap_use_status,ap_width,ap_height,ap_price,ap_sys_type,ap_show_type,ap_sale_type,ap_acc_id,ap_text,ap_acc_url,ap_code,ap_location
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ap_title != null">and ap_title = #{ap_title,jdbcType=VARCHAR}</if>
+		<if test="ap_content != null">and ap_content = #{ap_content,jdbcType=VARCHAR}</if>
+		<if test="ap_type != null">and ap_type = #{ap_type,jdbcType=VARCHAR}</if>
+		<if test="ap_status != null">and ap_status = #{ap_status,jdbcType=INTEGER}</if>
+		<if test="ap_use_status != null">and ap_use_status = #{ap_use_status,jdbcType=INTEGER}</if>
+		<if test="ap_use_status_no != null">and ap_use_status != #{ap_use_status_no,jdbcType=INTEGER}</if>
+		<if test="ap_width != null">and ap_width = #{ap_width,jdbcType=INTEGER}</if>
+		<if test="ap_height != null">and ap_height = #{ap_height,jdbcType=INTEGER}</if>
+		<if test="ap_price != null">and ap_price = #{ap_price,jdbcType=INTEGER}</if>
+		<if test="ap_sys_type != null">and ap_sys_type = #{ap_sys_type,jdbcType=INTEGER}</if>
+		<if test="ap_sys_type_no != null">and ap_sys_type != #{ap_sys_type_no,jdbcType=INTEGER}</if>
+		<if test="ap_show_type != null">and ap_show_type = #{ap_show_type,jdbcType=INTEGER}</if>
+		<if test="ap_sale_type != null">and ap_sale_type = #{ap_sale_type,jdbcType=INTEGER}</if>
+		<if test="ap_text != null">and ap_text = #{ap_text,jdbcType=VARCHAR}</if>
+		<if test="ap_acc_url != null">and ap_acc_url = #{ap_acc_url,jdbcType=VARCHAR}</if>
+		<if test="ap_code != null">and ap_code = #{ap_code,jdbcType=VARCHAR}</if>
+		
+		<if test="ap_location != null">and ap_location = #{ap_location,jdbcType=VARCHAR}</if>
+		<if test="ap_title_like">and ap_title like CONCAT('%',#{ap_title_like},'%') </if>
+		<if test="ap_acc_id != null">and ap_acc_id = #{ap_acc_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		ap_title= #{ap_title},
+		ap_content= #{ap_content},
+		ap_type= #{ap_type},
+		ap_status= #{ap_status},
+		ap_use_status= #{ap_use_status},
+		ap_width= #{ap_width},
+		ap_height= #{ap_height},
+		ap_price= #{ap_price},
+		ap_sys_type= #{ap_sys_type},
+		ap_show_type= #{ap_show_type},
+		ap_sale_type= #{ap_sale_type},
+		<if test="ap_acc != null and ap_acc.id != null">ap_acc_id = #{ap_acc.id,jdbcType=BIGINT},</if>
+		<if test="ap_acc == null or ap_acc.id == null">ap_acc_id = null,</if>
+		ap_text= #{ap_text},
+		ap_acc_url= #{ap_acc_url},
+		ap_code= #{ap_code},
+		ap_location= #{ap_location},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.AdvertPosition" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_adv_pos 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.AdvertPosition" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_adv_pos obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_adv_pos obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getApAccByAccessoryId" resultType="com.redpigmall.domain.AdvertPosition" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_adv_pos
+		where
+			ap_acc_id= #{ap_acc_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.AdvertPosition" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_adv_pos obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.AdvertPosition" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_adv_pos(addTime,deleteStatus,ap_title,ap_content,ap_type,ap_status,ap_use_status,ap_width,ap_height,ap_price,ap_sys_type,ap_show_type,ap_sale_type,ap_text,ap_acc_url,ap_code,ap_location,ap_acc_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ap_title,jdbcType=VARCHAR},#{ap_content,jdbcType=VARCHAR},#{ap_type,jdbcType=VARCHAR},#{ap_status,jdbcType=INTEGER},#{ap_use_status,jdbcType=INTEGER},#{ap_width,jdbcType=INTEGER},#{ap_height,jdbcType=INTEGER},#{ap_price,jdbcType=INTEGER},#{ap_sys_type,jdbcType=INTEGER},#{ap_show_type,jdbcType=INTEGER},#{ap_sale_type,jdbcType=INTEGER},#{ap_text,jdbcType=VARCHAR},#{ap_acc_url,jdbcType=VARCHAR},#{ap_code,jdbcType=VARCHAR},#{ap_location,jdbcType=VARCHAR},#{ap_acc.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.AdvertPosition">
+		update redpigmall_adv_pos
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_adv_pos where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_adv_pos where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.AdvertPosition" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_adv_pos obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.AdvertPosition" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_adv_pos obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.AdvertPosition" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_adv_pos
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_adv_pos where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

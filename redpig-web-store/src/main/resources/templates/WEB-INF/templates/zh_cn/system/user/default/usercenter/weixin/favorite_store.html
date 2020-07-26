@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="no" />
+<meta name="format-detection" content="telephone=no,address=no" />
+<title>店铺收藏 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<script>
+<!--获取type类型值-->
+jQuery(document).ready(function(){	
+	 jQuery(".c_nav_ul li").removeClass();
+	 jQuery(".c_nav_ul li:eq('1')").addClass('this');		 
+	});
+/* ************************分页功能实现************************** */   
+   var currentPage = 2;
+   var ret = 1;
+   var totalPage = "$!totalPage";
+   if(totalPage>1){    
+   jQuery(window).scroll(
+   function()
+  {
+ if (jQuery(document).scrollTop()+200 >=jQuery(document).height()-jQuery(window).height()&&ret==1) 
+{  
+ if(currentPage<=totalPage)
+{	  
+ jQuery.ajax
+ ({
+	type:'POST',
+    url:"$!webPath/wap/buyer/favorite_store_data",
+ 	data:{"currentPage":currentPage,
+ 		  "orderBy":"$!{orderBy}",
+		  "orderType":"$!{orderType}"
+		  },
+ beforeSend:function(){
+  	 ret = 2;
+	 jQuery("#loading").show();
+ 	 jQuery("#loading_none").hide();	
+  },
+ success:function(data){ 
+	 if(data){
+     currentPage = currentPage+1;
+	 ret = 1; 
+  	 jQuery(".store_collect").append(data); 
+	 <!--为店铺追加数据页添加编辑标识符-->			  
+	 if(jQuery(".s_collect_item ul").hasClass('editor_show')){
+	 <!--  alert(1);-->
+	 jQuery(".s_collect_item ul").addClass('editor_show');	
+	    }	 			  		
+	 }
+  }
+});
+}else{
+	jQuery("#loading").hide();	   
+    jQuery("#loading_none").show();  	
+   }  
+  }
+ }
+); 
+}
+/* ******************************************************************* */	
+
+<!--点击编辑时获取改变页面显示效果-->
+function show_editor(){	
+	if(jQuery("a.editor").text()=="编辑"){
+		jQuery("a.editor").text("完成");
+		jQuery("#loading").css("padding-bottom","60px");
+		jQuery("#loading_none").css("padding-bottom","60px");
+		}else{
+		jQuery("a.editor").text("编辑");
+		jQuery("#loading").css("padding-bottom","");
+		jQuery("#loading_none").css("padding-bottom","");
+		}
+    <!-- 显示编辑数据-->
+		if(jQuery(".s_collect_item ul").hasClass('editor_show')){
+			<!--test  alert("-");-->
+			jQuery(".s_collect_item span").removeClass();
+		    jQuery(".s_collect_item ul").removeClass();
+		}else{
+			<!--test  alert("+");-->
+			jQuery(".s_collect_item ul").addClass('editor_show');	
+		}
+	 <!--下方删除键显示控制-->
+	 if(jQuery(".collect_del").hasClass('collect_del_show')){
+		 jQuery(".collect_del").removeClass('collect_del_show');
+	 }else{
+		 jQuery(".collect_del").addClass('collect_del_show');
+	 }  
+}
+	 <!--点击删除后删除数据-->
+	 function collection_del(){	
+			if(!jQuery(".editor_show span").hasClass("pitch_on")){
+				Wap_alert("请至少选择一间店铺");
+				}else{	  
+			WapshowDialog(2,"您确定要删除该店铺吗",method);  
+			function method(){
+		    var ids="";
+		    jQuery("div span[class='pitch_on']").each(function(){
+			   var cid=jQuery(this).attr("cid");
+			   if(cid!=""){
+			   			ids=ids+","+cid;
+			        }
+			window.location.href="$!webPath/wap/buyer/favorite_store_del?mulitId="+ids+"&&currentPage="+currentPage;	
+		  	});	     
+	  }
+		}			
+	}
+<!--选择编辑店铺时添加确认图标,若已存在图标去掉确认-->
+function choose_store_pitch(id){
+  <!-- alert(id);-->
+    if(jQuery("#store_"+id).hasClass("pitch_on")){
+	   jQuery("#store_"+id).removeClass("pitch_on");
+	}else if(jQuery("#store_"+id).hasClass("")){	
+	     if(jQuery(".s_collect_item span[class='pitch_on']").size()==10){
+			 Wap_alert("每次最多选择10个店铺");	
+	     }else{
+			    jQuery("#store_"+id).addClass("pitch_on");
+			 }
+		}
+}
+</script>
+</head>
+<body>
+<div class="phone_main">
+  <div class="my_collect_title"> <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a> 我的收藏 <a class="editor" href="javascript:void(0);" #if($!objs.size()>0) onClick="show_editor();" #end >编辑</a> </div>
+  <div class="collect_nav">
+    <ul class="c_nav_ul">
+      <li><a href="$!webPath/wap/buyer/favorite">商品收藏</a></li>
+      <li><a href="$!webPath/wap/buyer/favorite_store">店铺收藏</a></li>
+    </ul>
+  </div>
+  #if($!objs.size()>0) 
+  <!--店铺收藏功能-->
+  <div class="store_collect"> #foreach($obj in $objs)
+    <div class="s_collect_item" > 
+      <!--点击编辑按钮后ul添加editor_show--> 
+      #if($!obj.store_photo)
+      #set($store_logo="$!imageWebServer/$!{obj.store_photo}")
+      #else
+      #set($store_logo="$!imageWebServer/$!config.storeImage.path/$!config.storeImage.name")
+      #end
+      <ul>
+        <li class="s_logo"><a href="$!webPath/wap/store?id=$!obj.store_id"> <img src="$!store_logo"></a></li>
+        <!--$!store_logo-->
+        <li class="s_name"><a href="$!webPath/wap/store?id=$!obj.store_id">$!obj.store_name</a></li>
+        <li class="editor"><span id="store_$!obj.id" cid="$!obj.id" onClick="choose_store_pitch($!{obj.id})"></span></li>
+        <!--选中时span加pitch_on-->
+      </ul>
+    </div>
+    #end </div>
+  #else  
+  <!--没有收藏店铺的情况-->
+<div class="none_collect"> <span><img src="$webPath/resources/style/system/front/default/images/weixin/collect_none.png"></span>
+  <p>您还没有收藏的店铺</p>
+  </div>
+  #end </div>
+  <!--页面底部数据状态显示-->
+<div class="loading" id="loading" style="display:none;">
+  <ul>
+    <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+    <li>正在加载....</li>
+  </ul>
+</div>
+<div class="loading" id="loading_none"  style="display:none;">
+  <ul>
+    <li>没有更多了....</li>
+  </ul>
+</div>
+<!--点击编辑按钮后collect_del添加collect_del_show-->
+<div class="collect_del"><a href="javascript:void(0)" onClick="collection_del()">删除</a></div>
+</body>
+</html>

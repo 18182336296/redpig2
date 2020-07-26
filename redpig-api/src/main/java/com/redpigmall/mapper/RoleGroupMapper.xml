@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.RoleGroupMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.RoleGroup">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+		<collection property="roles" column="id" select="com.redpigmall.dao.RoleMapper.getRgByRoleGroupId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.RoleGroup">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,name,sequence,type
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="name != null">and name = #{name,jdbcType=VARCHAR}</if>
+		<if test="sequence != null">and sequence = #{sequence,jdbcType=INTEGER}</if>
+		<if test="type != null">and type = #{type,jdbcType=VARCHAR}</if>
+	</sql>
+	<sql id="ifStatement">
+		name= #{name},
+		sequence= #{sequence},
+		type= #{type},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.RoleGroup" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT 
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_rolegroup 
+		WHERE id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.RoleGroup" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_rolegroup obj 
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+				ORDER BY obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT count(1) FROM redpigmall_rolegroup obj 
+		WHERE 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.RoleGroup" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM redpigmall_rolegroup obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.RoleGroup" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	INSERT INTO redpigmall_rolegroup(addTime,deleteStatus,name,sequence,type)
+	 VALUES(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{type,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.RoleGroup">
+		UPDATE redpigmall_rolegroup
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			DELETE FROM redpigmall_rolegroup WHERE id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		DELETE FROM redpigmall_rolegroup WHERE id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.RoleGroup" resultMap="BaseResultMap2" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM redpigmall_rolegroup obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.RoleGroup" resultMap="BaseResultMap2" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_rolegroup obj 
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+				ORDER BY obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.RoleGroup" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM redpigmall_rolegroup
+		WHERE 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				AND ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		DELETE FROM redpigmall_rolegroup where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<select id="queryGroupNameLists" resultType="java.lang.String"  parameterType="java.lang.Long">
+		SELECT DISTINCT rg.`name` FROM redpigmall_rolegroup rg
+		JOIN redpigmall_role role ON role.rg_id = rg.id AND  rg.type='SELLER'
+		JOIN redpigmall_user_role ur ON ur.role_id=role.id AND ur.user_id=#{id,jdbcType=BIGINT}
+	</select>
+	
+	
+</mapper>

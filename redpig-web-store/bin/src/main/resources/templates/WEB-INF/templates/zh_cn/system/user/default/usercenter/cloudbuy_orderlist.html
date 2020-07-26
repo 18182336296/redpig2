@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>实物交易订单 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/cloud.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+
+
+jQuery(document).ready(function(){
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<style>
+.myorder_index_ul li .this {
+color: #FF6600;
+text-decoration: underline;
+}
+.count_time{ color:#999; text-align:center; margin-bottom:5px;}
+.count_time .time_icon{display: inline-block;width: 15px;height: 15px;text-align: center;margin-bottom: 5px;margin: 0px 3px 0px 0px;overflow: hidden;
+background:url($!cdnServer/resources/style/system/front/default/images/cont_time.png) no-repeat;vertical-align: middle;}
+               
+</style>
+<div class="main">
+  <div class="usercenter"> $!httpInclude.include("/buyer/nav?op=cloudbuy_order")
+    <div class="usercenter_right">
+      <div class="myorder">
+        <h4><span class="myorder_fright"></span><strong>购买记录</strong></h4>
+      </div>
+      <div class="user_list">
+        <div class="user_list_title" style="width:920px;">
+          <ul class="user_title_ul">
+            <li #if(!$status)class="this"#end ><i></i><a href="$!webPath/buyer/cloudbuy_order">参与成功 </a></li>
+            <li #if($!status==10)class="this"#end><i></i><a href="$!webPath/buyer/cloudbuy_order?status=10"> 即将揭晓</a></li>
+            <li #if($!status==5)class="this"#end><i></i><a href="$!webPath/buyer/cloudbuy_order?status=5"> 正在进行</a></li>
+            <li #if($!status==15)class="this"#end><i></i><a href="$!webPath/buyer/cloudbuy_order?status=15"> 已揭晓</a></li>
+          </ul>
+        </div>
+      </div>
+      <form action="$!webPath/buyer/cloudbuy_order" method="post" id="ListForm">
+        <div class="user_list">
+          <div class="cloud_usercenter_goods"> #if($!objs.size()>0)
+            <ul>
+              <li> <span class="c_usercenter_name">商品名称</span> <span class="c_usercenter_name2">商品期号</span> <span class="c_usercenter_name2">参与人次</span> <span class="c_usercenter_name2">夺宝状态</span> <span class="c_usercenter_name2">操作</span> </li>
+              #foreach($obj in $!record_list)
+              #if($!obj.cloudPurchaseLottery.status==15)
+              <li class="this"> #if($obj.cloudPurchaseLottery.lucky_username=="$user.userName") <span class="c_usercenter_win"><img src="$!cdnServer/resources/style/system/front/default/images/cloudpurchase/c_win.png" width="64" height="64" alt=""/></span> #end <span class="c_usercenter_name"> <b class="c_u_g_pic"><a href="$!webPath/cloudbuy/items?id=$!obj.cloudPurchaseLottery.id"><img src="$!obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo" /></a></b> <b class="c_u_g_name"> <i><a href="$!webPath/cloudbuy/items?id=$!obj.cloudPurchaseLottery.id">$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</a></i> <i>总需:$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price人次</i> <i>获得者：$!obj.cloudPurchaseLottery.lucky_username</a>(本期参与$!obj.total_purchased_times 人次)</i> <i>幸运代码：<strong>$!obj.cloudPurchaseLottery.lucky_code</strong></i> 
+                <!--<i>揭晓时间：2015-05-19 19:03:00.000</i>--> 
+                </b> </span> <span class="c_usercenter_name1">$!obj.cloudPurchaseLottery.period</span> <span class="c_usercenter_name1">$!obj.total_purchased_times </span> <span class="c_usercenter_name1"> #if($!obj.cloudPurchaseLottery.status==10) 即将揭晓 #end
+                #if($!obj.cloudPurchaseLottery.status==5) 正在进行 #end
+                #if($!obj.cloudPurchaseLottery.status==15) 已揭晓 #end </span> #if($!obj.status==1 && $!obj.cloudPurchaseLottery.delivery_status==-1)<span class="c_usercenter_name1 c_cart_color"><a class="newadd" href="javascript:void(0);" dialog_uri="$!webPath/buyer/cloudpurchase_address_add?id=$!obj.cloudPurchaseLottery.id&currentPage=$!currentPage" dialog_title="新增地址" dialog_width="500"  dialog_id="address_add">填写地址</a></span> #end
+                #if($!obj.status==1 && $!obj.cloudPurchaseLottery.delivery_status==0) <span class="c_usercenter_name1 c_cart_color">等待发货</span> #end
+                #if($!obj.status==1 && $!obj.cloudPurchaseLottery.delivery_status==1) <span class="c_usercenter_name1 c_cart_color"><a href="$!webPath/buyer/cloudpurchase_delivery_status?id=$!obj.cloudPurchaseLottery.id">确认收货</a></span> #end
+                #if($!obj.status==1 && $!obj.cloudPurchaseLottery.delivery_status==2) <span class="c_usercenter_name1 c_cart_color">已确认</span> #end
+                #if($!obj.status==0) <span class="c_usercenter_name1 c_cart_color"><a class="newadd" href="$!webPath/cloudbuy/new?id=$!obj.cloudPurchaseLottery.id">参与最新</a></span> #end </li>
+              #end
+              #if($!obj.cloudPurchaseLottery.status==10)
+              <li class="this"> <span class="c_usercenter_win"></span> <span class="c_usercenter_name"> <b class="c_u_g_pic"><a href="$!webPath/cloudbuy/items?id=$!obj.cloudPurchaseLottery.id"><img src="$!obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo"  /> </a></b> <b class="c_u_g_name"> <i><a href="$!webPath/cloudbuy/items?id=$!obj.cloudPurchaseLottery.id">$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</a></i> <i>总需：$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price 人次</i> #set($percent=100 * $obj.cloudPurchaseLottery.purchased_times / $!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price)
+                <div class="purchase_goodslist_bd_time" style="text-align: left; float:left; margin-left:0"><span style="width:${percent}%;"><em></em></span></div>
+                <div class="goods_last_one">已完成${percent}%，剩余<em>$obj.cloudPurchaseLottery.purchased_left_times</em></div>
+                </b> </span> <span class="c_usercenter_name1">$!obj.cloudPurchaseLottery.period</span> <span class="c_usercenter_name1">$!obj.total_purchased_times </span> <span class="c_usercenter_name1"> #if($!obj.cloudPurchaseLottery.status==10) 即将揭晓 #end
+                #if($!obj.cloudPurchaseLottery.status==5) 正在进行 #end
+                #if($!obj.cloudPurchaseLottery.status==15) 已揭晓 #end </span> <span class="c_usercenter_name1 c_cart_color"><a class="newadd" href="$!webPath/cloudbuy/new?id=$!obj.cloudPurchaseLottery.id">参与最新</a></span> </li>
+              #end
+              #if($!obj.cloudPurchaseLottery.status==5)
+              <li class="this"> <span class="c_usercenter_win"></span> <span class="c_usercenter_name"> <b class="c_u_g_pic"><a href="$!webPath/cloudbuy/items?id=$!obj.cloudPurchaseLottery.id"><img src="$!obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo"  /> </a></b> <b class="c_u_g_name"> <i><a href="$!webPath/cloudbuy/items?id=$!obj.cloudPurchaseLottery.id">$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</a></i> <i>总需：$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price 人次</i> #set($percent=100 * $obj.cloudPurchaseLottery.purchased_times / $!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price)
+                <div class="purchase_goodslist_bd_time" style="text-align: left; float:left; margin-left:0"><span style="width:${percent}%;"><em></em></span></div>
+                <div class="goods_last_one">已完成${percent}%，剩余<em>$obj.cloudPurchaseLottery.purchased_left_times</em></div>
+                </b> </span> <span class="c_usercenter_name1">$!obj.cloudPurchaseLottery.period</span> <span class="c_usercenter_name1">$!obj.total_purchased_times </span> <span class="c_usercenter_name1"> #if($!obj.cloudPurchaseLottery.status==10) 即将揭晓 #end
+                #if($!obj.cloudPurchaseLottery.status==5) 正在进行 #end
+                #if($!obj.cloudPurchaseLottery.status==15) 已揭晓 #end </span> <span class="c_usercenter_name1 c_cart_color"><a class="newadd" href="$!webPath/cloudbuy/items?id=$!obj.cloudPurchaseLottery.id">追加购买</a></span> </li>
+              #end
+              #end
+              #else
+              <div class="nothing">
+                <div class="nothing_left"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></div>
+                <div class="nothing_right">您目前还没有进行中的订单!<a href="$!webPath/cloudbuy/index" target="_blank">云购首页</a></div>
+              </div>
+              <div id="your_like_goods"></div>
+              #end
+            </ul>
+            <input type="hidden" id="currentPage" name="currentPage" value="" />
+            <input type="hidden" id="status" name ="status" value="$!status" />
+            <!--根据状态分页-->
+            <div class="fenye"><span>$!gotoPageFormHTML</span> </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer")
+</div>
+</body>
+</html>

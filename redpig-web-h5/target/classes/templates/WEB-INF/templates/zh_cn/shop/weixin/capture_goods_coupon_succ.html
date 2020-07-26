@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="no">
+<meta name="format-detection" content="telephone=no,address=no">
+<title>优惠券领取成功 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/style.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+        jQuery(document).ready(function() {    
+            function jump(count) {    
+                window.setTimeout(function(){    
+                    count--;    
+                    if(count > 0) {    
+                        $('#num').attr('innerHTML', count);    
+                        jump(count);    
+                    } else {    
+                        location.href="$!webPath/coupon/goods_coupon";    
+                    }    
+                }, 1000);    
+            }    
+            jump(2);    
+        });    
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>领券中心<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+
+<div class="mt50"></div>
+<div class="phone_main">
+	<div class="coupon">
+    	<div class="cou_succeed">
+        	<p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/coupon_succeed.png" width="200" /></p>
+            <p class="big">恭喜您，领取成功！</p>
+            <p class="gray">优惠券将于5-10分钟后<br />发送到您的账户</p>
+        </div>
+    </div>
+</div>
+ </div>
+$!httpInclude.include("/layer")
+</body>
+</html>

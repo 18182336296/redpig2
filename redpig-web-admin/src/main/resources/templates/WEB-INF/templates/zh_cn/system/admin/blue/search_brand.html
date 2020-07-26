@@ -1,0 +1,65 @@
+﻿<script>
+jQuery(document).ready(function(){
+	#if($!gbs.size()>0)
+		#foreach($gb in $gbs)
+		jQuery("#brand_show_list").find("input[type='checkbox'][value='"+$!{gb.id}+"']").attr("checked","checked");
+		#end
+	#end							
+jQuery("input[id^=brand_sear_]").click(function(){
+	 var val = jQuery(this).val();
+	 var name = jQuery(this).attr("mark"); 
+	 var n = 0;
+	 jQuery(":checkbox[mark='brand']").each(function(){
+	 if(val==jQuery(this).val()){
+		 n=1;
+	 }
+	 });
+	 if(n==0){
+		 if(jQuery(this).attr("checked")=="checked"){	 
+					jQuery("#goodsTypeBrandshow").find("span:first").append("<label class='type_brand'><input type='checkbox' checked='checked' mark='brand' id='brand_sas_"+val+"' value="+val+"><b>"+name+"</b></label>");
+					
+				 }else{
+					jQuery("#goodsTypeBrandshow").find("span:first").append("<label class='type_brand'><input type='checkbox' checked='' mark='brand' id='brand_sas_"+val+"' value="+val+"><b>"+name+"</b></label>"); 
+			}
+	 }
+	 if(jQuery(this).attr("checked")=="checked"){
+		jQuery("#brand_sas_"+val).attr("checked",true);
+	 }else{
+		jQuery("#brand_sas_"+val).attr("checked",false);
+	 }
+	 if(jQuery("input[id^=brand_sas_]").length>0){
+		 jQuery("#li_al_brand").remove();
+		}
+});
+});
+</script>
+
+<ul class="set1" id="brand_show_list" style="background:#f5f5f5; position:relative;">
+ <li style="position:absolute; left:845px;"><a href="javascript:void(0);" onclick="remove_ab();" style="width:15px; height:15px; line-height:15px; text-align:center;background: #4CB0F9;color: #fff;display: block;border-radius: 50%;">X</a></li>
+  <li  class="setcont_bg mt40">可选品牌</li>
+  <li>
+    <div class="s_brand"> <span class="size150">品牌名称:
+      <input type="text" name="brand_name" id="brand_name" />
+      </span> <span class="size150">品牌类型:
+      <input type="text" name="brand_class" id="brand_class" />
+      </span>
+      <input class="search_btn" value="搜 索" type="button" onclick="search_brand()"/>
+    </div>
+    <div class="s_brand_list">
+    #if($!objs.size()>0)
+    #foreach($obj in $!objs)
+    <label class='type_brand'>
+      <input type='checkbox' mark='$!obj.name' id="brand_sear_$!obj.id" value="$!obj.id"/>
+      &nbsp;<b>$!obj.name</b></label>
+    #end 
+    #else
+    <label class='type_brand'>
+<span>未搜索到相关品牌</span></label>
+    #end 
+    
+    </span>
+    #if($!PageSize>1)
+    <div class="channel_nav_page"> <span>$!scshowPageAjaxHtml</span> </div>
+    #end
+  </li>
+</ul>

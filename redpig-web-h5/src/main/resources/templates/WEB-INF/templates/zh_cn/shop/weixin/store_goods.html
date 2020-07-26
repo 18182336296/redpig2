@@ -1,0 +1,379 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>商品列表 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.mobile-events.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+   /*下拉加载商品*/
+   var ret = 1;
+   var totalPage;
+   var currentPage;
+   jQuery(window).scroll(function(){
+	 var le = jQuery(".g_list_box li a").length;
+	 if ( jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height() && ret==1 && le>0){
+		 currentPage = parseInt(jQuery("#currentPage").val())+1;
+		 totalPage = parseInt(jQuery("#totalPage").val());
+		 if(currentPage<=totalPage){ 
+		 ret = 2;
+		 jQuery("#currentPage").val(currentPage);
+		 var params=jQuery("#theForm").serialize();
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/store_items',
+				  data:params,
+				  beforeSend:function(){
+				  jQuery("#loading").show();
+				  jQuery("#loading_last").show();
+				  jQuery("#loading_none").hide();
+				  if(jQuery("#map_type").val() == "大图"){
+				  	  jQuery("#loading_last").hide();
+					  jQuery("#loading").show();
+				  }else{
+					  jQuery("#loading").hide();
+					  jQuery("#loading_last").show();
+				  }
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();	
+				 jQuery("#loading_none").hide();
+				 jQuery("#loading_last").hide();
+				 jQuery("#loading_none_last").hide();
+				 jQuery("#goods_none").hide();
+				 ret = 1;
+				 if(data!=""){
+				 		 jQuery(".g_list_box").append(data);
+						 jQuery(".small_g_list_box").append(data);
+			 		 }else{
+						 jQuery("#loading_none").show();
+						 jQuery("#loading_none_last").show();
+				 } 
+		 	 }
+	    });
+		 }else if(currentPage>totalPage){
+				 jQuery("#loading_none_last").hide();
+				 jQuery("#loading_none").hide();
+				 if(jQuery("#map_type").val() == "大图"){
+					jQuery("#loading_none").show();
+				 }else{
+					jQuery("#loading_none_last").show(); 
+				 }
+			}
+	 }
+	});
+	jQuery(".more").click(function(){
+		if(jQuery(".down").css("display")=="none"){
+			jQuery(".down").show();
+			jQuery(".black_bg").show();
+		}else{
+			jQuery(".down").hide();
+			jQuery(".black_bg").hide();
+		}
+	});
+	jQuery("#keyword_hide").click(function(){
+		jQuery("#goods_list_id").hide();
+		jQuery("#shop_hd").hide();
+		jQuery("#shopin_search").css("top",0).show();
+		jQuery("#recent_search").show();
+	});
+	jQuery("#search_back").click(function(){
+		jQuery("#shopin_search").css("top",-40).hide();
+		jQuery("#recent_search").hide();
+		jQuery("#goods_list_id").show();
+		jQuery("#shop_hd").show();
+	});				
+	/*人气、销量、价格进行转换*/
+	jQuery("#order_type_ul li").click(function(){
+		jQuery("#orderBy").val(jQuery(this).attr("id").substring(4));
+		jQuery("#currentPage").val(1);
+		jQuery("#big_map").val(jQuery("#big_map").html());
+		if(jQuery(this).attr("class")=="this"){
+			if(jQuery("#orderType").val()=="asc"){
+				jQuery("#orderType").val("desc");
+			}else{
+				jQuery("#orderType").val("asc");
+			}
+		}else{
+			jQuery("#orderType").val("desc");	
+		}
+		jQuery(this).siblings("li[class!=change_model]").removeClass();
+		jQuery(this).addClass("this");	
+		var params=jQuery("#theForm").serialize();
+  		var url = '$!webPath/store_items';
+ 		jQuery.ajax({type:'POST',url:url,data:params,
+		beforeSend:function(){
+				 jQuery(".g_list_box").empty();
+				 jQuery(".small_g_list_box").empty();	
+			     jQuery("#loading").hide();	
+				 jQuery("#loading_last").hide();
+				 jQuery("#loading_none").hide();
+				 jQuery("#loading_none_last").hide();
+				 jQuery("#goods_none").hide();
+				  if(jQuery("#big_map").html() == "大图"){
+				  	  jQuery("#loading").show();
+				  }else{
+					  jQuery("#loading_last").show();
+				  }
+			   },
+			  success:function(data){
+				         jQuery("#loading").hide();
+						 jQuery("#loading_last").hide();
+					if(data!=""){
+						jQuery(".g_list_box").empty();
+						jQuery(".small_g_list_box").empty();	
+				 		 jQuery(".g_list_box").append(data);
+						 jQuery(".small_g_list_box").append(data);
+			 		 }else{
+						if(jQuery(".g_list_box li a").length>0){
+					 	jQuery("#loading_none").show();
+						jQuery("#loading_none_last").show();
+						}else{
+						jQuery("#goods_none").show();
+						}
+				 	}  
+		       }																																		         });
+	 }) 	  
+})
+	function big(obj){
+	currentPage=2;
+		jQuery("#loading_none").hide();
+			jQuery("#loading").hide();
+			jQuery("#loading_last").hide();
+			var id=jQuery(obj).attr("id");
+			if(jQuery("#manner_list").css("display") == "none"){
+					jQuery("#manner_list").show();
+				}else{
+						jQuery("#manner_list").hide();
+					}
+			if(id == "manner_list"){
+					if(jQuery("#big_map").html() == "大图"){
+							jQuery("#g_list").hide();
+							jQuery("#small_g_list").show();
+							jQuery("#big_map").html("小图");
+							jQuery("#small_map").html("大图");
+							jQuery("#manner_list").hide();
+							jQuery("#map_type").val("小图");
+						}else{
+								jQuery("#g_list").show();
+								jQuery("#small_g_list").hide();
+								jQuery("#big_map").html("大图");	
+								jQuery("#small_map").html("小图");
+								jQuery("#manner_list").hide();
+								jQuery("#map_type").val("大图");
+							}
+				}
+		}
+	//根据关键字搜索商品
+	function search_goods(){
+		var ugc_id = "$!ugc.id";
+		var store_id = "$!store.id";
+		var keyword = jQuery("#se_keyword").val();
+		window.location.href="$!webPath/store_items?store_id="+store_id+"&ugc_id="+ugc_id+"&all=all&keyword="+keyword;
+	};
+	//移除商品分类条件
+	function remove_class_search(obj,type){
+
+		if(type=="ugc"){
+			jQuery("#ugc_id").val("");
+		}
+		if(type=="key"){
+			jQuery("#keyword").val("");
+		}
+		var store_id = "$!store.id";
+		var ugc_id = jQuery("#ugc_id").val();
+		var key_word = jQuery("#keyword").val();
+		window.location.href="$!webPath/store_items?store_id="+store_id+"&ugc_id="+ugc_id+"&all=all&keyword="+key_word;
+	};
+	//点击分类弹出分类选择框
+	function class_show_search(){ 
+		window.location.href="$!webPath/store_class_list?id=$!store.id";
+	};   
+	function saveReport(){ 
+		search_goods();
+		return false;
+	};
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<input id="totalPage" value="$!totalPage" type="hidden"/>
+<form action="javascript:void(0);"  method="post" id="theForm" onSubmit="saveReport();">
+  <div class="shop_hd" id="shop_hd"> <a class="fl" href="$!webPath/store?id=$!store.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_icon.png"></a>
+    <div class="shop_hd_s">
+      <input type="text" id="keyword_hide">
+      <ul class="shop_hd_h">
+      <input name="ugc_id" id="ugc_id" type="hidden" value="$!ugc.id">
+      #if($!ugc)
+        <li><span>$!ugc.className</span><a href="javascript:void(0);" onClick="remove_class_search(this,'ugc');">X</a></li>
+      #end 
+      <input  name="keyword" id="keyword" type="hidden" value="$!keyword">
+      #if($!keyword)
+      	 <li><span>$!keyword</span><a href="javascript:void(0);" onClick="remove_class_search(this,'key');">X</a></li>
+      #end  
+      </ul>
+      </div>
+    <div class="classify" onClick="class_show_search();"> <span><img src="$!cdnServer/resources/style/system/front/default/images/weixin/menu.png"></span> <span>分类</span> </div>
+    <div class="fr" id="fr"> <a class="more" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_more.png"></a>
+      <div class="down" style="display:none"><a class="car" href="$!webPath/goods_cart1">购物车</a><a class="home" href="$!webPath/index">首页</a><i></i></div>
+      <div class="black_bg" style="display:none"></div>
+    </div>
+  </div>
+  <input id="map_type" value="$!big_map" type="hidden"/>
+  <input name="store_id" type="hidden" id="store_id" value="$!store.id" />
+  <input name="submit_type" type="hidden" id="submit_type" value="$!{submit_type}" />
+  <input name="currentPage" type="hidden" id="currentPage" value="1" />
+  <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+  <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+  <div class="shopin_search" id="shopin_search" style="position: relative;float: left;top: -40px; display:none;"> <a  class="back" href="javascript:void(0);" id="search_back"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+    <div class="s_input">
+      <input id="se_keyword" placeholder="店铺内要搜索的宝贝关键字" value="$!keyword">
+    </div>
+    <a class="g_filter" href="javascript:void(0);" onClick="search_goods();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_search_1.png"></a> </div>
+  <div class="recent_search" id="recent_search" style="display:none;"> #if($!ugc)
+    <h3 class="r_search_title">已选分类</h3>
+    <ul class="search_items">
+      <li><a href="">$!ugc.className</a></li>
+    </ul>
+    #end </div>
+  <div id="goods_list_id">
+    <div class="pad_change">
+      <ul id="order_type_ul">
+        <li id="top_goods_salenum" class="this"><a href="javascript:void(0)">销量</a></li>
+        <!--当前选中的排行方式加“this”-->
+        <li id="top_goods_collect" ><a href="javascript:void(0)">人气</a></li>
+        <!--当价格由高向低时加value_up,反之由低向高时加value_down-->
+        <li id="top_store_price" ><a href="javascript:void(0)">价格</a></li>
+        <li class="change_model">
+          <div class="manner" onClick="big(this);" id="manner"><span class="before"></span><span id="big_map" name="big_map">大图</span><span class="after"></span></div>
+          <!--选择时manner_list显示-->
+          <ul class="manner_list" id="manner_list" style="display:none" onclick="big(this);">
+            <li><span id="small_map">小图</span></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!--大图列表-->
+    <div class="g_list" id="g_list">
+      <ul class="g_list_box">
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <li> 
+          <!-- $!imageWebServer/$!obj.goods_main_photo.path/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext} --> 
+          <a href="$!webPath/items?id=$!{obj.id}">
+          <div class="goods_pic"><img src="$!imageWebServer/$!obj.goods_main_photo.path/$!{obj.goods_main_photo.name}_middle.$!{obj.goods_main_photo.ext}"></div>
+          <div class="goods_name">$!obj.goods_name</div>
+          <div  class="goods_info"> <span class="goods_amount">销量$!{obj.goods_salenum}笔</span> <span class="goods_value"><span class="value">¥$!obj.store_price</span> #set($actName="")
+            #if($!obj.activity_status==2)
+            #set($actName="促")
+            #end
+            #if($!obj.group_buy==2)
+            #set($actName="团")
+            #end
+            #if($!obj.combin_status==1)
+            #set($actName="组")
+            #end
+            #if($!obj.order_enough_give_status==1)
+            #set($actName="送")
+            #end
+            #if($!obj.enough_reduce==1)
+            #set($actName="减")
+            #end
+            #if($!obj.f_sale_type==1)
+            #set($actName="F")
+            #end
+            #if($!obj.advance_sale_type==1)
+            #set($actName="预")
+            #end
+            #if($!actName!="") <span class="promotion">$!actName</span>#end</span> </div>
+          </a> </li>
+        #end
+        #else
+        <div class="loading" ty="none" style="position:absolute;">
+          <ul>
+            <li style="width:100%; background:none;">抱歉，没有找到相关商品...</li>
+          </ul>
+        </div>
+        #end
+      </ul>
+    </div>
+    <div class="loading" id="loading" style="display:none">
+      <ul>
+        <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+        <li>正在加载....</li>
+      </ul>
+    </div>
+    <div class="loading" id="loading_none" style="display:none">
+      <ul>
+        <li>没有更多了....</li>
+      </ul>
+    </div>
+    <!--小图列表-->
+    <div class="small_g_list" id="small_g_list" style="display:none">
+      <ul class="small_g_list_box">
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <li> <a href="$!webPath/items?id=$!{obj.id}">
+          <div class="goods_pic"><img src="$!imageWebServer/$!obj.goods_main_photo.path/$!{obj.goods_main_photo.name}_middle.$!{obj.goods_main_photo.ext}"></div>
+          <div  class="goods_info">
+            <div class="goods_name">$!obj.goods_name</div>
+            <div  class="goods_amount">销量$!{obj.goods_salenum}笔</div>
+          </div>
+          <div class="goods_value"><span class="value">¥$!obj.store_price</span> #set($actName="")
+            #if($!obj.activity_status==2)
+            #set($actName="促")
+            #end
+            #if($!obj.group_buy==2)
+            #set($actName="团")
+            #end
+            #if($!obj.combin_status==1)
+            #set($actName="组")
+            #end
+            #if($!obj.order_enough_give_status==1)
+            #set($actName="送")
+            #end
+            #if($!obj.enough_reduce==1)
+            #set($actName="减")
+            #end
+            #if($!obj.f_sale_type==1)
+            #set($actName="F")
+            #end
+            #if($!obj.advance_sale_type==1)
+            #set($actName="预")
+            #end
+            #if($!actName!="") <span class="promotion">$!actName</span>#end</div>
+          </a> </li>
+        #end
+        #else
+        <div class="loading" ty="none">
+          <ul>
+            <li>暂无数据....</li>
+          </ul>
+        </div>
+        #end
+      </ul>
+    </div>
+    <div class="loading" id="loading_last" style="display:none">
+      <ul>
+        <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+        <li>正在加载....</li>
+      </ul>
+    </div>
+    <div class="loading" id="loading_none_last" style="display:none">
+      <ul>
+        <li>没有更多了....</li>
+      </ul>
+    </div>
+    <div class="loading" style="position:absolute; display:none" id="goods_none">
+      <ul>
+        <li style="width:100%; background:none;">抱歉，没有找到相关商品</li>
+        <li><a href="$!webPath/store_items?store_id=$!store.id&submit_type=store&all=all">显示全部商品</a></li>
+      </ul>
+    </div>
+  </div>
+</form>
+</body>
+</html>

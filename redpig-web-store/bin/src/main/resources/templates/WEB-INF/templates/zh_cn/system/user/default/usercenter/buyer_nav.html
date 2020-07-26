@@ -1,0 +1,158 @@
+<script src="$!cdnServer/resources/js/jquery.cookie.js"></script>
+<script>
+var s ;
+jQuery(document).ready(function(){
+//首次加载页面时查询未读信息								
+jQuery("#show_new_msg").load("$!webPath/buyer/new_message_remind");	
+//
+  if(typeof pageVisibility.visibilityState !== "undefined"){
+	  if(pageVisibility.visibilityState=="visible"){
+		  s = setInterval("message_remind_ajax()",60000); 
+	  }
+	  pageVisibility.visibilitychange(function() {
+        if(this.visibilityState=="visible"){
+			 s = setInterval("message_remind_ajax()",60000); 
+		}
+		if(this.visibilityState=="hidden"){
+			clearInterval(s);
+		} 
+      });
+  };
+  jQuery(".user_menu>span>b").click(function(){
+     var child_show=jQuery(this).parent().attr("child_show");
+	 if(child_show=="true"){
+		 jQuery(this).removeClass("hide_this");
+		 jQuery(this).parent().find("ul").hide();
+	     jQuery(this).parent().find("i").removeClass("active");
+		 jQuery(this).parent().attr("child_show","false");
+	 }else{
+		jQuery(this).addClass("hide_this");
+	    jQuery(this).parent().find("ul").show();
+		jQuery(this).parent().find("i").addClass("active");
+		jQuery(this).parent().attr("child_show","true");
+	 }
+	 var nav_status="";
+	 jQuery(".user_menu>span>b").each(function(){
+		nav_status=nav_status+jQuery(this).parent().attr("id")+","+jQuery(this).parent().attr("child_show")+";";
+	 }); 
+	 jQuery.cookie("buyer_nav",nav_status);
+  });
+  jQuery(".user_menu ul li a").removeClass("this");						
+  jQuery(".user_menu ul li a[op='$!{op}']").addClass("this");	
+  //
+  if(jQuery.cookie("buyer_nav")!=null){
+      var nav_status=jQuery.cookie("buyer_nav");
+	  jQuery.each(nav_status.split(";"), function(index,item){
+	     var list=item.split(",");
+		 jQuery("#"+list[0]).attr("child_show",list[1]);
+		 if(list[1]=="true"){
+	       jQuery("#"+list[0]+" ul").show();
+		 }else{
+		   jQuery("#"+list[0]).find("i").removeClass("active");	 
+		   jQuery("#"+list[0]+" ul").hide(); 	 
+		 }
+	  });
+   };
+});
+var pageVisibility = (function(){
+	var prefixSupport,keyWithPrefix = function(prefix, key) {
+		if (prefix !== "") {
+		   return prefix + key.slice(0,1).toUpperCase() + key.slice(1);    
+		}
+    	return key;
+	};
+    var isPageVisibilitySupport = (function() {
+		var support = false;
+		if (typeof window.screenX === "number") {
+			  ["webkit", "moz", "ms", "o", ""].forEach(function(prefix) {
+				if (support == false && document[keyWithPrefix(prefix, "hidden")] != undefined) {
+						prefixSupport = prefix;
+						support = true;   
+					}
+			   });        
+		}
+		return support;
+	})();
+	var visibilityState = function() {
+        if (isPageVisibilitySupport) {
+            return document[keyWithPrefix(prefixSupport, "visibilityState")];
+        }
+        return undefined;
+    };
+	return {
+        visibilityState: visibilityState(),
+        visibilitychange: function(fn,usecapture) {
+            usecapture = undefined || false;
+            if (isPageVisibilitySupport && typeof fn === "function") {
+                return document.addEventListener(prefixSupport + "visibilitychange", function(evt) {
+                    this.visibilityState = visibilityState();
+                    fn.call(this, evt);
+                }.bind(this), usecapture);
+            }
+            return undefined;
+        }
+    };  
+})(undefined);
+function message_remind_ajax(){
+	jQuery.ajax({type:'POST',url:'$!webPath/buyer/new_message_remind',
+			  	success:function(data){
+						if(data.indexOf("查看详情")>0){
+							jQuery(".usercenter_left").append(data);
+							jQuery(".message_warn").slideDown();
+						}
+			  	}
+	})
+}
+function message_remind_off(){
+	jQuery(".message_warn").slideUp();
+}
+</script>
+<div class="usercenter_left">
+<h3><a href="$!webPath/buyer/index" id="trade_menu2">个人中心</a></h3>
+      <div class="user_menu">
+        <span child_show="true" id="trade_menu"><b class="hide_this"><strong></strong>我的交易<i class="active"></i></b>
+          <ul>
+            <li><a href="$!webPath/buyer/order" op="order">我的订单</a></li>
+            <li><a href="$!webPath/buyer/group" op="group">本地生活订单</a></li>
+            <li><a href="$!webPath/buyer/evaluate_list" op="evaluate">我的评价</a></li>
+            <li><a href="$!webPath/buyer/favorite_goods" op="favorite">我的收藏</a></li>
+            <li><a href="$!webPath/buyer/integral_order_list" op="integral">我的积分兑换</a></li>
+            <li><a href="$!webPath/buyer/recharge_card_add" op="card">充值卡充值</a></li>
+            <li><a href="$!webPath/buyer/cloudbuy_order" op="cloudbuy_order">云购购买记录</a></li>
+          </ul>
+        </span>
+        <span child_show="true" id="server_menu"><b class="hide_this"><strong></strong>服务中心<i class="active"></i></b>
+          <ul>
+            <li><a href="$!webPath/buyer/order_return_list" op="return">退货/退款</a></li>
+            <li><a href="$!webPath/buyer/order_complaint_list" op="complaint">我的投诉</a></li>
+            <li><a href="$!webPath/buyer/consult" op="consult">我的咨询</a></li>
+            <li><a href="$!webPath/buyer/message" op="message">站内信<strong style="color:#F00;">（$!{msg_size}）</strong></a></li>
+          </ul>
+        </span>
+        <span child_show="true" id="user_menu"><b class="hide_this"><strong></strong>账号管理<i class="active"></i></b>
+          <ul>
+            <li><a href="$!webPath/buyer/account" op="account">账户信息</a></li>
+            <li><a href="$!webPath/buyer/account_security" op="account_security">账户安全</a></li>
+            <li><a href="$!webPath/buyer/predeposit" op="predeposit" >账户充值</a></li>
+            <li><a href="$!webPath/buyer/predeposit_log" op="predeposit_log">收支明细</a></li>
+            <li><a href="$!webPath/buyer/buyer_cash" op="buyer_cash">提现管理</a></li>
+            <li><a href="$!webPath/buyer/vatinvoice_apply" op="vatinvoice_apply">增票资质</a></li>
+            <li><a href="$!webPath/buyer/address" op="address">收货地址</a></li>
+            <li><a href="$!webPath/buyer/coupon?usable=usable" op="coupon">优惠劵</a></li>
+            <li><a href="$!webPath/buyer/foot_point" op="foot">我的足迹</a></li>
+          </ul>
+        </span>
+        <span child_show="true" id="app_menu"><b class="hide_this"><strong></strong>应用管理<i class="active"></i></b>
+          <ul>
+            #if($!config.sina_login==true||$!config.qq_login==true)
+            <li><a href="$!webPath/buyer/account_bind" op="account_bind">账户绑定</a></li>
+            #end
+            <li><a href="$!webPath/buyer/user_level" op="user_level">用户等级</a></li>
+            <li><a href="$!webPath/buyer/my_sns_index" op="sns" target="_blank">个人主页</a></li>
+            <li><a href="$!webPath/buyer/my_sns_circle?type=my_circle" op="my_sns_circle" target="_blank">我的圈子</a></li>
+            <li><a href="$!webPath/buyer/freeapply_logs" op="free">0元试用</a></li>
+          </ul>
+        </span>
+      </div>
+<div id="show_new_msg"></div>
+</div>

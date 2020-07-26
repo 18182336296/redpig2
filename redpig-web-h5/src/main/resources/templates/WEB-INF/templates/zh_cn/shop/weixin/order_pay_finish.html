@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>订单支付</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="order_bg" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>订单支付<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="order_box">
+    <div class="mt50" style="height:49px;"></div>
+    <div class="pay_finish">
+      <section>
+        <ul>
+          <li><b>订单编号：</b><span>#if($!{type}=="integral") $!obj.igo_order_sn #else $!obj.order_id #end</span></li>
+          <li><b>应付金额：</b><span class="red">¥$!{all_price}</span></li>
+          <li><b>支付情况：</b><span class="gray">支付成功！</span></li>
+        </ul>
+      </section>
+      <div class="pay_finish_btn">
+      	  #if($!{type}=="integral")
+      	  #if($!obj.igo_status==0)
+          <input type="button" class="car_btn" value="重新支付" onClick="window.location.href='$!webPath/order_pay?id=$!{obj.id}&type=integral'">
+          #end
+          <input type="button" class="car_btn" value="查看订单" onClick="window.location.href='$!webPath/buyer/integral_order_view?id=$!{obj.id}'">
+          #else
+          #if($!obj.order_status==10)
+          <input type="button" class="car_btn" value="重新支付" onClick="window.location.href='$!webPath/order_pay?id=$!{obj.id}'">
+          #end
+          #if($!obj.order_cat==0)
+          <input type="button" class="car_btn" value="查看订单" onClick="window.location.href='$!webPath/buyer/order_view?id=$!{obj.id}'">
+          #end
+          #if($!obj.order_cat==2)
+          <input type="button" class="car_btn" value="查看订单" onClick="window.location.href='$!webPath/buyer/group_view?id=$!{obj.id}'">
+          #end
+          #end
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.CouponMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Coupon">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="coupon_name" property="coupon_name" jdbcType="VARCHAR"/>
+		<result column="coupon_amount" property="coupon_amount" jdbcType="DECIMAL"/>
+		<result column="coupon_begin_time" property="coupon_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="coupon_end_time" property="coupon_end_time" jdbcType="TIMESTAMP"/>
+		<result column="coupon_count" property="coupon_count" jdbcType="INTEGER"/>
+		<result column="coupon_order_amount" property="coupon_order_amount" jdbcType="DECIMAL"/>
+		<result column="coupon_type" property="coupon_type" jdbcType="INTEGER"/>
+		<result column="coupon_limit" property="coupon_limit" jdbcType="INTEGER"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="coupon_surplus_amount" property="coupon_surplus_amount" jdbcType="INTEGER"/>
+		<association property="coupon_acc" column="coupon_acc_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="store" column="store_id" select="com.redpigmall.dao.StoreMapper.selectByPrimaryKey"/>
+		<collection property="couponinfos" column="id" select="com.redpigmall.dao.CouponInfoMapper.getCouponByCouponId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Coupon">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="coupon_name" property="coupon_name" jdbcType="VARCHAR"/>
+		<result column="coupon_amount" property="coupon_amount" jdbcType="DECIMAL"/>
+		<result column="coupon_begin_time" property="coupon_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="coupon_end_time" property="coupon_end_time" jdbcType="TIMESTAMP"/>
+		<result column="coupon_count" property="coupon_count" jdbcType="INTEGER"/>
+		<result column="coupon_order_amount" property="coupon_order_amount" jdbcType="DECIMAL"/>
+		<result column="coupon_type" property="coupon_type" jdbcType="INTEGER"/>
+		<result column="coupon_limit" property="coupon_limit" jdbcType="INTEGER"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="coupon_surplus_amount" property="coupon_surplus_amount" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,coupon_name,coupon_amount,coupon_begin_time,coupon_end_time,coupon_count,coupon_order_amount,coupon_acc_id,coupon_type,store_id,coupon_limit,status,coupon_surplus_amount
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="coupon_name != null">and coupon_name = #{coupon_name,jdbcType=VARCHAR}</if>
+		<if test="coupon_name_like != null">and coupon_name like CONCAT('%',#{coupon_name_like},'%') </if>
+		<if test="coupon_amount != null">and coupon_amount = #{coupon_amount,jdbcType=DECIMAL}</if>
+		<if test="coupon_begin_time != null">and coupon_begin_time = #{coupon_begin_time,jdbcType=TIMESTAMP}</if>
+		<if test="coupon_begin_time_more_than_equal != null">and coupon_begin_time <![CDATA[ >= ]]> #{coupon_begin_time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="coupon_begin_time_less_than_equal != null">and coupon_begin_time <![CDATA[ <= ]]> #{coupon_begin_time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="coupon_end_time != null">and coupon_end_time = #{coupon_end_time,jdbcType=TIMESTAMP}</if>
+		
+		<if test="coupon_end_time_able != null">and <![CDATA[ (coupon_begin_time <= NOW() and coupon_end_time >=NOW() )  ]]></if>
+		
+		<if test="coupon_count != null">and coupon_count = #{coupon_count,jdbcType=INTEGER}</if>
+		<if test="coupon_order_amount != null">and coupon_order_amount = #{coupon_order_amount,jdbcType=DECIMAL}</if>
+		<if test="coupon_type != null">and coupon_type = #{coupon_type,jdbcType=INTEGER}</if>
+		<if test="coupon_limit != null">and coupon_limit = #{coupon_limit,jdbcType=INTEGER}</if>
+		
+		<if test="coupon_limit_less_than_equal != null">and coupon_limit <![CDATA[ <= ]]> #{coupon_limit_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="coupon_surplus_amount != null">and coupon_surplus_amount = #{coupon_surplus_amount,jdbcType=INTEGER}</if>
+		<if test="store_id!=null">and store_id=#{store_id,jdbcType=INTEGER}</if>
+		<if test="coupon_acc_id != null">and coupon_acc_id = #{coupon_acc_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		coupon_name= #{coupon_name},
+		coupon_amount= #{coupon_amount},
+		coupon_begin_time= #{coupon_begin_time},
+		coupon_end_time= #{coupon_end_time},
+		coupon_count= #{coupon_count},
+		coupon_order_amount= #{coupon_order_amount},
+		<if test="coupon_acc != null and coupon_acc.id != null">coupon_acc_id = #{coupon_acc.id,jdbcType=BIGINT},</if>
+		<if test="coupon_acc == null or coupon_acc.id == null">coupon_acc_id = null,</if>
+		coupon_type= #{coupon_type},
+		<if test="store == null or store.id == null">store_id = null,</if>
+		<if test="store != null and store.id != null">store_id = #{store.id,jdbcType=BIGINT},</if>
+		coupon_limit= #{coupon_limit},
+		status= #{status},
+		coupon_surplus_amount= #{coupon_surplus_amount},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_coupon 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_coupon obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_coupon obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getCouponAccByAccessoryId" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_coupon
+		where
+			coupon_acc_id= #{coupon_acc_id,jdbcType=BIGINT}
+	</select>
+	<select id="getStoreByStoreId" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_coupon
+		where
+			store_id = #{store_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_coupon obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Coupon" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_coupon(addTime,deleteStatus,coupon_name,coupon_amount,coupon_begin_time,coupon_end_time,coupon_count,coupon_order_amount,coupon_type,coupon_limit,status,coupon_surplus_amount,coupon_acc_id,store_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{coupon_name,jdbcType=VARCHAR},#{coupon_amount,jdbcType=DECIMAL},#{coupon_begin_time,jdbcType=TIMESTAMP},#{coupon_end_time,jdbcType=TIMESTAMP},#{coupon_count,jdbcType=INTEGER},#{coupon_order_amount,jdbcType=DECIMAL},#{coupon_type,jdbcType=INTEGER},#{coupon_limit,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{coupon_surplus_amount,jdbcType=INTEGER},#{coupon_acc.id,jdbcType=BIGINT},#{store.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Coupon">
+		update redpigmall_coupon
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_coupon where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_coupon where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_coupon obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_coupon obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Coupon" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_coupon
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_coupon where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="redpig-web-h5">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="redpig-api-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-api/redpig-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-beans-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-beans/redpig-beans">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-chat-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-chat/redpig-chat">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-cms-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-cms/redpig-cms">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-circle-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-circle/redpig-circle">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-yungou-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-yungou/redpig-yungou">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-delivery-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-delivery/redpig-delivery">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-express-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-express/redpig-express">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-framework-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-framework/redpig-framework">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-h5-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-h5/redpig-h5">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-payment-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-payment/redpig-payment">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="redpig-sns-RedPigMallV8.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/redpig-sns/redpig-sns">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="redpig-web-h5"/>
+        <property name="java-output-path" value="/redpig-web-h5/target/classes"/>
+    </wb-module>
+</project-modules>

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+			jQuery(".index_select .index_select_one").click(function(){
+					  var target = jQuery(this);												 
+					  var index =jQuery(this).index();
+					 jQuery.post("$!webPath/set_index_ajax",
+								 {"index_type":index},
+								 function(data){
+									 jQuery("span[mark='selected']").each(function(){
+											jQuery(this).hide();									   
+											});
+									 jQuery("div[class='index_select_floor']").each(function(){
+											jQuery(this).hide();												 
+											});
+										 jQuery(target).find("span[mark='selected']").show();
+										  jQuery(target).find(".index_select_floor").show();
+									 },"text");
+					 });					
+   });
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth">首页管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/set_index_setting" class="this"><b>首页管理</b></a></li>
+      <li><a href="$!webPath/goods_floor_list"><b>窄屏楼层</b></a> </li>
+      <li><a href="$!webPath/goods_floor_list?gf_type=1"><b>宽屏楼层</b></a> </li>
+    </ul>
+  </div>
+  <div class="index_select">
+    <div class="index_select_one">
+      <div class="index_select_one_top"> <b>窄屏首页（固定宽度1200px）</b> </div>
+      <div class="index_select_one_main" > <img src="$!cdnServer/resources/style/system/manage/blue/images/narrow_img.png"  style="cursor:pointer" /> <span mark="selected" #if($!config.index_type==1) style="display:none" #end><img src="$!cdnServer/resources/style/system/manage/blue/images/narrow_img_this.png" /></span> </div>
+      <div class="index_select_floor" #if($!config.index_type==1) style="display:none" #end><a href="$!webPath/goods_floor_add">添加楼层</a></div>
+    </div>
+    <div class="index_select_one">
+      <div class="index_select_one_top"> <b>宽屏首页（宽度1640px,自适应）</b> </div>
+      <div class="index_select_one_main this"> <img src="$!cdnServer/resources/style/system/manage/blue/images/wide_img.png" style="cursor:pointer" /> <span mark="selected" #if($!config.index_type==0) style="display:none" #end><img src="$!cdnServer/resources/style/system/manage/blue/images/narrow_img_this.png" /></span> </div>
+      <div class="index_select_floor" #if($!config.index_type==0) style="display:none" #end><a href="$!webPath/goods_floor_add?gf_type=1">添加楼层</a></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

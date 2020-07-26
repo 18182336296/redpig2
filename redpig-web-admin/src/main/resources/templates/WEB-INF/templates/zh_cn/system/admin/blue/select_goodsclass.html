@@ -1,0 +1,101 @@
+<script>
+#foreach($obj in $list)
+	jQuery("#goods_cl_$!obj.id").addClass("this");
+#end
+//选择商品分类
+	function addgcs(obj){
+		if(jQuery("#goods_cl_"+obj).attr("class")=="this"){
+			jQuery("#goods_cl_"+obj).removeClass();
+			jQuery("#gd_"+obj).remove();
+		}else{
+			var gname = jQuery("#goods_cl_"+obj).text();
+			jQuery("#goods_cl_"+obj).addClass("this");
+			var st = "<li id='gd_"+obj+"' lid='"+obj+"'><span class='fl'>"+gname+"</span><a class='del' onclick='remove_gd("+obj+");' href='javascript:void(0);'></a></li>";
+			jQuery("#gd_ul").append(st);
+		}
+	};
+function select_class(){
+  var name = jQuery("#query_class_name").val();
+  var id = jQuery("#id").val();
+  jQuery.ajax({type:'POST',url:'$!webPath/load_goodsclass',data:{"name":name,"id":id},
+               beforeSend:function(){
+			   },
+			   success:function(data){
+			   jQuery("#show_class_list").empty();  
+			   jQuery("#show_class_list").append(data);
+			   }
+			 });
+}	
+function remove_gd(obj){
+		jQuery("#gd_"+obj).remove();
+		jQuery("#goods_cl_"+obj).removeClass("this");
+	}
+function goods_class_sel(){
+	var gc_ids = ""
+	jQuery.each(jQuery("#gd_ul li"),function(index, value) {
+        var lid = jQuery(this).attr("lid");
+		if (lid != "") {
+            gc_ids = gc_ids + ","+lid;
+        }
+    });
+	jQuery("#gc_ids").val(gc_ids);
+	jQuery("#buy_goods").remove();
+	}	
+function cc_li(cc_id,obj){
+	if(jQuery(obj).attr("class")=="icon"){
+		jQuery(obj).addClass("minus");	
+		jQuery("#cc_li_"+cc_id).show();	
+		}else{
+		jQuery(obj).removeClass("minus");
+		jQuery("#cc_li_"+cc_id).hide();
+		}
+	}
+function c_li(obj){
+	if(jQuery(obj).attr("class")=="icon"){
+		jQuery(obj).addClass("minus");	
+		jQuery(obj).parent().parent().children(".pl20").show();
+		}else{
+		jQuery(obj).removeClass("minus");
+		jQuery(obj).parent().parent().children(".pl20").children("i").attr("class","icon");
+		jQuery(obj).parent().parent().children("dd").hide();
+		}
+	}	
+</script>
+<div class="show_class">
+	<div class="show_search"><span class="fl">商品分类名称：</span><input class="iptxt" name="query_class_name" type="text" id="query_class_name"><input class="choose_btn" name="input" type="button" value="查询" class="choose_btn" style="cursor:pointer;" onclick="select_class();"></div>
+    <div class="show_class_choose">
+    	<span class="fl_choose">已关联商品分类：</span>
+    	<ul id ="gd_ul">
+            #foreach($gd in $list)
+        	<li id="gd_$!gd.id" lid = "$!gd.id"><span class="fl">$!gd.className</span><a class="del" onclick="remove_gd($!gd.id);" href="javascript:void(0);"></a></li>
+            #end
+        </ul>
+    </div>
+    <div class="show_class_list" id="show_class_list">
+    #if($!gcs.size()>0)
+    	#foreach($gc in $gcs)
+        <dl>
+        	<dt><i class="icon" onclick="c_li(this);"></i><a href="javascript:void(0);" id="goods_cl_$!gc.id" gc ="$!gc.id" onclick="addgcs($!gc.id);">$!gc.ClassName</a></dt>
+             #foreach($child in $gc.childs)
+            <dd class="pl20" style="display:none"><i class="icon" onclick="cc_li('$!child.id',this);"></i><a href="javascript:void(0);" id="goods_cl_$!child.id" gc ="$!child.id" onclick="addgcs($!child.id);">$!child.ClassName</a></dd>
+            #if($!child.childs.size()>0)
+            <dd class="pl40" style="display:none" id="cc_li_$!child.id"><i class="icon nobg"></i>
+            	#foreach($c in $child.childs)
+            		<a href="javascript:void(0);" id="goods_cl_$!c.id" gc ="$!c.id" onclick="addgcs($!c.id);">$!c.ClassName</a>
+            	#end
+            </dd>
+            #end
+            #end
+        </dl>
+        #end
+        #else
+        <div style="padding-top:50px;"><img src="$!cdnServer/resources/style/system/manage/blue/images/phone_noting.jpg" /></div>
+        #end
+    </div>
+    <div class="submit">
+      <input class="choose_btn" name="按钮" type="button" style="cursor:pointer;" value="确定"  onclick="goods_class_sel();" />
+    </div>
+    <div>
+   	  
+    </div>
+</div>

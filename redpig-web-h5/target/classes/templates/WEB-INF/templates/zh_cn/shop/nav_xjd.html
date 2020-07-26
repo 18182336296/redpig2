@@ -1,0 +1,79 @@
+
+<div class="all-nav all-nav-border">
+  <div class="w1210">
+      <div class="home-category fl hover" > 
+        <a href="$!webPath/goods_class" class="menu-event main-bg-color" title="查看全部商品分类">全部商品分类<i></i></a> 
+        <div class="expand-menu all-cat main-bg-color"> 
+		<div class="list">
+          <dl class="cat">
+            <dt class="cat-name"> <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" title="$!gc.className">$!gc.className</a> </dt>
+            <i>&gt;</i>
+          </dl>
+          <div style="display: none;" class="categorys">
+            <div class="item-left fl"> 
+              
+              <div class="subitems"> 
+                <dl class="fore1">
+              
+                  <dt> 
+                  	<a href="x" target="_blank" title="x">x<i>&gt;</i></a> 
+                  </dt>
+                  <dd> 
+              
+                    <a href="x" target="_blank" title="$!gc2.className">x</a> 
+              
+                  </dd>
+               
+                </dl>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        #foreach($gc in $!gcs)
+        <div class="list">
+          <dl class="cat">
+            <dt class="cat-name"> <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" title="$!gc.className">$!gc.className</a> </dt>
+            <i>&gt;</i>
+          </dl>
+          <div style="display: none;" class="categorys">
+            <div class="item-left fl"> 
+              
+              <div class="subitems"> 
+                <dl class="fore1">
+              #foreach($gc1 in $gc.childs)
+                  <dt> 
+                  	<a href="$!webPath/store_goods_list_$!{gc1.id}" target="_blank" title="$!gc1.className">$!gc1.className<i>&gt;</i></a> 
+                  </dt>
+                  <dd> 
+                  #foreach($gc2 in $gc1.childs)
+                    <a href="$!webPath/store_goods_list_$!{gc2.id}" target="_blank" title="$!gc2.className">$!gc2.className</a> 
+                  #end
+                  </dd>
+              #end 
+                </dl>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        #end        
+        
+      </div>
+      </div>
+      <div class="allnav fl" id="nav">
+        <ul>
+      #set($navs=$!navTools.queryNav(0,-1))
+      #foreach($nav in $navs)
+      #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+      #set($url="$!nav.url")
+      #else
+      #set($url="$!webPath/$!{nav.url}")
+      #end
+                    
+         <li><a class="nav " href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url" title="$!{nav.title}">$!{nav.title}</a></li>
+     #end             
+     </ul>
+      </div>
+  </div>
+</div>

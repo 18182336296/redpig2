@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+
+ });
+</script>
+</head><body scroll="yes">
+<h1 class="seth">分销等级</h1>
+<a href="$!webPath/distribution_grade?id="><input name="" type="submit"  value="新增" style=" margin: 10px 25px; "   class="search_btn"/></a>
+<form method="post" id="ListForm" action="$!webPath/distribution_grade_goods_list">
+<div class="cont">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="3%">ID</td>
+          <th width="10%"><span class="form_btna">等级名称</span></th>
+          <th width="7%"><span class="form_btna">累计客户数</span></th>
+          <th width="15%"><span class="form_btna">累计订单金额</span></th>
+          <th width="15%"><span class="form_btna">下线累计订单金额</span></th>
+          <th width="3%"><span class="form_btna">对内返利百分比</span></th>
+          <th width="3%"><span class="form_btna">对外返利百分比</span></th>
+          <th width="8%" align="center"><b class="form_btna">操作</b></th>
+        </tr>
+        #if($!objs.size()>0)
+          #foreach($obj in $objs)
+        <tr>
+          <td class="check_position">$!obj.id</td>
+          <td align="center">
+              <label>$!obj.grade</label>
+          </td>
+          <td align="center">$!obj.count_user</td>
+          <td align="center">$!obj.count_price</td>
+          <td align="center">$!obj.down_count_price</td>
+          <td align="center">$!obj.inner_rebate</td>
+          <td align="center">$!obj.out_rebate</td>
+          <td class="hui oprate_con" align="center" style="white-space:nowrap"><a href="$!webPath/distribution_grade?id=$!{obj.id}"  class="blue">编辑</a></td>
+        </tr>
+          #end
+        #else
+<tr>
+	<td colspan="6">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+      </table>
+    </div>
+    #if($!objs.size()>0)
+    <div class="operate_bar">
+      <div class="fenye"> <span id="queryCondition" style="display:none"> #foreach($sm in $objs)
+        #end </span>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+    </div>
+    #end
+</div>
+</form>
+</body>
+</html>

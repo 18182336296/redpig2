@@ -1,0 +1,28 @@
+#foreach($sc in $scs)
+	#if($!sc.level==1)
+	   #set($css1="acc1")
+	   #set($css2="acc3")
+	   #set($child="child_$!sc.parent.id")
+    #end
+<tr id="$!sc.id" parent="$!sc.parent.id" level="$child">
+ 	<td class="check_position" class="check_position"><label for="ids_$!sc.id">
+        	<input class="ace" name="ids" type="checkbox" id="ids_$!sc.id" value="$!sc.id" />
+            <span class="lbl"></span>
+        </label></td>
+    <td colspan="2" align="center">
+ <ul class="addclass">
+   <li class="$!{css1}">　</li>
+   <li class="ac2" ><span class="num"><input type="text" name="$!sc.sequence" id="$!sc.sequence"  value="$!sc.sequence" onblur="ajax_update('$!sc.id','sequence',this)" title="可编辑"/></span></li>
+   <li class="$!{css2}"><span class="size150"><input type="text" name="$!sc.showSSName" id="$!sc.showName" value="$!sc.showName"  onblur="ajax_update('$!sc.id','showName',this)" title="可编辑"/></span>
+   </li>
+       </ul>    </td>
+    <td align="center" >#if($!sc.show_type=="0") #if($!sc.url=="") 商品列表 #else 自定义链接 #end #end
+        #if($!sc.show_type=="1")二级频道#end </td>
+    <td align="center" >#if($!sc.show_type=="0") #if($!sc.url=="") $!webPath/store_goods_list?sc_id=$!sc.id  #else $!sc.url #end #end
+        #if($!sc.show_type=="1")$!webPath/channel/index_$!{sc.channel_id} #end </td>
+    <td align="center"><img src="$!cdnServer/resources/style/system/manage/blue/images/$!{sc.display}.png" onclick="ajax_update('$!sc.id','display',this)" style="cursor:pointer;" title="可编辑" height="23" width="21"></td>
+    <td align="center"><img src="$!cdnServer/resources/style/system/manage/blue/images/$!{sc.recommend}.png" onclick="ajax_update('$!sc.id','recommend',this)" style="cursor:pointer;" title="推荐后在前台分类导航显示" height="23" width="21"></td>
+    
+    <td align="center"  class="hui oprate_con"><a href="$!webPath/showclass_edit?id=$!sc.id&currentPage=$!currentPage" class="blue">编辑</a>|<a href="javascript:void(0);" onclick="if(confirm('您将删除分类，是否继续?'))window.location.href='$!webPath/showclass_del?mulitId=$!sc.id&currentPage=$!currentPage'" class="blue">删除</a></td>
+</tr>
+#end

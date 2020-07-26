@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>宝贝分类 - $!config.title</title>
+<link type="text/css" href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+function search_class(id){
+		window.location.href = "$!webPath/wap/store_items?store_id=$!store.id&all=all&ugc_id="+id;
+	};	
+function search_store_list(){
+	var store_id = "$!store.id";
+	var keyword = jQuery("#keyword").val();
+	window.location.href="$!webPath/wap/store_items?store_id="+store_id+"&all=all&keyword="+keyword;
+	}  			
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+	<div class="shopin_search">
+        <a  class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+        <div class="s_input">
+        	<input id="keyword" placeholder="店铺内要搜索的宝贝关键字">
+        </div>
+        <a class="g_filter" href="javascript:void(0);" onClick="search_store_list();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_search_1.png"></a>
+    </div>
+	
+    <div class="all_goods">
+    	<a href="$!webPath/wap/store_items?store_id=$!store.id&all=all">全部宝贝</a>
+    </div>
+    #foreach($ugc in $ugcs)
+    <div class="shopin_g_list">
+    	<div class="l_title">
+        	<a class="name fl" href="$!webPath/wap/store_items?store_id=$!store.id&all=all&ugc_id=$!ugc.id">$!ugc.className</a>
+            <a class="check_all fr" href="$!webPath/wap/store_items?store_id=$!store.id&all=all&ugc_id=$!ugc.id">查看全部</a>
+        </div>
+        <ul class="list_items">
+        #foreach($child in $ugc.childs)
+        	<li onClick="search_class('$!child.id');"><a href="javascript:void(0);">$!child.className</a></li>
+            #end
+        </ul>
+    </div>
+    #end
+</body>
+</html>

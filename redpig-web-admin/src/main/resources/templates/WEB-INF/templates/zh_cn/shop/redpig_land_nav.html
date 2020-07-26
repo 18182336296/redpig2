@@ -1,0 +1,14 @@
+#set($navs=$!navTools.queryNav(1,-1))
+#if($!navs.size()>0) 
+<span class="top_pull"> <em class="">网站导航<s class=""></s></em>
+<div class="top_this" style="display:none">
+  <div class="website">
+    <ul>
+      #foreach($nav in $navs)
+      <li><a href="$!nav.url"  #if($!{nav.new_win}==1)target="_blank"#end  rel="nofollow">$!nav.title</a></li>
+      #end
+    </ul>
+  </div>
+</div>
+</span> 
+#end 

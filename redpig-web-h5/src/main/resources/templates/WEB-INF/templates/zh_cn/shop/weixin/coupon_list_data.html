@@ -1,0 +1,28 @@
+#foreach($!coupon in $!coupons)
+    	#if($!coupon.coupon_surplus_amount<1||$!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+    	<div class="coupon_item cou_none">
+		#else
+    	<div class="coupon_item">
+    	#end
+        	<dl>
+            	<dt><img src="$!imageWebServer/$!coupon.coupon_acc.path/$!coupon.coupon_acc.name" /></dt>
+                <dd><p>¥<span class="big">$!coupon.coupon_amount</span></p><p class="bg">满$!coupon.coupon_order_amount使用</p></dd>
+            </dl>
+            <p class="shop_name">#if(!$coupon.store)$!config.title自营#else<a href="$!webPath/store?id=$!{coupon.store.id}">$!coupon.store.store_name</a>#end</p>
+            <div class="time"><span class="fl">$!CommUtil.formatShortDate($!coupon.coupon_begin_time)--$!CommUtil.formatShortDate($!coupon.coupon_end_time)</span><span class="fr">剩余：#if($!coupon.coupon_surplus_amount<1) 0 #else $!coupon.coupon_surplus_amount #end</span></div>
+            
+            <span class="cou_fl">#if(!$!coupon.store)<img src="$!cdnServer/resources/style/system/front/default/images/weixin/coupon_04.png" />
+            					#else<img src="$!cdnServer/resources/style/system/front/default/images/weixin/coupon_05.png" />
+            					#end	
+            </span>
+            #if($!coupon.coupon_surplus_amount<1)
+	    	   <a class="draw_btn" href="javascript:void(0)">立即领取</a>
+	    	  <span class="state state_none"></span>
+	    	#elseif($!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+	    	<div class="draw_btn"><a href="javascript:void(0)">立即领取</a></div>
+    	     <span class="state state_used"></span>  
+			#else
+            <a class="draw_btn" href="$!webPath/coupon/to_capture_coupon?id=$!coupon.id">立即领取</a>
+	    	#end
+        </div>
+        #end

@@ -1,0 +1,38 @@
+
+<div class="tableBox" id="img_adv_img"  >
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tbody id="rc_info">
+                <tr class="table_title" >
+                  <th width="5%">排序</th>
+                  <th width="25%">名称</th>
+                  <th width="40%">链接</th>
+                  <th width="8%">是否显示</th>
+                  <th width="20%">操作</th>
+                </tr>
+              #if($!objs.size()>0)
+              #foreach($obj in $objs)
+              <tr id="rc_list_$!obj.id">
+                <td><span>
+                  <input type="text" value="$!obj.on" onblur="ajax_update('$!obj.id','c_id',this)">
+                  </span></td>
+                <td><span>
+                  <input type="text" value="$!obj.name" onblur="ajax_update('$!obj.id','c_name',this)">
+                  </span></td>
+                <td><span>
+                  <input type="text" value="$!obj.url" onblur="ajax_update('$!obj.id','c_url',this)">
+                  </span></td>
+                <td align="center"><img src="$!cdnServer/resources/style/system/manage/blue/images/$!{obj.show}.png" width="21" height="23" onclick="ajax_update('$!obj.id','display',this)" style="cursor:pointer;" title=""></td>
+                <td><a href="javascript:void(0);" onclick="rc_del($!obj.id);">删除</a></td>
+              </tr>
+              #end
+              #else
+              <tr id="rc_list_no">
+                <td colspan="5"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+              </tr>
+              #end
+                </tbody>
+            </table>
+          </div>
+<div class="channel_nav_page">
+<span>$!gotoPageAjaxHTML</span>
+</div>

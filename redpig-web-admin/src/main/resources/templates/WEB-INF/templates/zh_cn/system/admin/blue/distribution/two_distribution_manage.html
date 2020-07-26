@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+  <link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+  <link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+  <link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+    jQuery('#beginTime').attr("readonly","readonly").datepicker({
+        dateFormat:"yy-mm-dd",
+        changeMonth: true,
+        changeYear: true
+    });
+    jQuery('#endTime').attr("readonly","readonly").datepicker({
+        dateFormat:"yy-mm-dd",
+        changeMonth: true,
+        changeYear: true
+    });
+ });
+function query_form(){
+    jQuery("#ListForm").submit();
+}
+function clearData() {
+    jQuery("#distribution_grade").val("");
+    jQuery("#mobile").val("");
+    jQuery("#beginTime").val("");
+    jQuery('#endTime').val("");
+}
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <form name="ListForm" id="ListForm" action="$!webPath/stair_distribution_manage" method="post">
+  <h3 class="seth">分销商品</h3>
+    <div class="search">
+      <span>一级分销等级</span>
+      <span class="size100">
+        <select name="distribution_grade" id="distribution_grade">
+          <option value="">所有分类</option>
+              #foreach ( $gcc in $first )
+              <option value="$!gcc.id" >$!gcc.grade</option>
+              #end
+        </select>
+      </span>
+      <span>一级分销</span>
+      <span class="size200">
+        <input type="text" value="$!mobile" placeholder="请输入手机号码"  name="mobile" id="mobile" />
+      </span><span>加入时间</span>
+      <span class="size200">
+      <input name="beginTime" type="text" id="beginTime" value="$!beginTime" readonly="readonly" class="user_title_txt"  style="width:128px"  placeholder="开始时间"/>
+    </span>
+      <span  style="float:left; line-height:24px; padding-right:5px;">—</span>
+      <span class="size200">
+    <input name="endTime" type="text" id="endTime" value="$!endTime" readonly="readonly" class="user_title_txt" style="width:128px" placeholder="结束时间" />
+    </span>
+      <span>
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;" onclick="query_form()"  class="search_btn"/>
+        <!--<input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>-->
+      </span>
+      <span>
+      <input name="" type="button"  value="清除" style="cursor:pointer;" onclick="clearData()"  class="search_btn"/>
+      </span>
+    </div>
+    <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>用户购买商品上级推广人员就会有佣金！</li>
+      </ul>
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="3%"><span class="form-btna">ID</span></th>
+          <th width="10%"><span class="form_btna">一级分销</span></th>
+          <th width="10%"><span class="form_btna">一级分销等级</span></th>
+          <th width="8%"><span class="form_btna">昵称</span></th>
+          <th width="8%"><span class="form_btna">二级分销等级</span></th>
+          <th width="10%"><span class="form_btna">累计成交金额</span></th>
+          <th width="7%"><span class="form_btna">累计成交笔数</span></th>
+          <th width="7%"><span class="form_btna">累计客户数</span></th>
+          <th width="10%"><span class="form_btna">可提现金额</span></th>
+          <th width="7%"><span class="form_btna">下线累计成交金额</span></th>
+          <th align="center"><span class="form_btnb">加入时间</span></th>
+        </tr>
+        #if($!objs.size()>0)
+          #foreach($obj in $objs)
+        <tr>
+          <td align="center">$!obj.id</td>
+          <td align="center">$!obj.user.mobile</td>
+          <td align="center">$!obj.grade</td>
+          <td align="center">$!obj.nickName</td>
+          <td align="center">???</td>
+          <td align="center">$!obj.sum_deal_price</td>
+          <td align="center">$!obj.sum_order</td>
+          <td align="center">$!obj.sum_user</td>
+          <td align="center">$!obj.balance_price</td>
+          <td align="center">$!obj.down_sum_price</td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+        </tr>
+        #end
+        #else
+<tr>
+	<td colspan="6">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+      </table>
+    </div>
+    #if($!objs.size()>0)
+    <div class="operate_bar">
+      <div class="fenye"> <span id="queryCondition" style="display:none"> #foreach($sm in $sms)
+        <input name="$!sm.key" id="$!sm.key" type="hidden" value="$!sm.value"/>
+        #end </span>
+        <input name="mulitId" type="hidden" id="mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="er_id" type="hidden" id="er_id" value="$!er.id" />
+        $!gotoPageFormHTML </div>
+      <div class="oper_sp"> <span class="oper_check">
+        <label for="all">
+          <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+          全部</label>
+        </span> <span class="oper_del">
+        <input name="" type="button" value="添加" onclick="cmd('$!webPath/direct_selling_goods_update?type=add');" style="cursor:pointer;" />
+        </span> <span class="oper_del">
+        <input name="" type="button" value="移除" onclick="cmd('$!webPath/direct_selling_goods_update?type=remove');" style="cursor:pointer;" />
+        </span> </div>
+    </div>
+    #end
+  </form>
+  
+</div>
+</body>
+</html>

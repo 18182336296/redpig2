@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title></title>
+  <link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+  <link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+  <link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+  <script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+  <script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+  <script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor-min.js"></script>
+  <script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+  <script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+
+  <link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/default/easyui.css">
+  <link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/icon.css">
+  <script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/jquery.easyui.min.js"></script>
+  <script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/locale/easyui-lang-zh_CN.js"></script>
+  <script>
+jQuery(document).ready(function(){
+    #if($!obj)
+        jQuery("#nuke_type").val($!obj.nuke_type);
+    #end
+    // 禁用日期控件的今天之前的日期
+    jQuery('#beginTime').datebox().datebox('calendar').calendar({
+        validator: function(date){
+            var now = new Date();
+            var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            return d1<=date;
+        }
+    });
+    jQuery('#endTime').datebox().datebox('calendar').calendar({
+        validator: function(date){
+            var now = new Date();
+            var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            return d1<=date;
+        }
+    });
+    // 校验表单
+    jQuery("#theForm").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent());
+        },
+        rules:{
+            luckydraw_name:{required:true},
+            /*user_level_id:{required:true},*/
+            consume_integral:{required:true,digits:true},
+            limit_number:{required:true,number:true},
+            win_rate:{required:true,number:true}
+        },
+        messages:{
+            luckydraw_name:{required:'活动名称不能为空'},
+            /*user_level_id:{required:'请选择用户等级'},*/
+            consume_integral:{required:'消耗积分不能为空',digits:'必须输入整数'},
+            limit_number:{required:'请选择参与次数限制',digits:'必须输入整数'},
+            win_rate:{required:'中奖率不能为空',number:'必须输入合法的数字（负数，小数）'}
+        }
+    });
+    //校验结束时间是否大于起始时间
+    jQuery.extend(jQuery.fn.validatebox.defaults.rules, {
+        endTimeMin: {
+            validator: function (value, param) {
+                var d1 = jQuery(''+param[0]+'').datebox('getValue')
+                return value >= d1;
+            },
+            message: '结束时间必须大于或等于开始时间'
+        },
+    })
+    //改变系统提示的样式
+    jQuery("span .w").mousemove(function(){
+        var id=jQuery(this.parentNode).attr("id");
+        if(id="nothis"){
+            jQuery(this.parentNode).attr("id","this")
+        }
+    }).mouseout(function(){
+        var id=jQuery(this.parentNode).attr("id");
+        if(id="this"){
+            jQuery(this.parentNode).attr("id","nothis")
+        }
+    });
+    // 如果是编辑，设置日期控件的值
+    jQuery('#beginTime').datetimebox('setValue', "$!CommUtil.formatTime('yyyy-MM-dd HH:mm:ss ',$!obj.beginTime)");
+    jQuery('#endTime').datetimebox('setValue', "$!CommUtil.formatTime('yyyy-MM-dd HH:mm:ss ',$!obj.endTime)");
+
+    // 判断是否勾选商品
+    if(jQuery("#isIntegral").prop("checked")){
+        // 加载输入框，填写奖品信息……
+
+    }
+    if(jQuery("#isCoupon").prop("checked")){
+        // 加载输入框，填写奖品信息……
+
+    }
+    if(jQuery("#isGoods").prop("checked")){
+        // 加载输入框，填写奖品信息……
+
+    }
+    jQuery( "#dialog-confirm" ).attr("style","display:none;");
+});
+// 设置奖品
+/*function setReward() {
+    jQuery("#dialog-confirm").css("display","block");
+    jQuery( "#dialog-confirm" ).dialog({
+        resizable: false,
+        height:500,
+        modal: true,
+        buttons: {
+            "保存": function() {
+                jQuery( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                jQuery( this ).dialog( "close" );
+            }
+        }
+    });
+}*/
+
+// 点击tab页的事件
+var tab = jQuery('#demoTab').tabs('getSelected');
+var index = jQuery('#demoTab').tabs('getTabIndex',tab);
+alert(index);
+/*jQuery('.easyui-tabs').tabs({
+    onSelect:function(title,index){
+        alert(title+' is selected');
+        var url = '';
+        if(index == 1){
+            url = '';
+        }
+        var activeTab = $('#tab').tabs('getTab',index);
+        activeTab.panel('refresh',url);
+    }
+});*/
+jQuery('#demoTab').tabs({
+    border:false,
+    onSelect:function(title){
+        alert(title+' is selected');
+    }
+});
+
+function saveForm(){
+    if(jQuery("#theForm").form('enableValidation').form('validate')){
+        jQuery("#theForm").submit();
+    }
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/luckydraw_save" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id"/>
+  <div class="cont">
+    <h1 class="seth">抽奖管理</h1>
+    <div class="nav_list">
+
+      <ul>
+        <li><a href="$!webPath/luckydraw_list?"><b>所有活动</b></a> </li>
+        <li><a href="$!webPath/luckydraw_list?status=1"><b>未开始</b></a> </li>
+        <li><a href="$!webPath/luckydraw_list?status=2"><b>进行中</b></a> </li>
+        <li><a href="$!webPath/luckydraw_list?status=-2"><b>已结束</b></a> </li>
+        #if($!edit)
+        <li><a href="javascript:void(0);" class="this"><b>编辑</b></a> </li>
+        #elseif($!view)
+        <li><a href="javascript:void(0);" class="this"><b>查看</b></a> </li>
+        #else
+        <li><a href="$!webPath/luckydraw_add" class="this"><b>新增活动</b></a> </li>
+        #end
+      </ul>
+
+    </div>
+    <div class="edit">
+      <div class="editul setcont" id="base">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>活动名称：</li>
+          <li><span class="size200"><input name="luckydraw_name" type="text" id="luckydraw_name" value="$!obj.luckydraw_name"/></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>开始时间：</li>
+          <li> <span class="size200">
+                <input type="text" id="beginTime" name="beginTime" required
+                       class="easyui-datetimebox"  data-options="editable:false" labelPosition="top" validType="beginTimeValidate" style="width:100%;" >
+          </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>结束时间：</li>
+          <li> <span class="size200">
+              <input type="text" id="endTime" name="endTime" class="easyui-datetimebox" required
+                     data-options="validType:['endTimeValidate','endTimeMin[\'#beginTime\']'],editable:false" labelPosition="top" style="width:100%;">
+          </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">活动说明：</li>
+          <li><textarea name="remark" rows="3" cols="40" id="remark">$!obj.remark</textarea></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>参与会员等级：</li>
+          <li> <span class="size100">
+          <select name="user_level_id" id="user_level_id">
+            <option value="" selected="selected">所有</option>
+            <option value="2">银牌会员</option>
+            <option value="3">金牌会员</option>
+            <option value="4">钻石会员</option>
+            <option value="6">铜牌会员</option>
+          </select>
+          </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>消耗积分：</li>
+          <li><span class="size200"><input name="consume_integral" type="text" id="consume_integral" value="$!obj.consume_integral"/>用户每次参与需要消耗积分</span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">参与送积分：</li>
+          <li><span class="size200"><input name="reward_integral" type="text" id="reward_integral" value="$!obj.reward_integral"/></span></li>
+          <li>
+            <input type='checkbox' class='check_position' name='buyer' checked='checked' id=""/>仅送给未中奖的用户
+          </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>参与次数：</li>
+          <li> <span class="use_code">
+          <label>
+              <input type="radio" name="timer" id="timer" value="" checked="checked" style="border:none; width:auto;" />一人一次
+              <input type="radio" name="timer" id="timer" value="" style="border:none; width:auto;" />一天一次
+              <input type="radio" name="timer" id="timer" value="" style="border:none; width:auto;" />一天两次
+            </label></span> </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>中奖率：</li>
+          <li><span class="size100"><input name="win_rate" type="text" id="win_rate" value="$!obj.win_rate"/>%</span></li>
+          <li>等级设置的奖品数量越多，则该等级中奖率越高。例如：总中奖率50%，一等奖1个，二等奖2个，三等奖3个，四等奖4个，一等奖中奖概率为50%*1/(1+2+3+4)=5%</li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>奖品设置：</li>
+          <li><a style="color:#ff4f19; text-decoration:underline;" href="javascript:void(0);" dialog_uri="$!webPath/luckydraw_goods_select" dialog_title="奖品设置"
+                 dialog_width="450" dialog_height="200" dialog_id="reward_set">
+            <input name="" value="设置"class="search_btn"/></a></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">奖品详情：</li>
+          <li></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">未中奖说明：</li>
+          <li><textarea name="notwin_remark" rows="5" cols="40" id="notwin_remark"></textarea></li>
+        </ul>
+      </div>
+      <div class="editul setcont">
+      </div>
+    </div>
+  </div>
+  <div id="dialog-confirm" title="奖品设置">
+    <div id="tt" class="easyui-tabs" style="width:500px;height:400px;">
+      <div title="奖品一" style="padding:20px;display:none;" class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>奖品选择：</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠送积分</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer'  id=""/>赠送优惠券</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer'  id=""/>赠品</li>
+        </ul>
+        <!--<ul class="set1">
+          <li class="setcont_bg">奖品名称：</li>
+          <li><span class="size200"><input name="luckydraw_name" type="text" id="luckydraw_name" value="$!obj.luckydraw_name"/></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">奖品数量：</li>
+          <li><span class="size200"><input name="" type="text" id="" value=""/></span></li>
+        </ul>-->
+      </div>
+      <div title="奖品二" data-options="" style="overflow:auto;padding:20px;display:none;" class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>奖品选择：</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠送积分</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠送优惠券</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠品</li>
+        </ul>
+      </div>
+      <div title="奖品三" data-options="" style="padding:20px;display:none;" class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>奖品选择：</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠送积分</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠送优惠券</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠品</li>
+        </ul>
+      </div>
+      <div title="奖品四" data-options="" style="padding:20px;display:none;" class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>奖品选择：</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠送积分</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠送优惠券</li>
+          <li><input type='radio' style="border:none; width:auto;" name='buyer' checked='checked' id=""/>赠品</li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit" style = "text-align:center;">
+      <input name="go" type="button" value="确定" onclick="" />
+      <input name="go" type="button" value="取消" onclick="" />
+    </div>
+  </div>
+  <!--<div class="easyui-tabs" id="demoTab" style="width:700px;height:250px">
+    <div title="About" style="padding:10px">
+      <p style="font-size:14px">jQuery EasyUI framework helps you build your web pages easily.</p>
+      <ul>
+        <li>easyui is a collection of user-interface plugin based on jQuery.</li>
+        <li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
+        <li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
+        <li>complete framework for HTML5 web page.</li>
+        <li>easyui save your time and scales while developing your products.</li>
+        <li>easyui is very easy but powerful.</li>
+      </ul>
+    </div>
+    <div title="My Documents" style="padding:10px">
+      <ul class="easyui-tree" data-options="url:'tree_data1.json',method:'get',animate:true"></ul>
+    </div>
+    <div title="Help" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
+      This is the help content.
+    </div>
+  </div>-->
+  <div class="submit">
+    #if($!view)
+    #else
+    <span class="pad80"> <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/></span>
+    #end
+    <input name="go" type="button" value="返回列表" style="margin-left: 30px;" onclick="window.location.href='$!webPath/luckydraw_list'" />
+  </div>
+</form>
+</body>
+</html>

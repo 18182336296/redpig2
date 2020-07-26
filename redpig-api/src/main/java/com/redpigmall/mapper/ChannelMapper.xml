@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ChannelMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Channel">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ch_name" property="ch_name" jdbcType="VARCHAR"/>
+		<result column="ch_nav_gc_list" property="ch_nav_gc_list" jdbcType="VARCHAR"/>
+		<result column="ch_nav_word_list" property="ch_nav_word_list" jdbcType="VARCHAR"/>
+		<result column="ch_nav_advp_id" property="ch_nav_advp_id" jdbcType="BIGINT"/>
+		<result column="ch_nav_right_img_list" property="ch_nav_right_img_list" jdbcType="VARCHAR"/>
+		<result column="ch_nav_bottom_adv_list" property="ch_nav_bottom_adv_list" jdbcType="VARCHAR"/>
+		<result column="ch_floors" property="ch_floors" jdbcType="VARCHAR"/>
+		<result column="ch_nav_style" property="ch_nav_style" jdbcType="VARCHAR"/>
+		<result column="ch_sequence" property="ch_sequence" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Channel">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ch_name" property="ch_name" jdbcType="VARCHAR"/>
+		<result column="ch_nav_gc_list" property="ch_nav_gc_list" jdbcType="VARCHAR"/>
+		<result column="ch_nav_word_list" property="ch_nav_word_list" jdbcType="VARCHAR"/>
+		<result column="ch_nav_advp_id" property="ch_nav_advp_id" jdbcType="BIGINT"/>
+		<result column="ch_nav_right_img_list" property="ch_nav_right_img_list" jdbcType="VARCHAR"/>
+		<result column="ch_nav_bottom_adv_list" property="ch_nav_bottom_adv_list" jdbcType="VARCHAR"/>
+		<result column="ch_floors" property="ch_floors" jdbcType="VARCHAR"/>
+		<result column="ch_nav_style" property="ch_nav_style" jdbcType="VARCHAR"/>
+		<result column="ch_sequence" property="ch_sequence" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ch_name,ch_nav_gc_list,ch_nav_word_list,ch_nav_advp_id,ch_nav_right_img_list,ch_nav_bottom_adv_list,ch_floors,ch_nav_style,ch_sequence
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ch_name != null">and ch_name = #{ch_name,jdbcType=VARCHAR}</if>
+		<if test="ch_nav_gc_list != null">and ch_nav_gc_list = #{ch_nav_gc_list,jdbcType=VARCHAR}</if>
+		<if test="ch_nav_word_list != null">and ch_nav_word_list = #{ch_nav_word_list,jdbcType=VARCHAR}</if>
+		<if test="ch_nav_advp_id != null">and ch_nav_advp_id = #{ch_nav_advp_id,jdbcType=BIGINT}</if>
+		<if test="ch_nav_right_img_list != null">and ch_nav_right_img_list = #{ch_nav_right_img_list,jdbcType=VARCHAR}</if>
+		<if test="ch_nav_bottom_adv_list != null">and ch_nav_bottom_adv_list = #{ch_nav_bottom_adv_list,jdbcType=VARCHAR}</if>
+		<if test="ch_floors != null">and ch_floors = #{ch_floors,jdbcType=VARCHAR}</if>
+		<if test="ch_nav_style != null">and ch_nav_style = #{ch_nav_style,jdbcType=VARCHAR}</if>
+		<if test="ch_sequence != null">and ch_sequence = #{ch_sequence,jdbcType=INTEGER}</if>
+	</sql>
+	<sql id="ifStatement">
+		ch_name= #{ch_name},
+		ch_nav_gc_list= #{ch_nav_gc_list},
+		ch_nav_word_list= #{ch_nav_word_list},
+		ch_nav_advp_id= #{ch_nav_advp_id},
+		ch_nav_right_img_list= #{ch_nav_right_img_list},
+		ch_nav_bottom_adv_list= #{ch_nav_bottom_adv_list},
+		ch_floors= #{ch_floors},
+		ch_nav_style= #{ch_nav_style},
+		ch_sequence= #{ch_sequence},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Channel" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_channel 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Channel" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_channel obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_channel obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Channel" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_channel obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Channel" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_channel(addTime,deleteStatus,ch_name,ch_nav_gc_list,ch_nav_word_list,ch_nav_advp_id,ch_nav_right_img_list,ch_nav_bottom_adv_list,ch_floors,ch_nav_style,ch_sequence)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ch_name,jdbcType=VARCHAR},#{ch_nav_gc_list,jdbcType=VARCHAR},#{ch_nav_word_list,jdbcType=VARCHAR},#{ch_nav_advp_id,jdbcType=BIGINT},#{ch_nav_right_img_list,jdbcType=VARCHAR},#{ch_nav_bottom_adv_list,jdbcType=VARCHAR},#{ch_floors,jdbcType=VARCHAR},#{ch_nav_style,jdbcType=VARCHAR},#{ch_sequence,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Channel">
+		update redpigmall_channel
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_channel where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_channel where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="or" close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Channel" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_channel obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Channel" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_channel obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Channel" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_channel
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_channel where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

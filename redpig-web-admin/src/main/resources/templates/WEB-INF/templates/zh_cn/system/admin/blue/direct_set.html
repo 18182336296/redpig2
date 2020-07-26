@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#weixin_logo").change(function(){
+	 jQuery("#textfield1").val(jQuery("#weixin_logo").val());
+   });
+    jQuery("#qr_img").change(function(){
+	 jQuery("#textfield2").val(jQuery("#qr_img").val());
+   });
+	jQuery("#welcome_img").change(function(){
+	 jQuery("#textfield3").val(jQuery("#welcome_img").val());
+   });
+//
+  jQuery(":checkbox").click(function(){
+     var id=jQuery(this).attr("name");
+	 id=id.substring(0,id.length-3);
+	 if(jQuery(this).attr("checked")=="checked"){
+	    jQuery("#"+id).val("true");
+	 }else jQuery("#"+id).val("false");
+  });
+  //
+    jQuery("input[id^=img][type=file]").change(function(){
+	   var id=jQuery(this).attr("id");
+	   jQuery("#"+id+"_text").val(jQuery(this).val());
+   })
+  //
+  jQuery(":radio[value=$!config.sysLanguage]").attr("checked",true);
+  //
+ #if($!config.direct_selling==1)								
+  jQuery("#wx_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+ #else
+  jQuery("#wx_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+ #end
+ jQuery("#wx_img").click(function(){
+   var status=jQuery("#direct_selling").val();
+   if(status==1){
+	 jQuery("#wx_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	 jQuery("#direct_selling").val("0");
+	}else{
+	 jQuery("#wx_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	 jQuery("#direct_selling").val("1");    
+	}
+ });
+});
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/direct_selling_set_save" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" id="id" type="hidden" value="$!config.id"/>
+  <div class="cont">
+    <h1 class="seth">分销配置</h1>
+    <div class="nav_list">
+      <ul>
+      <li><a href="$!webPath/direct_set" class="this" id="site_base"><b>基本信息</b></a> </li>
+      </ul>
+      </div>
+        <div class="edit">
+    <div class="editul setcont" id="base">
+    <ul class="set1">
+        <li class="setcont_bg">是否开启分销</li>
+        <li><span class="webSwitch"><img id="wx_img" src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" style="cursor:pointer;" /></span><span id="nothis"><strong class="q"></strong><strong class="w">
+          <input name="direct_selling" type="hidden" id="direct_selling" value="$!config.direct_selling" />
+         开通分销商城后，客户购物上级推广人员会有对应提成</strong><strong class="c"></strong></span></li>
+      </ul>
+      #if($!config.direct_selling==1)
+		
+		<ul class="set1">
+			<li class="setcont_bg">一级提成</li>
+			<li>
+				<span class="webname"><input name="direct_selling_first_level_rate" type="text" id="direct_selling_first_level_rate" value="$!{config.direct_selling_first_level_rate}" /></span> 
+			</li>
+		</ul>
+		
+		<ul class="set1">
+			<li class="setcont_bg">二级提成</li>
+			<li>
+				<span class="webname"><input name="direct_selling_second_level_rate" type="text" id="direct_selling_second_level_rate" value="$!{config.direct_selling_second_level_rate}" /></span> 
+			</li>
+		</ul>
+		
+	  #end
+    </div>  
+      </div>
+      <div class="submit">
+    <span class="pad120"><input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/></span>
+  </div>
+  </div>
+  
+</form>
+</body>
+</html>

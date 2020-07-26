@@ -1,0 +1,14 @@
+#if($objs.size()>0)
+<ul>
+  #foreach($obj in $objs)
+  #if($!obj.goods_main_photo)
+  #set($path="$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}?$!{obj.goods_main_photo.height}&$!{obj.goods_main_photo.width}")
+  #set($img="$!imageWebServer/$!path")
+  #else
+  #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+  #end
+  <li onclick="goods_list_set(this);" img_uri="$!img#foreach($img in $obj.goods_photos),$!imageWebServer/$!{img.path}/$!{img.name}?$!{img.height}&$!{img.width}#end" goods_name="$!obj.goods_name" goods_id="$!obj.id" class="this"  path="$!path"><span><img src="$!img" /><i></i></span><b>$!obj.goods_name</b></li>
+  #end
+</ul>
+#end
+<div class="floor_page" use="goods_list"><span>$!gotoPageAjaxHTML</span></div>

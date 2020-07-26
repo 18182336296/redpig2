@@ -1,0 +1,17 @@
+﻿#if($!sc.weixinChannel_id)<h3 class="in_second_page"><a href="$!webPath/wap/channel?id=$!sc.weixinChannel_id&sc=$!sc.id">$!{sc.showName}频道页</a></h3>#end
+#if($!second_gcs)
+#foreach($gc in $!second_gcs)
+<li class="pli">
+<div class="pop_item">
+<h2>$!gc.showName</h2>
+<ul>
+#foreach($gc2 in $!showClassTools.getSclist($!gc.id))
+<li> <a  href="javascript:void(0);" onClick="window.location.href='$!webPath/wap/class_items?gc_id=$!{gc2.id}'">
+<div class="pop_item_img"> #if($!gc2.wx_icon) #set($wx_img=$!imageTools.queryImg($!gc2.wx_icon))<img src="$!imageWebServer/$!wx_img.path/$!wx_img.name"> #end</div>
+<b class="pop_item_name">$!gc2.className</b> </a> </li>
+#end 
+</ul>
+</div>
+</li>
+#end
+#end

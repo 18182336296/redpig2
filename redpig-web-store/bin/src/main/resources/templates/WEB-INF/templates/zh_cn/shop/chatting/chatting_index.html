@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>在线客服 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/common/css/jquery.bigcolorpicker.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/im/css/em.css" media="screen and (max-device-width:640px)" rel="stylesheet" type="text/css">
+<link href="$!cdnServer/resources/style/im/css/im.css" media="screen and (min-device-width:641px)" rel="stylesheet" type="text/css">
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.bigcolorpicker.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+</head>
+
+<body style="background:#fff">
+<div class="chat_top">
+	<div class="chat_top_center">
+    	<div class="chat_top_c_img"><img src="$!cdnServer/resources/style/im/images/im_portrait.png" /></div>
+        <div class="chat_top_c_name">$!config.title在线客服</div>
+    </div>
+</div>
+<div class="chat_main">
+	<div class="chat_main_center">
+    	<div class="chat_main_center_notice">
+温馨提示：如果您对商品规格、介绍等有疑问，可以在商品详情页点击“在线客服”进行咨询，或者在商品详情页“商品咨询”处发起咨询，会得到及时专业的回复！
+        </div>
+        <div class="chat_main_center_t">请选择您需要咨询的业务</div>
+        <div class="chat_main_center_list">
+        	<div class="chat_main_center_list_one">
+            	<dl class="pre_sales">
+                	<dt>售前客服</dt>
+                    <dd>商品咨询</dd>
+                </dl>
+                <div class="chat_main_center_list_b"><a mark="before-sales" href="$!webPath/chatting_distribute?service_type=before-sales&#if($!goods_id)#if($!goods_id)goods_id=$!goods_id#end#end&#if($!store_id)store_id=$!store_id#end">开始咨询</a></div>
+            </div>
+            <div class="chat_main_center_list_one">
+            	<dl class="aftet_sale">
+                	<dt>售后客服</dt>
+                    <dd>订单咨询</dd>
+                    <dd>退款/退货</dd>
+                    <dd>优惠券</dd>
+                </dl>
+                <div class="chat_main_center_list_b"><a mark="after-sales" href="$!webPath/chatting_distribute?service_type=after-sales&#if($!goods_id)goods_id=$!goods_id#end&#if($!store_id)store_id=$!store_id#end">开始咨询</a></div>
+            </div>
+            <div class="chat_main_center_list_one">
+            	<dl class="merchant">
+                	<dt>商家服务</dt>
+                    <dd>活动咨询</dd>
+                    <dd>联系平台</dd>
+                </dl>
+                <div class="chat_main_center_list_b"><a mark="seller-service" href="$!webPath/chatting_distribute?service_type=seller-service&#if($!goods_id)goods_id=$!goods_id#end&#if($!store_id)store_id=$!store_id#end">开始咨询</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

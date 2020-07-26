@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>提现</title>
+	<link href="$!cdnServer/resources/yingerMall/css/mui.min.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="$!cdnServer/resources/yingerMall/css/common.css" />
+</head>
+<body style="background-color: #fff;">
+<header class="mui-bar mui-bar-nav mui-common-bar">
+	<a class="mui-icon mui-action-back mui-pull-left mui-icon-back-black"></a>
+	<h1 class="mui-title">提现</h1>
+</header>
+
+	<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<!--顶部-->
+			<div class="cum-top mui-content with-content">
+				<p class="num">￥<span>138,452.15</span></p>
+				<p class="lable">可提现金额(元)</p>
+			</div>
+			<form action="$!webPath/income/withdraw_apply" id="theForm" >
+				<ul class="mui-table-view mui-table-view-radio with-table-radio">
+					<li class="mui-table-view-cell mui-selected" typeID="1">
+						<a class="mui-navigate-right">
+							<img src="$!cdnServer/resources/yingerMall/images/Alipay.png" class="icon-alipay" alt="支付宝"/>
+							<span class="with-txt">支付宝</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" typeID="2">
+						<a class="mui-navigate-right">
+							<img src="$!cdnServer/resources/yingerMall/images/WeChat.png" class="icon-webchat" alt="微信"/>
+							<span class="with-txt">微信</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" typeID="3">
+						<a class="mui-navigate-right">
+							<img src="$!cdnServer/resources/yingerMall/images/UnionPay.png" class="icon-pay" alt="银联"/>
+							<span class="with-txt">银联</span>
+						</a>
+					</li>
+				</ul>
+				<input type="hidden" name="withdrawal_way" id="withdrawal_way">
+			</form>
+			<p class="with-info">注:提现金额(收取0.25%服务费)</p>
+
+			<div class="with-btn-box">
+				<button class="mui-btn" onclick="submitForm();">预计24小时内到账，确认提现</button>
+			</div>
+
+		</div>
+	</div>
+<script src="$!cdnServer/resources/yingerMall/js/mui.min.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/yingerMall/js/jquery-1.9.1.min.js" ></script>
+<script>
+    mui.ready(function() {
+        //初始化区域滚动
+        var scroll = mui(".mui-scroll-wrapper").scroll();
+        jQuery("#withdrawal_way").attr("value",1);
+        //支付方式选中事件
+        document.querySelector('.mui-table-view.mui-table-view-radio').addEventListener('selected',function(e){
+            console.log(e.detail.el.innerText);
+            console.log($(e.target).attr('typeID'));
+            jQuery("#withdrawal_way").attr("value",$(e.target).attr('typeID').trim());
+        });
+    })
+
+    function submitForm() {
+        var withdrawal_way = jQuery("#withdrawal_way").attr("value");
+        if (withdrawal_way!=null&&withdrawal_way!=""){
+            jQuery("#theForm").submit();
+        }else {
+            alert("请选择提现方式！");
+            return;
+        }
+
+    }
+</script>
+</body>
+</html>

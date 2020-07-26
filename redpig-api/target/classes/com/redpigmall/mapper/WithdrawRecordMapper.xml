@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.redpigmall.dao.WithdrawRecordMapper" >
+	<!-- 结果集映射Map -->
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.WithawalRecord" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="withdrawal_way" property="withdrawalWay" jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="accept_id" property="acceptId" jdbcType="BIGINT" />
+		<result column="receiver" property="receiver" jdbcType="VARCHAR" />
+		<result column="accept_status" property="acceptStatus" jdbcType="TINYINT" />
+		<result column="accept_time" property="acceptTime" jdbcType="TIMESTAMP" />
+		<result column="withdrawal_status" property="withdrawalStatus" jdbcType="TINYINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<!-- 字段列 -->
+	<sql id="Base_Column_List" >
+		id, user_id AS userId, withdrawal_way AS withdrawalWay, create_time AS createTime, accept_id AS acceptId, receiver, accept_status AS acceptStatus, accept_time AS acceptTime, 
+		update_time AS updateTime,withdrawal_status AS withdrawalStatus
+	</sql>
+  
+	<!-- 根据ID查询表记录 -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+		select 
+		<include refid="Base_Column_List" />
+		from redpigmall_withawal_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+  	<!-- 根据ID查询表记录 -->
+  	<select id="selectById" resultType="com.redpigmall.domain.WithawalRecord" parameterType="java.lang.Long" >
+		select 
+		<include refid="Base_Column_List" />
+		from redpigmall_withawal_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+  	
+	<!-- 根据ID删除表记录 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+		delete from redpigmall_withawal_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+	<!-- 查询总记录数 -->
+  	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_withawal_record t1
+		where 1 = 1  
+		<include refid="whereStatement"/>
+	</select>
+	
+	<!-- 查询分页列表 -->
+	<select id="queryPageList" resultType="com.redpigmall.domain.virtual.WithdrawRecordView" parameterType="map">
+		SELECT
+			t1.id,
+			t1.withdrawal_way AS withdrawalWay,
+			t1.create_time AS createTime,
+			t1.accept_status AS acceptStatus,
+			t1.accept_time AS acceptTime,
+			t1.withdrawal_status AS withdrawalStatus,
+			t1.withdrawal_money AS withdrawalMoney,
+			IFNULL(t2.nickName,t2.userName) AS nickName,
+			t2.mobile,
+			t2.userName AS userName,
+			t3.balance_price AS balancePrice,
+			t3.balance_price-t1.withdrawal_money AS balance
+		FROM
+			redpigmall_withawal_record t1
+		LEFT JOIN redpigmall_user t2 ON t1.user_id = t2.id
+		LEFT JOIN redpigmall_distribution_commission t3 ON t3.user_id=t2.id
+		WHERE 1=1
+		<!-- 联系方式 -->
+		<if test="mobile !=null and mobile!=''">
+			and t2.mobile like CONCAT('%',#{mobile},'%')
+		</if>
+		<include refid="whereStatement"/>
+			order by t1.create_time desc
+		<if test="currentPage !=null and pageSize !=null"> 
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<!-- 通用查询条件 -->
+	<sql id="whereStatement">
+		<if test="id != null">and t1.id = #{id,jdbcType=BIGINT}</if>
+		<if test="createTime != null">and t1.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="acceptStartTime != null"><![CDATA[ and accept_time >=CONCAT(#{acceptStartTime},' 00:00:00') ]]></if>
+		<if test="acceptEndTime != null"><![CDATA[ and accept_time <=CONCAT(#{acceptEndTime},' 23:59:59') ]]></if>
+		<if test="acceptStatus != null">and accept_status = #{acceptStatus,jdbcType=INTEGER}</if>
+	</sql>
+	<!-- 查询分页列表 -->
+	<select id="queryPages" resultType="com.redpigmall.domain.virtual.WithdrawRecordView" parameterType="map">
+		SELECT
+			t1.id,
+			t1.withdrawal_way AS withdrawalWay,
+			t1.create_time AS createTime,
+			t1.accept_status AS acceptStatus,
+			t1.accept_time AS acceptTime,
+			t1.withdrawal_status AS withdrawalStatus,
+			t1.withdrawal_money AS withdrawalMoney,
+			IFNULL(t2.nickName,t2.userName) AS nickName,
+			t2.mobile,
+			t2.userName AS userName,
+			t3.balance_price AS balancePrice,
+			t3.balance_price-t1.withdrawal_money AS balance
+		FROM
+			redpigmall_withawal_record t1
+		LEFT JOIN redpigmall_user t2 ON t1.user_id = t2.id
+		LEFT JOIN redpigmall_distribution_commission t3 ON t3.user_id=t2.id
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<!-- 联系方式 -->
+			<if test="mobile !=null and mobile!=''">
+				and t2.mobile like CONCAT('%',#{mobile},'%')
+			</if>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by t1.create_time desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<!-- 分页列表 -->
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.virtual.WithdrawRecordView" parameterType="map">
+		SELECT
+			t1.id,
+			t1.withdrawal_way AS withdrawalWay,
+			t1.create_time AS createTime,
+			t1.accept_status AS acceptStatus,
+			t1.accept_time AS acceptTime,
+			t1.withdrawal_status AS withdrawalStatus,
+			t1.withdrawal_money AS withdrawalMoney,
+			IFNULL(t2.nickName,t2.userName) AS nickName,
+			t2.mobile,
+			t2.userName AS userName,
+			t3.balance_price AS balancePrice,
+			t3.balance_price-t1.withdrawal_money AS balance
+		FROM
+			redpigmall_withawal_record t1
+		LEFT JOIN redpigmall_user t2 ON t1.user_id = t2.id
+		LEFT JOIN redpigmall_distribution_commission t3 ON t3.user_id=t2.id
+		WHERE 1=1
+		<!-- 联系方式 -->
+		<if test="mobile !=null and mobile!=''">
+			and t2.mobile like CONCAT('%',#{mobile},'%')
+		</if>
+		<include refid="whereStatement"/> 
+			order by t1.create_time desc
+		<if test="currentPage !=null and pageSize !=null"> 
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<!-- 插入所有字段值 -->
+	<insert id="insert" parameterType="com.redpigmall.domain.WithawalRecord" >
+		insert into redpigmall_withawal_record (id, user_id, withdrawal_way, 
+		  create_time, accept_id, receiver, 
+		  accept_status, accept_time
+		  )
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{withdrawalWay,jdbcType=TINYINT}, 
+		  #{createTime,jdbcType=TIMESTAMP}, #{acceptId,jdbcType=BIGINT}, #{receiver,jdbcType=VARCHAR}, 
+		  #{acceptStatus,jdbcType=TINYINT}, #{acceptTime,jdbcType=TIMESTAMP}
+		  )
+	</insert>
+	<!-- 插入不为空的字段值 -->
+	<insert id="insertSelective" parameterType="com.redpigmall.domain.WithawalRecord" >
+		insert into redpigmall_withawal_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+		  <if test="id != null" >
+			id,
+		  </if>
+		  <if test="userId != null" >
+			user_id,
+		  </if>
+		  <if test="withdrawalWay != null" >
+			withdrawal_way,
+		  </if>
+		  <if test="createTime != null" >
+			create_time,
+		  </if>
+		  <if test="acceptId != null" >
+			accept_id,
+		  </if>
+		  <if test="receiver != null" >
+			receiver,
+		  </if>
+		  <if test="acceptStatus != null" >
+			accept_status,
+		  </if>
+		  <if test="acceptTime != null" >
+			accept_time,
+		  </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		  <if test="id != null" >
+			#{id,jdbcType=BIGINT},
+		  </if>
+		  <if test="userId != null" >
+			#{userId,jdbcType=BIGINT},
+		  </if>
+		  <if test="withdrawalWay != null" >
+			#{withdrawalWay,jdbcType=TINYINT},
+		  </if>
+		  <if test="createTime != null" >
+			#{createTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="acceptId != null" >
+			#{acceptId,jdbcType=BIGINT},
+		  </if>
+		  <if test="receiver != null" >
+			#{receiver,jdbcType=VARCHAR},
+		  </if>
+		  <if test="acceptStatus != null" >
+			#{acceptStatus,jdbcType=TINYINT},
+		  </if>
+		  <if test="acceptTime != null" >
+			#{acceptTime,jdbcType=TIMESTAMP},
+		  </if>
+		</trim>
+	</insert>
+  
+  <!-- 根据ID更新不为空的字段值 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.redpigmall.domain.WithawalRecord" >
+		update redpigmall_withawal_record
+		<set >
+			<if test="userId != null" >
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="withdrawalWay != null" >
+				withdrawal_way = #{withdrawalWay,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null" >
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="acceptId != null" >
+				accept_id = #{acceptId,jdbcType=BIGINT},
+			</if>
+			<if test="receiver != null" >
+				receiver = #{receiver,jdbcType=VARCHAR},
+			</if>
+			<if test="acceptStatus != null" >
+				accept_status = #{acceptStatus,jdbcType=TINYINT},
+			</if>
+			<if test="acceptTime != null" >
+				accept_time = #{acceptTime,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+  
+	<!-- 根据ID更新所有值 -->
+	<update id="updateByPrimaryKey" parameterType="com.redpigmall.domain.WithawalRecord" >
+		update redpigmall_withawal_record
+		set user_id = #{userId,jdbcType=BIGINT},
+		  withdrawal_way = #{withdrawalWay,jdbcType=TINYINT},
+		  create_time = #{createTime,jdbcType=TIMESTAMP},
+		  accept_id = #{acceptId,jdbcType=BIGINT},
+		  receiver = #{receiver,jdbcType=VARCHAR},
+		  accept_status = #{acceptStatus,jdbcType=TINYINT},
+		  accept_time = #{acceptTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

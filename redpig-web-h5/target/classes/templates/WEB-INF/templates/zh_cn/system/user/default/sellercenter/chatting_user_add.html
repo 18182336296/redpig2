@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-子账号添加-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!cdnServer/resources/js/jquery.form.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#theForm").validate({
+	errorPlacement:function(error, element) {
+     if(element.attr("name")=="chatting_user_id"){
+		 	element.parent().parent().parent().find("i").html(error);
+		 }else{
+			 element.after(error);
+			 }
+      },
+    rules:{
+	  chatting_name:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/seller/chatting_user_verify",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "chatting_name": function(){return jQuery("#chatting_name").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  } ,
+	  chatting_type:{required :true},
+	  chatting_user_id:{required :true}
+	 },
+	messages:{
+	  chatting_name:{required:"客服名不能为空",remote:"该客服名已经存在"} ,
+	  chatting_type:{required :"客服类型不能为空"},
+	  chatting_user_id:{required :"对应子账户不能为空"}
+	}
+  });
+//
+jQuery("#chatting_type").val("$!obj.chatting_type");
+});
+
+#if(!$!obj)
+function search_admin(){
+  jQuery.ajax({type:'POST',url:'$!webPath/seller/chatting_seller_search',data:'',dataType:'json',
+			  success:function(data){
+				     jQuery("#chatting_user_id").empty();
+				     jQuery.each(data, function(index,item){
+						jQuery("#chatting_user_id").append('<option value="'+item.id+'" selected="selected">'+item.userName+'</option>');
+					 })
+				  }
+			  });
+}
+#end
+
+function save(method){
+	jQuery("#cmd").val(method);
+	var chatting_user_name=jQuery("#chatting_user_id").find("option:selected").text();
+	jQuery("#chatting_user_name").val(chatting_user_name);
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/seller/top")
+<div class="main">
+  <div class="seller_center">
+    <div class="seller_center_left"> $!httpInclude.include("/seller/nav?op=chatting") </div>
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index">商家中心</a></b>><b>客户服务</b>><b>客服管理</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li><a href="$!webPath/seller/chatting_user_list"><i></i>客服列表</a></li>
+            <li class="this"><a href="$!webPath/seller/chatting_user_add"><i></i>客服分配</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="add_usercenter">
+        <form action="$!webPath/seller/chatting_user_save" method="post" name="theForm" id="theForm">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="user_base_table">
+            <tr>
+              <td width="20%" align="right">客服名称：</td>
+              <td width="80%" class="px8"><span class="setinput">
+                <input name="chatting_name" type="text" id="chatting_name" value="$!obj.chatting_name" class="base_txt"/>
+                </span></td>
+            </tr>
+            <tr>
+              <td align="right">客服类型：</td>
+              <td class="px10"><select name="chatting_type" id="chatting_type" >
+              	  <option value="">请选择客服类型...</option>
+                  <option value="0">售前客服</option>
+                  <option value="1">售后客服</option>
+                  <option value="2">商家服务</option>
+                </select></td>
+            </tr>
+            #if(!$!obj)
+            <tr>
+              <td align="right">搜索管理员：</td>
+              <td  class="px10"><span class="setinput">
+                <input class="base_txt" name="admin_username" type="text" id="admin_username" placeholder="输入子账户用户名或者真实姓名" />
+                </span> <span class="setinput">
+                <input class="seller_save" name="" type="button"  value="搜索" style=" width:80px;cursor:pointer; margin-left:10px;" onclick="search_admin();" />
+                </span></td>
+            </tr>
+            #end
+            <tr>
+              <td align="right">客服对应管理员：</td>
+              <td  class="px10"><div class="spec_radio"><span class="setinput">
+                  <select name="chatting_user_id" id="chatting_user_id" >
+                    
+                  
+              #if(!$!obj)
+              
+                  
+                    <option value="" selected="selected">请选择一个子账号...</option>
+                    
+                  
+              #end   
+              #if($!obj.chatting_user_id)
+              
+                  
+                    <option value="$!obj.chatting_user_id">$!obj.chatting_user_name</option>
+                    
+                  
+              #end         
+            
+                
+                  </select>
+                  </span> </div>
+                  <input name="chatting_user_name" type="hidden" id="chatting_user_name" value="$!obj.chatting_user_name" />
+                <i class="base_i"></i></td>
+            </tr>
+            <tr >
+              <td align="right">是否启用：</td>
+              <td><div class="spec_radio">
+                  <label>
+                    <input name="chatting_status" id="chatting_status" type="radio" #if(!$!obj||$!obj.chatting_status==1)checked="checked"#end value="1" />
+                    是 </label>
+                  <label>
+                    <input name="chatting_status" id="chatting_status" type="radio" #if($!obj.chatting_status==0)checked="checked"#end value="0" />
+                    否 </label>
+                </div>
+                <i class="base_i" style="margin-top:5px;">未启用的客服账号不能使用</i></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td class="px10"><span class="setsub">
+                <input name="role_ids" type="hidden" id="role_ids" value="" />
+                <input name="" type="button" value="提交" onclick="save('save');" class="seller_save"/>
+                <input name="id" type="hidden" id="id" value="$!obj.id" />
+                </span></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>云购 - $!{config.poweredby}</title>
+<meta name="keywords" content="#if($!store.store_seo_keywords!="") $!store.store_seo_keywords #else $!config.keywords #end" />
+<meta name="description" content="#if($!store.store_seo_description!="") $!store.store_seo_description #else $!config.description #end" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/cloud.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function() {
+
+    jQuery("input[id='ids']").change(function() {
+        var checked = jQuery(this).attr("checked");
+        if (typeof(checked) == "undefined") jQuery("#cart_form").find(":checkbox").attr("checked", false);
+        else jQuery("#cart_form").find(":checkbox").attr("checked", checked);
+        jQuery(".shopping_table_check_one").each(function() {
+            var clas = jQuery(this).parent().parent().parent().parent().attr("class");
+            if (typeof(clas) == "undefined") {
+                clas = "";
+            }
+            if (clas.indexOf("no_goods") < 0) {
+                if (checked == "checked") {
+                    jQuery(this).addClass("this");
+                } else {
+                    jQuery(this).removeClass("this");
+                }
+            }
+        });
+        cal_cart();
+    });
+    jQuery("input[id='id']").change(function() {
+        var checked = jQuery(this).attr("checked");
+        var id = jQuery(this).val();
+        var cla = jQuery("tr[id=" + id + "]").attr("class");
+        if (checked == "checked" && cla != "no_goods") {
+            jQuery("#checkbox_" + id).addClass("this");
+        } else {
+            jQuery("#checkbox_" + id).removeClass("this");
+        }
+        cal_cart();
+    });
+
+    jQuery(".shop_num").live("change",
+    function() {
+        var id = jQuery(this).attr("id");
+        id = id.replace("goods_count_", "");
+        var goods_count = jQuery("#goods_count_" + id).val();
+        goods_count = parseInt(goods_count);
+        jQuery.post("$!current_webPath/cloudbuy/cartadjust", {
+            "cart_id": id,
+            "count": goods_count
+        },
+        function(data) {
+            if (data.code == 70003) {
+                jQuery("#goods_count_" + id).val(goods_count);
+                jQuery("#gc_price" + id).html(goods_count);
+            } else {
+                showDialog("msg_info", "", "修改失败！", 2, "warning", 3, '');
+            }
+        },
+        "json");
+    });
+    jQuery(".shop_add").live("click",
+    function() {
+        var id = jQuery(this).attr("gc_id");
+        var goods_count = jQuery("#goods_count_" + id).val();
+        goods_count = parseInt(goods_count);
+        var goods_type = jQuery("#goods_count_" + id).attr("goods_type");
+        goods_type = parseInt(goods_type);
+        goods_count += goods_type;
+        jQuery.post("$!current_webPath/cloudbuy/cartadjust", {
+            "cart_id": id,
+            "count": goods_count
+        },
+        function(data) {
+            if (data.code == 70003) {
+                jQuery("#goods_count_" + id).val(goods_count);
+                jQuery("#gc_price" + id).html(goods_count);
+            } else {
+                showDialog("msg_info", "", "修改失败！", 2, "warning", 3, '');
+            }
+        },
+        "json");
+    });
+    jQuery(".shop_cut").live("click",
+    function() {
+        var id = jQuery(this).attr("gc_id");
+        var goods_count = jQuery("#goods_count_" + id).val();
+        goods_count = parseInt(goods_count);
+        var goods_type = jQuery("#goods_count_" + id).attr("goods_type");
+        goods_type = parseInt(goods_type);
+        goods_count -= goods_type;
+        jQuery.post("$!current_webPath/cloudbuy/cartadjust", {
+            "cart_id": id,
+            "count": goods_count
+        },
+        function(data) {
+            if (data.code == 70003) {
+                jQuery("#goods_count_" + id).val(goods_count);
+                jQuery("#gc_price" + id).html(goods_count);
+            } else {
+                showDialog("msg_info", "", "修改失败！", 2, "warning", 3, '');
+            }
+        },
+        "json");
+    });
+
+});
+function cal_cart() {
+    var ids = "";
+    var all_price = 0;
+    jQuery.each(jQuery(":checkbox[checked=true]"),
+    function(index, value) {
+        var id = jQuery(value).val();
+        if (id > 0) {
+            ids += jQuery(value).val() + ",";
+            var price = jQuery("#goods_count_" + id).val();
+            price = parseInt(price);
+            all_price += price;
+        }
+    });
+    jQuery("#total_price").html("￥" + all_price);
+}
+function cart_del(id) {
+
+    var method = function() {
+        jQuery.post("$!current_webPath/cloudbuy/cartdel", {
+            "cart_id": id
+        },
+        function(data) {
+            if (data.code != 10002) {
+                jQuery("#goods_info_" + id).remove();
+                if (jQuery("tr").length < 2) {
+                    jQuery(".shopping_list").hide();
+                    jQuery("#show_money").hide();
+                    jQuery(".shopping_car_none").show();
+                }
+                cal_cart();
+            }
+        },
+        "json");
+    };
+    showDialog("msg_info", "", "确定要删除商品吗？", 1, "warning", 3, method);
+}
+function more_big_cart_remove() {
+    var ids = "";
+    jQuery.each(jQuery(":checkbox[checked=true]"),
+    function(index, value) {
+        var id = jQuery(value).val();
+        if (id > 0) {
+            ids += jQuery(value).val() + ",";
+        }
+    });
+    var method = function() {
+        jQuery.post("$!current_webPath/cloudbuy/cartdel", {
+            "cart_id": ids
+        },
+        function(data) {
+            if (data.code != 10002) {
+                jQuery.each(jQuery(":checkbox[checked=true]"),
+                function(index, value) {
+                    var id = jQuery(value).val();
+                    if (id > 0) {
+                        jQuery("#goods_info_" + id).remove();
+                        if (jQuery("tr").length < 2) {
+                            jQuery(".shopping_list").hide();
+                            jQuery("#show_money").hide();
+                            jQuery(".shopping_car_none").show();
+                        }
+                    }
+                });
+
+                cal_cart();
+            }
+        },
+        "json");
+    };
+    showDialog("msg_info", "", "确定要删除商品吗？", 1, "warning", 3, method);
+}
+function confirm_cart() {
+	var ids = "";
+    jQuery.each(jQuery(":checkbox[checked=true]"),
+    function(index, value) {
+        var id = jQuery(value).val();
+        if (id > 0) {
+            ids += jQuery(value).val() + ",";
+        }
+    });
+	jQuery("#cart_ids").val(ids);
+    jQuery("#cart_form").submit();
+}
+</script>
+</head>
+<body bgcolor="#FFFFFF" >
+$!httpInclude.include("/top")
+$!httpInclude.include("/cloudbuy/head") 
+$!httpInclude.include("/cloudbuy/nav1?nav=2") 
+
+<!---------云购  列表---------->
+<div class="main">
+  <div id="carts_list"> 
+  #if($user)
+    <form  method="post"  name="cart_form" target="_self" id="cart_form" action="$!webPath/cloudbuy/cart1">
+      <input type="hidden" name="cart_ids" id="cart_ids" value="" />
+      <div class="shopping_list" style="margin:35px 0 15px 0; #if($carts.size()==0) display:none #end">
+        <table width="1200" border="1" bordercolor="#dedede" cellpadding="0" cellspacing="0" class="shopping_table">
+          <tr>
+            <th align="left" > <span class="shopping_table_check">
+              <label>
+                <input name="ids" type="checkbox" value="-1" id="ids" style="display:none" onclick="selectAll(this)"/>
+                <span class="shopping_table_check_one"></span> &nbsp;全选</label>
+              </span></th>
+            <th width="33%">店铺商品</th>
+            <th width="12%">价值</th>
+            <th width="13%">云购价</th>
+            <th width="14%">参与人次</th>
+            <th width="13%">小计</th>
+            <th>操作</th>
+          </tr>
+          #foreach($obj in $carts)
+          <tr goods_list="goods_info_$!obj.id" id="goods_info_$!obj.id">
+            <td style="border-right:1px solid #fff;"><span class="shopping_table_check1">
+              <label>
+                <input name="id" type="checkbox" mark="" value="$!obj.id" id="id" style="display:none">
+              	<span class="shopping_table_check_one" id="checkbox_$!obj.id"></span> 
+              </label>
+              </span></td>
+            <td><dl class="shopping_goods">
+                <dt><a href="$!webPaht/cloudbuy/items?id=$obj.cloudPurchaseLottery.id" target="_blank"><span class="img_cspan">
+                #set($obj_img="$!imageWebServer/$!{obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo}")
+                  <p><img src="$!obj_img" width="60" height="60" /></p>
+                  </span></a></dt>
+                <dd>
+                  <h5><a href="$!webPaht/cloudbuy/items?id=$obj.cloudPurchaseLottery.id" target="_blank">#if($obj.cloudPurchaseLottery.cloudPurchaseGoods.least_rmb==10)<b style="color:#ff0000">【十元专区】</b>#end$obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_name </a> </h5>
+                  <h5>总需$obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price人次参与，还剩：$obj.cloudPurchaseLottery.purchased_left_times人次</h5>
+                </dd>
+              </dl></td>
+            <td align="center">
+            $obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price元
+            </td>
+            <td align="center">$obj.cloudPurchaseLottery.cloudPurchaseGoods.least_rmb元</td>
+            <td><span class="shop_count">             
+            
+              <input name="goods_count_$!{obj.id}"  type="text" id="goods_count_$!{obj.id}"  value="$obj.purchased_times"  class="shop_num" goods_type="$obj.cloudPurchaseLottery.cloudPurchaseGoods.least_rmb" />
+              <a href="javascript:void(0);" id="count_up_$!obj.id" gc_id="$!obj.id"  lc="$!obj.remain_count"  f_sale_type="$!obj.goods.f_sale_type" class="shop_add">+</a><a  href="javascript:void(0);" id="count_down_$!obj.id" gc_id="$!obj.id"  f_sale_type="$!obj.goods.f_sale_type" class="shop_cut">-</a> </span>
+              </td>
+            <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">$obj.purchased_times</strong></td>
+            <td  align="center"><a href="javascript:void(0);" onclick="cart_del($obj.id)" class="cart_common">删除</a></td>
+          </tr>
+          #end
+        </table>
+      </div>
+      <div id="show_money" #if($carts.size()==0) style=" display:none" #end>
+        <div class="shopping_operate" id="shopping_operate"> <span class="go_count"> <i style="height:45px; width:200px; float:left;">
+          </i> <b>商品总价：<strong id="total_price">¥0.00</strong>元</b><a href="javascript:void(0);" #if(!$!user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="confirm_cart()" #end class="go_price">
+          <input type="hidden" name="gcs" id="gcs" />
+          去结算</a></span> <span class="shopping_operate_check">
+          <label>
+            <input name="ids" type="checkbox" value="-1" id="ids" style="display:none" />
+            <span class="shopping_table_check_one"></span> &nbsp;全选</label>
+          </span><span class="shop_del_all"><a href="javascript:void(0);" onclick="more_big_cart_remove();">批量删除</a></span><span class="shop_del_all"><a href="$!webPath/cloudbuy/index">继续购物</a></span></div>
+      </div>
+    </form>
+    #end
+    <div class="shopping_car_none" #if($carts.size()>0) style=" display:none" #end>
+      <div class="shopcar_none_box">
+        <dl>
+          <dt></dt>
+          <dd>
+            <h4>您的购物车还是空的，赶紧行动吧！</h4>
+            <span class="none_box_sp">您可以<a href="$!webPath/buyer/cloudbuy_order">查看订单</a>，或者是<a href="$!webPath/cloudbuy/index">随便看看</a></span></dd>
+        </dl>
+      </div>
+    </div></div>
+</div>
+$!httpInclude.include("/footer")
+</body>
+</html>

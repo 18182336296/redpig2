@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/activity_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">活动管理</h1>
+  
+  <div class="nav_list">
+
+ <ul>
+  <li><a href="$!webPath/activity_list"><b>所有活动88</b></a></li>
+   <li> <a href="$!webPath/activity_add" ><b>新增活动</b></a></li>
+   <li><a href="javascript:void(0);" class="this"><b>活动商品</b></a></li>
+   
+  </ul>
+
+ 
+ </div>
+  
+  
+  <form method="post" id="queryForm">
+  <div class="search">
+    <ul>
+      <li><span>商品名称</span> <span class="size150">
+        <input name="goods_name" type="text" id="goods_name" />
+        </span> <span>
+        <select name="ag_status" id="ag_status">
+          <option value="">活动状态</option>
+          <option value="1">审核通过</option>
+          <option value="0">等待审核</option>
+          <option value="-1">拒绝通过</option>
+        </select>
+        </span><span>
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+        </span> </li>
+    </ul>
+  </div>
+  </form>
+  
+  
+  <form method="post" id="ListForm">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+      
+        <th width="4%"></th>
+        <th width="30%"><span class="form_btna">活动商品</span></th>
+        <th width="15%"><span class="form_btna">活动标题</span></th>
+        <th width="8%" align="center"><span class="form_btna">开始时间</span></th>
+        <th align="center" width="8%"><span class="form_btna">结束时间</span></th>
+        <th align="center" width="8%"><span class="form_btna">状态</span></th>
+        <th align="center"><span class="form_btna">操作</span></th>
+      </tr>
+       #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr>
+        <td class="check_position"><label for="ids_$!obj.id">
+        	<input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" />
+            <span class="lbl"></span>
+        </label></td>
+        <td >$!obj.ag_goods.goods_name</td>
+        <td>$!obj.act.ac_title</td>
+        <td align="center">$!CommUtil.formatShortDate($!obj.act.ac_begin_time)</td>
+        <td align="center">$!CommUtil.formatShortDate($!obj.act.ac_end_time)</td>
+         #set($status="等待审核")
+         #if($!obj.ag_status==1)
+           #set($status="审核通过")
+         #end
+         #if($!obj.ag_status==-1)
+           #set($status="拒绝通过")
+         #end
+        <td align="center">$!status</td>
+        <td  align="center" class="hui oprate_con">#if($!obj.ag_status!=1)<a href="$!webPath/activity_goods_audit?act_id=$!act_id&mulitId=$!obj.id&currentPage=$!currentPage" class="blue">通过</a>#end #if($!obj.ag_status!=-1)<a href="$!webPath/activity_goods_refuse?act_id=$!act_id&mulitId=$!obj.id&currentPage=$!currentPage" class="blue">拒绝</a>#end</td>
+      </tr>
+      #end
+      
+#else
+<tr>
+	<td colspan="7">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end   
+      
+      
+    </table>
+    #if($!objs.size()>0)
+    <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/activity_goods_audit?act_id=$!act_id');">通过</a></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/activity_goods_refuse?act_id=$!act_id');">拒绝</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye"> 
+       <input name="ag_status" type="hidden" id="ag_status" value="$!ag_status" />
+          <input name="goods_name" type="hidden" id="goods_name" value="$!goods_name" />
+		  <input type="hidden" name="mulitId" id="mulitId" />
+          <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+            </div>
+        </div>
+        #end
+  </div>
+  </form>
+</div>
+</body>
+</html>

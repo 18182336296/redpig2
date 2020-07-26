@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>秒杀</title>
+    <link href="$!cdnServer/resources/yingerMall/css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="$!cdnServer/resources/yingerMall/css/common.css" />
+    <script src="$!cdnServer/resources/yingerMall/js/mui.min.js"></script>
+    <script type="text/javascript" src="$!cdnServer/resources/yingerMall/js/jquery-1.9.1.min.js" ></script>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav mui-sec-bar">
+    <a class="mui-icon mui-pull-left mui-icon-back-white" href="javascript:history.go(-1);"></a>
+    <h1 class="mui-title">秒杀列表</h1>
+    <a class="mui-icon mui-pull-right mui-icon-more-white" href="$!webPath/index" ></a>
+</header>
+
+<!--下拉刷新容器-->
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper mui-sec-wraper">
+    <div class="mui-scroll">
+        <!--数据列表-->
+        <ul class="mui-table-view">
+            #if($!objs.size()>0)
+            #foreach($obj in $objs)
+            <li class="mui-table-view-cell sec-table-view-cell" beginTime="$!CommUtil.formatLongDate($!obj.nuke.beginTime)" endTime="$!CommUtil.formatLongDate($!obj.nuke.endTime)">
+                <div class="mui-clearfix">
+                    <div class="mui-pull-left sec-cell-left">
+                        <a href="$!webPath/items?id=$!{obj.ng_goods.id}">
+                            <img width="90" height="90" src="$!imageWebServer/$!obj.ng_goods.goods_main_photo.path/$!{obj.ng_goods.goods_main_photo.name}_small.$!{obj.ng_goods.goods_main_photo.ext}">
+                        </a>
+                        <div class="sec-time-div">
+                            <span class="time-label">仅剩&nbsp;</span>
+                            <span class="time-span hour">--</span>&nbsp;:&nbsp;<span class="time-span minute">--</span>&nbsp;:&nbsp;<span class="time-span second">--</span>
+                        </div>
+                    </div>
+                    <div class="sec-cell-right">
+                        <div class="sec-flex">
+                            <div>
+                                <p class="sec-name mui-ellipsis">$!obj.ng_goods.goods_name</p>
+                                <div>
+                                    #set($cutdown = $obj.ng_goods.store_price - $obj.ng_price)
+                                    <span class="sec-sub">立减$cutdown元</span>
+                                    #set($left = $obj.ng_count - $obj.ng_nuke_count)
+                                    #if($left > 0)
+                                    <span class="sec-remain">仅剩$left件</span>
+                                    #else
+                                    <span class="sec-remain">已卖完</span>
+                                    #end
+                                </div>
+                            </div>
+                            <div>
+                                <p class="sec-price"><span>秒杀价</span>¥$!{obj.ng_price}</p>
+                                <div class="mui-clearfix">
+                                    <span class="act-price mui-pull-left">活动结束价￥$!{obj.ng_goods.store_price}</span>
+                                    #if($left > 0)
+                                    <span class="sec-btn mui-pull-right"><a href="$!webPath/items?id=$!{obj.ng_goods.id}" style="color: red;">马上秒</a></span>
+                                    #else
+                                    <span class="sec-btn mui-pull-right"><a href="javascript:void(0);" style="color: red;">已卖完</a></span>
+                                    #end
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            #end
+            #end
+        </ul>
+    </div>
+</div>
+<script>
+    mui.ready(function() {
+        //初始化区域滚动
+        var scroll = mui(".mui-scroll-wrapper").scroll();
+        //给列表添加倒计时
+        $("#pullrefresh").find(".sec-table-view-cell").each(function(e){
+            //给
+            var beginTime = new Date($(this).attr("beginTime"));
+            var endTime = new Date($(this).attr("endTime"));
+            var curTime = new Date();
+            if (curTime < beginTime){
+                //未开始，按钮变灰
+                $(this).find('span>a').css("color",'gray');
+                $(this).find('span>a').removeAttr("color",'gray');
+                $(this).find('span>a').text("未开始");
+            }else if(curTime > endTime){
+                //未开始，按钮变灰
+                $(this).find('span>a').css("color",'gray');
+                $(this).find('span>a').removeAttr("color",'gray');
+                $(this).find('span>a').text("已结束");
+            }else{
+                var leftTime = Math.abs(Date.parse(endTime) - Date.parse(curTime));
+                var index = $(this).index();
+                var _this = $(this);
+                var name = "timeInt" + index;
+
+                timeInFun(_this,leftTime);
+            }
+            /*if($(".sec-remain").text()=="已卖完"){
+                $(this).find('span>a').css("color",'gray');
+                $(this).find('span>a').removeAttr("color",'gray');
+                $(this).find('span>a').text("已卖完");
+            }*/
+
+        })
+    })
+    //
+    function timeInFun(_this,timeStamp){
+        var timeInt = setInterval(function(){
+            //判断是否大于1S
+            //var t = formatSecond(timeStamp);
+            if(timeStamp/1000 > 0){
+                _this.find(".hour").text(formatHours(timeStamp));
+                _this.find(".minute").text(formatMinutes(timeStamp));
+                _this.find(".second").text(formatSecond(timeStamp));
+                timeStamp = (timeStamp/1000 - 1)*1000;
+            }else{
+                //
+                timeInt = null;
+            }
+        },1000)
+    }
+    //时间倒数
+    function countDown(_this,timeStamp){
+        _this.find(".hour").text(formatHours(timeStamp));
+        _this.find(".minute").text(formatMinutes(timeStamp));
+        _this.find(".second").text(formatSecond(timeStamp));
+        timeStamp = timeStamp/1000 - 1;
+    }
+    //获取小时
+    function formatHours(mss) {
+        var hours = parseInt(mss / (1000 * 60 * 60));
+        hours = hours < 10 ? ('0' + hours) : hours;
+        return  hours;
+    }
+    //获取分钟
+    function formatMinutes(mss) {
+        var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+        minutes = minutes < 10 ? ('0' + minutes) : minutes;
+        return minutes;
+    }
+    //获取秒
+    function formatSecond(mss) {
+        var seconds = (mss % (1000 * 60)) / 1000;
+        //console.log(seconds);
+        seconds = seconds < 10 ? ('0' + seconds) : seconds;
+        //seconds = seconds < 10 && seconds >= 1 ? ('0' + seconds) : seconds;
+        return seconds;
+    }
+
+    //var thisTime = 4830000;
+    //console.log("时："+ formatHours(thisTime) + "-分：" + formatMinutes(thisTime) + "-秒：" + formatSecond(thisTime));
+</script>
+</body>
+</html>

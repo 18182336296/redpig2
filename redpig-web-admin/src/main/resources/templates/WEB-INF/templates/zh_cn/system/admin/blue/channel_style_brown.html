@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/public.css"  rel="stylesheet" type="text/css"/>
+
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath//resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<title>RedPigMall二级页面导航</title>
+</head>
+
+<body>
+<div class="cont">
+  <h3 class="seth">频道管理</h3>
+  <div class="nav_list">
+		<ul>
+        	<li><a href="$!webPath/channel_list"><b>管理</b></a></li>
+            <li><a href="$!webPath/channel_add" ><b>新增</b></a></li>
+            <li><a href="$!webPath/channel_list?id=$!obj.id"  class="this"><b>频道导航模板</b></a></li>
+        </ul>
+  </div>
+<div class="guide_gray" style="margin-left:18px">
+	<div class="left_nav">
+    	<h2 class="nav_title">$!obj.ch_name</h2>
+        <div class="nav_content">
+        	<dl class="left_nav_item"  style=" width:230px; height:120px; overflow:hidden;">
+        	<dt><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=1&style=2" dialog_title="编辑导航分类信息" dialog_width="600" dialog_height="100" dialog_top="100"  dialog_id="channel_style_2">编辑</a>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff;">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item"  style=" width:230px; height:90px; overflow:hidden;">
+        	<dt><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=2&style=2" dialog_title="编辑导航分类信息" dialog_width="600" dialog_height="100" dialog_top="100"  dialog_id="channel_style_2">编辑</a>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff;">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item"  style=" width:230px; height:90px; overflow:hidden;">
+        	<dt><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=3&style=2" dialog_title="编辑导航分类信息" dialog_width="600" dialog_height="100" dialog_top="100"  dialog_id="channel_style_2">编辑</a>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff;">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item"  style=" width:230px; height:120px; overflow:hidden;">
+        	<dt><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=4&style=2" dialog_title="编辑导航分类信息" dialog_width="600" dialog_height="100" dialog_top="100"  dialog_id="channel_style_2">编辑</a>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff;">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>		
+        <dl class="left_nav_item last"  style=" width:230px; height:90px; overflow:hidden;">
+        	<dt><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=5&style=2" dialog_title="编辑导航分类信息" dialog_width="600" dialog_height="100" dialog_top="100"  dialog_id="channel_style_2">编辑</a>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","5"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff;">$!gc.className</a>
+                 #end</dt>
+            <dd class="last">
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","5"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>	
+        </div>					
+    </div>
+    <div class="right_content">
+    	<div class="top_nav_box">
+            <ul class="navitems">
+                <li><a href="javascript:void(0);"  class="edit"   dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=1&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                     #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","1"))<a href="$!wc.href" target="_blank" style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);" class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=2&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","2"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=3&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","3"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=4&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","4"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=5&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","5"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=6&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","6"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=7&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","7"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=8&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","8"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=9&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","9"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=10&style=1" dialog_title="编辑导航文字信息" dialog_width="540" dialog_height="100" dialog_top="100"  dialog_id="channel_style_1">编辑</a>
+                    #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","10"))<a href="$!wc.href" target="_blank"style="color:#6A5447;">$!wc.name</a>#end
+                </li>
+            </ul>
+        </div>
+        <div class="slider_wrap_gray">
+            <div class="slideBox" style="background:none;">
+                <div> <a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=1&style=3" dialog_title="编辑导航信息" dialog_width="600" dialog_height="100" dialog_top="100"  dialog_id="channel_style_3">编辑</a></div>
+             <script src="$!webPath/advert_invoke?id=$!obj.ch_nav_advp_id"></script>   <div class="bd">
+                </div>
+            </div>
+        </div>
+        <div class="slide_bottom">
+        	<ul>
+    
+            	<li><a href="javascript:void(0);" class="edit"  dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=1&style=5" dialog_title="编辑导航信息" dialog_width="665" dialog_height="100" dialog_top="100"  dialog_id="channel_style_4">编辑</a>
+                 #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","1"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href"><img src="$!imageWebServer/$!goods.path"></a></span>
+                    #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=2&style=5" dialog_title="编辑导航信息" dialog_width="665" dialog_height="100" dialog_top="100"  dialog_id="channel_style_4">编辑</a>
+                      #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","2"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href"><img src="$!imageWebServer/$!goods.path"></a></span>
+                    #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=3&style=5" dialog_title="编辑导航信息" dialog_width="665" dialog_height="100" dialog_top="100"  dialog_id="channel_style_4">编辑</a>
+                      #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","3"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href"><img src="$!imageWebServer/$!goods.path"></a></span>
+                   #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+                <li><a href="javascript:void(0);"  class="edit" dialog_uri="$!webPath/channel_style?id=$!obj.id&seq=4&style=5" dialog_title="编辑导航信息" dialog_width="665" dialog_height="100" dialog_top="100"  dialog_id="channel_style_4">编辑</a>
+                     #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","4"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href"><img src="$!imageWebServer/$!goods.path"></a></span>
+                    #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+            </ul>
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+</html>

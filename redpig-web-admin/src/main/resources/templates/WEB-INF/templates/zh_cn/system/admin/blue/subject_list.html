@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  tipStyle();
+//设置推荐的默认装态
+	function recommendState(){
+	var state = jQuery("#recommend").val();
+	if(state=="true"){
+		jQuery("#recommend").val("false");
+		jQuery("#stateOff").show();
+		jQuery("#stateOn").hide();
+	}else{
+		jQuery("#recommend").val("true");
+		jQuery("#stateOff").hide();
+		jQuery("#stateOn").show();
+	}
+}
+});
+//网站logo file样式
+jQuery(function(){
+    var textButton="<input type='text' name='textfield' id='textfield1' class='size13' /><input type='button' name='button' id='button1' value='' class='filebtn' />"
+	jQuery(textButton).insertBefore("#brandLogo");
+	jQuery("#brandLogo").change(function(){
+	jQuery("#textfield1").val(jQuery("#brandLogo").val());
+	})
+});	
+//
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/subject_list_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+				   var dis = false;
+	             if(val==""){
+					if(data=="true"){
+					  dis = true;
+					 }
+				   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+dis+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+</script>
+<body>
+<div class="cont">
+  <h3 class="seth">专题管理</h3>
+  <div class="nav_list">
+  		<ul>
+        <li><a href="$!webPath/subject_list" class="this"><b>管理</b></a></li>
+        <li><a href="$!webPath/subject_add"><b>新增</b></a></li>
+        </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/subject_list" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="4%">&nbsp;</th>
+          <th width="10%"><span class="form_btna">排序</span></th>
+          <th width="58%"><span class="form_btna">标题</span></th>
+          <th width="10%" align="center"><span class="form_btna">显示</span></th>
+          <th  align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <tr>
+          <td  class="check_position"><label for="ids_$!obj.id"><input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl" /></label></td>
+          <td align="center"><span class="size90"> <input type="text" name="$!obj.sequence" id="$!obj.sequence"  value="$!obj.sequence"  onblur="ajax_update('$!obj.id','sequence',this)" title="可编辑"/></span></td>
+          <td align="center">$!obj.title</td>
+          #set($display="false")
+          #if($!obj.display==1)
+           #set($display="true")
+          #end
+          <td align="center"><img onclick="ajax_update('$!obj.id','display',this)" src="$!cdnServer/resources/style/system/manage/blue/images/$!{obj.display}.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑"/> </td>
+          <td class="hui oprate_con" align="center">
+          		<a href="$!webPath/subject_edit?id=$!obj.id" class="blue">编辑</a>
+                |<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续'))window.location.href='$!webPath/subject_del?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a>|<a href="$!webPath/subject_set?id=$!obj.id" class="blue">专题设计</a>
+                
+                </td>
+        </tr>
+        #end
+        #else
+        <tr>
+          <td colspan="5"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+        </tr>
+        #end
+    </table>
+    #if($!objs.size()>0)
+    <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/subject_del?currentPage=$!currentPage');">删除</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	 	<input name="mulitId" type="hidden" id="mulitId" />
+      	$!gotoPageFormHTML
+    </div>
+            </div>
+        </div>
+    #end
+  </div>
+  </form> 
+</div>
+</body>
+</html>

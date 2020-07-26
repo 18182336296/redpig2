@@ -1,0 +1,12 @@
+#if($!config.websiteLogo)
+#set($img="$!imageWebServer/$!{config.websiteLogo.path}/$!{config.websiteLogo.name}")
+#else
+#set($img="$!cdnServer/resources/style/system/front/default/images/logo.png")
+#end
+<div class="head_seller_top">
+  <div class="head_seller">
+    <h1 class="logo" title=""><span class="img_cspan">
+      <p><a href="$!webPath"><img src="$!img" width="209" height="70" /></a></p>
+      </span></h1>
+    <span class="logo_seller">商家中心</span></div>
+</div>

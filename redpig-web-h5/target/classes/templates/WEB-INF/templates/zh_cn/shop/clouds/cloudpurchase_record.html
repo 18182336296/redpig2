@@ -1,0 +1,25 @@
+#if($!objs.size()>0)
+<div class="content">
+  <div class="icon_start"><i></i></div>
+  <div class="record_detail">
+    <div class="date_start">$!objs.get(0).payTime.substring(0,10) <i class="icon_solid"></i> </div>
+    <ul class="p_record_list">
+      #foreach($!obj in $!objs)
+      <li class="p_item"> <span class="time">$!obj.payTime.substring(10,23)</span> <i class="icon_t"></i>
+        <div class="user_info "> <!--点击查看号码后添加info_show，则全部号码显示-->
+          <div class="inner">
+            <p class="info_p"> <span class="avatar"><img src="$!obj.user_photo" /></span> <a href="javascript:void(0)" class="blue_c">$!obj.user_name</a>参与了 <b class="red">$!obj.purchased_times人次</b> <a href="javascript:void(0)" class="hover_a" ></a><a href="javascript:void(0)" class="btn_close" onclick="show_numbers(this)"> 所有夺宝号码 <i class="hover_look"></i> </a> </p>
+            <a href="javascript:void(0)" class="btn_close" onclick="hide_numbers(this)" >x</a><!--点击后关闭全部号码框-->
+            <p class="codes"> #foreach($data in $goodsViewTools.query_LuceneVo_photos_url($!obj.purchased_codes))<b>$data</b>#end  </p>
+          </div>
+        </div>
+      </li>
+      #end
+    </ul>
+  </div>
+  <div class="icon_start"><i></i></div>
+</div>
+<div class="fenye" target_id="record"> <span> $!record_gotoPageAjaxHTML</span> </div>
+#else
+<div class="novalue"  style="margin:30px; text-align:center">还没有参与记录</div>
+#end

@@ -1,0 +1,89 @@
+<script src="$!cdnServer/resources/js/wap/iscroll-lite.js"></script>
+<script>
+
+</script>
+<div class="pop_nav" style="left:-90%">
+  <div class="pop_nav_top">全部分类</div>
+  <div class="pop_nav_left"  id="wrapper2">
+  <div id="scroller2">
+    <ul>
+     #foreach($gc in $!second_gcs)
+      <li  #if($!velocityCount==1) class="this" #end><a href="javascript:void(0);" onclick="show_goods_class('$!gc.id',this);" #if($!velocityCount==1) status='1' #else status='0' #end>$!gc.showName</a></li>
+     #end
+    </ul>
+    </div>
+  </div>
+  <div id="wrapper">
+    <div id="scroller">
+    #if($!sc2)
+      <ul id="pulli_$!{sc2.id}">
+        <li class="pli">
+          <div class="pop_item">
+            <ul>
+            #foreach($gc2 in $!showClassTools.getSclist($!sc2.id))
+              <li> <a href="javascript:void(0);" onClick="window.location.href='$!webPath/wap/class_items?gc_id=$!{gc2.id}'">
+                <div class="pop_item_img"> #if($!gc2.wx_icon) #set($wx_img=$!imageTools.queryImg($!gc2.wx_icon))<img src="$!imageWebServer/$!wx_img.path/$!wx_img.name"> #end</div>
+                <b class="pop_item_name">$!gc2.className</b> </a> </li>
+            #end 
+            </ul>
+          </div>
+        </li>
+      </ul>
+	#end
+    #foreach($gc in $!second_gcs)
+    	#if($!velocityCount>1)
+       <ul id="pulli_$!{gc.id}" style="display:none">
+       
+       </ul>
+       #end
+     #end
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var myScroll = new IScroll('#wrapper', {
+		scrollbars: false,
+		mouseWheel: true,
+		interactiveScrollbars: true,
+		shrinkScrollbars: 'scale',
+		click:true,
+		fadeScrollbars: true
+});
+var child_load=0;
+function show_goods_class(id,arg){
+	var status = jQuery(arg).attr('status');
+	jQuery("#scroller2 ul li").removeClass("this");
+	jQuery(arg).parent().addClass("this");
+	if(status=='0'&&child_load==0){
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/sec_goodsclass',
+				  data:{"type":"second","id":id},
+				 beforeSend:function(){
+				 child_load==1;
+				 jQuery("ul[id^=pulli_]").hide();
+				},
+			   success:function(data){
+				 jQuery("#pulli_"+id).html(data).show();
+			   child_load==0;
+			    jQuery(arg).attr('status','1');
+				myScroll.refresh();
+			   }
+	    });
+	}else if(status=='1'){
+		jQuery("ul[id^=pulli_]").hide();
+ 		 jQuery("#pulli_"+id).show();
+		 myScroll.refresh();
+	}
+}
+var myScroll2 = new IScroll('#wrapper2', {
+		scrollbars: false,
+		mouseWheel: true,
+		interactiveScrollbars: true,
+		shrinkScrollbars: 'scale',
+		preventDefault: false,
+		click:true,
+		fadeScrollbars: true
+});
+</script>
+     <div class="all_list_right"  onClick="hideClass();"><a class="back_top" href="javascript:void(0);"><ul><li>点</li><li>击</li><li>此</li><li>处</li><li>返</li><li>回</li><li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back_left.png" /></li></ul></a></div>
+    <div class="black_bg"></div>

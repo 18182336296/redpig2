@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ShipAddressMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.ShipAddress">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="sa_name" property="sa_name" jdbcType="VARCHAR"/>
+		<result column="sa_area_id" property="sa_area_id" jdbcType="BIGINT"/>
+		<result column="sa_type" property="sa_type" jdbcType="INTEGER"/>
+		<result column="sa_user_id" property="sa_user_id" jdbcType="BIGINT"/>
+		<result column="sa_user_name" property="sa_user_name" jdbcType="VARCHAR"/>
+		<result column="sa_addr" property="sa_addr" jdbcType="VARCHAR"/>
+		<result column="sa_default" property="sa_default" jdbcType="INTEGER"/>
+		<result column="sa_sequence" property="sa_sequence" jdbcType="INTEGER"/>
+		<result column="sa_user" property="sa_user" jdbcType="VARCHAR"/>
+		<result column="sa_telephone" property="sa_telephone" jdbcType="VARCHAR"/>
+		<result column="sa_company" property="sa_company" jdbcType="VARCHAR"/>
+		<result column="sa_zip" property="sa_zip" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.ShipAddress">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="sa_name" property="sa_name" jdbcType="VARCHAR"/>
+		<result column="sa_area_id" property="sa_area_id" jdbcType="BIGINT"/>
+		<result column="sa_type" property="sa_type" jdbcType="INTEGER"/>
+		<result column="sa_user_id" property="sa_user_id" jdbcType="BIGINT"/>
+		<result column="sa_user_name" property="sa_user_name" jdbcType="VARCHAR"/>
+		<result column="sa_addr" property="sa_addr" jdbcType="VARCHAR"/>
+		<result column="sa_default" property="sa_default" jdbcType="INTEGER"/>
+		<result column="sa_sequence" property="sa_sequence" jdbcType="INTEGER"/>
+		<result column="sa_user" property="sa_user" jdbcType="VARCHAR"/>
+		<result column="sa_telephone" property="sa_telephone" jdbcType="VARCHAR"/>
+		<result column="sa_company" property="sa_company" jdbcType="VARCHAR"/>
+		<result column="sa_zip" property="sa_zip" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,sa_name,sa_area_id,sa_type,sa_user_id,sa_user_name,sa_addr,sa_default,sa_sequence,sa_user,sa_telephone,sa_company,sa_zip
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="sa_name != null">and sa_name = #{sa_name,jdbcType=VARCHAR}</if>
+		<if test="sa_area_id != null">and sa_area_id = #{sa_area_id,jdbcType=BIGINT}</if>
+		<if test="sa_type != null">and sa_type = #{sa_type,jdbcType=INTEGER}</if>
+		<if test="sa_user_id != null">and sa_user_id = #{sa_user_id,jdbcType=BIGINT}</if>
+		
+		<if test="sa_user_ids != null and sa_user_ids.size() &gt; 0">
+			and sa_user_id in
+			<foreach collection="sa_user_ids" index="index" item="item" separator="," open="(" close=")"> 
+	            #{item}
+	    	</foreach>
+		</if>
+		
+		<if test="sa_user_name != null">and sa_user_name = #{sa_user_name,jdbcType=VARCHAR}</if>
+		<if test="sa_addr != null">and sa_addr = #{sa_addr,jdbcType=VARCHAR}</if>
+		<if test="sa_default != null">and sa_default = #{sa_default,jdbcType=INTEGER}</if>
+		<if test="sa_sequence != null">and sa_sequence = #{sa_sequence,jdbcType=INTEGER}</if>
+		<if test="sa_user != null">and sa_user = #{sa_user,jdbcType=VARCHAR}</if>
+		<if test="sa_telephone != null">and sa_telephone = #{sa_telephone,jdbcType=VARCHAR}</if>
+		<if test="sa_company != null">and sa_company = #{sa_company,jdbcType=VARCHAR}</if>
+		<if test="sa_zip != null">and sa_zip = #{sa_zip,jdbcType=VARCHAR}</if>
+	</sql>
+	<sql id="ifStatement">
+		sa_name= #{sa_name},
+		sa_area_id= #{sa_area_id},
+		sa_type= #{sa_type},
+		sa_user_id= #{sa_user_id},
+		sa_user_name= #{sa_user_name},
+		sa_addr= #{sa_addr},
+		sa_default= #{sa_default},
+		sa_sequence= #{sa_sequence},
+		sa_user= #{sa_user},
+		sa_telephone= #{sa_telephone},
+		sa_company= #{sa_company},
+		sa_zip= #{sa_zip},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.ShipAddress" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ship_address 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.ShipAddress" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ship_address obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_ship_address obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.ShipAddress" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_ship_address obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.ShipAddress" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_ship_address(addTime,deleteStatus,sa_name,sa_area_id,sa_type,sa_user_id,sa_user_name,sa_addr,sa_default,sa_sequence,sa_user,sa_telephone,sa_company,sa_zip)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{sa_name,jdbcType=VARCHAR},#{sa_area_id,jdbcType=BIGINT},#{sa_type,jdbcType=INTEGER},#{sa_user_id,jdbcType=BIGINT},#{sa_user_name,jdbcType=VARCHAR},#{sa_addr,jdbcType=VARCHAR},#{sa_default,jdbcType=INTEGER},#{sa_sequence,jdbcType=INTEGER},#{sa_user,jdbcType=VARCHAR},#{sa_telephone,jdbcType=VARCHAR},#{sa_company,jdbcType=VARCHAR},#{sa_zip,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.ShipAddress">
+		update redpigmall_ship_address
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_ship_address where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_ship_address where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.ShipAddress" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_ship_address obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.ShipAddress" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ship_address obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.ShipAddress" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_ship_address
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_ship_address where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

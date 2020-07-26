@@ -1,0 +1,21 @@
+﻿#foreach($obj in $objs)
+<dl>
+   #if($!obj.goods_main_photo)
+      #set($small_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+   #else
+      #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+   #end
+  <dt><a href="$!webPath/items_$!{obj.id}" target="_blank"><img src="$!small_img" /></a></dt>
+  <span class="contrast_center_center_close" goods_id="$!obj.id">X</span>  
+  <dd><a href="$!webPath/items_$!{obj.id}" target="_blank">$!obj.goods_name</a></dd>
+</dl>
+#end
+#if($!compare_goods_flag)
+#if($!compare_goods_flag==0)
+<input type="hidden" id="ajaxed" value="$!compare_goods_flag" />
+#else
+<script>
+showDialog("msg_info","","商品主分类不一致，无法对比！",2,"warning",3,'');
+</script>
+#end
+#end

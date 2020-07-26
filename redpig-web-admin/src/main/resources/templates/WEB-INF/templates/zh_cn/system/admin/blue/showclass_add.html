@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/jquery.bigcolorpicker.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.bigcolorpicker.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	  jQuery("#cid").val("$!obj.channel_id");
+	  jQuery("#ap_id").val("$!aap_id");
+	  jQuery("a[id^=ic_count_]").removeClass("this");
+	  var icon = "$!obj.icon_sys";
+	  jQuery("#ic_count_"+icon).addClass("this");
+	  var val="$!obj.show_type";
+	  if(val!=""){
+	  jQuery("ul[id^=img_adv_]").hide();
+	  jQuery("ul[id^=goods_adv_]").hide();
+	  jQuery("ul[id^=system_adv_]").hide();
+	  if(val=="0"){
+	  jQuery("ul[id^=img_adv_]").show();
+	  }
+	  if(val=="1"){
+	   jQuery("ul[id^=goods_adv_]").show();
+	  }  
+	  }
+	  var ic_sys = "$!obj.icon_type";
+	  if(ic_sys==1){
+	  jQuery("#icon_sys_ul").hide();
+	  jQuery("#icon_acc_ul").show();	  
+	  }else{
+	  jQuery("#icon_sys_ul").show();
+	  jQuery("#icon_acc_ul").hide();		  
+	  }
+	  var val = "$!adv_type";
+	  jQuery("ul[id^=sc_adv_]").hide();
+	  if(val==1){
+	  jQuery("#sc_adv_1").show();
+	  jQuery("#sc_adv_3").show();}
+	  if(val==0){
+	  jQuery("#sc_adv_0").show();}	 
+jQuery("#goodsTypeBrandshow").show();
+      var val = "$!obj.parent.id";
+	  if(val==""){
+		  jQuery("#select_class").hide(); 
+		  }else{ 
+		  jQuery("#select_class").show();
+		  jQuery("#icon").hide(); //隐藏品牌
+		  jQuery("#icon_sys_ul").hide(); //隐藏广告
+		  jQuery("#se_brand").hide(); //隐藏广告
+		  jQuery("#goodsTypeBrandshow").hide(); //隐藏广告
+		  jQuery("#sc_color_ul").hide(); //隐藏广告
+		  jQuery("#sc_adv_0").hide(); //隐藏广告
+		  jQuery("#sc_adv_1").hide();
+		  jQuery("#sc_adv_3").hide();  
+		  jQuery("#adv_type_ul").hide();
+		 }
+var sc_id = "$!obj.id";
+			jQuery.ajax({type:'POST',
+					url:'$!webPath/showclass_brand',
+					data:{"sc_id":sc_id},
+					success:function(data){
+						var list = jQuery.parseJSON(data);
+						if(list==null){
+							jQuery("#al_brand").after("<li id='li_al_brand'>未添加品牌请先添加</li>");
+						}
+						jQuery("#goodsTypeBrandshow").find("span:first").empty();
+						jQuery.each(list,function(index,obj){
+							jQuery("#goodsTypeBrandshow").find("span:first").append("<label class='type_brand'><input type='checkbox' mark='brand'  id='brand_sas_"+obj.id+"' value='"+obj.id+"'/><b>"+obj.name+"</b></label>");
+						}); 
+						//设置已选中
+							#if($!gbs.size()>0)
+								#foreach($gb in $gbs)
+								jQuery("#goodsTypeBrandshow").find("input[type='checkbox'][value='"+$!{gb.id}+"']").attr("checked",true);
+								#end
+							#end	
+					}
+});	
+
+	 jQuery("#logoShow").mouseover(function(){								
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+	  jQuery("#logoShow3").mouseover(function(){								
+	    jQuery("#logoImg4").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg4").css('display','none');
+	});
+	jQuery("#sc_color").bigColorpicker(function(el,color){
+	jQuery(el).val(color);
+	});	 
+	jQuery(".webSwitch img").click(function(){
+	var dis = jQuery(this).siblings("input").val()
+	if(dis=="true"){
+	jQuery(this).attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	jQuery(this).siblings("input").val("false");
+	}else{
+	jQuery(this).attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	jQuery(this).siblings("input").val("true");
+	}
+	})
+	jQuery("input[type='radio'][name='type']").click(function(){//展示类目链接方法
+     var val=jQuery(this).val();
+	  jQuery("ul[id^=img_adv_]").hide();
+	  jQuery("ul[id^=goods_adv_]").hide();
+	   jQuery("ul[id^=system_adv_]").hide();
+	 if(val=="0"){
+	  jQuery("ul[id^=img_adv_]").show();
+	 }
+	 if(val=="1"){
+	   jQuery("ul[id^=goods_adv_]").show();
+	 }
+  });
+   jQuery("input[type='radio'][name='icon_type']").click(function(){//展示类目选择图标
+	 var val = jQuery(this).attr("value");
+	  if(val==1){
+	  jQuery("#icon_sys_ul").hide();
+	  jQuery("#icon_acc_ul").show();	  
+	  }else{
+	  jQuery("#icon_sys_ul").show();
+	  jQuery("#icon_acc_ul").hide();		  
+	  }
+  });
+  jQuery("#search_button").click(function(){
+	if(jQuery("#brand_show_list").length>0){
+	jQuery("#brand_show_list").remove();
+	}else{
+		var brand_name =jQuery("#brand_name").val();
+var brand_class =jQuery("#brand_class").val();
+var sc_id = jQuery("#id").val();
+			jQuery.ajax({type:'POST',
+					url:'$!webPath/search_brand',
+					data:{"brand_name":brand_name,
+						  "brand_class":brand_class,
+						  "sc_id":sc_id,
+						  "currentPage":1
+					},
+					success:function(data){
+						jQuery("#brand_show_list").remove();
+						jQuery("#se_brand").after(data);
+						jQuery("#brand_name").val(brand_name);
+						jQuery("#brand_class").val(brand_class);
+						jQuery(":checkbox[checked=true][mark='brand']").each(function(){
+							 var mark = jQuery(this).val();
+							 jQuery("#brand_sear_"+mark).attr("checked",true);
+						});
+					}
+				});	
+	}		
+});
+   jQuery("input[type='radio'][name='adv_type']").change(function(){//广告
+	 var val = jQuery(this).attr("value");
+	 jQuery("ul[id^=sc_adv_]").hide();
+	 if(val==1){
+	jQuery("#sc_adv_1").show();
+	jQuery("#sc_adv_3").show();
+		 }
+	if(val==0){
+	jQuery("#sc_adv_0").show();	 
+		 }	 
+  });
+  jQuery("#icon_acc").change(function(){
+	jQuery("#textfield").val(jQuery("#icon_acc").val());
+})
+jQuery("#sc_adv").change(function(){
+	jQuery("#textfield1").val(jQuery("#sc_adv").val());
+})
+var sc_pt = "$!obj.childs";
+   jQuery("#pid").change(function(){
+	 if(sc_pt=="[]" || sc_pt==""){
+	 var val = jQuery(this).val();
+	  if(val==""){
+		  jQuery("#select_class").hide(); 
+		  jQuery("#icon").show(); 		 
+		  jQuery("#se_brand").show(); //显示品牌
+		  jQuery("#goodsTypeBrandshow").show(); //显示广告
+		  jQuery("#sc_color_ul").show(); //隐藏广告
+		  jQuery("#adv_type_ul").show();
+		  var ic_sys = "$!obj.icon_type";
+	 	  if(ic_sys==1){
+	 	  jQuery("#icon_sys_ul").hide();
+	 	  jQuery("#icon_acc_ul").show();	  
+	 	  }else{
+	 	  jQuery("#icon_sys_ul").show();
+	      jQuery("#icon_acc_ul").hide();		  
+	      }
+	      var val = "$!adv_type";
+	      jQuery("ul[id^=sc_adv_]").hide();
+	      if(val==1){
+	      jQuery("#sc_adv_1").show();
+	      jQuery("#sc_adv_3").show();}
+	      if(val==0){
+	      jQuery("#sc_adv_0").show();}
+		  }else{
+		  jQuery("#select_class").show(); 	   
+		  jQuery("#icon").hide(); //隐藏品牌
+		  jQuery("#icon_sys_ul").hide(); //隐藏广告
+		  jQuery("#icon_acc_ul").hide(); //隐藏广告
+		  jQuery("#se_brand").hide(); //隐藏广告
+		  jQuery("#goodsTypeBrandshow").hide(); //隐藏广告
+		  jQuery("#sc_color_ul").hide(); //隐藏广告
+		  jQuery("#sc_adv_0").hide(); //隐藏广告
+		  jQuery("#sc_adv_1").hide();
+		  jQuery("#sc_adv_3").hide();  
+		  jQuery("#adv_type_ul").hide();
+		 }	 
+	 }else{   
+	      jQuery("#pid").val("");
+		  alert("已有下级展示类目，请先删除下级展示类目");  	
+	 }
+	 });
+  
+	jQuery("input[id^=brand_sas_]").live("click",function(){
+		var vas = jQuery(this).val();
+	 if(jQuery(this).attr("checked")=="checked"){
+			jQuery("#brand_sear_"+vas).attr("checked",true);
+			
+	 }else{
+		jQuery("#brand_sear_"+vas).attr("checked",false);
+	 }	
+	});
+    jQuery(".icon_sys a").click(function(){
+	  jQuery("#icon_sys").val(jQuery(this).attr("icon"));
+	  jQuery(this).parent().find("a").removeClass("this");
+	  jQuery(this).addClass("this");
+	  });
+	  
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+     jQuery("#logoShow").mouseover(function(){								
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+  jQuery("#theForm").validate({
+    rules:{
+	  showName:{required :true},
+	  sequence:{digits:true}
+	 },
+	messages:{
+	  showName:{required:"名称不能为空"},
+	  sequence:{digits:"请填写正整数"} 
+	}
+  });
+ jQuery("#pid").val("$!obj.parent.id");  
+});
+function remove_ab(){
+	jQuery("#brand_show_list").remove();
+}
+function search_brand(){
+var brand_name =jQuery("#brand_name").val();
+var brand_class =jQuery("#brand_class").val();
+var sc_id = jQuery("#id").val();
+			jQuery.ajax({type:'POST',
+					url:'$!webPath/search_brand',
+					data:{"brand_name":brand_name,
+						  "brand_class":brand_class,
+						  "sc_id":sc_id,
+						  "currentPage":1
+					},
+					success:function(data){
+						jQuery("#brand_show_list").remove();
+						jQuery("#se_brand").after(data);
+						jQuery("#brand_name").val(brand_name);
+						jQuery("#brand_class").val(brand_class);
+						jQuery(":checkbox[checked=true][mark='brand']").each(function(){
+							 var mark = jQuery(this).val();
+							 jQuery("#brand_sear_"+mark).attr("checked",true);
+						});
+					}
+				});	
+				
+}
+function ajaxPage(url,page,obj){
+var brand_name =jQuery("#brand_name").val();
+var brand_class =jQuery("#brand_class").val();
+var sc_id = jQuery("#id").val();
+ jQuery.ajax({type:'POST',url:url,data:{"currentPage":page,"brand_name":brand_name,
+						  "brand_class":brand_class,"sc_id":sc_id},
+			  success:function(data){
+				  jQuery("#brand_show_list").remove();
+					jQuery("#se_brand").after(data);
+					jQuery("#brand_name").val(brand_name);
+					jQuery("#brand_class").val(brand_class);	
+					jQuery(":checkbox[checked=true][mark='brand']").each(function(){
+							 var mark = jQuery(this).val();
+							 jQuery("#brand_sear_"+mark).attr("checked",true);
+						});																										               }																																		    });
+}
+function saveForm(method){
+	var scbrand_ids = "";
+	jQuery(":checkbox[checked=true][mark='brand']").each(function(){
+	scbrand_ids = scbrand_ids+","+jQuery(this).val();
+	});
+	jQuery("#scbrand_ids").val(scbrand_ids);
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">展示类目</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/showclass_list"><b>管理</b></a></li>
+      <li><a href="$!webPath/showclass_add" #if(!$!edit)class="this" #end ><b>新增</b></a></li>
+      #if($!edit)
+      <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+      #end
+    </ul>
+  </div>
+  <form action="$!webPath/showclass_save" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id"/>
+    <input name="gc_ids" type="hidden" id="gc_ids" value="$!gc_ids"/>
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="scbrand_ids" id="scbrand_ids" type="hidden"   />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/showclass_list" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/showclass_add" />
+    <div class="edit">
+      <div class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>名称</li>
+          <li><span class="webSwitch">
+            <input name="showName" type="text" id="showName" value="$!obj.showName" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">排序序号</li>
+          <li><span class="webSwitch">
+            <input name="sequence" id="sequence" type="text" value="$!obj.sequence" />
+            </span> <span id="nothis"><strong class="q"></strong><strong class="w">序号越小排名越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg">上级类目</li>
+          <li><span class="webnamesec sizese">
+            <select name="pid" id="pid" >
+              <option value="">请选择上级类目...</option>
+			  #foreach($sc in $scs)              
+              <option value="$!sc.id">$!sc.showName</option>
+              #end            
+            </select>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的类目则为被选择上级类目的子类目，<i style="color:#F00;">二级类目下可关联商品分类</i></strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1" id="select_class">
+          <li  class="setcont_bg">关联商品分类</li>
+          <li> <span>
+			<a href="javascript:void(0);"style="cursor:pointer;" class="search_btn" dialog_uri="$!webPath/select_goodsclass?id=$!obj.id" dialog_title="选择关联的商品分类" dialog_width="770" dialog_height="300" dialog_id="buy_goods">编辑</a>	
+            </span> <span class="use_code"><strong> </strong></span><strong></strong></li>
+          <li> <span style="width:740px;"> </span><span class="use_code"><strong> </strong></span><span id="nothis"><strong class="q"></strong><strong class="w">只可在二级展示类目下关联商品分类，关联的商品分类将显示在该展示类目的下级</strong></span> <strong></strong></li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg">选择跳转的链接</li>
+          <li><span class="webnamesec sizese">
+            <label>
+              <input name="type" type="radio" id="type" value="0" #if($!obj.show_type==0||!$!obj.show_type) checked="checked" #end />
+              自定义链接</label>
+            <label>
+              <input name="type" type="radio" id="type" value="1" #if($!obj.show_type==1) checked="checked" #end />
+              二级频道 </label>
+           </span>   
+           <span id="nothis"><strong class="q"></strong><strong class="w">选择点击展示类目跳转到的页面，不填写则查询该展示类目下所有分类的商品</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1" id="img_adv_">
+          <li class="setcont_bg">链接地址</li>
+          <li id="img_adv_"><span class="webSwitch" >
+            <input name="url" id="url" type="text" value="$!obj.url" size="40" />
+            </span> <span id="nothis"><strong class="q"></strong><strong class="w">链接前请加http://，不填写跳转到商品列表页，填写跳转到对应页面</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul id="goods_adv_" style="display:none;" class="set1">
+          <li class="setcont_bg">二级频道</li>
+          <li><span>
+            <select name="cid" id="cid" >
+                         
+			  #foreach($cs in $css)
+              
+              <option value="$!cs.id">$!cs.ch_name</option>
+              
+              #end
+            
+            </select>
+            </span> <span id="nothis"><strong class="q"></strong><strong class="w">点击后跳转到指定的二级频道</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">微信二级频道页</li>
+          <li><span>
+            <select name="wxcid" id="wxcid" >
+                <option value="">请选择要跳转的微信二级频道链接</option>  
+			  #foreach($wxc in $wxcs)
+              
+              <option value="$!wxc.id" #if($!obj.weixinChannel_id==$!wxc.id) selected="selected" #end>$!wxc.ch_name</option>
+              
+              #end
+            
+            </select>
+            </span> <span id="nothis"><strong class="q"></strong><strong class="w">点击后跳转到指定的微信二级频道</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1" id="icon">
+          <li class="setcont_bg">图标</li>
+          <li> <span>
+            <input name="icon_type" id="type1"  type="radio" #if($!obj.icon_type==0 || !$!obj.icon_type) checked="checked" #end value="0">
+            <label for="type1">系统图标</label>
+            <input name="icon_type" id="type2"  type="radio"  #if($!obj.icon_type==1) checked="checked" #end value="1">
+            <label for="type2">自定义图标</label>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">商城分类图标只在一级分类旁显示，最佳尺寸为：18x20</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1" id="icon_sys_ul" >
+          <li class="setcont_bg">系统图标</li>
+          <li>
+            <div class="icon_sys" id="icon_sys_id"> <a href="javascript:void(0);" id="ic_count_" icon="" class="this"><img src="$!cdnServer/resources/style/common/images/icon/default_icon.png" /></a> #foreach($count in [1..39]) <a href="javascript:void(0);" icon="$!count" id="ic_count_$!count"><img src="$!cdnServer/resources/style/common/images/icon/icon_$!{count}.png" /></a> #end </div>
+          </li>
+          <input name="icon_sys" type="hidden" id="icon_sys" value="$!obj.icon_sys"  />
+        </ul>
+        <ul class="set1" id="icon_acc_ul" style="display:none" >
+          <li class="setcont_bg">图标上传</li>
+          <li> <span class="size13" >
+            <input name="textfield" type="text" id="textfield" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="icon_acc" type="file" id="icon_acc" class="file-text" size="30"/>
+            </span> <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.photo_id)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图标</strong><strong class="c"></strong></span>#end
+            #if($!obj.photo_id)
+            #set($icon_img="$!imageWebServer/$!showClassTools.getaccessory($!obj.photo_id).path/$!showClassTools.getaccessory($!obj.photo_id).name")
+            <div class="bigimgpre" id="logoImg" style="display:none; left:380px;"><img src="$!icon_img"  width="50" height="50" id="logoShow2"/> </div>
+            #end </li>
+        </ul>
+        <ul class="set1" id="se_brand">
+          <li  class="setcont_bg">品牌添加</li>
+          <li> <span>
+            <input name="search" id="search_button"  class="search_btn" type="button" value="添加" />
+            </span> 
+            <span id="nothis"><strong class="q"></strong><strong class="w">点击品牌添加搜索品牌，可以将品牌添加到已选品牌中</strong></span> <strong></strong></li>
+        </ul>
+        <ul class="set1" id="goodsTypeBrandshow" style="display:none">
+          <li  class="setcont_bg" id="al_brand">已选品牌</li>
+          <li> <span style="width:700px;"> </span><span id="nothis"><strong class="q"></strong><strong class="w">设置后在首页分类弹出层中顶部显示</strong></span></li>
+        </ul>
+        <ul class="set1"  id="sc_color_ul">
+          <li class="setcont_bg">底层颜色</li>
+          <li><span class="size70">
+            <input name="sc_color" type="text" id="sc_color" #if($!obj.gc_color) value="$!obj.sc_color" #else value="#E60012" #end style="cursor:pointer" readonly="readonly"/>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">设置分类底层以及弹出层的颜色</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1" id="adv_type_ul">
+          <li class="setcont_bg">广告类型</li>
+          <li> <span>
+           <input name="adv_type" id="adv_type1"  type="radio" #if($!adv_type==0 || !$!adv_type) checked="checked" #end value="0">
+            <label for="adv_type1">系统广告</label>
+            <input name="adv_type" id="adv_type2"  type="radio" #if($!adv_type==1) checked="checked" #end value="1">
+            <label for="adv_type2">自定义</label>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">广告将出现在导航栏品牌显示的下方</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1" id="sc_adv_0">
+          <li  class="setcont_bg">系统广告</li>
+          <li> <span>
+            <select name="ap_id" id="ap_id">
+              <option value="">请选择...</option>
+		          #foreach($ap in $!aps)
+              <option value="$!ap.id">$!{ap.ap_title}</option>
+		           #end  
+            </select>
+            </span>
+           </li>
+           
+           <li> <span></span>
+            <span id="nothis"><strong class="q"></strong><strong class="w">请先在运营中的广告管理编辑系统广告位的广告 </strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1" id="sc_adv_1" style="display:none" >
+          <li class="setcont_bg">广告上传</li>
+          <li> <span class="size13" >
+            <input name="textfield1" type="text" id="textfield1" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="sc_adv" type="file" id="sc_adv" class="file-text" size="30"/>
+            </span> <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow3" style="cursor:help"/> </span><span id="nothis"><strong class="q"></strong><strong class="w">为了能体现出弹出层广告效果，建议广告图片背景透明，宽度大于230px</strong><strong class="c"></strong></span> #if($!acc_img)
+            <div class="bigimgpre" id="logoImg4" style="display:none; left:350px;"><img src="$!{acc_img}"  width="100" height="150"/> </div>
+            #end </li>
+        </ul>
+        <ul class="set1" id="sc_adv_3" style="display:none">
+          <li class="setcont_bg">广告链接</li>
+          <li><span class="webname">
+            <input name="sc_adv_url" type="text" id="sc_adv_url" value="$!acc_url" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">链接前请加http://，例如http://redpigmall.net</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">显示</li>
+          <li class="webSwitch" id="display_on"> #if($!obj.display=="true"||!$!obj)
+            <input name="display" id="display" type="hidden" value="true" />
+            #else
+            <input name="display" id="display" type="hidden" value="$!obj.display" />
+            #end
+            #if($!obj.display=="true"||!$!obj)<img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="displayOn" style="cursor:pointer"/>#end
+            #if($!obj.display=="false")<img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="displayOn"  style="cursor:pointer"/>#end </li>
+          <li><span id="nothis"><strong class="q"></strong><strong class="w"> 显示为开本展示类目将显示在导航栏</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">推荐</li>
+          <li class="webSwitch"> <span>
+            <input name="recommend" id="recommend" type="hidden" #if($!obj.recommend=="true"||!$!obj) value="true" #else value="$!obj.recommend" #end />
+            #if($!obj.recommend=="true"||!$!obj)
+            <img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="recommendOn" onclick="recommendState();" style="cursor:pointer"/> 
+            #end
+            #if($!obj.recommend=="false")
+            <img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="recommendOff" onclick="recommendState();" style="cursor:pointer"/>
+            #end
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">推荐商品分类将会在首页楼层显示</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">SEO关键字</li>
+          <li><span class="webname">
+            <textarea name="seo_keywords" cols="40" rows="6" id="seo_keywords">$!obj.seo_keywords</textarea>
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">SEO描述</li>
+          <li><span class="webname">
+            <textarea name="seo_description" cols="40" rows="6" id="seo_description">$!obj.seo_description</textarea>
+            </span></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>1元云购去支付 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+function submit_form(){
+    jQuery("#theForm").submit();	
+}
+</script>
+</head>
+
+<body>
+<div class="phone_hd">
+   <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png"></a>
+    支付订单
+     <a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png"></a>
+</div>
+<form id="theForm" method="post" action="$!webPath/cloudpurchase_cart3">
+<div class="s_pay_order" style="margin-top:2rem;">
+	<ul class="pay_order_list">
+    #set($all_price=0)
+     #foreach($obj in $objs)
+     #set($all_price=$!all_price+$!obj.purchased_times)
+     #if($!obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo)                              					  
+        #set($img="$!obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li>
+        	<div class="goods_pic"><a href="$!webPath/cloudpurchase_items?id=$!obj.cloudPurchaseLottery.id"><img src="$!img"></a></div>
+            <div class="submit_info">
+            	<p class="item_name">$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</p>
+            	<p class="part_number"><b class="red">$!obj.purchased_times</b>人次</p>
+            </div>
+        </li>
+     #end
+     <input value="$!cart_session_id" name="cart_session_id" type="hidden" id="cart_session_id"/>
+    </ul>
+    <p class="pay_order_t">商品合计：<b class="red">$!{all_price}元</b></p>
+</div>
+</form>
+<div style="height:65px;"></div>
+<div class="pay_submit">
+    #if($!objs.size()>0)
+	<a href="javascript:void(0);" onClick="submit_form();">去支付</a>
+    #end
+</div>
+</body>
+</html>

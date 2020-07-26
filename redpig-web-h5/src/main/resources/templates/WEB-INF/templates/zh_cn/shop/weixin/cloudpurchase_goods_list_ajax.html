@@ -1,0 +1,22 @@
+#foreach($cpl in $cpls)
+<li class="cw_item">
+<div class="goods_pic"><a href="$!webPath/cloudpurchase_items?id=$!cpl.id"><img src="$!cpl.cloudPurchaseGoods.primary_photo"></a></div>
+<div class="goods_info">
+<p class="w_text">$!cpl.cloudPurchaseGoods.goods_name</p>
+<div class="w_progressBar">
+<p class="w_line">
+#set($p = 100*$!cpl.purchased_times/$!cpl.cloudPurchaseGoods.goods_price)
+<span class="w_bar" style="width:$!{p}%"><!--进度条由百分比控制-->
+<i class="color"></i>
+</span>
+</p>
+<ul class="txt">
+<li class="txt_1">总需$!cpl.cloudPurchaseGoods.goods_price 人次</li>
+<li class="txt_2">剩余$!cpl.purchased_left_times</li>
+</ul>
+</div>
+</div>
+<a  #if(!$!user)href="$!webPath/login" #else href="javascript:void(0);" id="add_cart_$!{cpl.cloudPurchaseGoods.id}" lottery_id="$!cpl.id"  goods_img="$!cpl.cloudPurchaseGoods.primary_photo"   #end><div class="goods_shortFunc"></div></a>
+ #if($!cpl.cloudPurchaseGoods.least_rmb==10) <div class="ten_area"></div>#end
+</li>
+#end

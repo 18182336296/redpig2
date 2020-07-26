@@ -1,0 +1,9 @@
+﻿<h3>试用报告</h3>
+        #foreach($!obj in $!fal_objs )
+        <div class="try_out_one">
+        	<i>$!{obj.freegoods_name}<b>$!CommUtil.formatShortDate($!obj.addTime)</b></i>
+            <span>$!obj.use_experience</span>
+        </div>
+        
+        #end
+ <div class="details_discus_page"><span target_id="goods_fal">$!fal_gotoPageAjaxHTML</span></div>

@@ -1,0 +1,457 @@
+<div id="cover">
+    <div class="inner" height="480px;">
+      <div class="cover_col1">
+        <div class="nav_cate_menu">
+          <div class="cate">
+            <!-- 一级菜单 -->
+            <ul class="cate_menu">
+            #foreach($sc in $!sc_list)
+            #if($!sc.display==true)
+              <li class="cate_menu_item">
+                
+                #if($!sc.recommend==false) 
+	              	#set($s_ccs=$!showClassTools.getSecondSclist($!sc.id,"3"))
+		              #if($!s_ccs.size()>0)
+		              #foreach($sgc in $!s_ccs)
+			               <a class="cate_menu_lk" 
+			               #if($!sgc.show_type=="0")
+				               #if($!sgc.url=="") 
+				               		href="$!webPath/store_goods_list?sc_id=$!{sgc.id}"
+				               #else
+				               		href ="$!sgc.url"
+				               #end
+			               #end
+			              #if($!sgc.show_type=="1") href ="$!webPath/channel/index_$!{sgc.channel_id}" #end target="_blank" > $!sgc.showName</a> 
+			              
+			              #if($!s_ccs.size()!=$!{velocityCount})/#end
+			          #end
+			              
+			          #else 
+			              	<a class="cate_menu_lk" #if($!sc.show_type=="0") #if($!sc.url=="") href="$!webPath/store_goods_list?sc_id=$!{sc.id}" #else href ="$!sc.url" #end #end
+			            		#if($!sc.show_type=="1") href ="$!webPath/channel/index_$!{sc.channel_id}" #end target="_blank">$!sc.showName</a> 
+			          #end 
+	              #else
+	              	<a class="cate_menu_lk" #if($!sc.show_type=="0") #if($!sc.url=="") href="$!webPath/store_goods_list?sc_id=$!{sc.id}" #else href ="$!sc.url" #end #end
+	            		#if($!sc.show_type=="1") href ="$!webPath/channel/index_$!{sc.channel_id}" #end target="_blank">$!sc.showName</a> 	
+	              #end
+                
+                #set($adv_map=$!showClassTools.query_sc_advert_colony($!sc.id,"$!webPath","$!imageWebServer"))
+                #set($scbsrc=$!showClassTools.getscbrandsrc($!sc.id,"6"))
+                <!-- 二级菜单 -->
+                <div class="cate_part" id="cate_item$!sc.id">
+                  <div class="cate_part_col1">
+                    <div class="cate_channel">
+                      #set($scb=$!showClassTools.getscbrand($!sc.id))
+                      #if($!scb.size()>0)
+                      	#foreach($map in $scb)
+                      		<a href="$!webPath/brand_goods_$!{map.get('id')}" class="cate_channel_lk">$!{map.get('name')}<i class="iconfont cate_channel_arrow">&#xe627;</i></a>
+                      	#end
+                      #end
+                    </div>
+                    <div class="cate_detail">
+                      #foreach($scc in $sc.childs)
+	        			#if($!scc.display==true)
+	                      <dl class="cate_detail_item cate_detail_item1">
+	                        <dt class="cate_detail_tit">
+	                          <a class="cate_detail_tit_lk"
+		                       #if($!scc.show_type=="0")
+			                       #if($!scc.url=="")
+			                       	href="$!webPath/store_goods_list?sc_id=$!{scc.id}" 
+			                       #else
+			                       	href="$!scc.url" 
+			                       #end
+		                       #end
+		                       
+		                       #if($!scc.show_type=="1") href="$!webPath/channel/index_$!{scc.channel_id}" #end target="_blank">$!scc.showName<i class="iconfont cate_detail_tit_arrow">&#xe627;</i></a>
+		                      	 
+	                        </dt>
+	                        <dd class="cate_detail_con">
+	                          
+	                          #foreach($gc2 in $!showClassTools.getSclist($!scc.id)) 
+					          	<a target="_blank" href="$!webPath/store_goods_list_$!{gc2.id}" class="cate_detail_con_lk">$!gc2.className</a> 
+					          #end
+	                          
+	                        </dd>
+	                      </dl>
+	                     #end
+	        		  #end 
+                      
+                    </div>
+                  </div>
+                  <div class="cate_part_col2">
+                    <div class="cate_brand">
+                    
+                    #if($!scbsrc.size()>0)
+                    	#foreach($map in $scbsrc)
+	                    <a href="$!webPath/brand_goods_$!{map.id}" class="cate_brand_lk" clstag="h|keycount|head|category_01e01" target="_blank">
+	                    	<img  width="83" height="35" src="$!imageWebServer/$!{map.src}" data-webp="no">
+	                    </a>
+	                    #end
+	                #end
+	                
+                    </div>
+                    
+                    #if($!adv_map.get('advert_img')!="" && $!adv_map.get('advert_img')!='null')
+                    #set($adv_url=$!adv_map.get('advert_url'))
+					<div class="cate_promotion">
+						<a #if($!{adv_url}!="") href="$!adv_map.get('advert_url')" target="_blank" #else href="javascript:void(0);" #end class="cate_promotion_lk" clstag="h|keycount|head|category_01f01" >
+							<img  width="168" height="134" src="$!adv_map.get('advert_img')" data-webp="no">
+						</a>
+						
+					</div>
+					#end
+					
+                  </div>
+                </div>
+              </li>
+              #end
+              #end
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="cover_col2">
+        <script src="$!webPath/advert_invoke?id=32"></script>
+        <script src="$!webPath/advert_invoke?id=33"></script>
+      </div>
+      <div class="cover_col3">
+        <div class="user">
+          <div class="user_inner">
+            <div class="user_avatar">
+              #if($!user && $!user.photo)  
+		       #set($user_photo="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+		     #else
+		       #set($user_photo="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+		     #end
+		     
+              <a href="$!webPath/buyer/index" class="user_avatar_lk">
+			    				<img src="$!user_photo" alt="">
+			  </a>
+            </div>
+            <div class="user_show">
+              <p>
+                Hi,
+                <a href="$!webPath/buyer/index">#if($!user) $!CommUtil.substring("$!{user.userName}",20) #else 欢迎来$!{config.websiteName}！ #end</a>
+              </p>
+              <p>
+              	#if(!$!user)
+	                <a href="$!webPath/user/login" class="user_login">登录</a>
+	                <a href="$!webPath/register" class="user_reg">注册</a>
+                #end
+              </p>
+            </div>
+            <div class="user_profit_22">
+              <a href="javascript:void(0);" class="user_profit_lk">新人福利</a>
+              <a href="javascript:void(0);" class="user_profit_lk user_profit_lk_plus">PLUS会员</a>
+            </div>
+          </div>
+        </div>
+        <!-- news start -->
+        <div class="news">
+          <div class="mod_tab news_tab">
+            <div class="mod_tab_head clearfix">
+              <a href="javascript:;" class="mod_tab_head_item news_first">促销</a>
+              <a href="javascript:;" class="mod_tab_head_item news_last mod_tab_head_item_on">公告</a>
+              <div class="news_tab_active" style="transform: translateX(0px);"></div>
+              <a href="javascript:;" class="news_more">更多</a>
+            </div>
+            <div class="mod_tab_content">
+              <div class="mod_tab_content_item mod_tab_content_item_on">
+                <ul class="news_list">
+                  #if($!group_goods_list.size()>0)
+	                  #foreach($group_goods in $group_goods_list)
+	                  <li class="news_item"><a href="$!webPath/group/view_goods_$!{group_goods.id}" class="news_link">$!CommUtil.substring("$!group_goods.gg_name",15)</a></li>
+	                  #end
+                  #end
+                </ul>
+              </div>
+              <div class="mod_tab_content_item">
+                <ul class="news_list">
+                  
+                  #foreach($!art_c in $!acs_right)
+                  	#foreach($!article in $!article_Tools.article_list($!art_c.id,"user",3))
+                  	  #if($!article.url!="")
+						#set($url="$!article.url")
+		              #else
+						#set($url="$!webPath/article_$!{article.id}")
+		              #end
+                  		<li class="news_item"><a href="$!url" class="news_link">$!CommUtil.substring("$!article.title",15)</a></li>
+                  	#end
+                  #end
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--index_ok-->
+        <!-- news end -->
+        <!-- life start -->
+        <div class="service">
+          <div class="service_entry">
+            <ul class="service_list">
+              <li class="service_item service_frame mod_tab_head_item service_frame_on">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_huafei"></i>
+			                        <span class="service_txt">话费</span>
+			                    </a>
+              </li>
+              <li class="service_item service_frame mod_tab_head_item">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_jipiao"></i>
+			                        <span class="service_txt">机票</span>
+			                    </a>
+              </li>
+              <li class="service_item service_frame mod_tab_head_item">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_jiudian"></i>
+			                        <span class="service_txt">酒店</span>
+			                    </a>
+              </li>
+              <li class="service_item service_frame mod_tab_head_item">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_youxi"></i>
+			                        <span class="service_txt">游戏</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_qyg"></i>
+			                        <span class="service_txt">企业购</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_jiayou"></i>
+			                        <span class="service_txt">加油卡</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_dianying"></i>
+			                        <span class="service_txt">电影票</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_huoche"></i>
+			                        <span class="service_txt">火车票</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_zhongchou"></i>
+			                        <span class="service_txt">众筹</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_licai"></i>
+			                        <span class="service_txt">理财</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_lipin"></i>
+			                        <span class="service_txt">礼品卡</span>
+			                    </a>
+              </li>
+              <li class="service_item ">
+                <a href="" class="service_lk">
+			                        <i class="service_ico service_ico_baitiao"></i>
+			                        <span class="service_txt">白条</span>
+			                    </a>
+              </li>
+            </ul>
+          </div>
+          <div class="service_pop">
+            <div class="service_pop_item">
+              <div class="iframe-recharge">
+                <ul class="tab-iframe">
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">话费充值</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">流量充值</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">套餐变更</a>
+                  </li>
+                </ul>
+                <div class="content-iframe">
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">号码</label>
+                    </dt>
+                    <dd class="pr">
+                      <input class="input-phone" id="phoneNumber" maxlength="11" type="text" placeholder="移动/联通/电信">
+                    </dd>
+                  </dl>
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">面值</label>
+                    </dt>
+                    <dd class="pr">
+                      <select class="select-price-money" id="select-price-money" name="" clstag="h|keycount|head|shortcut_01a02">
+                        <option value="10">10元</option>
+                        <option value="20">20元</option>
+                        <option value="30">30元</option>
+                        <option value="50">50元</option>
+                        <option selected="selected" value="100">100元</option>
+                        <option value="200">200元</option>
+                        <option value="300">300元</option>
+                        <option value="500">500元</option>
+                      </select>
+                    </dd>
+                    <p class="link-ad">
+                      <span style="color: #e43f3b;">￥9.8-￥11.0</span>
+                    </p>
+                  </dl>
+                  <div class="btn-wrap">
+                    <input class="btn-submit" type="button" value="快速充值" clstag="h|keycount|head|shortcut_01a03">
+                  </div>
+                  <br>
+                  <p class="link-ad">
+                    <a href="javascript:void(0);">抢90减50元话费券</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="service_pop_item">
+              <div class="iframe-recharge">
+                <ul class="tab-iframe">
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">国内机票</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">国际/港澳</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">特惠</a>
+                  </li>
+                </ul>
+                <div class="content-iframe">
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">出发</label>
+                    </dt>
+                    <dd class="pr">
+                      <input class="input-phone" id="place" type="text" placeholder="城市">
+                    </dd>
+                  </dl>
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">到达</label>
+                    </dt>
+                    <dd class="pr">
+                      <input class="input-phone" id="destination" type="text" placeholder="城市">
+                    </dd>
+                  </dl>
+                  <dl class="form-top">
+                    <input class="btn-submit" type="button" value="机票查询">
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="service_pop_item">
+              <div class="iframe-recharge">
+                <ul class="tab-iframe">
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">国内</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">港澳台</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">促销活动</a>
+                  </li>
+                </ul>
+                <div class="content-iframe">
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">目的地　</label>
+                    </dt>
+                    <dd class="pr">
+                      <input class="input-phone" id="rzmdd" type="text" placeholder="北京" style="width: 110px;">
+                    </dd>
+                  </dl>
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">入住日期</label>
+                    </dt>
+                    <dd class="pr">
+                      <input class="input-phone" id="J-xl1" type="text" placeholder="2018-07-24" style="width: 110px;">
+                    </dd>
+                  </dl>
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">离店日期</label>
+                    </dt>
+                    <dd class="pr">
+                      <input class="input-phone" type="text" placeholder="2018-07-25" id="J-xl2" style="width: 110px;">
+                    </dd>
+                  </dl>
+                  <input class="input-phone" id="phoneNumber" type="text" placeholder="酒店 / 商圈 / 地标" style="width: 100%;margin: 5px 0;">
+                  <div class="btn-wrap">
+                    <input class="btn-submit" type="button" value="酒店查询" clstag="h|keycount|head|shortcut_01a03">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="service_pop_item">
+              <div class="iframe-recharge">
+                <ul class="tab-iframe">
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">视频/娱乐</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">点卡</a>
+                  </li>
+                  <li class="tab-item">
+                    <a href="javascript:void(0);">QQ</a>
+                  </li>
+                </ul>
+                <div class="content-iframe">
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">服务类型</label>
+                    </dt>
+                    <dd class="pr">
+                      <input class="input-phone" id="phoneNumber" type="text" placeholder="爱奇艺" style="width: 110px;">
+                    </dd>
+                  </dl>
+                  <dl class="form-top">
+                    <dt>
+                      <label for="">充值时长</label>
+                    </dt>
+                    <dd class="pr">
+                      <select name="" style="width: 110px;">
+                        <option value="1">1个月</option>
+                        <option value="3">3个月</option>
+                        <option value="6">6个月</option>
+                        <option value="12">12个月</option>
+                      </select>
+                    </dd>
+                    <p class="link-ad">
+                      <span style="color: #e43f3b;">￥19.9</span>
+                    </p>
+                  </dl>
+                  <div class="btn-wrap">
+                    <input class="btn-submit" type="button" value="快速充值" clstag="h|keycount|head|shortcut_01a03">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a class="service_pop_close iconfont" href="javascript:;">&#xe668;</a>
+          </div>
+        </div>
+        <!--index_ok-->
+        <!-- life end -->
+      </div>
+    </div>
+    <div id="in_city" style="display: none"></div>
+    <div id="J_fs_act" class="fs_act" style="position: absolute; width:100%; height: 480px; left: 0px; top: 0px;">
+      <a id="J_fs_act_lk" class="fs_act_lk" href="#"></a>
+    </div>
+  </div>

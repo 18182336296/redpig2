@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){	
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  topics_name:{required :true},
+	  sequence:{required:true,digits:true}
+	 },
+	messages:{
+	  topics_name:{required:"专题名称不能为空"},
+	  sequence:{required:"排序不能为空",digits:"请填写合法数字"}
+	}
+  });
+});
+//
+function saveForm(method){
+	/*var value=jQuery("#app_index").val();
+	if(value!=null && value!=""){
+	   jQuery("#theForm").submit();
+	}else{
+	   showDialog("msg_info", "", "请先关联首页楼层！", 2, "warning", 3, '');
+	}*/
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">频道管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li> <a href="$!webPath/app_topics"><b>管理</b></a></li>
+      <li> <a href="$!webPath/app_topics_add"  #if(!$!edit) class="this" #end ><b>新增</b></a> </li>
+      #if($!edit)
+      <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+      #end
+    </ul>
+  </div>
+  <form action="$!webPath/app_topics_save" method=post enctype="multipart/form-data" name="theForm" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/app_topics" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/app_topics_add" />
+    <div class="edit">
+      <div class="editul setcont ">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>专题名称</li>
+          <li><span class="webname">
+            <input name="topics_name" type="text" id="topics_name" value="$!obj.topics_name" size="40" />
+            </span></li>
+        </ul>
+         <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>排序</li>
+          <li><span class="webname">
+            <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+       <!-- <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>关联楼层</li>
+          <li><span class="webname">
+          <div class="floor_edit_l">
+          <input type="hidden" name="app_index_id" id="app_index_id" value="$!obj.app_index_id"> 
+          #if($!app_index_list.size()>0)
+          <select name="app_index" id="app_index">
+          #foreach($!app_index in $!app_index_list)
+            <option value="$!app_index.id" #if($!edit && $!app_index.id==$!app_floor.id) selected="selected" #end>$!app_index.title</option>
+          #end
+          </select>
+          <a href="$!webPath/app_index?temp=temp">新增</a>
+          #else
+            <a href="$!webPath/app_index">新增</a>
+          #end
+         </div>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">若首页楼层信息为空，请先新增楼层信息再进行关联</strong><strong class="c"></strong></span></li>
+        </ul>-->
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

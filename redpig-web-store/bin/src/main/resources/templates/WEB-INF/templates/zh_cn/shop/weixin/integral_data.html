@@ -1,0 +1,15 @@
+#foreach($obj in $integralGoods)
+<dl>
+<dt><a href=""><img src="images/test/5.jpg" /></a></dt>
+<dd>
+<ul>
+<li class="name"><a href="">$!obj.ig_goods_name</a></li>
+<li><img src="images/test/member.png" width="20" />
+ #set($level_map=$!integralViewTools.query_level("$!obj.ig_user_Level"))
+ $!{level_map.name}专享
+</li>
+<li><span class="fl"><img src="images/inte_icon.png" width="20" /><b>$!obj.ig_goods_integral</b>积分</span><span class="fr"><a href="">马上兑换</a></span></li>
+</ul>
+</dd>
+</dl>
+#end

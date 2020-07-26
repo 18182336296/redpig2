@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>注册页 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery.validator.addMethod("phone",function(value,element){
+	    var re =  /(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
+        if(re.test(jQuery("#mobile").val())){			
+			return true;
+		  } else {
+		    return false;
+		  }		  
+});
+  jQuery("#theForm").validate({
+	errorPlacement: function(error, element) {  
+					   element.parent().addClass("bd_red");
+        			 error.appendTo(element.parent().next());  
+   					 },	
+	success:function(label) {
+     						 label.parent().prev().removeClass("bd_red");
+						},
+	 rules:{ 
+		mobile:{
+		  required:true,
+		  phone:true,
+		  remote:{
+		    url: "$!webPath/verify_mobile",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "mobile": function(){return jQuery("#mobile").val();},
+				  "type": function(){return jQuery("#type").val();}
+		     }
+		  }
+		},m_code:{required:true,digits:true,remote:{
+		    url: "$!webPath/verify_mcode",     
+            type: "post",               
+            dataType: "json",          
+            data: {                     
+                   "mcode": function(){return jQuery("#m_code").val();},
+				   "mobile": function(){return jQuery("#mobile").val();}
+		     }
+		  }},
+        phone_password:{
+		  required:true,
+		  minlength:6,
+		  maxlength:20  
+		},agree:{
+		  required:true
+		}
+		#if($!config.securityCodeRegister),
+		code:{
+		  required:true,
+		  remote:{
+		    url: "$!webPath/verify_code",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "code": function(){return jQuery("#code").val();}
+		     }
+		  }
+		}
+		#end
+	  },
+	messages: {
+			mobile:{
+		  required:"手机号不能为空",
+		  phone:"格式不正确",
+		  remote:"该手机号已经被注册"
+		},
+		m_code:{
+		  required:"请输入手机验证码",
+		  digits:"格式不正确",
+		  remote:"动态码不正确"
+		},
+        phone_password:{
+		  required:"密码不能为空",
+		  minlength:"密码不能小于{0}个字符",
+		  maxlength:"密码不能大于{0}个字符" 
+		},
+		  agree:{
+		  required:"请接受用户协议"
+		}
+		#if($!config.securityCodeRegister),
+					code:{
+		  		required:"验证码不能为空",
+		  		remote:"验证码不正确"
+		}
+		#end
+		},
+  });
+});
+function send_mcode(obj){
+	       if(jQuery("#theForm").validate().element(jQuery("#mobile"))){
+	         if(jQuery(obj).attr("do")=="true"){		
+	         var m=jQuery("#mobile").val();
+			 var t=jQuery("#type").val();
+			 jQuery.ajax({type:'POST',url:'$!webPath/send_mcode',dataType:"json",data:{"mobile":m,"type":t,"verify_mobile_code":"$!{verify_mobile_code}"},
+				  success:function(data){
+					 if(data.ret==100){
+					   time(obj);
+					  }else{
+						  Wap_alert(data.msg);
+						  jQuery("#phone_error label").show().html(data.msg);
+					  } 
+				  }
+			 });		
+	  }
+	  }
+}
+var int;
+function time(obj) {//o为按钮的对象，p为可选，这里是60秒过后，提示文字的改变
+        window.clearInterval(int);
+		var count=60;	
+		jQuery("#send_mcode_span").attr("class","obtain");
+		jQuery(obj).html("重新获取（"+count+"）");
+	    int =window.setInterval(time_go,1000);
+	    function time_go(){
+		 if(count>0){
+		 count--;
+		 jQuery(obj).attr("do", false);//倒计时过程中禁止点击按钮
+		 jQuery(obj).html("重新获取（"+count+"）");//改变按钮中value的值
+	     if(count==0){ 
+		 jQuery("#send_mcode_span").attr("class","obtain obtain_after");
+		 jQuery(obj).attr("do", true);
+		 jQuery(obj).html("点击获取验证码");//改变按钮中value的值
+		 }
+	  	}
+	  }
+}
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>手机号注册<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="phone_main">
+  <!--注册页-->
+  <form action="$!webPath/phone_register_finish" method="post" name="theForm" id="theForm" autocomplete="off">
+  <input name="type" type="hidden" id="type" value="register"/>
+    <div class="phone_login">
+      <ul class="phone_login_ul">
+        <li class="ip " style="width:60%;">
+        <input name="mobile"  id="mobile" type="text" placeholder="请输入手机号" autocomplete="off"/>
+        </li>
+        <li class="yz"></li>
+        <li id="send_mcode_span" class="obtain obtain_after"><a do="true" href="javascript:void(0);" onclick="send_mcode(this);">点击获取验证码</a></li><!--加obtain_after-->
+        <li class="ip">
+          <input name="m_code" id="m_code" type="text" placeholder="请输入6位手机验证码" autocomplete="off" />
+        </li>
+        <li class="yz"></li>
+        
+        <li class="ip">
+          <input name="phone_password" id="phone_password" type="password"  placeholder="登录密码" autocomplete="off"/>
+        </li><li class="yz"></li>
+        #if($!config.securityCodeRegister)
+        <script>
+                 function refreshCode(){
+	                 jQuery("#code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+                 }
+             </script>
+        <li class="yzm">
+          <input name="code" type="text"  id="code" placeholder="请输入验证码" />
+          <img id="code_img" src="$!webPath/verify" width="73" height="27" /><a href="javascript:void(0);" onClick="refreshCode();" ><img src="$!cdnServer/resources/style/system/front/default/images/weixin/refresh.png" width="32" height="32" /></a></li><li class="yz"></li> #end
+        <li>
+          <input name="agree" type="checkbox"  id="agree" value="true" checked="checked" />
+          <label for="agree">我已阅读并同意 </label>
+          <a href="$!webPath/doc?mark=register"> 《商城在线服务协议》</a></li><li class="yz">
+        <li class="ip_btn">
+          <input name="" type="submit"   value="立即注册"/>
+        </li>
+        <li><span class="fl"><a href="$!webPath/login">登录</a><a href="$!webPath/register">账户注册</a></span><span class="fr"><a href="$!webPath/forget1">找回密码</a></span></li>
+      </ul>
+    </div>
+  </form>
+  <!--底部-->
+</div>
+</body>
+</html>

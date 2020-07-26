@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.SmsGoldLogMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.SmsGoldLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="seller_id" property="seller_id" jdbcType="BIGINT"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="gold" property="gold" jdbcType="INTEGER"/>
+		<result column="count" property="count" jdbcType="INTEGER"/>
+		<result column="all_gold" property="all_gold" jdbcType="INTEGER"/>
+		<result column="log_status" property="log_status" jdbcType="INTEGER"/>
+		<result column="log_type" property="log_type" jdbcType="VARCHAR"/>
+		<result column="log_content" property="log_content" jdbcType="VARCHAR"/>
+		<result column="pay_time" property="pay_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.SmsGoldLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="seller_id" property="seller_id" jdbcType="BIGINT"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="gold" property="gold" jdbcType="INTEGER"/>
+		<result column="count" property="count" jdbcType="INTEGER"/>
+		<result column="all_gold" property="all_gold" jdbcType="INTEGER"/>
+		<result column="log_status" property="log_status" jdbcType="INTEGER"/>
+		<result column="log_type" property="log_type" jdbcType="VARCHAR"/>
+		<result column="log_content" property="log_content" jdbcType="VARCHAR"/>
+		<result column="pay_time" property="pay_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,title,seller_id,store_name,gold,count,all_gold,log_status,log_type,log_content,pay_time
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="title != null">and title = #{title,jdbcType=VARCHAR}</if>
+		<if test="seller_id != null">and seller_id = #{seller_id,jdbcType=BIGINT}</if>
+		<if test="store_name != null">and store_name = #{store_name,jdbcType=VARCHAR}</if>
+		<if test="gold != null">and gold = #{gold,jdbcType=INTEGER}</if>
+		<if test="count != null">and count = #{count,jdbcType=INTEGER}</if>
+		<if test="all_gold != null">and all_gold = #{all_gold,jdbcType=INTEGER}</if>
+		<if test="log_status != null">and log_status = #{log_status,jdbcType=INTEGER}</if>
+		<if test="log_type != null">and log_type = #{log_type,jdbcType=VARCHAR}</if>
+		<if test="log_content != null">and log_content = #{log_content,jdbcType=VARCHAR}</if>
+		<if test="pay_time != null">and pay_time = #{pay_time,jdbcType=TIMESTAMP}</if>
+		<if test="store_name_like !=null">and store_name like CONCAT('%',#{store_name_like},'%')</if>
+	</sql>
+	<sql id="ifStatement">
+		title= #{title},
+		seller_id= #{seller_id},
+		store_name= #{store_name},
+		gold= #{gold},
+		count= #{count},
+		all_gold= #{all_gold},
+		log_status= #{log_status},
+		log_type= #{log_type},
+		log_content= #{log_content},
+		pay_time= #{pay_time},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.SmsGoldLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_sms_gold_log 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.SmsGoldLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_sms_gold_log obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_sms_gold_log obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.SmsGoldLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_sms_gold_log obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.SmsGoldLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_sms_gold_log(addTime,deleteStatus,title,seller_id,store_name,gold,count,all_gold,log_status,log_type,log_content,pay_time)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{seller_id,jdbcType=BIGINT},#{store_name,jdbcType=VARCHAR},#{gold,jdbcType=INTEGER},#{count,jdbcType=INTEGER},#{all_gold,jdbcType=INTEGER},#{log_status,jdbcType=INTEGER},#{log_type,jdbcType=VARCHAR},#{log_content,jdbcType=VARCHAR},#{pay_time,jdbcType=TIMESTAMP}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.SmsGoldLog">
+		update redpigmall_sms_gold_log
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_sms_gold_log where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_sms_gold_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.SmsGoldLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_sms_gold_log obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.SmsGoldLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_sms_gold_log obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.SmsGoldLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_sms_gold_log
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_sms_gold_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

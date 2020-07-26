@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.AdvertMapper">
+	 
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Advert">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ad_title" property="ad_title" jdbcType="VARCHAR"/>
+		<result column="ad_begin_time" property="ad_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ad_end_time" property="ad_end_time" jdbcType="TIMESTAMP"/>
+		<result column="ad_status" property="ad_status" jdbcType="INTEGER"/>
+		<result column="ad_text" property="ad_text" jdbcType="VARCHAR"/>
+		<result column="ad_slide_sequence" property="ad_slide_sequence" jdbcType="INTEGER"/>
+		<result column="ad_url" property="ad_url" jdbcType="VARCHAR"/>
+		<result column="ad_click_num" property="ad_click_num" jdbcType="INTEGER"/>
+		<result column="ad_gold" property="ad_gold" jdbcType="INTEGER"/>
+		<result column="bg_color" property="bg_color" jdbcType="VARCHAR"/>
+		<association property="ad_ap" column="ad_ap_id" select="com.redpigmall.dao.AdvertPositionMapper.selectByPrimaryKey"/>
+		<association property="ad_acc" column="ad_acc_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="ad_user" column="ad_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Advert">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ad_title" property="ad_title" jdbcType="VARCHAR"/>
+		<result column="ad_begin_time" property="ad_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ad_end_time" property="ad_end_time" jdbcType="TIMESTAMP"/>
+		<result column="ad_status" property="ad_status" jdbcType="INTEGER"/>
+		<result column="ad_text" property="ad_text" jdbcType="VARCHAR"/>
+		<result column="ad_slide_sequence" property="ad_slide_sequence" jdbcType="INTEGER"/>
+		<result column="ad_url" property="ad_url" jdbcType="VARCHAR"/>
+		<result column="ad_click_num" property="ad_click_num" jdbcType="INTEGER"/>
+		<result column="ad_gold" property="ad_gold" jdbcType="INTEGER"/>
+		<result column="bg_color" property="bg_color" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ad_title,ad_begin_time,ad_end_time,ad_ap_id,ad_status,ad_acc_id,ad_text,ad_slide_sequence,ad_user_id,ad_url,ad_click_num,ad_gold,bg_color
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ad_title != null">and ad_title = #{ad_title,jdbcType=VARCHAR}</if>
+		<if test="ad_begin_time != null">and ad_begin_time = #{ad_begin_time,jdbcType=TIMESTAMP}</if>
+		<if test="ad_end_time != null">and ad_end_time = #{ad_end_time,jdbcType=TIMESTAMP}</if>
+		<if test="ad_status != null">and ad_status = #{ad_status,jdbcType=INTEGER}</if>
+		<if test="ad_text != null">and ad_text = #{ad_text,jdbcType=VARCHAR}</if>
+		<if test="ad_slide_sequence != null">and ad_slide_sequence = #{ad_slide_sequence,jdbcType=INTEGER}</if>
+		<if test="ad_url != null">and ad_url = #{ad_url,jdbcType=VARCHAR}</if>
+		<if test="ad_click_num != null">and ad_click_num = #{ad_click_num,jdbcType=INTEGER}</if>
+		<if test="ad_gold != null">and ad_gold = #{ad_gold,jdbcType=INTEGER}</if>
+		<if test="bg_color != null">and bg_color = #{bg_color,jdbcType=VARCHAR}</if>
+		<if test="ad_title_like != null">and ad_title like CONCAT('%',#{ad_title_like},'%') </if>
+		<if test="ad_ap_id != null">and ad_ap_id = #{ad_ap_id,jdbcType=BIGINT}</if>
+		<if test="ad_acc_id != null">and ad_acc_id = #{ad_acc_id,jdbcType=BIGINT}</if>
+		<if test="ad_user_id != null">and ad_user_id = #{ad_user_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		ad_title= #{ad_title},
+		ad_begin_time= #{ad_begin_time},
+		ad_end_time= #{ad_end_time},
+		<if test="ad_ap == null or ad_ap.id == null">ad_ap_id = null,</if>
+		<if test="ad_ap != null and ad_ap.id != null">ad_ap_id = #{ad_ap.id,jdbcType=BIGINT},</if>
+		ad_status= #{ad_status},
+		<if test="ad_acc != null and ad_acc.id != null">ad_acc_id = #{ad_acc.id,jdbcType=BIGINT},</if>
+		<if test="ad_acc == null or ad_acc.id == null">ad_acc_id = null,</if>
+		ad_text= #{ad_text},
+		ad_slide_sequence= #{ad_slide_sequence},
+		<if test="ad_user == null or ad_user.id == null">ad_user_id = null,</if>
+		<if test="ad_user != null and ad_user.id != null">ad_user_id = #{ad_user.id,jdbcType=BIGINT},</if>
+		ad_url= #{ad_url},
+		ad_click_num= #{ad_click_num},
+		ad_gold= #{ad_gold},
+		bg_color= #{bg_color},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_advert 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_advert obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_advert obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getAdApByAdvertPositionId" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_advert
+		where
+			ad_ap_id = #{ad_ap_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAdAccByAccessoryId" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_advert
+		where
+			ad_acc_id= #{ad_acc_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAdUserByUserId" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_advert
+		where
+			ad_user_id = #{ad_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_advert obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Advert" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_advert(addTime,deleteStatus,ad_title,ad_begin_time,ad_end_time,ad_status,ad_text,ad_slide_sequence,ad_url,ad_click_num,ad_gold,bg_color,ad_ap_id,ad_acc_id,ad_user_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ad_title,jdbcType=VARCHAR},#{ad_begin_time,jdbcType=TIMESTAMP},#{ad_end_time,jdbcType=TIMESTAMP},#{ad_status,jdbcType=INTEGER},#{ad_text,jdbcType=VARCHAR},#{ad_slide_sequence,jdbcType=INTEGER},#{ad_url,jdbcType=VARCHAR},#{ad_click_num,jdbcType=INTEGER},#{ad_gold,jdbcType=INTEGER},#{bg_color,jdbcType=VARCHAR},#{ad_ap.id,jdbcType=BIGINT},#{ad_acc.id,jdbcType=BIGINT},#{ad_user.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Advert">
+		update redpigmall_advert
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_advert where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_advert where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_advert obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_advert obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Advert" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_advert
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_advert where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	<select id="getAdvertImg" parameterType="map" resultType="map" >
+		select acc.path, acc.name from redpigmall_accessory acc
+		where id in (
+			select advert.ad_acc_id from redpigmall_advert advert where ad_ap_id = #{ad_ap_id} and deleteStatus = #{deleteStatus}
+			)
+	</select>
+</mapper>

@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>我的足迹 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" type="text/css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.mobile-events.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+var currentPage = 2;
+<!-- 移动端下拉加载 -->
+jQuery(document).ready(function(){
+	jQuery("img[id^=goods_img_]").each(function(){
+				jQuery(this).parent().parent().parent().siblings(".f_goods_btns").children("a").height(jQuery(this).parent().width()+20+"px");
+				jQuery(".f_goods_info").height(jQuery(this).parent().width()+19.084+"px");
+				jQuery(this).parent().parent().parent().siblings(".f_goods_btns").children("a").css("line-height",jQuery(this).parent().width()+20+"px");
+			});
+	var  ret = 1;
+  	var totalPage = "$!totalPage";
+	if(totalPage>1){
+   	jQuery(window).scroll(function(){
+		 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1){ 
+			 if(currentPage<=totalPage){
+				jQuery.ajax({type:'POST',
+	            	 	 url:'$!webPath/buyer/foot_point_ajax',
+				 		 data:{"currentPage":currentPage},
+						 beforeSend:function(){
+				   	     currentPage = parseInt(currentPage) +1;
+				 	 	 jQuery("#loading_none").hide();
+				  		 jQuery("#loading").show();
+				 		 ret = 2;
+					},
+			  		success:function(data){
+				    jQuery("#loading").hide();
+				 	ret = 1;
+	             	if(data!=""){
+				 		 	jQuery(".footprint_items").last().after(data);
+			 			}else{
+					 		jQuery("#loading_none").show();
+				 		 }    
+		 			}
+	   	 		});
+		 	}else{
+				 if(currentPage>totalPage){
+						jQuery("#loading_none").show();
+					}else{
+						jQuery("#loading_none").hide();
+				}
+		 	} 
+	 	 }
+	});		
+	}
+	});
+	function fp_remove(date,goods_id,obj){
+		WapshowDialog(2,"您确定删除当天的足迹吗？",method1);
+		function method1(){
+				jQuery.ajax({type:'POST',url:'$!webPath/buyer/foot_point_remove',data:{"date":date},
+			 	success:function(data){
+			   		if(data=="true"){
+						if(jQuery(".top_title").length==1){
+							jQuery(".footprint_items").empty();
+							var t1="<div class='none_footprint'><div class='pic'><img src='$!cdnServer/resources/style/system/front/default/images/weixin/footprint.png'></div><p>还没有任何浏览足迹哦~ ~ ~</p></div>";
+							jQuery(".phone_main").append(t1);
+						}else{
+				  			jQuery(obj).parent().parent().remove();
+						}
+				   
+					}
+				 }
+			});
+		}
+	}
+	function all_fp_remove(date,goods_id,obj){
+		WapshowDialog(2,"您确定要删除全部的足迹吗？",method2);
+		function method2(){
+			jQuery.ajax({type:'POST',url:'$!webPath/buyer/foot_point_remove',
+					 success:function(data){
+				  	 	if(data=="true"){
+								jQuery(".footprint_items").empty();
+								jQuery(".none_footprint").remove();
+								jQuery("#loading_none").hide();
+								jQuery("#loading").hide();
+								var t1="<div class='none_footprint'><div class='pic'><img src='$!cdnServer/resources/style/system/front/default/images/weixin/footprint.png'></div><p>还没有任何浏览足迹哦~ ~ ~</p></div>";
+								jQuery(".phone_main").append(t1);
+						}else{
+								Wap_alert("删除失败....")
+							}
+					 }
+				});
+			}
+		}
+	function only_fp_remove(date,goods_id,obj){
+		WapshowDialog(2,"您确定要删除该商品吗？",method3);
+		function method3(){
+			jQuery.ajax({type:'POST',url:'$!webPath/buyer/foot_point_remove',data:{"date":date,"goods_id":goods_id},
+				 success:function(data){
+			   		if(data=="true"){
+						if(jQuery(".footprint_items div[class^=f_goods_wrap]").length>1){
+							jQuery(obj).parent().parent().remove();
+						}else{
+							jQuery(obj).parent().parent().parent(".footprint_items").remove();
+							jQuery(".footprint_items").empty();
+							var t1="<div class='none_footprint'><div class='pic'><img src='$!cdnServer/resources/style/system/front/default/images/weixin/footprint.png'></div><p>还没有任何浏览足迹哦~ ~ ~</p></div>";
+							jQuery(".phone_main").append(t1);
+						}
+						jQuery("#amount").text(jQuery(".footprint_items div[class^=f_goods_wrap]").length);
+					}else{
+							Wap_alert("删除失败....");
+						}
+				 }
+			});
+		}
+	}
+	jQuery(document).ready(function(){
+		if(jQuery(".footprint_items div[class^=f_goods_wrap]").length==0){
+			if(jQuery(".top_title").length==1){
+					jQuery(".footprint_items").empty();
+						var t1="<div class='none_footprint'><div class='pic'><img src='$!cdnServer/resources/style/system/front/default/images/weixin/footprint.png'></div><p>还没有任何浏览足迹哦~ ~ ~</p></div>";
+						jQuery(".phone_main").append(t1);
+					}else{
+				  		jQuery(obj).parent().parent().remove();
+					}
+			
+			}
+		
+		})
+jQuery(function(){
+    jQuery(".f_goods_wrap").on("swipeleft",function(){
+		jQuery(this).addClass('selected').find(".f_goods_info").animate({"left":"-28%"})
+    }).on("swiperight",function(){
+		jQuery(this).addClass('selected').find(".f_goods_info").animate({"left":"0%"})
+    })
+})
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+	<div class="footprint_title">
+    	<a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+    	我的足迹
+        <a class="clear" href="javascript:void(0);" onClick="all_fp_remove('','',this);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/f_clear.png"></a>
+    </div>
+    <input id="currentPage" value="$!currentPage" type="hidden" />
+    #if($!objs.size() > 0)
+    #foreach($obj in $objs)
+    <div class="footprint_items" >
+    	<div class="top_title" id="top_title_$!obj.id">
+        	<span class="time">$!obj.fp_date</span>
+            <span class="amount">浏览过<span id="amount">$!{obj.fp_goods_count}</span>件商品</span>
+            <span class="clear" onClick="fp_remove('$!obj.fp_date','',this);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/f_clear.png"></span>
+        </div>
+        #foreach($fpv in $footPointTools.generic_fpv("$!obj.fp_goods_content"))
+        #set($store=$!footPointTools.goods_second_domain("$!fpv.fpv_goods_id","goods"))
+        #set($goods_domainPath="$!webPath/items?id=$!{fpv.fpv_goods_id}")
+        #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+        #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items?id=$!{fpv.fpv_goods_id}")
+        #end
+       <!-- $!{fpv.fpv_goods_img_path}
+        style="left:-28%;"-->
+    	<div class="f_goods_wrap">
+        	<div class="f_goods_info" >
+            	<a href="$!goods_domainPath">
+                    <div class="pic"><img src="$!{fpv.fpv_goods_img_path}" id="goods_img_$!obj.id"></div>
+                    <p class="name">$!{fpv.fpv_goods_name}</p>
+                    <div class="value_box">
+                        <span class="value"><em>￥</em>$!{fpv.fpv_goods_price}</span>
+                        <span class="sales_volume">销量：$!{fpv.fpv_goods_sale}件</span>
+                    </div>
+                </a>
+            </div>
+            <div class="f_goods_btns"><!--f_goods_btns中两个按钮的高度需要JS控制，需获取pic的高度后加16px，两个按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是172px-->
+            	<a class="similar_btn" href="$!webPath/class_goods_$!{fpv.fpv_goods_class_id}" target="_blank" style=" height:118px; line-height:118px;">找相似</a>
+                <a class="del_btn" href="javascript:void(0);" onClick="only_fp_remove('$!obj.fp_date','$!fpv.fpv_goods_id',this);" style=" height:118px; line-height:118px;">删除</a>
+            </div>
+        </div>
+        #end
+    </div>
+    #end
+    #else
+    <div class="none_footprint">
+    	<div class="pic"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/footprint.png"></div>
+        <p>还没有任何浏览足迹哦~ ~ ~</p>
+    </div>
+    #end
+</div>
+<div class="loading" id="loading" style="display:none">
+	<ul>
+  	  <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+</div>
+<div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+</div>
+</body>
+</html>

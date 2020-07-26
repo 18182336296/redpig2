@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style"
+	content="black-translucent">
+<title>地址管理</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css"
+	type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.mobile-events.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	var start;
+	var deltaX;
+	var den;
+	var did;
+	var del_onclick;
+	var div_wi = jQuery(".address_item").width();	
+
+	document.addEventListener("touchstart",function(event){
+	del_onclick = event.target.getAttribute("touch_id");
+	did = "addr_"+del_onclick;	
+	    start = {
+            pageX: event.touches[0].pageX,
+        };
+	    den  = jQuery("#"+did).position().left;	
+	deltaX = 0;
+	}, false);
+	document.addEventListener("touchmove", function (event){	
+		deltaX = event.touches[0].pageX - start.pageX;
+		var pa = parseInt(deltaX)*100/parseInt(div_wi);	
+		var de = parseInt(den)*100/parseInt(div_wi); 
+		var mo = jQuery("#"+did).position().left;    
+		var move = parseInt(mo)*100/parseInt(div_wi); 
+			if(Math.abs(de)>14){
+				if(move > 1){
+				jQuery("#"+did).css("right","1%");	
+				}else if(move<-29){
+				jQuery("#"+did).css("left","-17%");	
+				}else{
+					jQuery("#"+did).css("left",pa-28+"%");
+				}
+			}else{
+				if(move>1){
+				jQuery("#"+did).css("right","1%");			
+				}else if(move<-29){
+				jQuery("#"+did).css("left","-17%");		
+				}else{
+				jQuery("#"+did).css("left",pa+"%");
+				}
+		}
+   },false);
+   document.addEventListener("touchend", function (event){
+		del = jQuery("#"+did).position().left;
+		if(del<0){
+		var pa = Math.abs(del)*100/parseInt(div_wi);
+		if(pa>14){
+			jQuery("#"+did).animate({left:"-16%"},200);
+		}else{
+			jQuery("#"+did).animate({left:"0%"},200);
+			}
+		}else{
+			jQuery("#"+did).animate({left:"0%"},200);
+		}
+		did="";
+   },false);  
+    //jQuery(".address_item").on("swipeleft",function(){
+    	//alert("asd");
+		//jQuery(this).find(".address_detail").animate({"left":"-28%"})
+   // }).on("swiperight",function(){
+	//	jQuery(this).find(".address_detail").animate({"left":"0%"})
+  //  }) 
+})
+function saveForm(){
+	jQuery("#cart_form").attr("action","$!webPath/goods_cart2_address_save").submit();
+	}	
+function address_chooes(add_id){
+	if("$!type".indexOf("cloud_order_list")<=-1){
+	jQuery("#addr_id").val(add_id);
+	jQuery("#mark").val("set");
+	jQuery("#cart_form").submit();
+	}
+}
+function address_box_show(aid){
+	jQuery(".address_content").animate({left:"0%"});	
+	jQuery(".address_name").animate({left:"0%"});
+	jQuery.ajax({
+		type:'POST',
+        url:'$!webPath/buyer/address_add_ajax',
+		data:{"aid":aid},	
+		success:function(data){
+			 var dataObj=eval("("+data+")");
+			   jQuery(".address_list_ul this").html("");
+			    var html="";
+			jQuery(dataObj.data).each(function(index){
+				html=html + "<li><a href='javascript:void(0)' onClick='query_address_data("+dataObj.data[index].addr_id+")'>" + dataObj.data[index].addr_name + "</li>"
+			});
+			jQuery(".address_items_box ul").html(html);
+		} 
+	},"json");	
+	}
+	function save_cart_address(id){
+		jQuery("#addr_id").val(id);
+		jQuery("#cart_form").submit();
+	}
+<!--所在区域-->
+
+function query_address_data(aid){
+	
+
+		jQuery("#areaView").siblings("label").hide();	
+	
+jQuery.ajax({
+			type:'POST',
+            url:'$!webPath/buyer/address_add_ajax',
+			data:{"aid":aid},	
+			success:function(data){
+		    var dataObj=eval("("+data+")");	
+		    if(dataObj.level){
+		    	jQuery(".address_content").animate({left:"0%"});	
+				jQuery(".address_name").animate({left:"0%"});	
+		    jQuery(".address_list_ul this").html("");
+		    var html="";
+		 	jQuery(dataObj.data).each(function(index){
+				html=html + "<li><a href='javascript:void(0)' onClick='query_address_data("+dataObj.data[index].addr_id+")'>" + dataObj.data[index].addr_name + "</li>"
+			});
+			jQuery(".address_items_box ul").html(html);	    
+			}else{
+				jQuery(".area a input").val(dataObj.info);
+				jQuery("#area_id").val(dataObj.aid);
+				jQuery(".address_content").animate({left:"100%"});	
+				jQuery(".address_name").animate({left:"100%"});
+				var html="";
+			 	jQuery(dataObj.data).each(function(index){
+					html=html+"<li><input><a href='javascript:void(0)' onClick='query_address_data("+dataObj.data[index].addr_id+")'>" +dataObj.data[index].addr_name+"</a></li>"
+				});
+				jQuery(".hoster ul").html(html);	
+			}
+} 
+},"json");
+}
+function add_ad(id,return_free_apply){
+	jQuery("#addr_id").val(id);
+	var params=jQuery("#cart_form").serialize();	
+jQuery.ajax({type:'POST',url:"$!webPath/goods_cart2_address_edit" ,data:params,success:function(data){
+	jQuery(".add_address_wrap").html(data);
+	jQuery(".add_address_wrap").addClass("add_address_wrap_show");
+	}
+},"json");
+}
+function del_ad(id){	
+	var cf =confirm("您确定要删除地址吗");
+	if(cf=true){
+	jQuery("#addr_id").val(id);
+	jQuery.ajax({type:'POST',url:"$!webPath/goods_cart2_address_del" ,data : {"id" : id},success:function(data){
+		if(data=="true"){
+			jQuery("#address_item_"+id).remove();
+		}else{
+			alert("删除失败");
+		}
+	}
+	});	
+	}
+}
+function back(){	
+				jQuery(".address_content").animate({left:"-100%"});	
+				jQuery(".address_name").animate({left:"-100%"});
+	}
+function backmain(obj){	
+jQuery(obj).parent().parent().removeClass("add_address_wrap_show");
+}
+
+</script>
+<script>
+			jQuery(function() {
+				var rank = "$!rank";
+				if (rank == "") {
+					rank = 0;
+				}
+				var img = jQuery("#img").html();
+				jQuery(" li[id^=rand_]").each(function(index, element) {
+					jQuery(element).removeClass("this");
+				});
+				jQuery("#rank_" + rank).addClass("this");
+				var begin_count = 12;
+				jQuery(window)
+						.scroll(
+								function() {
+									if (jQuery(document).scrollTop() >= jQuery(
+											document).height()
+											- jQuery(window).height()) {
+										jQuery
+												.ajax({
+													type : 'POST',
+													url : '$!webPath/integral/integral_data',
+													data : {
+														"begin_count" : begin_count,
+														"ig_user_Level" : "$!ig_user_Level",
+														"begin" : "$!begin",
+														"end" : "$!end",
+														"rank" : "$!rank"
+													},
+													beforeSend : function() {
+														begin_count = begin_count + 6;
+														jQuery("#loading_none")
+																.hide();
+														jQuery("#loading")
+																.show();
+													},
+													success : function(data) {
+														jQuery("#loading")
+																.hide();
+														if (data) {
+															jQuery(".inte_list")
+																	.append(
+																			data);
+														} else {
+															jQuery(
+																	"#loading_none")
+																	.show();
+														}
+													}
+												});
+									}
+								});
+			})
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+	<form method="post"  name="cart_form" id="cart_form" action="$!webPath/cart_address_default">
+    <input type="hidden" name="gcs" id="gcs" value="$!gcs"/>
+	<input name="gifts" type="hidden" id="gifts" value="$!giftids" />
+	<input type="hidden" name="addr_id" id="addr_id" value="$!addr_id"/>
+	<input name="cart_session" type="hidden" id="cart_session" value="$!cart_session" />
+	<input name="type" type="hidden" id="type" value="$!type"/>
+    <input name="cloudPurchaseLottery_id" type="hidden" id="cloudPurchaseLottery_id" value="$!cloudPurchaseLottery_id"/>
+	<div class="phone_main">
+		<div class="address_title">
+		
+	<script type="text/javascript">
+	function back_zero(){
+		javascript:history.go(-1);
+		}
+	</script>
+			<a class="back" href="javascript:void(0);" onClick="back_zero()"><img
+				src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+			管理收货地址<a class="add" href="javascript:void(0);"
+				onClick="add_ad('$!{addr.id}','$!{return_free_apply}')">新增</a>
+		</div>
+		#foreach($addr in $addrs) #if($!addr.default_val>0)
+		<div class="default_address">
+			<div class="border">
+				<img
+					src="$!cdnServer/resources/style/system/front/default/images/weixin/address_default.png">
+			</div>
+			<div class="info">
+				<h1 class="number_name">
+					<span class="hoster">$!addr.trueName</span> <span class="number">$!addr.mobile</span>
+					
+					<div class="edit_box">
+					
+						<a class="editor" href="javascript:void(0);"
+							onClick="add_ad('$!{addr.id}','$!{return_free_apply}')">编辑</a>
+					</div>
+				</h1>
+				<p class="address">$!{addr.area_info}</p>
+			</div>
+			<div class="border">
+				<img
+					src="$!cdnServer/resources/style/system/front/default/images/weixin/address_default.png">
+			</div>
+		</div>
+		#end #end
+		<script>
+jQuery(document).ready(function(){
+jQuery("div[id^=addr_]").each(function(){
+				jQuery(this).siblings(".address_del").height(jQuery(this).height() + 9);
+				jQuery(this).siblings(".address_del").css("line-height",jQuery(this).height()+9+"px");
+			})
+})
+
+</script>
+		#foreach($addr in $addrs) #if($!addr.default_val==0)
+		<div class="address_item" touch_id="$!addr.id" id="address_item_$!addr.id">
+			<div class="address_detail" id="addr_$!addr.id" touch_id="$!addr.id">
+
+				<div class="info" touch_id="$!addr.id">
+
+					<h1 class="number_name" touch_id="$!addr.id">
+						<span class="hoster" touch_id="$!addr.id">$!addr.trueName</span> <span class="number" touch_id="$!addr.id">$!addr.mobile</span>
+
+					</h1>
+					<p class="address" touch_id="$!addr.id">$!{addr.area_info}</p>
+				</div>
+				<div class="function" touch_id="$!addr.id">
+					<a class="click_default" href="javascript:void(0);" onClick="save_cart_address($!addr.id);" touch_id="$!addr.id">
+						点击设为默认地址</a>
+					<div class="edit_box" touch_id="$!addr.id">
+						<a class="editor" href="javascript:void(0);"
+							onClick="add_ad('$!{addr.id}','$!{return_free_apply}')" touch_id="$!addr.id">编辑</a>
+					</div>
+				</div>
+			</div>
+			<!--address_del的高度需要JS控制，需获取address_detail的高度后加10px，删除按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是150px-->
+			<div class="address_del" style="height: 150px; line-height: 150px;" touch_id="$!addr.id">
+				<a href="javascript:void(0);" onClick="del_ad('$!{addr.id}')" touch_id="$!addr.id">删除</a>
+			</div>
+		</div>
+		#end #end
+				<div class="loading" id="loading" style="display: none">
+			<ul>
+				<li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif"
+					width="16" height="16" /></li>
+				<li>正在加载....</li>
+			</ul>
+		</div>
+		<div class="loading" id="loading_none" style="display: none">
+			<ul>
+				<li>没有更多了....</li>
+			</ul>
+		</div>
+	</div>
+    
+    <div class="add_address_wrap">
+		</div>
+    <div class="address_menu">
+			<!--点击所在区域时，请JS控制address_content和address_name的css属性left变为left:0;-->
+			<div class="address_content">
+				<div class="address_name">
+					<span class="back_arow" onClick="back()"></span><span
+						class="title_name">选择收货地址</span>
+				</div>
+				<div class="address_title_h"></div>
+				<div class="address_items_box">
+					<!--显示哪一级加this-->
+					<ul class="address_list_ul this">
+						#foreach($area in $!areas)
+						<li><a href="javascript:void(0)"
+							onClick="query_address_data($!area.id)">$!area.areaName</a>
+						</li> 
+						#end
+					</ul>
+				</div>
+			</div>
+		</div>
+        </form>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+<script>
+function change_pay_type(){
+	var pay_type=jQuery("input[name='pay_type']:checked").val();
+	if(pay_type==0){
+		jQuery("#pay_type_1").show();
+		jQuery("#pay_type_10").hide();
+	}else{
+		jQuery("#pay_type_1").hide();
+		jQuery("#pay_type_10").show();
+	}
+}
+//商品图片删除
+function del_goods_image(element){
+if(confirm("删除后不可恢复，是否继续？")){	
+	jQuery(element).parent().parent().remove();
+}				   
+}
+function checkprice(value){
+	var pay_type = jQuery("input[name='pay_type']:checked").val();;
+	  if(pay_type == 0){ //人民币
+		  var least_rmb = jQuery("#least_rmb").val();
+	      if(value%least_rmb != 0){
+	    	 return false;
+	      }
+	  }
+	  return true;
+}
+function check_Num(value){
+	var re=/^([1-9]\d*|-1|0)$/;
+	return re.test($("#goodsNum").val());
+}
+jQuery.validator.addMethod("goods_price", function(value, element) {     
+    return this.optional(element) || checkprice(value);     
+}, "请正确输入人民币");
+jQuery.validator.addMethod("goodsNum", function(value, element) {     
+    return this.optional(element) || check_Num(value);     
+}, "请正确输入库存数量");
+jQuery(document).ready(function(){	
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//支付类型
+  change_pay_type();
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  class_id:{required :true},
+	  goods_name:{required:true,maxlength:30},
+	  goods_price:{required:true,
+				number:true},
+	  goodsNum:{required:true},
+	  goods_description:{maxlength:30},
+	  primaryimg_url:{required:true}
+	 },
+	messages:{
+	  class_id:{required:"分类不能为空"},
+	  goods_name:{required:"商品名不能为空",maxlength:"商品名称最多不超过30字符"},
+	  goods_price:{required:"总需人次不能为空",
+				number:"请输入正确数字"},
+	  goodsNum:{required:"商品数量不能为空"},
+	  goods_description:{maxlength:"广告语最多不超过30字符"},
+	  primaryimg_url:{required:"主图不能为空"}		
+	}
+  });  
+  jQuery("#pay_type").live("change",change_pay_type);
+  //上传图片
+  jQuery("#primary_photo").live("change",function(){
+      jQuery.ajaxFileUpload({
+	      url:'$!webPath/cloudpurchaserelease_upload?img_class=primary_photo',
+	      fileElementId:['primary_photo'],  
+		  fileFilter: "$!imageSuffix1",
+	      dataType: 'json',                
+	      success: function (data){
+	           jQuery("#primaryimg_url").val(data.src);	 
+			   jQuery("#primary_photo_ul").show();
+			   jQuery("#primary_photo_ul").find("img").attr("src",data.src);
+			}
+		});
+  });	
+  jQuery("#secondary_photo").live("change",function(){
+		jQuery.ajaxFileUpload({
+	          url:'$!webPath/cloudpurchaserelease_upload?img_class=secondary_photo',
+	          fileElementId:['secondary_photo'],  
+			  fileFilter: "$!imageSuffix1",
+	          dataType: 'json',                
+	          success: function (data){
+				  jQuery("#secondary_photo_ul").show();
+				  jQuery("#secondary_photo_ul").find(".choose_img_right").append("<span style='width:100px; height:100px;' ><img src='"+data.src+"' width='100' height='100'/><b><a onclick='del_goods_image(this);' href='javascript:void(0)'>删除</a></b></span> ");				  
+			}
+		});
+	});
+	  
+	//options为编辑配置属性
+		var options = {
+			cssPath : '$!cdnServer/resources/editor/themes/default/default.css',
+			filterMode : true,
+			uploadJson : '$!webPath/upload',
+			width : '700px',
+			height : '400px',
+			syncType : "form",
+			afterCreate : function() {
+				var self = this;
+				self.sync();
+			},
+			afterChange : function() {
+				var self = this;
+				self.sync();
+			},
+			afterBlur : function() {
+				var self = this;
+				self.sync();
+			},
+			items : [ 'source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut',
+					'copy', 'paste', 'plainpaste', 'wordpaste', '|', 'justifyleft',
+					'justifycenter', 'justifyright', 'justifyfull',
+					'insertorderedlist', 'insertunorderedlist', 'indent',
+					'outdent', 'subscript', 'superscript', '|', 'selectall',
+					'clearhtml', 'quickformat', '|', 'formatblock', 'fontname',
+					'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic',
+					'underline', 'strikethrough', 'lineheight', 'removeformat',
+					'|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink',
+					'|', 'about' ]
+		};
+
+		//在某个特定位置加入编辑器
+		editor = KindEditor.create('#goods_detail', options);
+  
+});
+
+function saveForm(method){
+	editor.sync();
+	var arr=new Array();
+	jQuery.each(jQuery("#secondary_photo_ul").find("img"),function(index,value){
+		arr.push(jQuery(value).attr("src"));
+	});
+	jQuery("#secondaryimg_url").val(JSON.stringify(arr));
+	jQuery("#theForm").submit();
+}
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">云购商品管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li> <a href="$!webPath/cloudpurchasegoods_list"><b>管理</b></a></li>
+      <li> <a href="$!webPath/cloudpurchasegoods_add"  #if(!$!edit) class="this" #end ><b>新增</b></a> </li>
+      #if($!edit)
+      <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+      #end
+    </ul>
+  </div>
+  <form action="$!webPath/cloudpurchasegoods_save" method=post enctype="multipart/form-data" name="theForm" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/cloudpurchasegoods_list" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/cloudpurchasegoods_add" />
+    <input name="secondaryimg_url" type="hidden" id="secondaryimg_url" value="" />
+    <div class="edit">
+      <div class="editul setcont ">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>云购分类</li>
+          <li><span class="webname">
+            <select name="class_id" id="class_id" >
+              <option value="" #if(!$obj)selected="selected"#end>请选择</option>
+              
+            #foreach($class in $goodsclass)
+          
+              <option value="$!class.id" #if($!obj.class_id==$!class.id)selected="selected"#end>$!class.class_name</option>
+              
+            #end
+        
+            </select>
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>商品名</li>
+          <li><span class="webname">
+            <input name="goods_name" class="required goods_name" type="text" id="goods_name" value="$!obj.goods_name" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg">广告语</li>
+          <li><span class="webname">
+            <input name="goods_description" type="text" id="goods_description" value="$!obj.goods_description" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+        <li  class="setcont_bg">支付类型</li>
+        <li class="radiosp">
+        <label><span style="clear:both">
+          <input id="pay_type" name="pay_type" type="radio" value="0" #if(!$obj||$obj.pay_type!=1)checked="checked" #end>
+          </span><span>人民币</span> </label>
+        <label>
+        </li>
+        </ul>
+        <ul class="set1" id="pay_type_1">
+          <li  class="setcont_bg">最少购买</li>
+          <li><span class="webname">
+            <select name="least_rmb" id="least_rmb" >
+              <option value="1" #if(!$obj||$!obj.least_rmb==1)selected="selected"#end>1人次</option>
+              <option value="10" #if($!obj.least_rmb==10)selected="selected"#end>10人次</option>
+            </select>
+            </span> <span id="nothis"><strong class="q"></strong><strong class="w">每次参与，人次必须是一或十的倍数</strong><strong class="c"></strong></span> </li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>总需人次</li>
+          <li><span class="webname">
+            <input name="goods_price" class="required goods_price" type="text" id="goods_price" value="$!obj.goods_price" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">请输入正整数</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg">商品库存</li>
+          <li><span class="webname">
+            <input name="goodsNum" class="required goodsNum" type="text" id="goodsNum" value="$!obj.goodsNum" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">商品库存请填写正整数</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">主图上传</li>
+          <li>
+            <div class="choose_img_upload"><i>
+              <input class="ip200" type="file" id="primary_photo" name="primary_photo" />
+              </i> <span>上传图片</span> </div>
+            <input name="primaryimg_url" type="text" id="primaryimg_url" value="$!obj.primary_photo" style="height:0px;width:0px;border:0px;color:#FDFDFD" />
+          </li>
+        </ul>
+        <ul class="set1" #if(!$obj.primary_photo) style="display:none" #end id="primary_photo_ul">
+          <li class="setcont_bg">图片预览</li>
+          <li><span class="webname"> <img src="$!CommUtil.replaceImgWebServer($!imageWebServer,$!obj.primary_photo)" width="100" height="100"  /> </span> </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">副图上传</li>
+          <li>
+            <div class="choose_img_upload"><i>
+              <input class="ip200" type="file" id="secondary_photo" name="secondary_photo"/>
+              </i> <span>上传图片</span></div>
+          </li>
+        </ul>
+        <ul class="set1" #if(!$obj.secondary_photo) style="display:none" #end id="secondary_photo_ul">
+          <li class="setcont_bg">图片预览</li>
+          <li class="choose_img_right">
+          	#if($!obj.secondary_photo !="") 
+            	#foreach($secondary_photo in $photos) <span style="width:100px; height:100px;" ><img src="$!CommUtil.replaceImgWebServer($!imageWebServer,$secondary_photo)" width="100" height="100"/><b><a onclick="del_goods_image(this);" href="javascript:void(0)">删除</a></b></span> #end 
+            #end </li>
+        </ul>
+        <ul class="set1" id="advert_url">
+          <li class="setcont_bg">商品详情</li>
+          <li><span class="webname">
+            <input name="goods_detail" type="text" id="goods_detail" value="$!obj.goods_detail" />
+            </span></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> 
+    <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户注册 -$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ //
+  jQuery("#userName").focus();
+  jQuery("#password,#email_password,#phone_password").keyup(function(){
+	 var id=jQuery(this).attr("id");
+	 var password = jQuery(this).val();
+	 jQuery("#"+id+"_li span").removeClass("this");
+	 var level=passwordSecurityLevel(password);
+	      if(level==0){
+		   jQuery("#"+id+"_li span").removeClass("this");
+		  }
+		  if(level==1){
+		   jQuery("#"+id+"_li .login_ul_li_password1").addClass("this");  
+		   }
+		  if(level==2 || level==3){
+		   jQuery("#"+id+"_li .login_ul_li_password2").addClass("this");  
+		   }	  
+		  if(level==4){
+		   jQuery("#"+id+"_li .login_ul_li_password3").addClass("this");  
+		  }		
+	  
+  });
+ jQuery(".regist_top_nav span").live("click",function(){ 
+	  var id = jQuery(this).attr("id");
+	  var v=jQuery(this).attr("v");
+	 jQuery(".regist_top_nav span").each(function(){
+		if(jQuery(this).attr("id")==id){
+			if($!config.securityCodeLogin){
+				if(v=="email"){
+					refreshCode_email();
+				}else if(v=="mobile"){
+					refreshCode_phone();
+				}else{
+					refreshCode();
+				}
+			}
+			jQuery(this).addClass("this");
+			var i="#"+jQuery(this).attr("id").substring(0,6);
+			jQuery(i).show();
+			jQuery("#"+v).focus();
+			}else{
+			jQuery(this).removeClass("this");
+		   var i="#"+jQuery(this).attr("id").substring(0,6);
+		   jQuery(i).hide();
+			}
+		})
+  });
+   jQuery.validator.addMethod("verify1",function(value,element){
+	    var re =  /^([0-9a-zA-Z]|[\u4E00-\u9FA5])+$/;
+        if(re.test(jQuery("#userName").val())){			
+			return true;
+		  } 
+		  else {
+		    return false;
+			  }		  
+});
+jQuery.validator.addMethod("phone",function(value,element){
+	    var re =  /(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
+        if(re.test(jQuery("#mobile").val())){			
+			return true;
+		  } 
+		  else {
+		    return false;
+			  }		  
+});
+ jQuery("#theForm").validate({				 
+	errorPlacement:function(error, element) {
+        var display =jQuery("#error label").css("display");
+		if(display=="none"){
+			        jQuery("#error").html(error);
+					jQuery(element).focus()	
+					}	
+      },
+	  rules:{
+	    userName:{
+		  required:true,
+		  verify1:true,
+          remote:{
+		    url: "$!webPath/verify_username",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "userName": function(){return jQuery("#userName").val();}
+		     }
+			}
+		},
+        password:{
+		  required:true,
+		  minlength:6,
+		  maxlength:20  
+		},
+		repassword:{
+		  required:true,
+		  equalTo:"#password" 
+		}#if($!config.securityCodeRegister),
+		code:{
+		  required:true,
+		  remote:{
+		    url: "$!webPath/verify_code",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "code": function(){return jQuery("#code").val();}
+		     }
+		  }
+		}
+		#end
+	  },
+	  messages:{
+	    userName:{
+		  required:"用户名不能为空",
+		  verify1:"不可使用特殊字符",
+		  remote:"用户名已存在"
+		},
+        password:{
+		  required:"密码不能为空",
+		  minlength:"密码不能小于{0}个字符",
+		  maxlength:"密码不能大于{0}个字符" 
+		},
+		repassword:{
+		  required:"确认密码不能为空",
+		  equalTo:"两次输入密码不一致"
+		}#if($!config.securityCodeRegister),
+		code:{
+		  required:"验证码不能为空",
+		  remote:"验证码不正确"
+		}
+		#end
+	  }
+	});
+	jQuery("#phoneForm").validate({	 
+	  errorPlacement:function(error, element) {
+        var display =jQuery("#phone_error label").css("display");
+		       if(display=="none"){
+					jQuery("#phone_error").html(error);
+					jQuery(element).focus()	
+					}	 
+      },
+	  rules:{ 
+		mobile:{
+		  required:true,
+		  phone:true,
+		  remote:{
+		    url: "$!webPath/verify_mobile",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "mobile": function(){return jQuery("#mobile").val();},
+				  "type": function(){return jQuery("#type").val();}
+		     }
+		  }
+		},m_code:{required:true,digits:true,remote:{
+		    url: "$!webPath/verify_mcode",     
+            type: "post",               
+            dataType: "json",          
+            data: {                     
+                   "mcode": function(){return jQuery("#m_code").val();},
+				   "mobile": function(){return jQuery("#mobile").val();}
+		     }
+		  }},
+        phone_password:{
+		  required:true,
+		  minlength:6,
+		  maxlength:20  
+		}#if($!config.securityCodeRegister),
+		phone_code:{
+		  required:true,
+		  remote:{
+		    url: "$!webPath/verify_code",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "code": function(){return jQuery("#phone_code").val();}
+		     }
+		  }
+		}
+		#end
+	  },
+	  messages:{
+		mobile:{
+		  required:"手机号不能为空",
+		  phone:"格式不正确",
+		  remote:"该手机号已经被注册"
+		},
+		m_code:{
+		  required:"请输入手机验证码",
+		  digits:"格式不正确",
+		  remote:"动态码不正确"
+		},
+        phone_password:{
+		  required:"密码不能为空",
+		  minlength:"密码不能小于{0}个字符",
+		  maxlength:"密码不能大于{0}个字符" 
+		}#if($!config.securityCodeRegister),
+		phone_code:{
+		  required:"验证码不能为空",
+		  remote:"验证码不正确"
+		}
+		#end
+	  }
+	});
+	jQuery("#emailForm").validate({				 
+	errorPlacement:function(error, element) {
+		var display =jQuery("#email_error label").css("display");
+				if(display=="none"){
+					jQuery("#email_error").html(error);
+					jQuery(element).focus()	
+					}	   
+      },
+	  rules:{
+		email:{
+		  required:true,
+		  email:true,
+		  remote:{
+		    url: "$!webPath/verify_email",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "email": function(){return jQuery("#email").val();}
+		     }
+		  }
+		},
+        email_password:{
+		  required:true,
+		  minlength:6,
+		  maxlength:20  
+		}#if($!config.securityCodeRegister),
+		email_code:{
+		  required:true,
+		  remote:{
+		    url: "$!webPath/verify_code",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "code": function(){return jQuery("#email_code").val();}
+		     }
+		  }
+		}
+		#end
+	  },
+	  messages:{
+       email_password:{
+		  required:"密码不能为空",
+		  minlength:"密码不能小于{0}个字符",
+		  maxlength:"密码不能大于{0}个字符" 
+		},
+		email:{
+		  required:"邮箱不能为空",
+		  email:"邮箱格式不正确",
+		  remote:"该邮箱已经被注册"
+		}#if($!config.securityCodeRegister),
+		email_code:{
+		  required:"验证码不能为空",
+		  remote:"验证码不正确"
+		}
+		#end
+	  }
+	});
+});
+function passwordSecurityLevel(password) {
+    var level = 0;
+	if (/[a-z]/.test(password)){
+		level++;    //lowercase
+	}
+	if (/[A-Z]/.test(password)){
+		level++;    //uppercase
+	} 
+	if(/[0-9]/.test(password)){
+		level++;    //digital
+	}
+	if(containSpecialChar(password)){
+		level++;    //specialcase
+	}
+	return level;
+
+}
+function containSpecialChar(str)   
+{   
+    var containSpecial = RegExp(/[(\ )(\~)(\!)(\@)(\#)(\$)(\%)(\^)(\&)(\*)(\()(\))(\-)(\_)(\+)(\=)(\[)(\])(\{)(\})(\|)(\\)(\')(\")(\,)(\.)(\/)(\<)(\>)(\?)(\)]+/);
+    return (containSpecial.test(str));   
+}
+function send_mcode(obj){
+	       if(jQuery("#phoneForm").validate().element(jQuery("#mobile"))){
+	         if(jQuery(obj).attr("do")=="true"){		
+	         var m=jQuery("#mobile").val();
+			 var t=jQuery("#type").val();
+			 jQuery.ajax({type:'POST',url:'$!webPath/send_mcode',dataType:"json",data:{"mobile":m,"type":t,"verify_mobile_code":"$!{verify_mobile_code}"},
+				  success:function(data){
+					 if(data.ret==100){
+						 jQuery("#phone_error label").show().html(data.msg).animate({'display':'block'},4000,'',function(){jQuery("#phone_error label").fadeOut(1000)});
+					   time(obj);
+					  }else{
+						  jQuery("#phone_error label").show().html(data.msg);
+					  } 
+				  }
+				  
+			 });		
+			 }}
+}
+var wait=60;
+function time(obj) {//o为按钮的对象，p为可选，这里是60秒过后，提示文字的改变
+        jQuery("#send_mcode_span").attr("class","phone_input_button this");
+		if (wait == 0) {
+		jQuery("#send_mcode_span").attr("class","phone_input_button");
+		jQuery(obj).attr("do", true);
+		jQuery(obj).html("点击获取验证码");//改变按钮中value的值
+		wait = 60;
+		} else {
+		jQuery(obj).attr("do", false);//倒计时过程中禁止点击按钮
+		jQuery(obj).html("重新获取（"+wait+"）");//改变按钮中value的值
+		wait--;
+		setTimeout(function() {
+		time(obj);//循环调用
+		},
+		1000)
+		}
+}
+function save(obj){
+   jQuery("#"+obj).submit();
+}
+</script>
+</head>
+<body>
+
+<div class="login_head">
+  <h1><span>#if($!config.websiteLogo) <a href="$!webPath/index"> <img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /> </a> #else <a href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/logo.jpg"  /> </a> #end</span><strong>用户注册</strong></h1>
+</div>
+<div class="regist_box_bg"></div>
+<div class="regist_box_m">
+  <div class="regist_box_center"> 
+    <!--切换导航-->
+    <div class="regist_top_nav"> <span id="uname_register" v="userName" class="this">账户注册<em></em></span>#if($!config.phone_register=="1") <span id="phone_register"  v="mobile">手机注册<em></em></span>#end  #if($!config.email_register=="1")<span id="email_register" v="email">邮箱注册<em></em></span> #end</div>
+    
+    <!--普通登录 -->
+    <div id="uname_" class="login_box_login" style="display:; margin-left:8%; display:;">
+    <form action="$!webPath/register_finish" method="post" name="theForm" id="theForm">
+      <ul class="login_ul">
+        <div id="error">
+        <label  style="display:none"></label>
+        </div>
+        <li class="login_ul_li">
+         <b>用户名：</b>
+          <input name="userName" type="text" id="userName" class="login_input_name" placeholder="请输入用户名" style="padding-left:85px; width:214px;"/>
+        </li>
+        <li class="login_ul_li">
+         <b>登录密码：</b>
+          <input name="password" type="password" id="password" class="login_input_pwd" placeholder="登录密码" style="padding-left:85px; width:214px;"/>
+          
+        </li>
+        <li id="password_li" class="login_ul_li_password" >
+        	<span class="login_ul_li_password1">弱</span>
+            <span class="login_ul_li_password2">中</span>
+            <span class="login_ul_li_password3">强</span>
+</li>
+        <li class="login_ul_li">
+        <b>确认密码：</b>
+          <input name="repassword" type="password" id="repassword" class="login_input_pwd" placeholder="再次输入密码" style="padding-left:85px; width:214px;"/>
+          
+        </li>
+        #if($!config.securityCodeRegister)
+              <script>
+                 function refreshCode(){
+	                 jQuery("#code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+                 }
+             </script>
+        <li class="login_auto">
+        <strong>验证码：</strong>
+          <input name="code" type="text" id="code" class="login_code" placeholder="验证码"  style="padding-left:85px;" style="padding-left:85px;"/>
+          
+           #if($!config.securityCodeType=='voice')
+            <script>   
+				   function readCode(id){
+					  var  s = "<embed id='sound_play' name='sound_play' src='$!cdnServer/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                    jQuery("#"+id).html(s);
+                    }
+			 </script>
+          <b><img id="code_img" src="$!webPath/verify" width="86" height="40" style="display:none;" /></b><a href="javascript:void(0);" onclick="readCode('player1')" title="朗读验证码" class="code_speech"></a><i id="player1"></i>
+           #else
+               <b class="regist_code_img"><img id="code_img" src="$!webPath/verify" width="86" height="40" /></b><a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a>
+             #end  
+          </li>
+          #end
+      </ul>
+      <div class="regist_agree">点击注册，表示您已同意<a onclick="jQuery('#agree_article').show();" href="javascript:void(0);">《服务协议》</a></div>
+      <div class="login_btn">
+        <input name="" type="button"  value="注册" onclick="save('theForm');"/>
+      </div>
+      <div class="login_btn_o">
+        <a href="$!webPath/user/login">已有账号，立即登录</a>
+      </div>
+      </form>
+    </div>
+    
+    <!--手机动态码登录-->
+    <div id="phone_" class="login_phone_cd" style=" margin-left:8%; display:none;">
+    <form action="$!webPath/phone_register_finish" method="post" name="phoneForm" id="phoneForm">
+      <ul class="login_ul">
+        <div id="phone_error">
+        <label  style="display:none"></label>
+        </div>
+        <input name="type" type="hidden" id="type" value="register"/>
+        <li class="login_ul_li">
+        <b>手机号：</b>
+          <input name="mobile"  id="mobile" type="text" class="phone_input_name" placeholder="请输入手机号" style="padding-left:85px; width:214px;" />
+        </li>
+        <li class="login_ul_li">
+          <input name="m_code" id="m_code" type="text" class="phone_input_pwd" placeholder="请输入6位手机验证码" />
+          
+          <span id="send_mcode_span" class="phone_input_button"><a do="true" href="javascript:void(0);" onclick="send_mcode(this);">点击获取验证码</a></span> </li>
+        <li class="login_ul_li" style="margin-top:5px">
+        <b>设置密码：</b>
+          <input name="phone_password" id="phone_password" type="password" class="login_input_pwd" placeholder="登录密码" style="padding-left:85px; width:214px;"/>
+          
+        </li>
+        <li id="phone_password_li" class="login_ul_li_password" >
+        	<span class="login_ul_li_password1">弱</span>
+            <span class="login_ul_li_password2">中</span>
+            <span class="login_ul_li_password3">强</span>
+</li>
+        
+        #if($!config.securityCodeRegister)
+              <script>
+                 function refreshCode_phone(){
+	                 jQuery("#phone_code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+                 }
+             </script>
+        <li class="login_auto">
+        <strong>验证码：</strong>
+          <input name="phone_code" type="text" id="phone_code" class="login_code" placeholder="验证码"  style="padding-left:85px;"/>
+          
+           #if($!config.securityCodeType=='voice')
+            <script>   
+				   function p_readCode(id){
+					  var  s = "<embed id='sound_play' name='sound_play' src='$!cdnServer/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                    jQuery("#"+id).html(s);
+                    }
+			 </script>
+          <b><img id="phone_code_img" src="$!webPath/verify" width="86" height="40" style="display:none;" /></b><a href="javascript:void(0);" onclick="p_readCode('player2')" title="朗读验证码" class="code_speech"></a><i id="player2"></i>
+           #else
+               <b class="regist_code_img"><img id="phone_code_img" src="$!webPath/verify" width="86" height="40" /></b><a href="javascript:void(0);" onclick="refreshCode_phone();" class="code_refresh"></a>
+             #end  
+          </li>
+          #end
+      </ul>
+      
+      <div class="regist_agree">点击注册，表示您已同意<a onclick="jQuery('#agree_article').show();" href="javascript:void(0);">《服务协议》</a></div>
+      <div class="login_btn">
+        <input name="" type="button"  value="注册" onclick="save('phoneForm');"/>
+      </div>
+            <div class="login_btn_o">
+        <a href="$!webPath/user/login">已有账号，立即登录</a>
+      </div>
+      </form>
+    </div>
+    
+    <!--邮箱登录 -->
+    <div id="email_" class="login_box_login" style="display:; margin-left:8%; display:none;">
+    <form action="$!webPath/email_register_finish" method="post" name="emailForm" id="emailForm">
+      <input id="register_type" name="register_type" value="email"  type="hidden"/>
+      <ul class="login_ul">
+        <div id="email_error">
+        <label style="display:none"></label>
+        </div>
+        <li class="login_ul_li">
+        <b>邮箱：</b>
+          <input name="email" type="text"  id="email" class="login_input_name_mail" placeholder="请输入邮箱" style="padding-left:85px; width:214px;"/>
+          
+        </li>
+        <li class="login_ul_li">
+        <b>设置密码：</b>
+          <input name="email_password" type="password" id="email_password" class="login_input_pwd" placeholder="登录密码" style="padding-left:85px; width:214px;"/>
+          
+        </li>
+        <li id="email_password_li" class="login_ul_li_password" >
+        	<span class="login_ul_li_password1">弱</span>
+            <span class="login_ul_li_password2">中</span>
+            <span class="login_ul_li_password3">强</span>
+</li>
+        
+        #if($!config.securityCodeRegister)
+              <script>
+                 function refreshCode_email(){
+	                 jQuery("#email_code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+                 }
+             </script>
+        <li class="login_auto">
+         <strong>验证码：</strong>
+          <input name="email_code" type="text" id="email_code" class="login_code" placeholder="验证码"  style="padding-left:85px;"/>
+          
+           #if($!config.securityCodeType=='voice')
+            <script>   
+				   function e_readCode(id){
+					  var  s = "<embed id='sound_play' name='sound_play' src='$!cdnServer/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                    jQuery("#"+id).html(s);
+                    }
+			 </script>
+          <b><img id="email_code_img" src="$!webPath/verify" width="86" height="40" style="display:none;" /></b><a href="javascript:void(0);" onclick="readCode('player3')" title="朗读验证码" class="code_speech"></a><i id="player3"></i>
+           #else
+               <b class="regist_code_img"><img id="email_code_img" src="$!webPath/verify" width="86" height="40" /></b><a href="javascript:void(0);" onclick="refreshCode_email();" class="code_refresh"></a>
+             #end  
+          </li>
+          #end
+      </ul>
+      <div class="regist_agree">点击注册，表示您已同意<a href="javascript:void(0);" onclick="jQuery('#agree_article').show();">《服务协议》</a></div>
+      <div class="login_btn">
+        <input name="" type="button"  value="注册" onclick="save('emailForm');"/>
+      </div>
+            <div class="login_btn_o">
+        <a href="$!webPath/user/login">已有账号，立即登录</a>
+      </div>
+      </form>
+    </div>
+    
+    
+  </div>
+</div>
+<div style="display:none;" id="agree_article">
+  <div class="white_content" > </div>
+  <div class="white_content_box"> <a href="javascript:void(0);"  onclick="jQuery('#agree_article').hide();" class="white_close"><img src="$!cdnServer/resources/style/system/front/default/images/login/close.gif" width="16" height="16" /></a>
+    <div class="white_con">
+      <h3 class="white_title"><span>用户注册协议</span></h3>
+      <div class="white_box">
+        <div class="white_box_contant"> $!doc.content </div>
+      </div>
+      <div class="white_box_btn">
+        <input name="" type="button" value="同意并继续" onclick="jQuery('#agree_article').hide();" />
+      </div>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</body>
+</html>

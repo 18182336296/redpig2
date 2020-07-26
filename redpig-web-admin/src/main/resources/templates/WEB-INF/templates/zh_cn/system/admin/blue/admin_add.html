@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!{config.title}</title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#theForm").validate({
+    rules:{
+	#if($!op=="admin_add")
+	  userName:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/verify_username",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "userName": function(){return jQuery("#userName").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  },
+	  password:{required :true,minlength:6}
+	  #end
+	  #if($!op=="admin_edit")
+	  new_password:{required:true,minlength:6},
+	  re_newpassword:{required:true,equalTo:"#new_password"}
+	  #end
+	 },
+	messages:{
+	  #if($!op=="admin_add")
+	  userName:{required:"用户名不能为空",remote:"该用户已经存在"},
+	  password:{required:"密码不能为空",minlength:"密码至少为6位"}
+	  #end
+	  #if($!op=="admin_edit")
+	  new_password:{required:"新密码不能为空",minlength:"密码长度不能小于{0}"},
+	  re_newpassword:{required:"确认新密码不能为空",equalTo:"两次密码输入不一致"}
+	  #end
+	}
+  });
+  //
+  jQuery(":checkbox[id^=rg_ck_]").click(function(){
+     var val=jQuery(this).attr("id").substring(6);
+	 var ck=jQuery(this).attr("checked");
+	 var expr="ul[id=rg_"+val+"] :checkbox";
+	 if(ck=="checked"){
+	   jQuery(expr).attr("checked",true);
+	 }else jQuery(expr).attr("checked",false);
+  });
+});
+function saveForm(){
+  var menus="";
+  jQuery(":checkbox:checked[id!='all']").each(function(){
+     if(jQuery(this).val()!=""){
+       menus=menus+","+jQuery(this).val();
+	 }
+  });
+  jQuery("#menu_ids").val(menus);
+  jQuery("#theForm").submit();
+}
+//全选
+function select_All(obj){
+	var checked =jQuery(obj).attr("checked");
+	if(checked=="checked"){
+			jQuery("#theForm").find("input[type='checkbox']").attr("checked","checked");
+		}else{
+			jQuery("#theForm").find("input[type='checkbox']").attr("checked",false);
+			}
+	}
+</script>
+<body>
+<form name="theForm" id="theForm" action="$!webPath/admin_save" method="post">
+<input id="id" name="id" type="hidden" value="$!obj.id"/>
+<input name="userRole" type="hidden" id="userRole" value="ADMIN"/>
+<input name="list_url" type="hidden" id="list_url" value="$!webPath/admin_list" />
+<input name="add_url" type="hidden" id="add_url" value="$!webPath/admin_add" />
+<input name="menu_ids" type="hidden" id="menu_ids" />
+<div class="cont">
+  <h1 class="seth">管理员管理</h1>
+  
+  <div class="nav_list">
+  <ul>
+  
+  <li><a href="$!webPath/admin_list"><b>管理员列表</b></a> </li> 
+  <li><a href="$!webPath/admin_add" #if($!op=="admin_add")class="this"#end><b>管理员新增</b></a></li>
+  #if($!op=="admin_set")<li><a href="javascript:void(0);" class="this"><b>编辑权限</b></a></li>#end
+  #if($!op=="admin_edit")<li><a href="javascript:void(0);" class="this"><b>修改密码</b></a></li>#end
+  
+   <li><a href="$!webPath/admin_log_list"><b>系统日志</b></a></li>        
+  </ul>
+  </div>
+  
+  <div class="edit">
+  #if($!op=="admin_add")
+    <div class="editul setcont">
+      <ul class="set3">
+        <li ><strong class="sred">*</strong>用户名</li>
+        <li ><span class="webname">
+          <input name="userName" type="text" id="userName" value="$!obj.userName"/>
+          </span></li>
+      </ul>
+      <ul class="set3">
+        <li ><strong class="sred">*</strong>密码</li>
+        <li><span class="webname">
+          <input name="password" type="password" id="password" />
+        </span></li>
+      </ul>
+    </div>
+	#end
+	
+	#if($!op=="admin_edit")
+	 <div class="editul setcont">
+	<ul class="set3">
+        <li >新密码</li>
+        <li ><span class="webname">
+          <input name="new_password" type="password" id="new_password" />
+        </span></li>
+      </ul>
+	 <ul class="set3">
+        <li >确认密码</li>
+        <li ><span class="webname">
+          <input name="re_newpassword" type="password" id="re_newpassword" />
+        </span></li>
+      </ul>
+	  </div>
+	#end
+	
+	#if($!op=="admin_set")
+	<div class="specification"><h2>用户名:$!obj.userName</h2></div>
+	#end
+	
+	#if($!op=="admin_add")
+	<div class="specification"><h2><b><label><input id="all" name="all" onclick="select_All(this)" type="checkbox"><span class="lbl"> 全选</span></label></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;权限管理</h2></div>
+	#end
+	
+	#if($!op!="admin_edit")
+			#foreach($menu in $menus)
+			   <div class="spec_sports_box">
+					<ul class="spec_sports_left">
+						<li>
+						<label> 
+							<b class="spec_check"><input
+									name="rg_ck_$!{menu.id}" type="checkbox" id="rg_ck_$!{menu.id}" value="$!{menu.id}" /> </b> 
+							<b>$!{menu.name}</b>
+						</label>
+						</li>
+					</ul>
+					<ul class="spec_sports" id="rg_$!{menu.id}">
+						#foreach($child in $menu.allChilds)
+						<li><label><b class="spec_check2"><input
+									name="menu_$!{child.id}" type="checkbox" id="menu_$!{child.id}" value="$!{child.id}" /></b> <em>$!{child.name}</em></label>
+						</li>
+						#end
+					</ul>
+				</div>
+			#end
+      
+	#end
+    </div>
+  </div>
+  <div class="submit">
+    <input name="save" type="button" id="save" value="保存" onclick="saveForm();" />
+  </div>
+</div>
+</form>
+</body>
+</html>

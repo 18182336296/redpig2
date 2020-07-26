@@ -1,0 +1,18 @@
+<!--店铺收藏追加数据-->
+ #foreach($obj in $objs)
+<div class="s_collect_item" > 
+  #if($!obj.store_photo)
+  #set($store_logo="$!imageWebServer/$!{obj.store_photo}")
+  #else
+  #set($store_logo="$!imageWebServer/$!config.storeImage.path/$!config.storeImage.name")
+  #end
+  <!--点击编辑按钮后ul添加editor_show--> 
+  <ul>
+    <li class="s_logo"><a href="$!webPath/wap/store?id=$!obj.store_id"> <img src="$!store_logo"></a></li>
+    <!--$!store_logo-->
+    <li class="s_name"><a href="$!webPath/wap/store?id=$!obj.store_id">$!obj.store_name</a></li>
+    <li class="editor"><span id="store_$!obj.id" cid="$!obj.id" onClick="choose_store_pitch($!{obj.id})"></span></li>
+    <!--选中时span加pitch_on-->
+  </ul>
+</div>
+#end

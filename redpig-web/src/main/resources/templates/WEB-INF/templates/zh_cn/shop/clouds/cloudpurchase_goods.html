@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>云购 - $!{config.poweredby}</title>
+<meta name="keywords" content="#if($!store.store_seo_keywords!="") $!store.store_seo_keywords #else $!config.keywords #end" />
+<meta name="description" content="#if($!store.store_seo_description!="") $!store.store_seo_description #else $!config.description #end" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/cloud.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/requestAnimationFrame.js"></script>
+<script src="$!cdnServer/resources/js/jquery.fly.min.js"></script>
+<script>
+function div_hide(){
+	  jQuery(".black_overlay_bg").hide();
+	  jQuery(".c_msgbox").hide();
+   }
+jQuery(document).ready(function(){
+  jQuery("#title").live("click",function(){
+		jQuery(".c_msgbox").show();
+		jQuery(".black_overlay_bg").show();
+		});
+	
+	jQuery("#img_list").find("img").live("mouseover",function(){
+		jQuery("#img_list").find("li").attr("class","");
+		jQuery(this).parent().attr("class","this");
+		jQuery("#big_img").attr("src",jQuery(this).attr("src"));
+	});
+	#if($user)
+	jQuery(".purchase_goodslist_buy").find("a").live("click",
+  function() {
+      var lottery_id = jQuery(this).attr("lottery_id");
+		var type=jQuery(this).attr("type");
+		var addcount=jQuery("#addcount").val();
+		var goods_img=jQuery(this).attr("img");
+		var left=jQuery(this).offset().left;
+	    var top=jQuery(this).offset().top-30;
+		if(lottery_id&&type)
+      jQuery.post("$!webPath/cloudbuy/cart_add", {
+          "lottery_id": lottery_id,
+          "count": addcount
+      },
+      function(data) {
+         if(data.data.status==1){
+			   if(type=="add"){
+			    jQuery(".goods_b_cart[lottery_id="+lottery_id+"]").attr("class","goods_b_cart1");
+				if(!jQuery(".u-flyer").is(':animated')){
+			 	var offset = jQuery('.cart_nb').offset(), flyer = jQuery('<img style="z-index:101" width="30px" height="30" class="u-flyer" src="'+goods_img+'"/>');
+															flyer.fly({
+																start: {
+																	left: left-jQuery(document).scrollLeft(),
+																	top: top-jQuery(document).scrollTop()
+																},
+																end: {
+																	left: offset.left-jQuery(document).scrollLeft(),
+																	top: offset.top-jQuery(document).scrollTop(),
+																	width: 10,
+																	height: 10
+																},onEnd: function(){
+										                            jQuery(".u-flyer").remove();
+																	jQuery(".cart_nb").html(data.data.count);
+																	} 
+															});
+															}
+			   }
+			   else{
+			   	window.location.href="$!webPath/cloudbuy/cart"; 
+			   }
+		   }else{
+			   showDialog("msg_info","","添加失败！",2,"warning",3,'');
+		   }
+
+      },
+      "json");
+  });
+	
+	#end
+	jQuery("#addcount").live("change",function(){				
+		var addcount=jQuery("#addcount").val();
+		if(isNaN(addcount)){
+			jQuery("#addcount").val($goods.least_rmb);
+		}
+		addcount=parseInt(addcount);
+		if(addcount>$!lottery.purchased_left_times)
+			jQuery("#addcount").val($!lottery.purchased_left_times);
+		if(addcount<0)
+			jQuery("#addcount").val($goods.least_rmb);
+	});
+	
+	#if($!lottery.status==10)
+	setInterval(clock,1000);
+	#end
+	jQuery(".purchase_goodsbd_table").find("li").live("click",function(){
+		jQuery(".purchase_goodsbd_table").find("li").attr("class","");
+		jQuery(this).attr("class","this");
+		var mark=jQuery(this).attr("mark");
+		jQuery(".purchase_goodsbd_img").hide();
+		jQuery(".purchase_record").hide();
+		jQuery(".history_pannel").hide();
+		jQuery("div[mark='"+mark+"']").show();
+		if(mark=="record"){
+			jQuery.post("$!webPath/cloudbuy/record", {
+          "id": $lottery.id
+			},
+			function(data){
+			   jQuery("div[mark='"+mark+"']").empty();
+			   jQuery("div[mark='"+mark+"']").append(data);
+			});
+		  }else if(mark=="history"){
+			jQuery.post("$!webPath/cloudbuy/history", {
+          "id": $lottery.id
+			},
+			function(data) {
+			   jQuery("div[mark='"+mark+"']").empty();
+			   jQuery("div[mark='"+mark+"']").append(data);
+			});
+		}
+	});
+	jQuery("b[mark=50]").hover(function(){
+		jQuery(this).parent().find(".more").show();
+	},function(){
+		jQuery(this).parent().find(".more").hide();
+	});
+	jQuery("b[mark=ssc]").hover(function(){
+		jQuery(this).parent().find(".more").show();
+	},function(){
+		jQuery(this).parent().find(".more").hide();
+	});
+});
+function clock(){
+	var date="$!announced_date";
+	var now = new Date();
+	var diff = date-now.getTime();
+	if(diff>0){
+		var hh = parseInt(diff / 1000 / 60 / 60 % 24);//计算剩余的小时数  
+       var mm = parseInt(diff / 1000 / 60 % 60);//计算剩余的分钟数  
+       var ss = parseInt(diff / 1000 % 60, 10);//计算剩余的秒数  
+		 hh = checkTime(hh);  
+       mm = checkTime(mm);  
+       ss = checkTime(ss); 
+		 
+		jQuery(".purchase_part_right_time").html(hh+":"+mm+":"+ss);
+	}else{
+		jQuery(".purchase_part_right_time").html("正在揭晓");
+		jQuery.post("$!current_webPath/cloudbuy/getresult", {
+          "lottery_id": $!lottery.id
+      },
+      function(data) {	
+	  	if(data.status==15)		
+         location.reload(); 
+      },
+      "json");
+	}
+}
+function checkTime(i)    
+          {    
+             if (i < 10) {    
+                 i = "0" + i;    
+              }    
+             return i;    
+          }
+function add_count(){	
+	var addcount=jQuery("#addcount").val();
+	addcount=parseInt(addcount);
+	addcount+=$goods.least_rmb;
+	if(addcount<=$!lottery.purchased_left_times)
+		jQuery("#addcount").val(addcount);
+}
+function reduce_count(){
+	var addcount=jQuery("#addcount").val();
+	addcount=parseInt(addcount);
+	addcount-=$goods.least_rmb;
+	if(addcount>0)
+		jQuery("#addcount").val(addcount);
+}
+function ajaxPage(url,currentPage,obj){
+jQuery.ajax({type:'POST',url:url,data:{"id":"$!lottery.id","currentPage":currentPage},
+			  beforeSend:function(){
+			   },
+			  success:function(data){
+				 var target_id=jQuery(obj).parent().parent().attr("target_id");
+				 jQuery("div[mark='"+target_id+"']").empty();
+			   	 jQuery("div[mark='"+target_id+"']").append(data);																							                
+			  }
+		})
+}
+function show_numbers(element){
+	jQuery(element).parent().parent().parent().addClass("info_show");
+	jQuery(element).hide();
+}
+function hide_numbers(element){
+	jQuery(element).parent().parent().removeClass("info_show");
+	jQuery(element).parent().find(".hover_a").attr("style","");
+}
+</script>
+</head>
+<body>
+<!--顶部--> 
+$!httpInclude.include("/top")
+$!httpInclude.include("/cloudbuy/head") 
+$!httpInclude.include("/cloudbuy/nav1") 
+<!---------云购  列表---------->
+<div class="main">
+  <div class="purchase">
+    <div class="purchase_location"><a href="$!webPath/cloudpurchase_index">首页</a><b>&gt;</b><span><a href="$!webPath/cloudbuy/list?class_id=$cloudPurchaseClass.id">$cloudPurchaseClass.class_name</a></span><b>&gt;</b><a href="$!webPth/cloudbuy/items?id=$!goods.id">$!goods.goods_name</a></div>
+    <!-----商品详情----->
+    
+    <div class="purchase_part"> 
+      <!-----商品详情 左侧大图----->
+      <div class="purchase_part_left">
+        <div class="purchase_part_left_picfocus">
+          <div class="bd">
+            <div class="bd_picfocus">
+              <ul>
+                <li><img id="big_img" src="$!CommUtil.replaceImgWebServer($!imageWebServer,$!goods.primary_photo)" /></li>
+              </ul>
+            </div>
+          </div>
+          <div class="hd_picfocus">
+            <ul id="img_list">
+              <li class="this"><img src="$!CommUtil.replaceImgWebServer($!imageWebServer,$!goods.primary_photo)" /></li>
+              #foreach($img in $secondary_photo)
+              <li><img src="$!CommUtil.replaceImgWebServer($!imageWebServer,$img)" /></li>
+              #end
+            </ul>
+          </div>
+        </div>
+        <div class="purchase_part_left_promise"> <span> <i class="pro_1"></i> <b>公正公开</b> </span> <span> <i class="pro_2"></i> <b>正品保证</b> </span> <span> <i class="pro_3"></i> <b>权益保障</b> </span> <span class="last"> <i class="pro_4"></i> <b>免费配送</b> </span> </div>
+      </div>
+      
+      <!-----商品详情 右侧详情----->
+      <div class="purchase_part_right">
+        <div class="purchase_part_right_title">$!goods.goods_name</div>
+        <div class="purchase_part_right_desc">$!goods.goods_description</div>
+        
+        <!---正在进行----> 
+        #if($!lottery.status==5)
+        <div class="purchase_part_right_ing">
+          <div class="purchase_part_right_name">
+            <h4>#if($goods.least_rmb==1)一#else十#end元夺宝</h4>
+            <span>期号 $!lottery.period</span><b>每满$!goods.goods_price人次，即抽取1人获得该商品</b> </div>
+          <div class="purchase_goodslist_ing"> #set($percent=100 * $lottery.purchased_times / $goods.goods_price)
+            <div class="purchase_goodslist_time"><span style="width:${percent}%"></span></div>
+            <div class="purchase_goodslist_ing_b">已经完成$percent%</div>
+          </div>
+          <div class="purchase_goodslist_lasttime"><span>总需人数$!goods.goods_price</span><b>剩余人次$!lottery.purchased_left_times</b></div>
+          <div class="purchase_goodslist_b_nb"> <span class="that">参与</span> <span class="this"><i><a href="javascript:void(0)" onclick="reduce_count()">-</a></i><b>
+            <input type="text" value="#if($!lottery.purchased_left_times>10)10#else$!lottery.purchased_left_times#end" id="addcount">
+            </b><i><a href="javascript:void(0)"  onclick="add_count()">+</a></i></span> <span class="that last">人次<i>加大参与人次，夺宝在望！</i></span> <span class="hint">#if($!goods.least_rmb==10)参与人次需是10的倍数#end</span> </div>
+          #set($lottery_img="$!imageWebServer/$!{lottery.cloudPurchaseGoods.primary_photo}") 
+          <div class="purchase_goodslist_buy"><a #if(!$user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login"#end
+          img="$!lottery_img" lottery_id="$!lottery.id" type="buy" href="javascript:void(0)">立即夺宝</a><a class="this" #if(!$user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login"#end img="$!imageWebServer/$lottery.cloudPurchaseGoods.primary_photo" lottery_id="$!lottery.id" type="add" href="javascript:void(0)">加入清单</a></div>
+        </div>
+        #elseif($!lottery.status==10)
+        <div class="purchase_part_right_time"></div>
+        #elseif($!lottery.status==15) 
+        <!---夺宝结束---->
+        <div class="purchase_part_right_end" >
+          <div class="purchase_part_right_end_top"> <span>期号$!lottery.period<i>幸运号码</i> </span> <b>$!lottery.lucky_code</b> </div>
+          
+          <!---本期号码---->
+          <div class="purchase_part_right_end_user">
+            <div class="purchase_part_right_end_user_left"><img src="$!imageWebServer/$!lottery.lucky_userphoto" /></div>
+            <div class="purchase_part_right_end_user_right">
+              <ul>
+                <li><span>用户昵称：</span><b><a href="javascript:voud(0)">$!lottery.lucky_username</a></b></li>
+                <li><span>揭晓时间：</span><b>$!lottery.announced_date</b></li>
+                <li><span>用户 I D：</span><b>$!lottery.lucky_userid （ID为用户唯一不变标识）</b></li>
+                <li><span>夺宝时间：</span><b>$!lottery.lucky_userbuytime</b></li>
+                <li><span>本期参与：</span><b class="this">$!lottery.lucky_usertimes人次</b></li>
+                <!--<li class="this"><a href="">查看TA的号码&gt;&gt;</a></li>-->
+              </ul>
+            </div>
+          </div>
+          #end
+          #if($!lottery.status>5) 
+          <!---算法---->
+          <div class="purchase_part_right_end_calculation">
+            <div class="purchase_part_right_end_calculation_left">
+              <div class="calculation_left_title">如何计算？</div>
+              <ul>
+                <li><span>#if($lottery.lucky_code)$!lottery.lucky_code#else ? #end</span><b>本期幸运号码</b></li>
+                <i>=</i>
+                <li><span>10000001</span><b>固定数值</b></li>
+                <i>+</i>
+                <li><span>#if($lottery.change_code)$lottery.change_code#else ? #end</span><b class="color_b">变化数值</b></li>
+              </ul>
+            </div>
+            <div class="purchase_part_right_end_calculation_right">
+              <div class="calculation_left_title"><b class="color_b">变化数值</b>是取下面公式的余数</div>
+              <ul>
+                <li><span>（$lottery.user_time_num_count.longValue()</span><b mark="50">50个时间求和</b><b class="more"  style="display:none">商品的最后一个号码分配完毕，公示该分配时间点前本站全部商品的<em>最后50个参与时间</em>，并求和。</b></li>
+                <i>+</i>
+                <li><span>#if($lottery.lottery_num)$lottery.lottery_num.longValue() #else ? #end）</span><b mark="ssc">时时彩开奖码</b><b class="more" style="display:none">取最近一期“老时时彩” (第$lottery.expect期) 开奖结果。</b></li>
+                <i>÷</i>
+                <li><span>$goods.goods_price</span><b>总需人次</b></li>
+              </ul>
+            </div>
+          </div>
+          #end
+          <div class="purchase_goodslist_codes"> 
+            
+            <!---登录----> 
+            #if($user)
+            #if($code_list.size()==0) 
+            
+            <!------未参加------>
+            <div class="list_codes" >你还没参与本期商品哦~</div>
+            #else 
+            
+            <!------参加号码------>
+            <div class="list_codes_l">
+              <ul>
+                <li class="title" id="title"><a href="javascript:void(0);" >查看我的夺宝号码</a></li>
+                
+                <!------弹出----------->
+                <div class="black_overlay_bg" style="display:none;"  ></div>
+                <div class="c_msgbox" style="display:none;" >
+                  <div class="c_msgbox_top">我的夺宝号码</div>
+                  <a class="c_msgbox_close" href="javascript:void(0);" onclick="div_hide();">×</a>
+                  <div class="c_msgbox_bd" >
+                    <div class="c_msgbox_bd_hd">您本期总共参与了$!count人次</div>
+                    <dl>
+                      <dd> #foreach($code in $code_list) <span>$code</span> #end </dd>
+                    </dl>
+                  </div>
+                </div>
+                <!--弹出结束-->
+              </ul>
+            </div>
+            #end
+            #else 
+            <!------未登录------>
+            <div class="list_codes" ><a #if(!$user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login"#end href="javascript:void(0)">请登录</a>查看你的夺宝号码</div>
+            #end </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-----商品详情 详情----->
+    
+    <div class="purchase_goodsbd">
+      <div class="purchase_goodsbd_table">
+        <ul>
+          <li class="this" mark="detail">商品详情</li>
+          <li mark="record">所有参与记录</li>
+          <li mark="history">往期记录</li>
+        </ul>
+      </div>
+      <div class="purchase_goodsbd_img" mark="detail"> $!goods.goods_detail </div>
+      <div class="purchase_record" mark="record" style="display:none"> </div>
+      <div class="history_pannel" mark="history" style="display:none"> </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer")
+</body>
+</html>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.PredepositCashMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.PredepositCash">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="cash_sn" property="cash_sn" jdbcType="VARCHAR"/>
+		<result column="cash_payment" property="cash_payment" jdbcType="VARCHAR"/>
+		<result column="cash_amount" property="cash_amount" jdbcType="DECIMAL"/>
+		<result column="cash_userName" property="cash_userName" jdbcType="VARCHAR"/>
+		<result column="cash_bank" property="cash_bank" jdbcType="VARCHAR"/>
+		<result column="cash_account" property="cash_account" jdbcType="VARCHAR"/>
+		<result column="cash_pay_status" property="cash_pay_status" jdbcType="INTEGER"/>
+		<result column="cash_status" property="cash_status" jdbcType="INTEGER"/>
+		<result column="cash_info" property="cash_info" jdbcType="VARCHAR"/>
+		<result column="cash_admin_info" property="cash_admin_info" jdbcType="VARCHAR"/>
+		<association property="cash_user" column="cash_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="cash_admin" column="cash_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.PredepositCash">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="cash_sn" property="cash_sn" jdbcType="VARCHAR"/>
+		<result column="cash_payment" property="cash_payment" jdbcType="VARCHAR"/>
+		<result column="cash_amount" property="cash_amount" jdbcType="DECIMAL"/>
+		<result column="cash_userName" property="cash_userName" jdbcType="VARCHAR"/>
+		<result column="cash_bank" property="cash_bank" jdbcType="VARCHAR"/>
+		<result column="cash_account" property="cash_account" jdbcType="VARCHAR"/>
+		<result column="cash_pay_status" property="cash_pay_status" jdbcType="INTEGER"/>
+		<result column="cash_status" property="cash_status" jdbcType="INTEGER"/>
+		<result column="cash_info" property="cash_info" jdbcType="VARCHAR"/>
+		<result column="cash_admin_info" property="cash_admin_info" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,cash_sn,cash_payment,cash_amount,cash_user_id,cash_userName,cash_bank,cash_account,cash_pay_status,cash_status,cash_info,cash_admin_id,cash_admin_info
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="cash_sn != null">and cash_sn = #{cash_sn,jdbcType=VARCHAR}</if>
+		<if test="cash_payment != null">and cash_payment = #{cash_payment,jdbcType=VARCHAR}</if>
+		<if test="cash_amount != null">and cash_amount = #{cash_amount,jdbcType=DECIMAL}</if>
+		<if test="cash_userName != null">and cash_userName = #{cash_userName,jdbcType=VARCHAR}</if>
+		<if test="cash_bank != null">and cash_bank = #{cash_bank,jdbcType=VARCHAR}</if>
+		<if test="cash_account != null">and cash_account = #{cash_account,jdbcType=VARCHAR}</if>
+		<if test="cash_pay_status != null">and cash_pay_status = #{cash_pay_status,jdbcType=INTEGER}</if>
+		<if test="cash_status != null">and cash_status = #{cash_status,jdbcType=INTEGER}</if>
+		<if test="cash_status_no != null">and cash_status != #{cash_status_no,jdbcType=INTEGER}</if>
+		<if test="cash_info != null">and cash_info = #{cash_info,jdbcType=VARCHAR}</if>
+		<if test="cash_admin_info != null">and cash_admin_info = #{cash_admin_info,jdbcType=VARCHAR}</if>
+		<if test="cash_user_id != null">and cash_user_id = #{cash_user_id,jdbcType=BIGINT}</if>
+		<if test="cash_admin_id != null">and cash_admin_id = #{cash_admin_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		cash_sn= #{cash_sn},
+		cash_payment= #{cash_payment},
+		cash_amount= #{cash_amount},
+		<if test="cash_user == null or cash_user.id == null">cash_user_id = null,</if>
+		<if test="cash_user != null and cash_user.id != null">cash_user_id = #{cash_user.id,jdbcType=BIGINT},</if>
+		cash_userName= #{cash_userName},
+		cash_bank= #{cash_bank},
+		cash_account= #{cash_account},
+		cash_pay_status= #{cash_pay_status},
+		cash_status= #{cash_status},
+		cash_info= #{cash_info},
+		<if test="cash_admin == null or cash_admin.id == null">cash_admin_id = null,</if>
+		<if test="cash_admin != null and cash_admin.id != null">cash_admin_id = #{cash_admin.id,jdbcType=BIGINT},</if>
+		cash_admin_info= #{cash_admin_info},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_predeposit_cash 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.* 
+		from redpigmall_predeposit_cash obj 
+		<if test="cash_user_userName_like !=null">
+			join redpigmall_user u on u.id = obj.cash_user_id and u.userName like CONCAT('%',#{cash_user_userName_like},'%')
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_predeposit_cash obj 
+		<if test="cash_user_userName_like !=null">
+			join redpigmall_user u on u.id = obj.cash_user_id and u.userName like CONCAT('%',#{cash_user_userName_like},'%')
+		</if>
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getCashUserByUserId" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_cash
+		where
+			cash_user_id = #{cash_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getCashAdminByUserId" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_cash
+		where
+			cash_admin_id = #{cash_admin_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.* 
+		from redpigmall_predeposit_cash obj 
+		<if test="cash_user_userName_like !=null">
+			join redpigmall_user u on u.id = obj.cash_user_id and u.userName like CONCAT('%',#{cash_user_userName_like},'%')
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.PredepositCash" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_predeposit_cash(addTime,deleteStatus,cash_sn,cash_payment,cash_amount,cash_userName,cash_bank,cash_account,cash_pay_status,cash_status,cash_info,cash_admin_info,cash_user_id,cash_admin_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{cash_sn,jdbcType=VARCHAR},#{cash_payment,jdbcType=VARCHAR},#{cash_amount,jdbcType=DECIMAL},#{cash_userName,jdbcType=VARCHAR},#{cash_bank,jdbcType=VARCHAR},#{cash_account,jdbcType=VARCHAR},#{cash_pay_status,jdbcType=INTEGER},#{cash_status,jdbcType=INTEGER},#{cash_info,jdbcType=VARCHAR},#{cash_admin_info,jdbcType=VARCHAR},#{cash_user.id,jdbcType=BIGINT},#{cash_admin.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.PredepositCash">
+		update redpigmall_predeposit_cash
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_predeposit_cash where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_predeposit_cash where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.* 
+		from redpigmall_predeposit_cash obj 
+		<if test="cash_user_userName_like !=null">
+			join redpigmall_user u on u.id = obj.cash_user_id and u.userName like CONCAT('%',#{cash_user_userName_like},'%')
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.* 
+		from redpigmall_predeposit_cash obj 
+		<if test="cash_user_userName_like !=null">
+			join redpigmall_user u on u.id = obj.cash_user_id and u.userName like CONCAT('%',#{cash_user_userName_like},'%')
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.PredepositCash" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_cash
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_predeposit_cash where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

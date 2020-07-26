@@ -1,0 +1,66 @@
+<script>
+jQuery(document).ready(function(){
+jQuery(".right_footer_center_list").mouseenter(function(){													
+     jQuery(this).find(".right_footer_center_del").show();
+  }).mouseleave(function(){
+     jQuery(this).find(".right_footer_center_del").hide();
+  });
+});
+jQuery("right_footer_center ul li").each(function(index, element) {
+    if(jQuery(this).find(".right_footer_center_left").length<1){
+	   jQuery(this).remove();
+	}
+});
+function fp_remove(date,goods_id,obj){
+	jQuery.ajax({type:'POST',url:'$!webPath/fp_remove',data:{"date":date,"goods_id":goods_id},
+				 success:function(data){
+				    if(data=="true"){
+						var a =jQuery(obj).parent().parent().siblings().size();
+						if(a<1){
+						 jQuery(obj).parent().parent().parent().parent().remove();
+						}else{
+					      jQuery(obj).parent().parent().remove();
+						}
+					}
+				 }
+	});
+}
+</script>
+<div class="right_nav_r_r_top">
+      <h3><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/backe.png" /></a></h3>
+      <span id="span">我的足迹</span> </div>
+    
+<div id="right_footer_none" class="right_footer_none" #if($!objs.size() > 0) style="display:none" #end><img src="$!cdnServer/resources/style/system/front/default/images/footer_center_none_bg.png" /><span>您还没有浏览过商品哦！</span></div>
+   
+      <div class="right_footer_center" style="display:">
+        <ul>
+        #foreach($obj in $objs)
+         #if($!{velocityCount}<=5)
+          <li> <span class="right_footer_center_left">
+            <p>$!obj.fp_date</p>
+            <b>浏览过$!{obj.fp_goods_count}个宝贝</b>
+            <a class="right_footer_center_left_del" href="javascript:void(0);" onClick="fp_remove('$!obj.fp_date','',this);">删除当天足迹</a>
+            </span> <span class="right_footer_center_center "><img src="$!cdnServer/resources/style/system/front/default/images/footer_center_bg.png" /></span>
+            <div class="right_footer_center_right"> 
+            #foreach($fpv in $footPointTools.generic_fpv("$!obj.fp_goods_content"))
+                #set($store=$!footPointTools.goods_second_domain("$!fpv.fpv_goods_id","goods"))
+               #set($goods_domainPath="$!webPath/items_$!{fpv.fpv_goods_id}")
+               #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+               #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{fpv.fpv_goods_id}")
+               #end
+                #if($!{velocityCount}<=4)
+              <!--循环 --> 
+              <span class="right_footer_center_list"> <em class="right_footer_center_list_img"><a href="$!goods_domainPath" target="_blank"><img src="$!{fpv.fpv_goods_img_path}" /></a></em>
+              <p class="right_footer_center_list_name">￥$!{fpv.fpv_goods_price}</p>
+              <em class="right_footer_center_del" style="display:none;"><a title="删除" href="javascript:void(0);" onclick="fp_remove('$!obj.fp_date','$!fpv.fpv_goods_id',this);"><img src="../resources/style/system/front/default/images/head_search_history_dele.png" /></a></em> </span>
+              #end
+            #end
+             </div>
+          </li>
+        #end
+        #end
+        </ul>
+      </div>
+      <div #if($!objs.size()<1)  style="display:none" #end class="right_more" id="footer_more">
+        	<a href="$!webPath/buyer/foot_point">查看更多>></a>
+        </div>

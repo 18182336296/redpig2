@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>满就减-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/parabola.js"></script>
+<style type="text/css">
+body, td, th {
+	font-family: "Microsoft Yahei", "Lucida Grande", Verdana, Lucida, Helvetica, Arial, Simsun, sans-serif;
+}
+</style>
+<script>
+    //添加到购物车
+   jQuery("a[id^=goods_cart_]").live("click",function(e){
+	  var goods_img=jQuery(this).attr("goods_img");
+	   var goods_price=jQuery(this).attr("goods_price");
+	  var goods_name=jQuery(this).attr("goods_name");
+	  var goods_id=jQuery(this).attr("goods_id");
+	  var goods_type=jQuery(this).attr("goods_type");
+	  var user_id=jQuery(this).attr("user_id");
+	  var left=jQuery(this).offset().left;
+	  var top=jQuery(this).offset().top-30;
+	  var buy=true;
+	  if(goods_type=="0"){
+	    if("$!user.userRole"=="ADMIN"){
+			buy=false;
+	    }
+	  }
+	  if(goods_type=="1"){
+	    if("$!user.id"==user_id){
+		   buy=false;
+		}
+	  }
+	  if(!buy){
+	     showDialog("msg_info","","不可以购买自己的商品！",2,"warning",3,'');
+	  }else{
+	     jQuery.post("$!current_webPath/add_goods_cart",{"id":goods_id,"count":1,"price":"","gsp":""},
+				function(data){
+							var success=1;
+	                    	if(data.code==-1){
+								  success=0;
+								  showDialog("msg_info","","添加失败，请刷新重试！",2,"warning",3,'');
+								}
+						   if(data.code==-2){
+							      success=0;
+								  showDialog("msg_info","","商品已下架，添加失败！",2,"warning",3,'');
+								}
+						   if(data.code==-3){
+							     success=0;
+							 	 showDialog("msg_info","","库存不足，添加失败！",2,"warning",3,'');
+							}	
+							if(data.code==-4){
+							     success=0;
+							 	 showDialog("msg_info","","超过限购数量，添加失败！",2,"warning",3,'');
+							}
+							if(data.code==-5){
+							     success=0;
+							 	 showDialog("msg_info","","限购商品，请登录后购买！",2,"warning",3,'');
+							}
+						   var change_count=function(){
+								if(data.code!=-1){
+									var count;
+									if(data.count==0){
+									count=1;
+									}else{
+										count=data.count;
+										}
+									 jQuery("b[id=cart_goods_count_top]").html(count);
+									 jQuery("b[id=top_good_cart]").html(count);
+									}
+							
+							   };
+							if(success==1){
+								var offset = jQuery('#car b').offset(), flyer = jQuery('<img style="z-index:101" width="30px" height="30" class="u-flyer" src="'+goods_img+'"/>');              
+								flyer.fly({
+									start: {
+										left: left-jQuery(document).scrollLeft(),
+										top: top-jQuery(document).scrollTop()
+									},
+									end: {
+										left: offset.left-jQuery(document).scrollLeft(),
+										top: offset.top-jQuery(document).scrollTop(),
+										width: 10,
+										height: 10
+                                    },onEnd: function(){
+										jQuery("#car b").html(data.count);
+										jQuery(".u-flyer").remove();
+										change_count();
+										goto_html("buy_car");
+										} 
+								});
+								
+								}
+				 },"json");
+	 	 }
+   });
+
+jQuery("a[id^=buy_]").live("click",function(e){
+	var goods_id=jQuery(this).attr("goods_id");
+	  var goods_type=jQuery(this).attr("goods_type");
+	  var user_id=jQuery(this).attr("user_id");
+	  var buy=true;
+	  if(goods_type=="0"){
+	    if("$!user.userRole"=="ADMIN"){
+			buy=false;
+	    }
+	  }
+	  if(goods_type=="1"){
+	    if("$!user.id"==user_id){
+		   buy=false;
+		}
+	  }
+	  if(!buy){
+	     showDialog("msg_info","","不可以购买自己的商品！",2,"warning",3,'');
+	  }else{
+	     jQuery.post("$!current_webPath/add_goods_cart",{"id":goods_id,"count":1,"price":"","gsp":""},
+				function(data){					
+					window.location.href="$!webPath/goods_cart1";
+				 },"json");
+	  }
+});
+function goto_html(i){
+	if(i=="img"){
+	jQuery.post("$!webPath/personal","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+					},"text");
+    }
+	if(i=="right_ticket"){
+	jQuery.post("$!webPath/coupon","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+						
+					},"text");}
+	if(i=="collect"){
+	jQuery.post("$!webPath/collect","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+						
+					},"text");}
+	if(i=="read"){
+	jQuery.post("$!webPath/user_footer","",function(text){	
+	                    jQuery("#"+i).empty();		
+					    jQuery("#"+i).append(text);
+					},"text");
+	jQuery("#span").html("我的足迹");
+	}
+	if(i=="buy_car"){
+	jQuery.post("$!webPath/cart_load","",function(text){
+						jQuery("#"+i).empty();		
+						jQuery("#"+i).append(text);
+		            },"text");
+    }
+}
+</script>
+</head>
+
+<body bgcolor="#FFFFFF">
+$!httpInclude.include("/top") 
+$!httpInclude.include("/head") 
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="main_top">
+    <div class="main_right_s">
+      <div class="search_list_shop_tipe"><strong style=" font-size:16px; line-height:40px;">$!er.ertitle</strong><br />
+        <span style="color:#F00; line-height:30px;">$!er.ertag</span><br />
+        <strong style="line-height:30px;">活动时间：</strong> $!CommUtil.formatShortDate($!er.erbegin_time)至$!CommUtil.formatShortDate($!er.erend_time)<br />
+        <strong>活动说明：</strong>$!er.ercontent</div>
+      <div class="main_search_mid_s">
+        <form action="$!webPath/enoughreduce/index" method="post" id="ListForm">
+          <input type="hidden" name="id" id="id" value="$!er.id" />
+          <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+          <div class="pro_list"> #foreach($obj in $objs)  
+            #if($!obj.goods_main_photo)
+            #set($goods="$!imageWebServer/$!obj.goods_main_photo.path/$!obj.goods_main_photo.name")
+            #else
+            #set($goods="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name")
+            #end
+            #set($goods_url="$!webPath/items_$!{obj.id}")
+            #if($!config.second_domain_open && $!obj.goods_store.store_second_domain!="")
+            #set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.id}")
+            #end
+            <div class="search_list_one" data-bind="$!obj.id">
+              <div class="search_list_one_img"><a href="$!goods_url" target="_blank"><img src="$!goods" id="$!{obj.id}_main_img"/></a></div>
+              <div class="search_list_one_word"><a href="$!goods_url" target="_blank">$!obj.goods_name</a></div>
+              <div class="search_list_one_price">¥$!obj.goods_current_price</div>
+              <div class="search_list_one_buy"> <a href="javascript:void(0);" goods_id="$!obj.id" goods_type="$!obj.goods_type" user_id="$!obj.goods_store.user.id" goods_img="$!{goods}" id="goods_cart_$!{obj.id}">加入购物车</a> <a href="javascript:void(0);" goods_id="$!obj.id" goods_type="$!obj.goods_type" user_id="$!obj.goods_store.user.id" id="buy_$!{obj.id}">立即购买</a></div>
+            </div>
+            #end </div>
+          <div class="fenye"><span>$!gotoPageFormHTML</span></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/footer")
+</div>
+ $!httpInclude.include("/toolbar") 
+</body>
+</html>

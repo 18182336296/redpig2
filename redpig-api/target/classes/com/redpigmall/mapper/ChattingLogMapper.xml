@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ChattingLogMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.ChattingLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="service_id" property="service_id" jdbcType="BIGINT"/>
+		<result column="service_name" property="service_name" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="send_from" property="send_from" jdbcType="VARCHAR"/>
+		<result column="user_read" property="user_read" jdbcType="INTEGER"/>
+		<result column="service_read" property="service_read" jdbcType="INTEGER"/>
+		<result column="font" property="font" jdbcType="VARCHAR"/>
+		<result column="font_size" property="font_size" jdbcType="VARCHAR"/>
+		<result column="font_colour" property="font_colour" jdbcType="VARCHAR"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.ChattingLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="service_id" property="service_id" jdbcType="BIGINT"/>
+		<result column="service_name" property="service_name" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+		<result column="send_from" property="send_from" jdbcType="VARCHAR"/>
+		<result column="user_read" property="user_read" jdbcType="INTEGER"/>
+		<result column="service_read" property="service_read" jdbcType="INTEGER"/>
+		<result column="font" property="font" jdbcType="VARCHAR"/>
+		<result column="font_size" property="font_size" jdbcType="VARCHAR"/>
+		<result column="font_colour" property="font_colour" jdbcType="VARCHAR"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		obj.id,obj.addTime,obj.deleteStatus,obj.service_id,obj.service_name,obj.user_id,obj.user_name,obj.send_from,obj.user_read,obj.service_read,obj.font,obj.font_size,obj.font_colour,obj.content
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="service_id != null">and service_id = #{service_id,jdbcType=BIGINT}</if>
+		<if test="service_name != null">and service_name = #{service_name,jdbcType=VARCHAR}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="user_name != null">and user_name = #{user_name,jdbcType=VARCHAR}</if>
+		<if test="send_from != null">and send_from = #{send_from,jdbcType=VARCHAR}</if>
+		<if test="user_read != null">and user_read = #{user_read,jdbcType=INTEGER}</if>
+		<if test="service_read != null">and service_read = #{service_read,jdbcType=INTEGER}</if>
+		<if test="font != null">and font = #{font,jdbcType=VARCHAR}</if>
+		<if test="font_size != null">and font_size = #{font_size,jdbcType=VARCHAR}</if>
+		<if test="font_colour != null">and font_colour = #{font_colour,jdbcType=VARCHAR}</if>
+		<if test="content != null">and content = #{content,jdbcType=VARCHAR}</if>
+		<if test="service_ids !=null and service_ids.size() &gt; 0">
+	 		and service_id in
+			<foreach collection="service_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</sql>
+	<sql id="ifStatement">
+		service_id= #{service_id},
+		service_name= #{service_name},
+		user_id= #{user_id},
+		user_name= #{user_name},
+		send_from= #{send_from},
+		user_read= #{user_read},
+		service_read= #{service_read},
+		font= #{font},
+		font_size= #{font_size},
+		font_colour= #{font_colour},
+		content= #{content},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.ChattingLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_chattinglog obj
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.ChattingLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_chattinglog obj 
+		<if test="chatting_user_service_id != null">
+			left join redpigmall_chatting_user cu on obj.service_id=cu.id and cu.chatting_user_id=#{chatting_user_service_id}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_chattinglog obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.ChattingLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_chattinglog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.ChattingLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_chattinglog(addTime,deleteStatus,service_id,service_name,user_id,user_name,send_from,user_read,service_read,font,font_size,font_colour,content)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{service_id,jdbcType=BIGINT},#{service_name,jdbcType=VARCHAR},#{user_id,jdbcType=BIGINT},#{user_name,jdbcType=VARCHAR},#{send_from,jdbcType=VARCHAR},#{user_read,jdbcType=INTEGER},#{service_read,jdbcType=INTEGER},#{font,jdbcType=VARCHAR},#{font_size,jdbcType=VARCHAR},#{font_colour,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.ChattingLog">
+		update redpigmall_chattinglog
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_chattinglog where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_chattinglog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.ChattingLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_chattinglog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.ChattingLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_chattinglog obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.ChattingLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_chattinglog obj
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	
+	<select id="getLogsByChattingLogId" resultType="com.redpigmall.domain.ChattingLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_chattinglog  obj
+		where chatting_id = #{chatting_id,jdbcType=BIGINT}
+	</select>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_chattinglog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	
+	
+</mapper>

@@ -1,0 +1,237 @@
+<!--StandardLayout Begin--> 
+
+#foreach($obj in $floors)
+<div class="home-standard-layout wrapper style-brown">
+  <div class="left-sidebar">
+    <div class="title">
+      	  <div class="txt-type">
+                <span>$!{obj.gf_sequence}</span>                        
+                <h2 title="$!{obj.gf_name}">$!{obj.gf_name}</h2>
+				
+          </div>
+    </div>
+    
+    <div class="left-ads" style="position:relative;">
+      		$!gf_tools.generic_adv("$!url","$!obj.gf_left_adv")
+			
+    </div>
+    
+    <div class="recommend-classes">
+      <ul>
+      	#foreach($gc in $gf_tools.generic_gf_gc("$!obj.gf_gc_list"))
+	        #foreach($c_gc in $gc.childs)
+	        <li><a href="$!config.indexUrl/store_goods_list_$!{c_gc.id}" title="$!c_gc.className" target="_blank">$!c_gc.className</a></li>
+			#end
+        #end
+	  </ul>
+    </div>
+  </div>
+  
+  <div class="middle-layout">
+    <ul class="tabs-nav">
+     #foreach($info in $obj.childs)
+        <li #if($!{velocityCount}==1) class="tabs-selected" #end>
+        	<i class="arrow"></i><h3>$!{info.gf_name}
+			
+        </li>
+		
+     #end
+    </ul>
+    #foreach($info in $obj.childs)
+	    #if($!{velocityCount}>1)
+	    <div class="tabs-panel middle-goods-list  tabs-hide ">
+	    #else
+	    <div class="tabs-panel middle-goods-list">
+	    #end
+         <ul>
+              #foreach($goods in $gf_tools.generic_goods("$!info.gf_gc_goods"))
+              #if($!goods)
+	              #if($!goods.goods_main_photo)               
+	              	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	              #else
+	              	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	              #end
+                
+              	#set($goods_url="$!config.indexUrl/items_$!{goods.id}")
+              	
+	              #if($!config.second_domain_open)
+	              	#set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+	              #end
+              
+             <li style="opacity: 0.9;">
+                <dl>
+                  <dt class="goods-name">
+                  <a target="_blank" href="$!goods_url" title="$!{goods.goods_name}">
+                  	$!{goods.goods_name}
+                  </a>
+                  </dt>
+                  <dd class="goods-thumb">
+                  	<a target="_blank" href="$!goods_url">
+                  	<img src="$!img" alt="$!{goods.goods_name}">
+                  	</a></dd>
+                  <dd class="goods-price"><em>￥$!{goods.goods_current_price}</em>
+                    <span class="original">￥$!{goods.goods_price}</span></dd>
+                </dl>
+              </li>
+              #end
+              #end
+       </ul>
+   </div>
+   #end
+	</div>
+   
+   
+  <div class="right-sidebar">
+    <div class="title">
+
+    </div>
+    #set($map=$!gf_tools.generic_goods_list("$!obj.gf_list_goods"))
+    <div class="recommend-brand">
+      <ul>
+        
+        #if($!map.get("goods1"))
+        	#set($goods=$!map.get("goods1"))
+	        #if($!goods.goods_main_photo)                   
+	        	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	        #else
+	        	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title='$!CommUtil.substring("$!goods.goods_name",15)' target="_blank">
+          	<img src="$!img" alt='$!CommUtil.substring("$!goods.goods_name",15)'></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods2"))
+        #set($goods=$!map.get("goods2"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods3"))
+        #set($goods=$!map.get("goods3"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods4"))
+        #set($goods=$!map.get("goods4"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods5"))
+        #set($goods=$!map.get("goods5"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods6"))
+        #set($goods=$!map.get("goods6"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods7"))
+        #set($goods=$!map.get("goods7"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods8"))
+        #set($goods=$!map.get("goods8"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods9"))
+        #set($goods=$!map.get("goods9"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods10"))
+        #set($goods=$!map.get("goods10"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!config.indexUrl/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+                                          </ul>
+    </div>
+    <div class="right-side-focus" style="position:relative;">
+        	  	$!gf_tools.generic_adv("$!url","$!obj.gf_right_adv")
+    <div class="pagination">
+    	<span style="opacity: 1;"></span>
+    </div>
+    <div class="arrow pre" style="opacity: 0;"></div>
+    <div class="arrow next" style="opacity: 0;"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+#end

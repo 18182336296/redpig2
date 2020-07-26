@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">价格区间</h1>
+  <div class="nav_list">
+  <ul>
+   <li><a href="$!webPath/group_list"><b>团购列表</b></a> </li>
+   <li><a href="$!webPath/group_add"><b>新增团购</b></a></li>
+   <li><a href="$!webPath/group_class_list?type=goods" ><b>商品团购分类</b></a> </li>
+   <li><a href="$!webPath/group_class_list?type=life" ><b>生活团购分类</b></a> </li>
+   <li><a href="$!webPath/group_class_add?type=goods" ><b>新增商品类分类</b></a></li>
+   <li><a href="$!webPath/group_class_add?type=life" ><b>新增生活类分类</b></a></li>
+<!--   <li><a href="$!webPath/group_area_list" ><b>团购区域</b></a></li>
+   <li><a href="$!webPath/group_area_add"><b>新增区域</b></a></li>-->
+   <li><a href="$!webPath/group_price_list" class="this"><b>价格区间</b></a></li>
+  <li><a href="$!webPath/group_price_add"><b>添加区间</b></a> </li>
+   </ul>   
+   </div>
+  <form method="post" id="ListForm" action="$!webPath/group_price_list">
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="4%"></th>
+        <th width="40%"><span class="form_btna">价格区间名称</span></th>
+        <th width="18%" align="center"><span class="form_btna">价格区间上限</span></th>
+        <th align="center" width="18%"><span class="form_btna">价格区间下限</span></th>
+        <th   align="center"><span class="form_btna">操作</span></th>
+      </tr>#if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr id="column_$!{obj.id}">
+        <td class="check_position"><label for="ids_$!obj.id"><input name="ids" type="checkbox" id="ids_$!obj.id" class="ace" value="$!obj.id" /><span class="lbl" /></label></td>
+        <td>$!obj.gpr_name</td>
+        <td align="center">$!obj.gpr_end</td>
+        <td align="center">$!obj.gpr_begin</td>
+        #if($!obj.status==0)
+          #set($status="正常")
+        #end
+        #if($!obj.status==1)
+          #set($status="关闭")
+        #end
+        <td  align="center" class="hui oprate_con"><a href="$!webPath/group_price_edit?id=$!obj.id" class="blue">编辑</a>|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续？'))window.location.href='$!webPath/group_price_del?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a></td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="5">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+  </div>
+  #if($!objs.size()>0)
+   <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/group_price_del')">删除</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye">
+		 <input name="beginTime" type="hidden" id="beginTime" value="$!beginTime" />
+          <input name="ac_status" type="hidden" id="ac_status" value="$!ac_status" />
+          <input name="q_ac_title" type="hidden" id="q_ac_title" value="$!q_ac_title" />
+          <input type="hidden" name="mulitId" id="mulitId" />
+          <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+     	$!gotoPageFormHTML
+     </div>
+            </div>
+        </div>
+ 
+ #end
+  </form>
+
+</div>
+</body>
+</html>

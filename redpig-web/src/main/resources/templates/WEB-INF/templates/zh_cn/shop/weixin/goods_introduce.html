@@ -1,0 +1,37 @@
+<script>
+jQuery(document).ready(function(){
+ var data='$!obj.goods_property';
+  if(data!=""){
+	var properties=eval("("+data+")");
+    jQuery.each(properties,function(index,item){
+		jQuery(".g_detail_text ul").append("<li><span class='name'>"+item.name+"</span><b class='text'>"+item.val+"</b></li>");
+    });
+  }
+})
+  </script>
+<div class="g_detail_c">
+        <div class="g_detail_text">
+             <ul>
+                <li>
+                	<span class="name">商品名称：</span>
+                    <b class="text">$!{obj.goods_name}</b>
+                </li>
+                <li>
+                #if($!{obj.goods_brand.name}!="")
+                	<span class="name">品牌：</span>
+                     <b class="text">$!{obj.goods_brand.name}</b>
+                #end
+                </li>
+                <li>
+                #if($!{obj.goods_seller_time}!="")
+                    <span class="name">上架时间：</span>
+                    <b class="text">$!CommUtil.formatShortDate($!{obj.goods_seller_time})</b>
+                #end
+                </li>
+            </ul>
+        </div>
+    	
+    	<div class="g_detail_img">
+        	$!CommUtil.addImgWebServer2($!imageWebServer,$!{obj.goods_details_mobile})
+        </div>
+</div>

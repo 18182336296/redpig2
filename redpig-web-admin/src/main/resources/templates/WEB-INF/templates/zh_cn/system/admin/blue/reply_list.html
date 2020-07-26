@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!name</title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+ function count(){
+	 
+			 jQuery.ajax({
+                  type: 'POST',
+                  url: '$!webPath/count_ajax',
+                  data: {
+			         "id": "$!id",
+					 "user_name":"$!user_name",
+					 "status":"add"
+                  },
+                  beforeSend: function() {},
+		          success: function(data) {
+					
+					  $("#c4").show();
+					  $("#c3").hide();
+					  $("#c2").hide();
+					  $("#c1").hide();
+					  $("#count").html(data);
+					  
+				  }
+               });
+	       }
+		   function count_1(){
+			 jQuery.ajax({
+                  type: 'POST',
+                  url: '$!webPath/count_ajax',
+                  data: {
+			         "id": "$!id",
+					 "user_name":"$!user_name",
+					 "status":"cut"
+                  },
+                  beforeSend: function() {},
+		          success: function(data) {
+					  
+					  $("#c3").show();
+					  $("#c2").hide();
+					  $("#c1").hide();
+					  $("#c4").hide();
+					  $("#count").html(data);
+					   }       
+               });
+	       }
+		   
+</script>
+</head>
+
+<body>
+<div class="news_main">
+	<div class="news_main_top" style="margin-left:auto">$!title</div>
+    <div class="news_main_time" style="margin-left:auto">
+        <b>$!time</b>
+        <span><a href="http://mp.weixin.qq.com/s?__biz=MjM5MTcwMzQyMA==&mid=10000001&idx=1&sn=4addb34d6ef0da13b74ec6869f6c83c4#rd" id="attention">$!name</a></span>
+        <div class="news_main_name_c" style="display:none">
+            	<span><img src="$!cdnServer/resources/style/system/manage/blue/images/admin_code.jpg"></span>
+                 
+                       <strong>$!name</strong>
+                		<strong>微信号 &nbsp;<i class="profile_meta">redpigmall</i></strong>
+                 <p class="profile_meta">
+RedPigMall企业级，结系统之路更加坚，结系统之路更加坚，结系统之路更加坚，结系统之路更加坚，结系统之路更加坚，结系统之路更加坚，结系统之路更加坚实！</p>
+        </div>
+    </div>
+    <div style="margin-left:auto">
+       <img src="$!cdnServer/resources/style/system/manage/blue/images/wap.gif" style="height:38px;width:279px"/>
+    </div>
+
+   
+    
+    <div class="news_main_center" style="margin-left:auto">
+    	<div class="news_main_center_img">
+         #if($!img_path) 
+           <img src="$!img_path" />
+          #end</div>
+        <div class="news_main_center_word" style="text-indent:20px;">$!content</div>
+    </div>
+    <div class="news_main_botttom" style="margin-left:auto"> 
+    	<b id="counter">阅读数：$!counter</b>
+        <span>
+        #if($!p_status=="no")
+        <a href="javascript:;" onclick="count();" id="c1" >
+            <img src="$!cdnServer/resources/style/system/manage/blue/images/like_it.png" /> 
+        </a>
+        #end
+        #if($!p_status=="yes")
+        <a href="javascript:;" onclick="count_1();" id="c2"> 
+            <img src="$!cdnServer/resources/style/system/manage/blue/images/like_it_a.png"/> 
+        </a>
+        #end 
+        <a href="javascript:;" onclick="count();" id="c3" style="display:none">
+            <img src="$!cdnServer/resources/style/system/manage/blue/images/like_it.png" /> 
+        </a>
+        <a href="javascript:;" onclick="count_1();" id="c4" style="display:none"> 
+            <img src="$!cdnServer/resources/style/system/manage/blue/images/like_it_a.png"/> 
+        </a>
+        </span>
+        <i id="count" style="color:#9d9d9d;font-size:16px;">$!count</i>
+    </div>
+</div>
+</body>
+</html>

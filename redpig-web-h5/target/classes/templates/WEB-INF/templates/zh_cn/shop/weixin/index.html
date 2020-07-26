@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>首页 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.mobile-events.min.js"></script>
+<script src="$!cdnServer/resources/js/TouchSlide.1.1.js"></script>
+
+<script>
+jQuery(document).ready(function() {
+jQuery("#img_load img").lazyload({effect:"fadeIn",threshold:200});
+	#if($index_nav_map.get("index_navigator")=="true"){ 
+		#foreach($obj in ${index_nav_map.keySet()})
+		jQuery("#${obj}"+"_pre").attr("src","$!imageWebServer/$index_nav_map.get($obj)");
+		#end
+	}
+	#end
+var currentPage = 1;
+var ret = 1;
+var none = 0;
+jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret==1&&none==0) {
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/recomend_items',
+				  data:{"currentPage":currentPage},
+				beforeSend:function(){
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				  jQuery(".m_favorite").show();
+				  ret=2;
+				},
+			   success:function(data){
+				   ret=1;
+				 jQuery("#loading").hide();
+	             if(data){ 
+				  jQuery(".m_favorite").find("ul").append(data);
+				  currentPage=currentPage+1;
+			 	 }else{
+				 jQuery("#loading_none").show();
+				 none=1;
+				  }    
+              	}
+	    });
+	 }
+	});	
+
+								});
+var c_load=0;
+function showClass(id,arg){
+	var status = jQuery(arg).attr('status');
+	if(status=='0'&&c_load==0){
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/goodsclass',
+				  data:{"type":"index","id":id},
+				beforeSend:function(){
+				 c_load==1;
+				},
+			   success:function(data){
+				 jQuery("#loading_none").after(data);
+				 jQuery("html,body").attr("style","overflow:hidden;height:100%");
+				 jQuery(".pop_nav").animate({ left: '0px' });
+			   c_load==0;
+			    jQuery(arg).attr('status','1');
+			   }
+	    });
+	}else if(status=='1'&&id==""){
+		jQuery(".all_list_right").show();
+		jQuery("html,body").attr("style","overflow:hidden;height:100%");
+ 		jQuery(".black_bg").show();
+		jQuery(".pop_nav").animate({ left: '0px' });
+	}
+}
+function hideClass(){
+ jQuery(".pop_nav").animate({ left: '-93%' },'','',function() {   } );
+ jQuery(".all_list_right").hide();
+ jQuery(".black_bg").hide();
+ jQuery("html,body").attr("style","");
+}
+</script>
+</head>
+<body class="index_bg" id="body" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main" >
+   #if($!config.app_download==1)<div class="phone_top"><a href="$!webPath/app/download"> <img src="$!cdnServer/resources/style/system/front/default/images/weixin/download.jpg" /> </a><a class="close" href="javascript:void(0);" onClick="jQuery('.phone_top').remove();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/close.png" width="30" height="30" /></a></div>#end
+  <!--顶部-->
+<div class="m_banner">
+     	<div class="m_head">
+        	<div class="m_classify">
+            	<a href="javascript:void(0);" onClick="showClass('',this);" status='0'><img src="$!cdnServer/resources/style/system/front/default/images/weixin/classify_icon.png"></a>
+            </div>
+        	<div class="m_search">
+            	<span></span>
+                <form name="theForm" id="theForm" action="$!webPath/search" method="post">
+            	<input type="text" name="keyword" id="keyword" placeholder="请输入商品名称或店铺名称">
+                </form>
+            </div>
+           #if(!$!user) <a class="m_login" href="$!webPath/login">登录</a> #else <a class="m_login m_login_after" href="$!webPath/buyer/center">$!user.userName</a> #end
+        </div>
+      <script src="$!webPath/advert_invoke?id=11"></script>
+	</div>
+  <!--导航菜单-->
+  <div class="m_nav">
+    	<ul>
+        	<!-- <li><a href="$!webPath/cloudpurchase_index"><img id="index_1_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_1.png"><span>云购</span></a></li> -->
+            <li><a href="$!webPath/brand"><img id="index_2_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_2.png"><span>品牌街</span></a></li>
+            <li><a href="$!webPath/activitys"><img id="index_3_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_3.png"><span>促销</span></a></li>
+            <li><a href="$!webPath/coupon/goods_coupon"><img id="index_4_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_4.png"><span>免费领券</span></a></li>
+            #if($!config.integralStore)
+            <li><a href="$!webPath/integral/index"><img id="index_5_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_5.png"><span>积分专区</span></a></li>
+            #end
+            #if($!config.whether_free==1) 
+            <!-- <li><a href="$!webPath/free/index"><img id="index_6_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_6.png"><span>0元试用</span></a></li> -->
+            #end
+             #if($!config.groupBuy)
+            <li><a href="$!webPath/group/index?type=life"><img id="index_7_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_7.png"><span>生活购</span></a></li>
+            <li><a href="$!webPath/group/index?type=goods"><img id="index_8_pre" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_8.png"><span>商品购</span></a></li>
+            <li><a href="$!webPath/nuke/index"><img id="index_9_pre1" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_8.png"><span>秒杀</span></a></li>
+            <li><a href="$!webPath/luckydraw/index"><img id="index_10_pre1" src="$!cdnServer/resources/style/system/front/default/images/weixin/nav_8.png"><span>抽奖</span></a></li>
+            #end
+        </ul>
+    </div>
+ <div id="img_load">
+    #foreach($obj in $floor_list)
+<!--精品推荐开始-->
+#foreach($map in $weixinIndexTools.getFloorInfo($!obj.id))
+#if($map.get("line_type")==8)
+	<div class="m_recommend">
+    	<div class="m_recommend_title">
+            <h3 class="m_title">$!obj.title</h3>
+            #if($!obj.more_link!="")<a href="$!{obj.more_link}" class="m_more">更多&nbsp;></a>#end
+        </div>
+#foreach($a in $map.get("line_info"))
+ #if($!velocityCount==1)
+    <div class="fl">
+        	<a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original='$!imageWebServer/$a.get("img_url")' style="width:auto;height:auto"></a>
+    </div>
+  #end
+  #if($!velocityCount==2)
+   <div class="fr">
+        	<a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original='$!imageWebServer/$a.get("img_url")' style="width:auto;height:auto"></a>
+   #end
+   #if($!velocityCount==3)
+            <a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original='$!imageWebServer/$a.get("img_url")' style="width:auto;height:auto"></a>
+   #end
+   #if($!velocityCount==4)
+           <a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original='$!imageWebServer/$a.get("img_url")' style="width:auto;height:auto"></a>
+   #end
+   #if($!velocityCount==5)
+            <a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original='$!imageWebServer/$a.get("img_url")' style="width:auto;height:auto"></a>
+   </div>
+   #end   
+ #end 
+    </div>
+
+#end
+<!--商城活动开始-->
+#if($map.get("line_type")==4)
+	<div class="m_activity">
+    	<div class="m_activity_title">
+            <h3 class="m_title fl">$!obj.title</h3>
+            #if($!obj.more_link!="")<a href="$!{obj.more_link}" class="m_more fr">更多&nbsp;></a>#end
+        </div>
+        <ul>
+        #foreach($a in $map.get("line_info"))
+            <li><a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original="$!imageWebServer/$a.get('img_url')" style="width:auto;height:auto"/></a></li>
+        #end
+        </ul>
+    </div>
+#end
+#if($map.get("line_type")==9)
+<!--品牌街开始-->
+	<div class="m_brand">
+    	<div class="m_brand_title">
+            <h3 class="m_title fl">$!obj.title</h3>
+            #if($!obj.more_link!="")<a href="$!{obj.more_link}" class="m_more fr">更多&nbsp;></a>#end
+        </div>
+        <ul>
+         #foreach($a in $map.get("line_info"))
+        	<li><a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original="$!imageWebServer/$a.get('img_url')" style="width:auto;height:auto"></a></li>
+		  #end
+        </ul>
+    </div>
+#end
+#if($map.get("line_type")==10)
+<!--精选市场开始-->
+	<div class="m_market">
+    	<div class="m_market_title">
+            <h3 class="m_title fl">$!obj.title</h3>
+            #if($!obj.more_link!="")<a href="$!{obj.more_link}" class="m_more fr">更多&nbsp;></a>#end
+        </div>
+        <ul>
+        	#foreach($a in $map.get("line_info"))
+            #if($!velocityCount<=2)
+        	<li class="m_top"><a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original="$!imageWebServer/$a.get('img_url')" style="width:auto;height:auto"></a></li>
+            #else
+            <li class="m_bottom"><a #if('goods'==$!a.get('click_type')) href='$!webPath/items?id=$!{a.get("click_info")}' #else href="$!{a.get('click_info')}"  #end><img original="$!imageWebServer/$a.get('img_url')" style="width:auto;height:auto"></a></li>
+            #end
+            #end
+        </ul>
+    </div> 
+#end 
+#end
+#end
+</div>
+<div class="m_favorite" style="display:none">
+    	<div class="m_favorite_title" >商城推荐</div>
+        <ul>
+        </ul>
+    </div>
+ </div>
+  <div class="loading" id="loading" style="display:none">
+    <ul>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+  <div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>
+<!--全部分类弹出层-->
+
+$!httpInclude.include("/layer?op=index")
+</body>
+</html>

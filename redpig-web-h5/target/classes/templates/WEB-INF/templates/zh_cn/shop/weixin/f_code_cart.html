@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>F码购物车</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+function validate_f_code(){
+   var f_code=jQuery("#f_code").val();
+   if(f_code==""){
+     Wap_alert("F码不能为空！");
+   }else{
+     jQuery.ajax({type:'POST',url:'$!webPath/f_code_validate',data:{"f_code":f_code,"goods_id":"$!obj.id"},
+				  success:function(data){
+					  if(data=="100"){
+						 jQuery("#paymen_btn").attr("class","paymen_btn").attr("onclick","f_code_cart();");
+						 jQuery("#validate_btn").val("验证通过").css("background-color","#2ADD26");
+						 jQuery("#veli").show();
+						 jQuery("#f_code").attr("readonly",true);
+					  }
+					  if(data=="-100"){
+						  Wap_alert("F码错误，请核实!") 
+					  }
+					  if(data=="-200"){
+						  Wap_alert("验证码已使用过!")
+					  }
+				  }
+	  });
+   }
+}
+//
+function f_code_cart(){
+  var f_code=jQuery("#f_code").val();
+  if(f_code==""){
+     alert("F码不能为空");
+  }else{
+     jQuery.ajax({type:'POST',url:'$!webPath/add_f_code_goods_cart',data:{"f_code":f_code,"goods_id":"$!obj.id","gsp":"$!gsp"},
+				 success:function(){
+				    window.location.href="$!webPath/goods_cart0"; 
+				 }
+	 }); 
+  }
+}
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd">
+	<a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>
+    F码验证 <a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a> 
+</div>
+<div class="mt50"></div>
+
+<div class="f_code_cart">
+	#if($!obj.goods_main_photo)
+       #set($bigimg="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}")
+       #set($img="$!{bigimg}_small.$!{obj.goods_main_photo.ext}")
+    #else
+       #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+    #end
+    #set($goods_url="$!webPath/items?id=$!{obj.id}")
+	<dl class="f_goods">
+        <dt><a href="$!webPath/items?id=$!obj.id"><img src="$!img" width="60" height="60" /></a></dt>
+        <dd>
+        	<div class="fl"><p class="name"><a href="$!goods_url">$!{obj.goods_name}</a></p><p class="gray">数量：1</p><p class="gray">$!spec_info</p></div>
+            <div class="fr"><strong>¥$!{price}</strong></div>
+        </dd>
+    </dl>
+    <div class="phone_login" style="margin-top:5px;">
+    	<ul>
+        	<li class="ip"><input name="f_code" id="f_code" type="text" placeholder="请输入F码" /></li>
+            <li class="ip_btn" style="color:#0C0"><input type="button" value="验证" id="validate_btn" onclick="validate_f_code();"/></li>
+            <li id="veli" style="width:100%; text-align:center; color:#F00; display:none;">注意：加入购物车后F码将失效</li>
+        </ul>
+    </div>
+    <div class="car_pay f_cart">
+        <div class="f_totail" ><b class="red">总计(不含运费)：¥$!{price}</b></div>
+        <a class="paymen_btn this" id="paymen_btn" href="javascript:void(0);">加入购物车</a>
+    </div>
+</div>
+</body>
+</html>

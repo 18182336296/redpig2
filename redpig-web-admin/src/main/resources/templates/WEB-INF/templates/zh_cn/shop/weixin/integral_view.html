@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分商品详细</title>
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes" />
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent" />
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.wap.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+  #if($!obj.ig_limit_type==true)
+    #set($max=$!{obj.ig_limit_count})
+  #else
+    #set($max=$!{obj.ig_goods_count})
+  #end
+  jQuery("#theForm").validate({
+      rules:{
+		   exchange_count:{required:true,digits:true,max:$!{max},min:1}
+		  },
+	  messages:{
+		    exchange_count:{required:"兑换数量不能为空",digits:"只能为整数",max:"最多兑换{0}件",min:"最少兑换1件"}
+		  }
+   });
+});
+function saveForm(){
+	jQuery("#theForm").submit();
+	}
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>积分专区
+ #if($!user) <a class="menu"
+			href="$!webPath/wap/integral/integral_cart"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/layer_03.png"
+			width="25" height="25" /></a> #end
+</div>
+<div class="phone_main">
+    <!--积分商品详细页-->
+    <form action="$!webPath/wap/integral/exchange1" method="post" id="theForm">
+    <div class="integral_view">
+    	<ul>
+        	<li class="img"><img src="$!imageWebServer/$!obj.ig_goods_img.path/$!obj.ig_goods_img.name" /></li>
+        	<li><span class="fl">商品名称：</span><span class="fr">$!obj.ig_goods_name</span></li>
+             <li><span class="fl">市场价格：</span><span class="fr red">¥ $!obj.ig_goods_price</span></li>
+            <li><span class="fl">消耗积分：</span><span class="fr"><b>$!obj.ig_goods_integral</b></span></li>
+            #if($!user)
+            <li><span class="fl">我的积分：</span><span class="fr orange">$!user.integral 分</span></li>
+            #set($level_map=$!integralViewTools.query_level("$!obj.ig_user_Level"))
+            #if($!level_map.name!="")
+            <li><span class="fl">要求等级：</span><span class="fr">
+                    $!{level_map.name}以上
+            </span></li>
+            #end
+            #end
+            #if($!obj.ig_limit_type==true)
+            <li><span class="fl">限制兑换：</span><span class="fr orange">$!obj.ig_limit_count件</span></li>
+            #end
+            <li><span class="fl">兑换数量：</span><span class="fr"><input class="ip50" name="exchange_count" type="text" id="exchange_count" value="1" /></span></li>
+            <li><span class="fl">剩余数量：</span><span class="fr">$!{obj.ig_goods_count}件</span></li>
+            <li class="btn">
+            #if($!user)
+            <a href="javascript:void(0);" onclick="saveForm()">我要兑换</a>
+            #else
+           <a class="btn"  href="javascript:void(0);" #if(!$!user) href="$!webPath/wap/login" #end >
+                    
+                  <!--  <a class="btn" href="$!webPath/wap/login">-->
+                    立即登录</a>
+            #end
+            </li>
+        </ul>
+    </div>	
+    <input id="id" name="id" type="hidden" value="$!obj.id" />
+    </form>
+    <div class="integral_con">
+    	<h1 class="title">礼品详情</h1>
+        <div class="integral_infro">
+        $!obj.ig_content
+        </div>
+    </div>    
+</div>
+</body>
+</html>

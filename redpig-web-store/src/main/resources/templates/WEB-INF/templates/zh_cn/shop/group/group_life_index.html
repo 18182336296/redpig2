@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>团购 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+#if($!config.sina_login)
+$!config.sina_domain_code
+#end
+#if($!config.qq_login)
+$!config.qq_domain_code
+#end
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet"/>
+<link href="$!cdnServer/resources/style/system/front/default/css/group.css" type="text/css" rel="stylesheet"/>
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/js/jquery.js" type="text/javascript"></script>
+<script src="$!cdnServer/resources/js/groupBuying.js" type="text/javascript"></script>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath//resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+
+	jQuery(document).ready(function(){
+		//广告滚动
+		var movePx=220;
+	var LeftLengh = 0-movePx;
+	var doubleLeftLengh=LeftLengh*2;
+
+				function changeImg(){
+						jQuery(".box").stop(true,false).animate({top:0},1000,function(){
+					jQuery(".box").css("top",LeftLengh)
+					jQuery(".box li:last").insertBefore(".box li:first");
+					})
+
+									}
+					var timer=setInterval(changeImg,2500);
+					jQuery(".windowsBox").hover(function(){
+						clearInterval(timer);
+						},function(){
+							timer=setInterval(changeImg,2500);
+							})
+	
+		
+				jQuery(".previous").click(function(){
+				
+					jQuery(".box").stop(true,false).animate({top:0},1000,function(){
+					jQuery(".box").css("top",LeftLengh)
+					jQuery(".box li:last").insertBefore(".box li:first");
+					})
+
+				})
+				
+				
+				jQuery(".next").click(function(){
+
+					jQuery(".box").stop(true,false).animate({top:doubleLeftLengh},1000,function(){
+					jQuery(".box").css("top",LeftLengh)
+					jQuery(".box li:first").insertAfter(".box li:last")
+					})
+				
+				})
+				
+		var va=jQuery("#areaId").val()
+		if(va==undefined){	
+		va="";
+		}
+		jQuery.ajax({
+			type:'POST',
+			url:'$!webPath/group/getSecondArea',
+			data:{"id":va},
+			success:function(data){
+				var option=eval(data);  
+				   	if(option.length>0){
+					for(var i=0;i<option.length;i++){  
+					 jQuery("#areadetail").append("<li id='"+option[i].id+"'><a href='$!webPath/grouplife/search?type=$!type&ga_id="+option[i].id+"'>"+option[i].areaName+"</a></li>");
+					}
+				}else{
+					jQuery("#nationwide").show();
+					jQuery("#areadetail").hide()
+				}
+			}
+			});	
+	});	
+	function group_sel(field,val){
+  jQuery("#"+field).val(val);
+  jQuery("#ListForm").submit();
+}
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/group/head")
+<div class="group_nav">
+	<div class="top_nav_Box">
+    <div class="nav_title">
+      <h3>全部团购分类</h3>
+    </div>
+    <div class="nav_items">
+      <ul>
+        #set($nums=[1 .. $groupViewTools.getButtonSize("$!obj.gid_nav_word_list")])
+        #foreach($o in $nums)
+        <li> #foreach($wc in $groupViewTools.getInfo_list("$!obj.gid_nav_word_list","$o"))<a href="$!wc.href">$!wc.name</a>#end </li>
+        #end 
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="groupBuy_wrap">
+  <div class="firstScreen">
+    <div class="left_nav"> 
+    #foreach($gc in $gcs)
+    #set($temp=$velocityCount)
+	#set($temp=($temp - 1)*56)
+      <div class="left_navitem">
+        <div class="first_level">
+          <dl>
+            <dt class="title"> <a href="$!webPath/grouplife/search?gc_id=$!gc.id" class="gcc">$!gc.gc_name</a> </dt>
+            #foreach($recom in $groupViewTools.getRecom($!gc.id))
+            <dd><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!recom.id" class="gcc">$recom.gc_name</a></dd>
+          	#end
+          </dl>
+        </div>
+        <div class="second_level" #if(${temp}!=0)style="top:-${temp}px;"#end> 
+        	#foreach($gc2 in $!gc.childs)
+            <div class="second_level_item" style="display:inline-block;">
+              <h4 class="second_title"><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc2.id">$!gc2.gc_name</a></h4>
+              #set ($item=$!groupViewTools.getItems($!gc2.childs))<!--分割list-->
+              #if($!item.get("0"))
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("0"))
+                  <li><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc3.id" class="gcc">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("1").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("1"))
+                  <li><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc3.id" class="gcc">$!gc3.gc_name</a></li> 
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("2").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("2"))
+                  <li><a href="$!webPath/grouplife/search?type=$!type&gc_id=$!gc3.id" class="gcc">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              </div>
+              #end
+         </div>
+      </div>
+      #end 
+      </div>
+     <div class="mid_content">
+      <div class="mid_slide">
+        <div class="slideBox" style="background:none"> 
+          <script src="$!webPath/advert_invoke?id=$!obj.gid_nav_advp_id"></script>
+        </div>
+      </div>
+      <div class="recommendBox">
+        <div class="hot_group">
+          <h3>热门团购</h3>
+          <ul>
+            #foreach($!gc in $!groupViewTools.getHotClass($!obj.gid_nav_hot_class))
+              <li><a href="$!webPath/grouplife/search?type=life&gc_id=$!gc.id" class="gcc">$!gc.gc_name</a></li>
+            #end
+          </ul>
+        </div>
+        <div class="all_area">
+          <h3>全部区域</h3>
+          <ul id="areadetail">
+          </ul>
+          <ul id="nationwide" style="display:none">
+          #foreach($obj in $hot_areas)
+            <li><a href="$!webPath/grouplife/search?type=life&ga_id=$!{obj.id}" id="$!{obj.id}">$!{obj.areaName}</a></li>
+          #end
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="right_side">
+      <div class="windowsBox">
+        <ul class="box">
+          #foreach($o in $!groupViewTools.getGrouplifeGoods($!obj.gid_nav_right_img_list))
+          	<li>
+              <div class="product_box"> <a href="$!imageWebServer/grouplife/view_$!{o.id}" > <img src="$!imageWebServer/$!o.group_acc.path/$!o.group_acc.name"+"._small."+"$!o.group_acc.ext"> <span class="text">$!o.gg_name</span><span class="value">￥$!o.group_price</span> </a> </div>
+            </li>
+          #end
+        </ul>
+        <div class="side_btn"> <a href="#" class="previous"></a> <a href="#" class="next"></a> </div>
+      </div>
+    </div>
+  </div>
+  $!httpInclude.include("/group/floor_list") </div>
+$!httpInclude.include("/footer")
+</body>
+</html>

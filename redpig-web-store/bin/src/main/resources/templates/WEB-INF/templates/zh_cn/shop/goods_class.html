@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>所有商品分类 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.masonry.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/parabola.js"></script>
+<script>
+jQuery(document).ready(function(){
+	 //添加到购物车
+   jQuery("a[id^=goods_cart_]").live("click",function(e){
+	  var goods_img=jQuery(this).attr("goods_img");
+	   var goods_price=jQuery(this).attr("goods_price");
+	  var goods_name=jQuery(this).attr("goods_name");
+	  var goods_id=jQuery(this).attr("goods_id");
+	  var goods_type=jQuery(this).attr("goods_type");
+	  var user_id=jQuery(this).attr("user_id");
+	  var left=jQuery(this).offset().left;
+	  var top=jQuery(this).offset().top-30;
+	  var buy=true;
+	  if(goods_type=="0"){
+	    if("$!user.userRole"=="ADMIN"){
+			buy=false;
+	    }
+	  }
+	  if(goods_type=="1"){
+	    if("$!user.id"==user_id){
+		   buy=false;
+		}
+	  }
+	  if(!buy){
+	     showDialog("msg_info","","不可以购买自己的商品！",2,"warning",3,'');
+	  }else{
+	     jQuery.post("$!current_webPath/add_goods_cart",{"id":goods_id,"count":1,"price":"","gsp":""},
+				function(data){
+							var success=1;
+	                    	if(data.code==-1){
+								  success=0;
+								  showDialog("msg_info","","添加失败，请刷新重试！",2,"warning",3,'');
+								}
+						   if(data.code==-2){
+							      success=0;
+								  showDialog("msg_info","","商品已下架，添加失败！",2,"warning",3,'');
+								}
+						   if(data.code==-3){
+							     success=0;
+							 	 showDialog("msg_info","","库存不足，添加失败！",2,"warning",3,'');
+							}	
+							if(data.code==-4){
+							     success=0;
+							 	 showDialog("msg_info","","超过限购数量，添加失败！",2,"warning",3,'');
+							}
+							if(data.code==-5){
+							     success=0;
+							 	 showDialog("msg_info","","限购商品，请登录后购买！",2,"warning",3,'');
+							}
+						   var change_count=function(){
+								if(data.code!=-1){
+									var count;
+									if(data.count==0){
+									count=1;
+									}else{
+										count=data.count;
+										}
+									 jQuery("b[id=cart_goods_count_top]").html(count);
+									 jQuery("b[id=top_good_cart]").html(count);
+									}
+							
+							   };
+							if(success==1){
+								var offset = jQuery('#car b').offset(), flyer = jQuery('<img style="z-index:101" width="30px" height="30" class="u-flyer" src="'+goods_img+'"/>');              
+								flyer.fly({
+									start: {
+										left: left-jQuery(document).scrollLeft(),
+										top: top-jQuery(document).scrollTop()
+									},
+									end: {
+										left: offset.left-jQuery(document).scrollLeft(),
+										top: offset.top-jQuery(document).scrollTop(),
+										width: 10,
+										height: 10
+                                    },onEnd: function(){
+										jQuery("#car b").html(data.count);
+										jQuery(".u-flyer").remove();
+										change_count();
+										} 
+								});
+								
+								}
+				 },"json");
+	 	 }
+   });
+   //F码购买
+   jQuery("a[id^=f_goods_cart_]").live("click",function(){
+	  var goods_id=jQuery(this).attr("goods_id");
+	  var user_id=jQuery(this).attr("user_id");
+	  var goods_type=parseInt(jQuery(this).attr("goods_type"));
+	  if("$!{user.id}"==user_id){
+         showDialog("msg_info","","不能购买自己的商品！",2,"warning",3,'');
+	  }else{
+          window.location.href="$!webPath/f_code_cart?goods_id="+goods_id;
+	  }								  
+   })
+    //瀑布流加载分类
+ jQuery(function(){
+    var container = jQuery('.class_all_bhid');
+    container.imagesLoaded( function(){
+       container.masonry({ 
+    	    itemSelector : '.class_all_one',
+            gutterWidth : 10,
+            isAnimated: true
+        });
+	    });
+	});
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main_class_all">
+  <div class="class_all">
+    <ul class="cls_tab_ul">
+      <li class="this"><a href="$!webPath/goods_class"><b>全部商品分类</b></a></li>
+      <li><a href="$!webPath/brand/index"><b>全部品牌</b></a></li>
+      <li style="display:none"><a href="$!webPath/store_goods_list"><b>全部商品</b></a></li>
+    </ul>
+    <div class="cls_all_top">
+      <h3>全部商品分类</h3>
+      <div class="cls_all_top_box">
+          #foreach($sc in $recommend_scs)
+              <!--<a href="$!webPath/store_goods_list_$!{sc.id}" target="_blank">
+              $!{sc.showName}
+              </a>-->
+               <a #if($!sc.show_type=="0")
+                    #if($!sc.url=="") href="$!webPath/store_goods_list?sc_id=$!{sc.id}"
+                     #else href ="$!sc.url" 
+                    #end 
+                   #elseif($!sc.show_type=="1") href ="$!webPath/channel/index_$!{sc.channel_id}"
+                   #end target="_blank">$!sc.showName</a> 
+          #end
+      </div>
+    </div>
+    <div class="class_all_bottom">
+      <div class="class_all_bhid">
+      #foreach($sc in $scs)
+        <div class="class_all_one">
+          <h4> <span>
+          <a #if($!sc.show_type=="0")
+                       #if($!sc.url=="")
+                       href="$!webPath/store_goods_list?sc_id=$!{sc.id}" 
+                       #else
+                       href="$!sc.url" 
+                       #end
+                       #end
+                      		#if($!sc.show_type=="1") href="$!webPath/channel/index_$!{sc.channel_id}" #end target="_blank">$!sc.showName</a>
+                           <!-- <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank">$!{sc.showName}</a>--></span></h4>
+          #foreach($c_sc in $sc.childs)
+          <dl>
+            <dt><!--<a href="$!webPath/store_goods_list_$!{c_sc.id}" target="_blank">$c_sc.showName</a>-->
+               <a #if($!c_sc.show_type=="0")
+                       #if($!c_sc.url=="")
+                       href="$!webPath/store_goods_list?sc_id=$!{c_sc.id}" 
+                       #else
+                       href="$!c_sc.url" 
+                       #end
+                       #end
+                      		#if($!c_sc.show_type=="1") href="$!webPath/channel/index_$!{c_sc.channel_id}" #end target="_blank">$!c_sc.showName</a>
+            </dt>
+            <dd> 
+               #foreach($gc2 in $!showClassTools.getSclist($!c_sc.id))
+                 #if($!gc2.display==true) 
+                      <a target="_blank" href="$!webPath/store_goods_list_$!{gc2.id}">$!gc2.className</a> 
+                 #end
+               #end 
+             </dd>
+            <!--<dd>#foreach($c_c_sc in $c_sc.childs)<a href="$!webPath/store_goods_list_$!{c_c_gc.id}" target="_blank">$!c_c_sc.showName</a>#end</dd>-->
+          </dl>
+          #end
+        </div>
+        #end
+      </div>
+    </div>
+  </div>
+<script>
+      jQuery(document).ready(function(){
+		jQuery(".shopping_other_list_center").slide({titCell:".shopping_other_list_button ul",mainCell:".shopping_other_list_center_box ul",autoPage:true,effect:"left",autoPlay:true,scroll:7,vis:7,trigger:"click"});
+		});
+      </script>
+#if($!goodsViewTools.query_Ztc_Goods(21).size()>0)      
+<div class="shopping_other">
+  <div class="shopping_other_list_center">
+    <div class="shopping_other_list_button">
+      <div class="shopping_other_list_button_left">热卖推荐</div>
+      <div class="shopping_other_list_button_right"> <a class="next"></a>
+        <ul>
+          <li></li>
+        </ul>
+        <a class="prev"></a> </div>
+    </div>
+    <div class="shopping_other_list_center_box">
+      <div class="shopping_other_list_center_box_c">
+        <ul>
+          #foreach($goods in $!goodsViewTools.query_Ztc_Goods(21))
+          #if($!goods.goods_main_photo)
+          #set($small_img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+          #else
+          #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+          
+          #set($goods_url="$!webPath/items_$!{goods.id}")
+          #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+          #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+          #end
+          <li><span><a href="$!goods_url" target="_blank"><img  id="class_$!{goods.id}" src="$!{small_img}" /></a></span><i><a href="$!goods_url" target="_blank">$!goods.goods_name</a></i><b>商城价：<strong>¥$!{goods.goods_current_price}</strong></b> <em class="btn"> #if($!user)
+            #if($!goods.f_sale_type==1) <a style="margin:0 auto;" href="javascript:void(0);" goods_id="$!goods.id" goods_type="$!goods.goods_type" user_id="$!goods.goods_store.user.id"   id="f_goods_cart_$!{goods.id}">F码购买</a></a> #else <a style="margin:0 auto;" href="javascript:void(0);" goods_id="$!goods.id" goods_type="$!goods.goods_type" user_id="$!goods.goods_store.user.id" id="goods_cart_$!{goods.id}" goods_img="$!{small_img}">加入购物车</a> #end
+            
+            #else
+            #if($!goods.f_sale_type==1) <a style="margin:0 auto;" href="javascript:void(0);" dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login">F码购买</a> #else <a style="margin:0 auto;" href="javascript:void(0);" goods_id="$!goods.id" goods_type="$!goods.goods_type" user_id="$!goods.goods_store.user.id" id="goods_cart_$!{goods.id}" goods_img="$!{small_img}">加入购物车</a> #end
+            #end </em> </li>
+          #end
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+#end
+ $!httpInclude.include("/footer") 
+</div>
+</div>
+$!httpInclude.include("/toolbar")
+</body>
+</html>

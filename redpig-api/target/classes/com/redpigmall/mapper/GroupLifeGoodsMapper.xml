@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GroupLifeGoodsMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GroupLifeGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gg_describe" property="gg_describe" jdbcType="VARCHAR"/>
+		<result column="gg_name" property="gg_name" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="group_details" property="group_details" jdbcType="VARCHAR"/>
+		<result column="group_status" property="group_status" jdbcType="INTEGER"/>
+		<result column="group_price" property="group_price" jdbcType="DECIMAL"/>
+		<result column="cost_price" property="cost_price" jdbcType="DECIMAL"/>
+		<result column="group_count" property="group_count" jdbcType="INTEGER"/>
+		<result column="selled_count" property="selled_count" jdbcType="INTEGER"/>
+		<result column="group_recommend" property="group_recommend" jdbcType="BIT"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="gg_rebate" property="gg_rebate" jdbcType="DECIMAL"/>
+		<result column="weixin_shop_recommend" property="weixin_shop_recommend" jdbcType="BIT"/>
+		<result column="weixin_shop_recommendTime" property="weixin_shop_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="gg_phone" property="gg_phone" jdbcType="VARCHAR"/>
+		<association property="group" column="group_id" select="com.redpigmall.dao.GroupMapper.selectByPrimaryKey"/>
+		<association property="gg_gc" column="gg_gc_id" select="com.redpigmall.dao.GroupClassMapper.selectByPrimaryKey"/>
+		<association property="gg_ga" column="gg_ga_id" select="com.redpigmall.dao.GroupAreaMapper.selectByPrimaryKey"/>
+		<association property="group_acc" column="group_acc_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="user" column="user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="gg_gai" column="gg_gai_id" select="com.redpigmall.dao.GroupAreaInfoMapper.selectByPrimaryKey"/>
+		<collection property="groupInfos" column="id" select="com.redpigmall.dao.GroupInfoMapper.getLifeGoodsByGroupLifeGoodsId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GroupLifeGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="gg_describe" property="gg_describe" jdbcType="VARCHAR"/>
+		<result column="gg_name" property="gg_name" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="group_details" property="group_details" jdbcType="VARCHAR"/>
+		<result column="group_status" property="group_status" jdbcType="INTEGER"/>
+		<result column="group_price" property="group_price" jdbcType="DECIMAL"/>
+		<result column="cost_price" property="cost_price" jdbcType="DECIMAL"/>
+		<result column="group_count" property="group_count" jdbcType="INTEGER"/>
+		<result column="selled_count" property="selled_count" jdbcType="INTEGER"/>
+		<result column="group_recommend" property="group_recommend" jdbcType="BIT"/>
+		<result column="goods_type" property="goods_type" jdbcType="INTEGER"/>
+		<result column="gg_rebate" property="gg_rebate" jdbcType="DECIMAL"/>
+		<result column="weixin_shop_recommend" property="weixin_shop_recommend" jdbcType="BIT"/>
+		<result column="weixin_shop_recommendTime" property="weixin_shop_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="gg_phone" property="gg_phone" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,gg_describe,gg_name,beginTime,endTime,group_id,gg_gc_id,gg_ga_id,group_details,group_status,group_price,group_acc_id,cost_price,user_id,group_count,selled_count,group_recommend,goods_type,gg_rebate,weixin_shop_recommend,weixin_shop_recommendTime,mobile_recommend,mobile_recommendTime,gg_phone,gg_gai_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="id_no != null">and id != #{id_no,jdbcType=BIGINT}</if>
+		<if test="ids != null and ids.size() &gt; 0">
+			and id in 
+			<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="add_Time_more_than != null">and addTime <![CDATA[ > ]]> #{add_Time_more_than,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than != null">and addTime <![CDATA[ < ]]> #{add_Time_less_than,jdbcType=TIMESTAMP}</if>
+		
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="gg_describe != null">and gg_describe = #{gg_describe,jdbcType=VARCHAR}</if>
+		<if test="gg_name != null">and gg_name = #{gg_name,jdbcType=VARCHAR}</if>
+		<if test="beginTime != null">
+			<![CDATA[ and beginTime < #{beginTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="endTime != null">
+			<![CDATA[ and endTime > #{endTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		
+		<if test="beginTime_more_than_equal != null">and beginTime <![CDATA[ >= ]]> #{beginTime_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="endTime_less_than_equal != null">and endTime <![CDATA[ <= ]]> #{endTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="group_details != null">and group_details = #{group_details,jdbcType=VARCHAR}</if>
+		<if test="group_status != null">and group_status = #{group_status,jdbcType=INTEGER}</if>
+		<if test="group_status_no != null">and group_status != #{group_status_no,jdbcType=INTEGER}</if>
+		<if test="group_price != null">and group_price = #{group_price,jdbcType=DECIMAL}</if>
+		
+		<if test="group_price_more_than != null">and group_price <![CDATA[ > ]]> #{group_price_more_than,jdbcType=DECIMAL}</if>
+		<if test="group_price_less_than != null">and group_price <![CDATA[ < ]]> #{group_price_less_than,jdbcType=DECIMAL}</if>
+		
+		<if test="group_price_more_than_equal != null">and group_price <![CDATA[ >= ]]> #{group_price_more_than_equal,jdbcType=DECIMAL}</if>
+		<if test="group_price_less_than_equal != null">and group_price <![CDATA[ <= ]]> #{group_price_less_than_equal,jdbcType=DECIMAL}</if>
+		
+		<if test="cost_price != null">and cost_price = #{cost_price,jdbcType=DECIMAL}</if>
+		<if test="group_count != null">and group_count = #{group_count,jdbcType=INTEGER}</if>
+		<if test="selled_count != null">and selled_count = #{selled_count,jdbcType=INTEGER}</if>
+		<if test="group_recommend != null">and group_recommend = #{group_recommend,jdbcType=BIT}</if>
+		<if test="goods_type != null">and goods_type = #{goods_type,jdbcType=INTEGER}</if>
+		<if test="gg_rebate != null">and gg_rebate = #{gg_rebate,jdbcType=DECIMAL}</if>
+		<if test="weixin_shop_recommend != null">and weixin_shop_recommend = #{weixin_shop_recommend,jdbcType=BIT}</if>
+		<if test="weixin_shop_recommendTime != null">and weixin_shop_recommendTime = #{weixin_shop_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=INTEGER}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="gg_phone != null">and gg_phone = #{gg_phone,jdbcType=VARCHAR}</if>
+		<if test="gg_name_like !=null">
+			and gg_name like concat(concat('%',#{gg_name_like}),'%') 
+		</if>
+		<if test="group_id != null">and group_id = #{group_id,jdbcType=BIGINT}</if>
+		<if test="gg_gc_id != null">and gg_gc_id = #{gg_gc_id,jdbcType=BIGINT}</if>
+		<if test="gg_gc_ids !=null and gg_gc_ids.size() &gt; 0">
+			and gg_gc_id in
+			<foreach collection="gg_gc_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="gg_ga_id != null">and gg_ga_id = #{gg_ga_id,jdbcType=BIGINT}</if>
+		<if test="gg_ga_ids != null">
+			and gg_ga_id in 
+			<foreach collection="gg_ga_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="group_acc_id != null">and group_acc_id = #{group_acc_id,jdbcType=BIGINT}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="gg_gai_id != null">and gg_gai_id = #{gg_gai_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		gg_describe= #{gg_describe},
+		gg_name= #{gg_name},
+		beginTime= #{beginTime},
+		endTime= #{endTime},
+		<if test="group == null or group.id == null">group_id = null,</if>
+		<if test="group != null and group.id != null">group_id = #{group.id,jdbcType=BIGINT},</if>
+		<if test="gg_gc == null or gg_gc.id == null">gg_gc_id = null,</if>
+		<if test="gg_gc != null and gg_gc.id != null">gg_gc_id = #{gg_gc.id,jdbcType=BIGINT},</if>
+		<if test="gg_ga == null or gg_ga.id == null">gg_ga_id = null,</if>
+		<if test="gg_ga != null and gg_ga.id != null">gg_ga_id = #{gg_ga.id,jdbcType=BIGINT},</if>
+		group_details= #{group_details},
+		group_status= #{group_status},
+		group_price= #{group_price},
+		<if test="group_acc != null and group_acc.id != null">group_acc_id = #{group_acc.id,jdbcType=BIGINT},</if>
+		<if test="group_acc == null or group_acc.id == null">group_acc_id = null,</if>
+		cost_price= #{cost_price},
+		<if test="user == null or user.id == null">user_id = null,</if>
+		<if test="user != null and user.id != null">user_id = #{user.id,jdbcType=BIGINT},</if>
+		group_count= #{group_count},
+		selled_count= #{selled_count},
+		group_recommend= #{group_recommend},
+		goods_type= #{goods_type},
+		gg_rebate= #{gg_rebate},
+		weixin_shop_recommend= #{weixin_shop_recommend},
+		weixin_shop_recommendTime= #{weixin_shop_recommendTime},
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+		gg_phone= #{gg_phone},
+		<if test="gg_gai == null or gg_gai.id == null">gg_gai_id = null,</if>
+		<if test="gg_gai != null and gg_gai.id != null">gg_gai_id = #{gg_gai.id,jdbcType=BIGINT},</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_group_lifegoods 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from redpigmall_group_lifegoods obj 
+		
+		<if test="gg_gai_area_parent_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id 
+			JOIN redpigmall_area ap ON a.parent_id = ap.id and ap.id = #{gg_gai_area_parent_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="gg_gai_area_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id AND a.id =  #{gg_gai_area_id,jdbcType=BIGINT}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_group_lifegoods obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getGroupByGroupId" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_lifegoods
+		where
+			group_id = #{group_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGgGcByGroupClassId" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_lifegoods
+		where
+			gg_gc_id = #{gg_gc_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGgGaByGroupAreaId" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_lifegoods
+		where
+			gg_ga_id = #{gg_ga_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGroupAccByAccessoryId" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_lifegoods
+		where
+			group_acc_id= #{group_acc_id,jdbcType=BIGINT}
+	</select>
+	<select id="getUserByUserId" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_lifegoods
+		where
+			user_id = #{user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGgGaiByGroupAreaInfoId" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_lifegoods
+		where
+			gg_gai_id = #{gg_gai_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from redpigmall_group_lifegoods obj 	
+		<if test="gg_gai_area_parent_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id 
+			JOIN redpigmall_area ap ON a.parent_id = ap.id and ap.id = #{gg_gai_area_parent_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="gg_gai_area_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id AND a.id =  #{gg_gai_area_id,jdbcType=BIGINT}
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GroupLifeGoods" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_group_lifegoods(addTime,deleteStatus,gg_describe,gg_name,beginTime,endTime,group_details,group_status,group_price,cost_price,group_count,selled_count,group_recommend,goods_type,gg_rebate,weixin_shop_recommend,weixin_shop_recommendTime,mobile_recommend,mobile_recommendTime,gg_phone,group_id,gg_gc_id,gg_ga_id,group_acc_id,user_id,gg_gai_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{gg_describe,jdbcType=VARCHAR},#{gg_name,jdbcType=VARCHAR},#{beginTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP},#{group_details,jdbcType=VARCHAR},#{group_status,jdbcType=INTEGER},#{group_price,jdbcType=DECIMAL},#{cost_price,jdbcType=DECIMAL},#{group_count,jdbcType=INTEGER},#{selled_count,jdbcType=INTEGER},#{group_recommend,jdbcType=BIT},#{goods_type,jdbcType=INTEGER},#{gg_rebate,jdbcType=DECIMAL},#{weixin_shop_recommend,jdbcType=BIT},#{weixin_shop_recommendTime,jdbcType=TIMESTAMP},#{mobile_recommend,jdbcType=INTEGER},#{mobile_recommendTime,jdbcType=TIMESTAMP},#{gg_phone,jdbcType=VARCHAR},#{group.id,jdbcType=BIGINT},#{gg_gc.id,jdbcType=BIGINT},#{gg_ga.id,jdbcType=BIGINT},#{group_acc.id,jdbcType=BIGINT},#{user.id,jdbcType=BIGINT},#{gg_gai.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GroupLifeGoods">
+		update redpigmall_group_lifegoods
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_group_lifegoods where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_group_lifegoods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.*
+		from redpigmall_group_lifegoods obj 	
+		<if test="gg_gai_area_parent_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id 
+			JOIN redpigmall_area ap ON a.parent_id = ap.id and ap.id = #{gg_gai_area_parent_id,jdbcType=BIGINT}
+		</if>	
+		
+		<if test="gg_gai_area_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id AND a.id =  #{gg_gai_area_id,jdbcType=BIGINT}
+		</if>
+				
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.*
+		from redpigmall_group_lifegoods obj 	
+		<if test="gg_gai_area_parent_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id 
+			JOIN redpigmall_area ap ON a.parent_id = ap.id and ap.id = #{gg_gai_area_parent_id,jdbcType=BIGINT}
+		</if>	
+		
+		<if test="gg_gai_area_id != null">
+			JOIN redpigmall_group_areainfo gai ON glg.gg_gai_id = gai.id 
+			JOIN redpigmall_area a ON gai.area_id = a.id AND a.id =  #{gg_gai_area_id,jdbcType=BIGINT}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GroupLifeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_group_lifegoods
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_group_lifegoods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

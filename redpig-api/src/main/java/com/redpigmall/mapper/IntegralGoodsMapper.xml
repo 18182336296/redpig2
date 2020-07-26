@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.IntegralGoodsMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.IntegralGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ig_goods_name" property="ig_goods_name" jdbcType="VARCHAR"/>
+		<result column="ig_goods_price" property="ig_goods_price" jdbcType="DECIMAL"/>
+		<result column="ig_goods_integral" property="ig_goods_integral" jdbcType="INTEGER"/>
+		<result column="ig_user_Level" property="ig_user_Level" jdbcType="INTEGER"/>
+		<result column="ig_goods_sn" property="ig_goods_sn" jdbcType="VARCHAR"/>
+		<result column="ig_goods_count" property="ig_goods_count" jdbcType="INTEGER"/>
+		<result column="ig_goods_tag" property="ig_goods_tag" jdbcType="VARCHAR"/>
+		<result column="ig_limit_type" property="ig_limit_type" jdbcType="BIT"/>
+		<result column="ig_limit_count" property="ig_limit_count" jdbcType="INTEGER"/>
+		<result column="ig_transfee_type" property="ig_transfee_type" jdbcType="INTEGER"/>
+		<result column="ig_transfee" property="ig_transfee" jdbcType="DECIMAL"/>
+		<result column="ig_time_type" property="ig_time_type" jdbcType="BIT"/>
+		<result column="ig_begin_time" property="ig_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ig_end_time" property="ig_end_time" jdbcType="TIMESTAMP"/>
+		<result column="ig_show" property="ig_show" jdbcType="BIT"/>
+		<result column="ig_recommend" property="ig_recommend" jdbcType="BIT"/>
+		<result column="ig_sequence" property="ig_sequence" jdbcType="INTEGER"/>
+		<result column="ig_seo_keywords" property="ig_seo_keywords" jdbcType="VARCHAR"/>
+		<result column="ig_seo_description" property="ig_seo_description" jdbcType="VARCHAR"/>
+		<result column="ig_content" property="ig_content" jdbcType="VARCHAR"/>
+		<result column="ig_exchange_count" property="ig_exchange_count" jdbcType="INTEGER"/>
+		<result column="ig_click_count" property="ig_click_count" jdbcType="INTEGER"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<association property="ig_goods_img" column="ig_goods_img_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<collection property="gcs" column="id" select="com.redpigmall.dao.IntegralGoodsCartMapper.getGoodsByIntegralGoodsId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.IntegralGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ig_goods_name" property="ig_goods_name" jdbcType="VARCHAR"/>
+		<result column="ig_goods_price" property="ig_goods_price" jdbcType="DECIMAL"/>
+		<result column="ig_goods_integral" property="ig_goods_integral" jdbcType="INTEGER"/>
+		<result column="ig_user_Level" property="ig_user_Level" jdbcType="INTEGER"/>
+		<result column="ig_goods_sn" property="ig_goods_sn" jdbcType="VARCHAR"/>
+		<result column="ig_goods_count" property="ig_goods_count" jdbcType="INTEGER"/>
+		<result column="ig_goods_tag" property="ig_goods_tag" jdbcType="VARCHAR"/>
+		<result column="ig_limit_type" property="ig_limit_type" jdbcType="BIT"/>
+		<result column="ig_limit_count" property="ig_limit_count" jdbcType="INTEGER"/>
+		<result column="ig_transfee_type" property="ig_transfee_type" jdbcType="INTEGER"/>
+		<result column="ig_transfee" property="ig_transfee" jdbcType="DECIMAL"/>
+		<result column="ig_time_type" property="ig_time_type" jdbcType="BIT"/>
+		<result column="ig_begin_time" property="ig_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ig_end_time" property="ig_end_time" jdbcType="TIMESTAMP"/>
+		<result column="ig_show" property="ig_show" jdbcType="BIT"/>
+		<result column="ig_recommend" property="ig_recommend" jdbcType="BIT"/>
+		<result column="ig_sequence" property="ig_sequence" jdbcType="INTEGER"/>
+		<result column="ig_seo_keywords" property="ig_seo_keywords" jdbcType="VARCHAR"/>
+		<result column="ig_seo_description" property="ig_seo_description" jdbcType="VARCHAR"/>
+		<result column="ig_content" property="ig_content" jdbcType="VARCHAR"/>
+		<result column="ig_exchange_count" property="ig_exchange_count" jdbcType="INTEGER"/>
+		<result column="ig_click_count" property="ig_click_count" jdbcType="INTEGER"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ig_goods_name,ig_goods_price,ig_goods_integral,ig_user_Level,ig_goods_sn,ig_goods_count,ig_goods_tag,ig_goods_img_id,ig_limit_type,ig_limit_count,ig_transfee_type,ig_transfee,ig_time_type,ig_begin_time,ig_end_time,ig_show,ig_recommend,ig_sequence,ig_seo_keywords,ig_seo_description,ig_content,ig_exchange_count,ig_click_count,mobile_recommend,mobile_recommendTime
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ig_goods_name != null">and ig_goods_name = #{ig_goods_name,jdbcType=VARCHAR}</if>
+		<if test="ig_goods_price != null">and ig_goods_price = #{ig_goods_price,jdbcType=DECIMAL}</if>
+		<if test="ig_goods_integral != null">and ig_goods_integral = #{ig_goods_integral,jdbcType=INTEGER}</if>
+		
+		<if test="ig_goods_integral_more_than != null">and ig_goods_integral <![CDATA[ > ]]> #{ig_goods_integral_more_than ,jdbcType=INTEGER}</if>
+		<if test="ig_goods_integral_less_than  != null">and ig_goods_integral <![CDATA[ < ]]> #{ig_goods_integral_less_than ,jdbcType=INTEGER}</if>
+		
+		<if test="ig_goods_integral_more_than_equal != null">and ig_goods_integral <![CDATA[ >= ]]> #{ig_goods_integral_more_than_equal,jdbcType=INTEGER}</if>
+		<if test="ig_goods_integral_less_than_equal != null">and ig_goods_integral <![CDATA[ <= ]]> #{ig_goods_integral_less_than_equal,jdbcType=INTEGER}</if>
+		
+		
+		<if test="ig_user_Level != null">and ig_user_Level = #{ig_user_Level,jdbcType=INTEGER}</if>
+		<if test="ig_goods_sn != null">and ig_goods_sn = #{ig_goods_sn,jdbcType=VARCHAR}</if>
+		<if test="ig_goods_count != null">and ig_goods_count = #{ig_goods_count,jdbcType=INTEGER}</if>
+		<if test="ig_goods_tag != null">and ig_goods_tag = #{ig_goods_tag,jdbcType=VARCHAR}</if>
+		<if test="ig_limit_type != null">and ig_limit_type = #{ig_limit_type,jdbcType=BIT}</if>
+		<if test="ig_limit_count != null">and ig_limit_count = #{ig_limit_count,jdbcType=INTEGER}</if>
+		<if test="ig_transfee_type != null">and ig_transfee_type = #{ig_transfee_type,jdbcType=INTEGER}</if>
+		<if test="ig_transfee != null">and ig_transfee = #{ig_transfee,jdbcType=DECIMAL}</if>
+		<if test="ig_time_type != null">and ig_time_type = #{ig_time_type,jdbcType=BIT}</if>
+		<if test="ig_begin_time != null">and ig_begin_time = #{ig_begin_time,jdbcType=TIMESTAMP}</if>
+		<if test="ig_end_time != null">and ig_end_time = #{ig_end_time,jdbcType=TIMESTAMP}</if>
+		<if test="ig_show != null">and ig_show = #{ig_show,jdbcType=BIT}</if>
+		<if test="ig_recommend != null">and ig_recommend = #{ig_recommend,jdbcType=BIT}</if>
+		<if test="ig_sequence != null">and ig_sequence = #{ig_sequence,jdbcType=INTEGER}</if>
+		<if test="ig_seo_keywords != null">and ig_seo_keywords = #{ig_seo_keywords,jdbcType=VARCHAR}</if>
+		<if test="ig_seo_description != null">and ig_seo_description = #{ig_seo_description,jdbcType=VARCHAR}</if>
+		<if test="ig_content != null">and ig_content = #{ig_content,jdbcType=VARCHAR}</if>
+		<if test="ig_exchange_count != null">and ig_exchange_count = #{ig_exchange_count,jdbcType=INTEGER}</if>
+		<if test="ig_click_count != null">and ig_click_count = #{ig_click_count,jdbcType=INTEGER}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=INTEGER}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="ig_goods_name_like !=null ">and ig_goods_name like CONCAT('%',#{ig_goods_name_like},'%')</if>
+		<if test="ig_goods_img_id != null">and ig_goods_img_id = #{ig_goods_img_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		ig_goods_name= #{ig_goods_name},
+		ig_goods_price= #{ig_goods_price},
+		ig_goods_integral= #{ig_goods_integral},
+		ig_user_Level= #{ig_user_Level},
+		ig_goods_sn= #{ig_goods_sn},
+		ig_goods_count= #{ig_goods_count},
+		ig_goods_tag= #{ig_goods_tag},
+		<if test="ig_goods_img != null and ig_goods_img.id != null">ig_goods_img_id = #{ig_goods_img.id,jdbcType=BIGINT},</if>
+		<if test="ig_goods_img == null or ig_goods_img.id == null">ig_goods_img_id = null,</if>
+		ig_limit_type= #{ig_limit_type},
+		ig_limit_count= #{ig_limit_count},
+		ig_transfee_type= #{ig_transfee_type},
+		ig_transfee= #{ig_transfee},
+		ig_time_type= #{ig_time_type},
+		ig_begin_time= #{ig_begin_time},
+		ig_end_time= #{ig_end_time},
+		ig_show= #{ig_show},
+		ig_recommend= #{ig_recommend},
+		ig_sequence= #{ig_sequence},
+		ig_seo_keywords= #{ig_seo_keywords},
+		ig_seo_description= #{ig_seo_description},
+		ig_content= #{ig_content},
+		ig_exchange_count= #{ig_exchange_count},
+		ig_click_count= #{ig_click_count},
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.IntegralGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_integral_goods 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.IntegralGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_integral_goods obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_integral_goods obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getIgGoodsImgByAccessoryId" resultType="com.redpigmall.domain.IntegralGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_integral_goods
+		where
+			ig_goods_img_id= #{ig_goods_img_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.IntegralGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_integral_goods obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.IntegralGoods" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_integral_goods(addTime,deleteStatus,ig_goods_name,ig_goods_price,ig_goods_integral,ig_user_Level,ig_goods_sn,ig_goods_count,ig_goods_tag,ig_limit_type,ig_limit_count,ig_transfee_type,ig_transfee,ig_time_type,ig_begin_time,ig_end_time,ig_show,ig_recommend,ig_sequence,ig_seo_keywords,ig_seo_description,ig_content,ig_exchange_count,ig_click_count,mobile_recommend,mobile_recommendTime,ig_goods_img_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ig_goods_name,jdbcType=VARCHAR},#{ig_goods_price,jdbcType=DECIMAL},#{ig_goods_integral,jdbcType=INTEGER},#{ig_user_Level,jdbcType=INTEGER},#{ig_goods_sn,jdbcType=VARCHAR},#{ig_goods_count,jdbcType=INTEGER},#{ig_goods_tag,jdbcType=VARCHAR},#{ig_limit_type,jdbcType=BIT},#{ig_limit_count,jdbcType=INTEGER},#{ig_transfee_type,jdbcType=INTEGER},#{ig_transfee,jdbcType=DECIMAL},#{ig_time_type,jdbcType=BIT},#{ig_begin_time,jdbcType=TIMESTAMP},#{ig_end_time,jdbcType=TIMESTAMP},#{ig_show,jdbcType=BIT},#{ig_recommend,jdbcType=BIT},#{ig_sequence,jdbcType=INTEGER},#{ig_seo_keywords,jdbcType=VARCHAR},#{ig_seo_description,jdbcType=VARCHAR},#{ig_content,jdbcType=VARCHAR},#{ig_exchange_count,jdbcType=INTEGER},#{ig_click_count,jdbcType=INTEGER},#{mobile_recommend,jdbcType=INTEGER},#{mobile_recommendTime,jdbcType=TIMESTAMP},#{ig_goods_img.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.IntegralGoods">
+		update redpigmall_integral_goods
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_integral_goods where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_integral_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.IntegralGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_integral_goods obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.IntegralGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_integral_goods obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.IntegralGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_integral_goods
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_integral_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

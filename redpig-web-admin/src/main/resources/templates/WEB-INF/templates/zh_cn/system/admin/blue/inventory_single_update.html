@@ -1,0 +1,41 @@
+<script>
+jQuery(document).ready(function(){
+jQuery.validator.addMethod("verify",function(value,element){
+var re = /^[0-9]*$/;
+        if(re.test(jQuery("#count").val())){			
+			return true;
+		  } 
+		  else {
+		    return false;
+			  }
+});								
+  jQuery("#theForm").validate({
+	   rules:{
+		   count:{required:true,verify:true}
+		   },
+	   messages:{
+	       count:{required:"操作数量不能为空",verify:"请正确填写操作数量"}
+	   }
+	});
+});
+</script>
+
+<form action="$!webPath/single_inventory_save" method="post" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!id" />
+  <input name="type" type="hidden" id="type" value="$!type" />
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td align="right" valign="top">操作数量：</td>
+      <td align="left"><input name="count" type="text" id="count" size="30" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">操作说明：</td>
+      <td align="left"><textarea name="operation_info" id="operation_info" cols="35" rows="5"></textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        </span></td>
+    </tr>
+  </table>
+</form>

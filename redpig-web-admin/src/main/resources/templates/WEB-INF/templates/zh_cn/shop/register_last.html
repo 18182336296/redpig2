@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户注册 -$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	    var uurl = jQuery("#email").val();
+		uurl = gotoEmail(uurl);
+		if (uurl != "") {
+			jQuery(".mail_pend_m_right span a").attr("href", "http://"+uurl);
+		}
+});
+function gotoEmail(mail) {
+                var t = mail.split('@')[1];
+				t=t.toLowerCase();
+                if (t == '163.com') {
+                    return 'mail.163.com';
+                } else if (t == 'vip.163.com') {
+                    return 'vip.163.com';
+                } else if (t == '126.com') {
+                    return 'mail.126.com';
+                } else if (t == 'qq.com' || t == 'vip.qq.com' || t == 'foxmail.com') {
+                    return 'mail.qq.com';
+                } else if (t == 'gmail.com') {
+                    return 'mail.google.com';
+                } else if (t == 'sohu.com') {
+                    return 'mail.sohu.com';
+                } else if (t == 'tom.com') {
+                    return 'mail.tom.com';
+                } else if (t == 'vip.sina.com') {
+                    return 'vip.sina.com';
+                } else if (t == 'sina.com.cn' || t == 'sina.com') {
+                    return 'mail.sina.com.cn';
+                } else if (t == 'yahoo.com.cn' || t == 'yahoo.cn') {
+                    return 'mail.cn.yahoo.com';
+                } else if (t == 'yeah.net') {
+                    return 'www.yeah.net';
+                } else if (t == '21cn.com') {
+                    return 'mail.21cn.com';
+                } else if (t == 'hotmail.com') {
+                    return 'www.hotmail.com';
+                } else if (t == 'sogou.com') {
+                    return 'mail.sogou.com';
+                } else if (t == '188.com') {
+                    return 'www.188.com';
+                } else if (t == '189.cn') {
+                    return 'webmail15.189.cn/webmail';
+                } else if (t == 'wo.com.cn') {
+                    return 'mail.wo.com.cn/smsmail';
+                } else if (t == '139.com') {
+                    return 'mail.10086.cn';
+                } else {
+                    return t;
+                }
+            };
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/top")
+<div class="login_head">
+  <h1><span>#if($!config.websiteLogo) <a href="$!webPath/index"> <img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /> </a> #else <a href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/logo.jpg"  /> </a> #end</span><strong>欢迎注册</strong></h1>
+</div>
+ <div class="mail_register_m_pend">
+ 		<div class="mail_pend_center">
+<!--最后一步 -->
+          <div class="mail_pend">
+           	    <div class="mail_pend_m_left">
+                <span><Img src="$!cdnServer/resources/style/system/front/default/images/login/mail_register_next.png" /></span><h3>激活邮件已经发送</h3></div>
+                
+                <div class="mail_pend_m_right">
+                
+				<b>我们已经向您的邮箱$!{obj.email}发送了一封激活邮件，请在48小时内完成激活！</b>
+                     <input name="email" id="email" type="hidden" value="$!obj.email" />
+                	<span><a target="_blank" href="">立即进入邮箱</a></span>
+                </div>
+			</div>
+           </div>
+           
+           <div class="mail_pend_bottom">
+           	<h3>没有收到邮件怎么办</h3>
+            <span>* 查看是否在垃圾邮件中，回收箱中。</span>
+            <span>* 如果您一直没有收到，请点击<a target="_blank" href="$!webPath/register">重新注册。</a></span>
+           </div>
+           </div>
+</body>
+</html>

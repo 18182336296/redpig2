@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>在线支付 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="index_bg" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>支付<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="main">
+  <div class="mt50" style="height:49px;"></div>
+  <div class="error_page1">
+    <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading_b.gif"></span>
+    <p>正在跳转，请稍候...</p>
+  </div>
+</div>
+
+</body >
+</html>
+#if($!type=="goods")
+  #set($id="$!order_id")
+#end
+#if($!type=="cash")
+  #set($id="$!cash_id")
+#end
+#if($!type=="gold")
+  #set($id="$!gold_id")
+#end
+#if($!type=="integral")
+  #set($id="$!integral_order_id")
+#end
+#if($!type=="group")
+  #set($id="$!{order_id}")
+#end
+#if($!type=="cloudpurchase")
+  #set($id="$!{order_id}")
+#end
+#if($!{payType}=="alipay_wap")
+ $!payTools.genericAlipayWap("$!url","$!payment_id","$!type","$!id")
+#end
+#if($!{payType}=="bill")
+$!payTools.generic99BillWap("$!url","$!payment_id","$!type","$!id")
+#end
+#if($!{payType}=="unionpay")
+$!payTools.genericUnionpay("$!url","$!payment_id","$!type","$!id","wap")
+#end
+#if($!{payType}=="tenpay")
+<script>
+  window.location.href='$!webPath/wap_tenpay?type=$!type&payment_id=$!payment_id&id=$!id';
+</script>
+#end
+#if($!{payType}=="chinabank")
+$!payTools.genericChinaBankWap("$!url","$!payment_id","$!type","$!id")
+#end
+#if($!{payType}=="paypal")
+$!payTools.genericPaypalWap("$!url","$!payment_id","$!type","$!id")
+#end

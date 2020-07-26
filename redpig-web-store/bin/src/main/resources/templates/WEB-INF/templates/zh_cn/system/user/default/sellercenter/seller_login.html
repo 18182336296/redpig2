@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-登录55 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+
+	window.onload=function(){jQuery("#username").focus()};
+  jQuery("#theForm").validate({
+    errorPlacement: function(error, element){
+			element.parent().parent().find("b").html("").append(error);
+			;
+        },
+	rules: {
+			username: "required",
+			password:{required:true}#if($!config.securityCodeLogin),
+			code:"required"#end},
+		messages: {
+			username: "用户名不能为空",
+			password: {required:"密码不能为空"}#if($!config.securityCodeLogin),
+			code:"验证码不能为空"#end
+	    }
+  });
+  //
+  jQuery("#code").focus(function(){
+     jQuery("#code_verify").show();
+  });
+});
+
+function seller_login(){
+		if(jQuery("#theForm").valid()){
+			seller_login_ajax();
+		}
+}
+
+function seller_login_ajax(){
+	#if($!config.securityCodeLogin)
+	jQuery("#username,#code").parent().parent().find('b').html("");
+	var username=jQuery("#username").val();
+	var password=jQuery("#password").val();
+	var code=jQuery("#code").val();
+	 var params = jQuery("#theForm").serialize();
+		 jQuery.ajax({type:'POST',url:'$!webPath/verity_password',data:{"username":username,"password":password,"code":code},
+			  success:function(ret){
+					if(ret=="ok"){
+						jQuery("#username").parent().parent().find('b').hide();
+						jQuery("#code").parent().parent().find('b').hide();
+						
+					jQuery("#theForm").submit();
+					}else{
+						if(ret=="user"){
+							var b=jQuery("#username").parent().parent().find('b');	
+					b.show();
+					b.append("用户名或密码不正确");
+					jQuery("#code,#password").val("");
+							}if(ret=="code"){
+								var b=jQuery("#code").parent().parent().find('b');	
+					b.show();
+					b.append("验证码不正确");
+					jQuery("#code,#password").val("");
+								}
+								if(ret=="user_code"){
+									var b=jQuery("#code").parent().parent().find('b');	
+									jQuery("#password,#code").val("");
+					b.show();
+					b.append("验证码不正确");
+									}
+					
+					refreshCode();
+					}
+			}
+		 });
+		 
+		 #else
+			jQuery("#username").parent().parent().find('b').html("");
+			var username=jQuery("#username").val();
+			var password=jQuery("#password").val();
+		 	var params = jQuery("#theForm").serialize();
+		 	
+		    jQuery.ajax({type:'POST',url:'$!webPath/verity_password',data:{"username":username,"password":password},
+				  success:function(ret){
+						if(ret=="ok"){
+							jQuery("#username").parent().parent().find('b').hide();
+						jQuery("#theForm").submit();
+						}else{
+							if(ret=="no"){
+								var b=jQuery("#username").parent().parent().find('b');	
+						b.show();
+						b.append("用户名或密码不正确");
+								}
+						}
+				}
+			 });
+		 
+		 
+		 #end
+		 
+		 
+	}	
+function strdown(event){
+  if(event.keyCode==13){
+      jQuery("#theForm").submit();
+   }
+}
+</script>
+</head>
+<body onkeydown="strdown(event)">
+<div class="login_head">
+    <h1><span> #if($!config.websiteLogo) <a href="$!webPath/index"> <img src="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name" border="0" /> </a> #else <a href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/logo.jpg"   /> </a> #end </span><strong>商家登录</strong></h1>
+  </div>
+<div class="login_center">
+  <div class="login_center_bg">
+    <div class="login_center_c">
+      <div class="login_center_c_main">
+        <div class="login_center_c_main_c">
+          <div class="new_seller_login_center">
+            <h3>商家后台登录2</h3>
+            <form action="$!webPath/redpigmall_login" method="post" name="theForm" id="theForm">
+            	<input type="hidden" name="refererUrl" value="$!webPath/index" />
+              <div class="new_seller_login_center_m">
+                <ul>
+                  <li><span><i class="login_top_img"><img src="$!cdnServer/resources/style/system/front/default/images/news_seller_bg_center_name.png" /></i>
+                    <input class="login_name" placeholder="请输入用户名..." name="username" type="text"  id="username"/>
+                    </span> <b></b> </li>
+                  <li><span><i class="login_top_img"><img src="$!cdnServer/resources/style/system/front/default/images/news_seller_bg_center_pass.png" /></i>
+                    <input class="login_name" placeholder="请输入密码..." name="password" type="password" id="password"/>
+                    </span> <b></b> </li>
+                  #if($!config.securityCodeLogin) 
+                  <script>
+                 function refreshCode(){
+	                 jQuery("#code_img").attr("src","$!webPath/verify?w=78&h=34&d"+new Date().getTime());
+                 }
+                </script>
+                  <li id="code_verify_li"> <i>验证码</i> <span><i class="login_top_img"><img src="$!cdnServer/resources/style/system/front/default/images/news_seller_bg_center_verify.png" /></i>
+                    <input class="login_verify"  name="code" type="text" id="code" />
+                    </span> 
+                    <!-- 验证码隐藏 h4 --> 
+                    #if($!config.securityCodeType!='voice')
+                    <h4  style="display:none;" id="code_verify"> <em><img id="code_img" src="$!webPath/verify?w=78&h=34" style="width:59px; height:34px;"/></em> <strong> <a href="javascript:void(0);" onclick="refreshCode();" title="刷新验证码" > <img src="$!cdnServer/resources/style/system/front/default/images/news_seller_bg_refresh.png" /></a> </strong> </h4>
+                    #end
+                    #if($!config.securityCodeType=='voice') <img id="code_img" src="$!webPath/verify" width="0" height="0" /> 
+                    <script>
+				   function readCode(id){
+                         var  s = "<embed id='sound_play' name='sound_play' src='$!cdnServer/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                    jQuery("#"+id).html(s);
+                    }
+			      </script> 
+                    <i id="player" style="width:0px;height:0px;"></i>
+                    <div style="margin-top:5px; float:left; margin-left:5px;"> <a href="javascript:void(0);"  onclick="readCode('player')" class="code_speech"></a> <a href="javascript:void(0);" onclick="refreshCode();" title="刷新验证码" class="code_refresh" ></a> </div>
+                    #end <b></b> </li>
+                  #end
+                  <li class="login_button"><a href="javascript:void(0);" onclick="seller_login();">登 录</a>
+                    <input name="login_role" type="hidden" id="login_role" value="seller" />
+                  </li>
+                </ul>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="login_center_bottom">$!config.copyRight</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

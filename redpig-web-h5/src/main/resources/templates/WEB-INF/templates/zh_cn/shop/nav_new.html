@@ -1,0 +1,80 @@
+<nav class="public-nav-layout">
+  <div class="wrapper">
+    <div class="all-category">
+      <div class="title"> <i></i>
+  <h3><a href="$!cdnServer/resources/platform/shop/index.php?act=category&amp;op=index">所有商品分类</a></h3>
+</div>
+<div class="category">
+  <ul class="menu">
+            #foreach($sc in $!sc_list)
+	            #if($!sc.display==true)
+	            #set($icon_img="$!cdnServer/resources/style/common/images/icon/default_icon.png")
+	            <li cat_id="$!sc.id" class="odd">
+		            #if($!sc.icon_type==0)
+			            #if($!sc.icon_sys!="")
+			            	#set($icon_img="$!cdnServer/resources/style/common/images/icon/icon_$!{sc.icon_sys}.png")
+			            #end
+		            #else
+			            #if($!sc.photo_id)         
+			             #set($icon_img="$!imageWebServer/$!showClassTools.getaccessory($!sc.photo_id).path/$!showClassTools.getaccessory($!sc.photo_id).name")
+			            #end
+		            #end
+	      			<div class="class">
+	      				<span class="arrow"></span>
+	                	<span class="ico"><img src="$!icon_img"></span>
+	                    <h4>
+							<a #if($!sc.show_type=="0") #if($!sc.url=="") href="$!webPath/store_goods_list?sc_id=$!{sc.id}" #else href ="$!sc.url" #end #end
+		            			#if($!sc.show_type=="1") href ="$!webPath/channel/index_$!{sc.channel_id}" #end target="_blank">$!sc.showName</a>
+	                    </h4>
+	                </div>
+				      <div class="sub-class"  cat_menu_id="$!sc.id">
+				      <div class="sub-class-content">
+				        <div class="recommend-class"></div>
+			      		#foreach($scc in $sc.childs)
+				      		#if($!scc.display==true)
+					          <dl>
+					          	<dt>
+					            <h3>
+									<a 
+				                       #if($!scc.show_type=="0")
+				                       #if($!scc.url=="")
+				                       href="$!webPath/store_goods_list?sc_id=$!{scc.id}" 
+				                       #else
+				                       href="$!scc.url" 
+				                       #end
+				                       #end
+				                      	 #if($!scc.show_type=="1") href="$!webPath/channel/index_$!{scc.channel_id}" #end target="_blank">$!scc.showName</a>
+								</h3>
+					            </dt>
+					          <dd class="goods-class">
+					              #foreach($gc2 in $!showClassTools.getSclist($!scc.id)) <a target="_blank" href="$!webPath/store_goods_list_$!{gc2.id}">$!gc2.className</a> #end
+					          </dd>
+					        </dl>
+					        #end
+			      		#end
+				                
+				       </div>
+				        <div class="sub-class-right">
+				                    <div class="adv-promotions">
+				                    </div>
+				        </div>
+				      </div>
+	    	   </li>
+	    	   #end
+    	   #end
+          </ul>
+</div>
+    </div>
+    <ul class="site-menu">
+      #set($navs=$!navTools.queryNav(0,-1))
+      #foreach($nav in $navs)
+	      #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+	      	#set($url="$!nav.url")
+	      #else
+	      	#set($url="$!webPath/$!{nav.url}")
+	      #end
+      <li><a href="$!url" id="$!nav.id"  #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url">$!{nav.title}</a></li>
+      #end
+    </ul>
+  </div>
+</nav>

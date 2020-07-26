@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>抽奖活动列表</title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/icon.css">
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/locale/easyui-lang-zh_CN.js"></script>
+<script>
+jQuery(document).ready(function(){
+    // tab样式聚焦
+    if("$!status"==""){
+        jQuery(".nav_list ul li:first a").addClass("this");
+    }
+    else if("$!status"=="1"){
+        jQuery(".nav_list ul li:eq(1) a").addClass("this");
+    }else if("$!status"=="2"){
+        jQuery(".nav_list ul li:eq(2) a").addClass("this");
+    }else if("$!status"=="-2"){
+        jQuery(".nav_list ul li:eq(3) a").addClass("this");
+    }
+});
+function removes(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery("#ListForm").find(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId+=jQuery(this).val()+",";
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("只能将尚无进行中的抽奖活动删除，是否继续？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+function clearData() {
+    jQuery("#luckydraw_name").val("");
+    jQuery('#beginTime').textbox('setValue','');
+    jQuery('#endTime').textbox('setValue','');
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">活动管理</h1>
+  
+  <div class="nav_list">
+ 
+      <ul>
+          <li><a href="$!webPath/luckydraw_list?"><b>所有活动</b></a> </li>
+          <li><a href="$!webPath/luckydraw_list?status=1"><b>未开始</b></a> </li>
+          <li><a href="$!webPath/luckydraw_list?status=2"><b>进行中</b></a> </li>
+          <li><a href="$!webPath/luckydraw_list?status=-2"><b>已结束</b></a> </li>
+          <li><a href="$!webPath/luckydraw_add"><b>新增活动</b></a> </li>
+      </ul>
+  </div>
+<form action="$!webPath/luckydraw_list?status=$!status" method="post" id="queryForm" >
+    <div class="search">
+        <ul>
+            <li>
+                <span>活动名称</span>
+                <span class="size200">
+                    <input name="luckydraw_name" type="text" id="luckydraw_name" value="$!{luckydraw_name}"/>
+                </span>
+                <span>创建时间</span>
+                <span class="size200">
+                    <input id="beginTime" name="beginTime" value="$!{beginTime}" class="easyui-datetimebox" data-options="editable:false" labelPosition="top" style="width:100%;">
+                </span>
+                <span>-</span>
+                <span class="size200">
+                    <input id="endTime" name="endTime" value="$!{endTime}" class="easyui-datetimebox" data-options="editable:false" data-options="validType:'testDate[\'#beginTime\']'" labelPosition="top" style="width:100%;">
+                </span>
+                <input name="" type="submit" value="搜索" style="cursor:pointer;margin-left: 20px;" class="search_btn" />
+                <input name="" type="button" value="清除" style="cursor:pointer;margin-left: 20px;" class="search_btn" onclick="clearData()"/>
+            </li>
+        </ul>
+    </div>
+</form>
+<div>
+
+</div>
+  <form method="post" id="ListForm" action="$!webPath/luckydraw_list">
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="4%"></th>
+        <th width="8%" align="center"><span class="form_btna">活动名称</span></th>
+        <th width="6%" align="center"><span class="form_btna">参与限制</span></th>
+        <th align="center" width="15%"><span class="form_btna">有效期</span></td>
+        <th align="center" width="10%"><span class="form_btna">用到奖品</span></td>
+        <th align="center" width="8%"><span class="form_btna">发放量</span></th>
+        <th align="center" width="8%"><span class="form_btna">参与人/次</span></th>
+        <th align="center" width="8%"><span class="form_btna">领到/未领到</span></th>
+        <th align="center" width="8%"><span class="form_btna">创建时间</span></th>
+        <th align="center" width="8%"><span class="form_btna">状态</span></th>
+        <th  align="center"><span class="form_btna">操作</span></th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr id="$!{obj.id}">
+         <td class="check_position">
+              <label for="ids_$!obj.id">
+                  <input class="ace" name="ids_$!obj.id" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl"></span></label></td>
+        <td align="center">$!obj.luckydraw_name</td>
+        <td align="center">$!obj.limit_number次</td>
+        <td align="center">$!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss ",$!obj.beginTime)至$!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss ",$!obj.endTime)</td>
+          #set($map=$!orderFormTools.queryCollageOrderInfoByCondition("$!obj.goods.id","$!obj.id"))
+          #set($order_total_price = "$!{map.get('order_total_price')}")
+          #set($order_count = "$!{map.get('order_count')}")
+
+          #if($!obj.status==0)
+              #set($status="正常")
+          #end
+              #if($!obj.status==-1)
+              #set($status="关闭")
+          #end
+              #if($!obj.status==-2)
+              #set($status="已结束")
+          #end
+              #if($!obj.status==1)
+              #set($status="未开始")
+          #end
+              #if($!obj.status==2)
+              #set($status="进行中")
+          #end
+        <td align="center">???</td>
+        <td align="center">???</td>
+        <td align="center">???</td>
+        <td align="center">???</td>
+        <td align="center">$!CommUtil.formatTime("yyyy-MM-dd HH:mm:ss ",$!obj.addTime)</td>
+        <td align="center">$!status</td>
+        <td  align="center" class="hui oprate_con">
+	        <a href="$!webPath/luckydraw_view?id=$!obj.id" class="blue">查看</a>|
+	        <!--#if($!obj.status==-1)
+	        <a href="javascript:void(0);" onclick="if(confirm('是否确认开启该抽奖活动？'))window.location.href='$!webPath/update_status?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">开启</a>|
+	        #end
+	        #if($!obj.status==0)
+	        <a href="javascript:void(0);" onclick="if(confirm('是否确认关闭该抽奖活动？'))window.location.href='$!webPath/update_status?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">关闭</a>|
+	        #end-->
+	        <a href="$!webPath/luckydraw_edit?id=$!obj.id"  class="blue">编辑</a>|
+	        <a href="javascript:void(0);" onclick="if(confirm('删除抽奖将同时删此抽奖下的商品，是否删除？'))window.location.href='$!webPath/luckydraw_del?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a>
+        </td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="7">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+    #if($!objs.size()>0)
+    <div class="operation_box">
+        <div class="operation_left">
+        <ul>
+            <li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+            <li><a href="javascript:void(0);" onclick="removes('$!webPath/collage_del');">删除</a></li>
+        </ul>
+        </div>
+        <div class="operation_right">
+            <div class="fenye">
+            <span id="queryCondition" style="display:none">
+            </span>
+                <input name="mulitId" type="hidden" id="mulitId" />
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML
+            </div>
+        </div>
+    </div>
+ #end
+  </div>
+  </form>
+
+</div>
+</body>
+</html>

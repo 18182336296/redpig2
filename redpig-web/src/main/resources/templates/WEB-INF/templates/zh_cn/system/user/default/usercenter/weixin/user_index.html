@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>个人中心 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+	jQuery(document).ready(function(){
+			#if(!$!user.id)
+				jQuery(".head_img img").hide();
+				jQuery(".info").hide();
+				jQuery(".login").show();
+			#else
+			var sum = 0;
+			#foreach($obj in $objs) 
+           		var count = $!{obj.fp_goods_count};
+				sum = sum + parseInt(count);
+            #end
+			jQuery("#foot_count").html(sum);
+			#end
+		});
+	/*function shouchang(id,obj){
+			jQuery.ajax({type:'POST',url:'$!webPath/wap/buyer/foot_point_remove',data:{"goods_id":goods_id},
+		}*/
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+  <div class="person_wrap"> 
+  <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/balance_back.png"></a>
+   <a class="home" href="$!webPath/wap/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png"></a>
+
+    <div class="head_img_info"> #if($!user.photo)
+      #set($user_img="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+      #else
+      #set($user_img="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+      #end
+      #set($level_map=$integralViewTools.query_user_level("$!user.id"))
+      <div class="head_img_box"><!--没有登录时head_img下的不显示，login显示，info不显示；登录后head_img下的img为头像的链接，login不显示，info显示-->
+        <div class="head_img"><a href="$!webPath/wap/buyer/account">
+          <img src="$!user_img" height="100%" width="100%"></a></div>
+      </div>
+      <div class="info" >
+        <p class="name">$!user.userName</p>
+        <p class="level">$!{level_map.name}</p>
+      </div>
+      <div class="login" style="display:none;"><a href="$!webPath/wap/login">登录/注册</a></div>
+    </div>
+    <div class="function">
+      <div class="news"> <a href="$!webPath/wap/buyer/message_list"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_news.png"></a> <span class="amount"> 
+      #if($!msg_size>0)
+      	#if($!msg_size>9)
+      	  9+
+      	  #else
+          $!msg_size
+        #end
+      #else
+      	0
+      #end</span> </div>
+      <div class="shopcar"> <a href="$!webPath/wap/goods_cart1"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_shopcar.png"></a> </div>
+    </div>
+    <div class="nav_box">
+      <ul class="nav">
+        <li class="goods_c"> <a href="$!webPath/wap/buyer/favorite">
+          <dl>
+            <dt>$!favorite_goods.size()</dt>
+            <dd>商品收藏</dd>
+          </dl>
+          </a> </li>
+        <li class="store_c"> <a href="$!webPath/wap/buyer/favorite_store">
+          <dl>
+            <dt>$!favorite_store.size()</dt>
+            <dd>店铺收藏</dd>
+          </dl>
+          </a> </li>
+        <li class="footprint"> <a href="$!webPath/wap/buyer/foot_point">
+          <dl>
+            <dt id="foot_count"></dt>
+            <dd>我的足迹</dd>
+          </dl>
+          </a> </li>
+      </ul>
+    </div>
+  </div>
+  <div class="person_order">
+    <div class="top_title">
+      <h3 class="o_name fl">我的订单</h3>
+      <a class="check fr" href="$!webPath/wap/buyer/order_list">查看全部订单</a> </div>
+    <ul class="p_order_items">
+      <li> <a href="$!webPath/wap/buyer/order_list?type=order_nopay&order_status=10">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_order_1.png"></dt>
+          <dd>待付款</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/order_list?type=order_noship&order_status=20">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_order_2.png"></dt>
+          <dd>待发货</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/order_list?type=order_notake&order_status=30">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_order_3.png"></dt>
+          <dd>待收货</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/order_list?type=order_over&order_status=40">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_order_4.png"></dt>
+          <dd>待评价</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/order_return_list">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_order_5.png"></dt>
+          <dd>退款/退货</dd>
+        </dl>
+        </a> </li>
+    </ul>
+  </div>
+  <div class="person_wallet">
+    <div class="top_title">
+      <h3 class="o_name fl">我的钱包</h3>
+      </div>
+    <ul class="p_wallet_items">
+      <li> <a href="$!webPath/wap/buyer/predeposit_log?type=0">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_wallet_1.png"></dt>
+          <dd>余额</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/integral_order_list">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_wallet_2.png"></dt>
+          <dd>积分</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/coupon">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_wallet_3.png"></dt>
+          <dd>优惠券</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/free_list">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_wallet_4.png"></dt>
+          <dd>我的试用</dd>
+        </dl>
+        </a> </li>
+      <li> <a href="$!webPath/wap/buyer/group_list">
+        <dl>
+          <dt><img src="$!cdnServer/resources/style/system/front/default/images/weixin/personal_wallet_5.png"></dt>
+          <dd>生活惠</dd>
+        </dl>
+        </a> </li>
+    </ul>
+  </div>
+  <div class="person_other">
+    <div class="top_title">
+    	<a href="$!webPath/wap/buyer/account">
+      <h3 class="o_name fl">账户管理</h3>
+      <span class="check fr">个人信息等</span></a> </div>
+      <div class="top_title">
+    	<a href="$!webPath/wap/buyer/cloud_order_list">
+      <h3 class="o_name fl">云购中心</h3>
+      <span class="check fr" >云购记录</span></a> </div>
+    <div class="top_title">
+    	<a href="$!webPath/wap/buyer/address">
+      <h3 class="o_name fl">地址管理</h3>
+      <span class="check fr" >管理收货地址</span></a> </div>
+    <div class="top_title">
+    	<a href="$!webPath/wap/buyer/account_safe">
+      <h3 class="o_name fl">账户安全</h3>
+      <span class="check fr" >可修改密码</span></a> </div>
+    <div class="top_title">
+    	<a   href="$!webPath/wap/buyer/service_center">
+      <h3 class="o_name fl">服务中心</h3>
+      <span class="check fr">咨询、投诉等</span></a> </div>
+     <!-- $!webPath/wap/buyer/order_complaint_list-->
+  </div>
+  
+  <a class="off_log_btn" href="$!webPath/redpigmall_logout">退出登录</a>  
+
+</div>
+</body>
+</html>

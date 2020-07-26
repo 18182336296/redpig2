@@ -1,0 +1,20 @@
+<div class="pop_nav" style="left:90%">
+	<div id="pop_nav_top" class="pop_nav_top" style="width:100%; padding-left:0; text-align:center;"> <div class="site_title" style="position:relative;">
+            	<span class="back_arow" style=" position:absolute; left:10px;" onClick="area_back();"></span>
+                配送至
+            </div></div>
+ 
+  <div class="pop_nav_left"  id="wrapper2"  style="width:100%; ">
+  <div id="scroller2" style="width:100%;">
+    <ul id="first_child_list" level="0">
+     #foreach($obj in $!objs)
+      <li onclick="load_area_second(this);" id="$!obj.id" level="$!obj.level" style="height:45px; line-height:45px; background:#fff;">$!obj.areaName</li>
+     #end
+    </ul>
+    <ul id="second_child_list" style="display:none" level="1">
+    </ul>
+    <ul id="three_child_list" style="display:none" level="2">
+    </ul>
+    </div>
+  </div>
+</div>

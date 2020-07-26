@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>团购信息 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/group.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  jQuery(".group_list_one img").lazyload({effect:"fadeIn",width:278,height:278});
+  jQuery(".group_top_sort a").removeClass("this");
+  jQuery(".group_top_sort a[id^=$!order_type]").addClass("this");
+  #if($!orderType=="desc")
+  jQuery(".group_top_sort a[id^=$!order_type] i").addClass("sort_top");
+  #else
+  jQuery(".group_top_sort a[id^=$!order_type] i").addClass("sort_bottom");
+  #end
+  jQuery(".group_class a").removeClass("this");
+  jQuery(".group_class a[id=price_$!{gpr_id}]").addClass("bluebg");
+  jQuery(".group_class a[id=gc_$!{gc_id}]").addClass("bluebg");
+});
+function group_sel(field,val){
+  jQuery("#"+field).val(val);
+  jQuery("#ListForm").submit();
+}
+function group_order(field1,val1,field2,val2){
+  jQuery("#"+field1).val(val1);
+  jQuery("#"+field2).val(val2);
+  jQuery("#ListForm").submit();
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/group/head")
+<div class="group_nav">
+<div class="top_nav_Box">
+    	<div class="nav_title">
+        	<h3>全部团购分类</h3>
+            <a href="" class="title_row"><img src="$!cdnServer/resources/style/system/front/default/images/group/changecity_row.png"></a>
+            <div class="left_nav"> 
+    #foreach($gc in $gcs)
+    #set($temp=$velocityCount)
+	#set($temp=($temp - 1)*56)
+      <div class="left_navitem">
+        <div class="first_level">
+          <dl>
+            <dt class="title"> <a href="$!webPath/store_goods_list_$!{gc.id}">$!gc.gc_name</a> </dt>
+            #foreach($recom in $groupViewTools.getRecom($!gc.id))
+            <dd><a href="">$recom.gc_name</a></dd>
+          	#end
+          </dl>
+        </div>
+        <div class="second_level" #if(${temp}!=0) style="top:-${temp}px;" #end > 
+        	#foreach($gc2 in $!gc.childs)
+            <div class="second_level_item" style="display:inline-block;">
+              <h4 class="second_title">$!gc2.gc_name</h4>
+              #set ($item=$!groupViewTools.getItems($!gc2.childs))<!--分割list-->
+              #if($!item.get("0"))
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("0"))
+                  <li><a href="">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("1").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("1"))
+                  <li><a href="">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("2").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("2"))
+                  <li><a href="">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              </div>
+              #end
+         </div>
+      </div>
+      #end 
+      </div>
+            
+        </div>
+    <div class="nav_items">
+      <ul>
+        #set($nums=[1 .. $groupViewTools.getButtonSize("$!obj.gid_nav_word_list")])
+        #foreach($o in $nums)
+        <li> #foreach($wc in $groupViewTools.getInfo_list("$!obj.gid_nav_word_list","$o"))<a href="$!wc.href">$!wc.name</a>#end </li>
+        #end 
+      </ul>
+    </div>
+    </div>
+    </div>
+
+<div class="group_bg" style="clear:left;">
+  <div class="main">
+    <div class="group_index_top">
+      <dl class="group_class">
+        <dt>分类：</dt>
+        <dd>
+        <a href="javascript:void(0);" onclick="group_sel('gc_id','')" id="gc_">不限</a> 
+   #foreach($gc in $gcs)
+               <a href="javascript:void(0);" onclick="group_sel('gc_id','$!gc.id')" id="gc_$!{gc.id}">$!gc.gc_name</a>
+   #end            
+        </dd>
+      </dl>
+
+      <dl class="group_class">
+        <dt>价格：</dt>
+        <dd>
+        <a href="javascript:void(0);" onclick="group_sel('gpr_id','')" id="price_">不限</a>
+        #foreach($gpr in $gprs)
+         <a href="javascript:void(0);" onclick="group_sel('gpr_id','$!gpr.id')" id="price_$!gpr.id">$!gpr.gpr_name</a> 
+        #end
+           </dd>
+      </dl>
+    </div>
+    	#if($!orderType=="desc")
+        #set($c_orderType="asc")
+        #else
+        #set($c_orderType="desc")
+        #end
+    <div class="group_top_sort"><span class="top_sort_page"></span><span class="top_sort_left">排序：</span><span class="sort_operate"><a href="javascript:void(0);" onclick="group_order('orderBy','addTime','orderType','$!c_orderType');"  class="this" id="addTime_$!orderType"><b>默认</b><i></i></a><a href="javascript:void(0);" onclick="group_order('orderBy','group_price','orderType','$!c_orderType');" id="group_price_$!orderType"><b>价格</b><i></i></a><a a href="javascript:void(0);" onclick="group_order('orderBy','gg_rebate','orderType','$!c_orderType');"  id="gg_rebate_$!orderType"><b>折扣</b><i></i></a><a href="javascript:void(0);" onclick="group_order('orderBy','selled_count','orderType','$!c_orderType');"  id="selled_count_$!orderType"><b>销量</b><i></i></a></span></div>
+    <form action="$!webPath/group/search?type=$!type" method="post" id="ListForm">
+    <div class="group_list"> 
+    #if($objs.size()>0)
+    #foreach($obj in $objs)
+      <ul class="group_list_one">
+        <li class="group_list_img"><span>
+          <p><a href="$!webPath/group/view_goods_$!{obj.vo_id}"><img src="$!imageWebServer/$!obj.vo_main_photo_url" original="$!imageWebServer/$!obj.vo_main_photo_url" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="278" height="186" /></a></p>
+          </span></li>
+        <li class="group_list_name"><a href="$!webPath/group/view_goods_$!{obj.vo_id}">$!obj.vo_title</a></li>
+        <li class="group_list_mid"><span class="group_list_price"><strong>¥$!obj.vo_store_price</strong><em><i>$!obj.vo_rate折</i><b>¥$!obj.vo_cost_price</b></em></span></li>
+        <li class="group_list_people"><span class="group_list_see"><a href="$!webPath/group/view_goods_$!{obj.vo_id}">查看详细</a></span><b>已售出$!obj.vo_goods_salenum</b></li>
+      </ul>
+      #end
+       #else
+     	<div class="free_list_center_nothing">
+        	<span><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png"></span>
+            <i>没有任何团购商品</i>
+        </div>
+     #end 
+      
+       </div>
+    <div class="fenye"><span>$!gotoPageFormHTML</span></div>
+     <input name="ga_id" type="hidden" id="ga_id" value="$!ga_id" />
+        <input name="gpr_id" type="hidden" id="gpr_id" value="$!gpr_id" />
+        <input name="gc_id" type="hidden" id="gc_id" value="$!gc_id" />
+        <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+        <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+        <input type="hidden" name="currentPage" id="currentPage" />
+        <input type="hidden" name="keyword" id="keyword" value="$!keyword" />
+    </form>
+  </div>
+</div>
+<div >
+  $!httpInclude.include("/footer")
+</div>
+</body>
+</html>

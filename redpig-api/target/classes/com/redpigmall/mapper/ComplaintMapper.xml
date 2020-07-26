@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ComplaintMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Complaint">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="from_user_content" property="from_user_content" jdbcType="VARCHAR"/>
+		<result column="to_user_content" property="to_user_content" jdbcType="VARCHAR"/>
+		<result column="appeal_time" property="appeal_time" jdbcType="TIMESTAMP"/>
+		<result column="handle_content" property="handle_content" jdbcType="VARCHAR"/>
+		<result column="handle_time" property="handle_time" jdbcType="TIMESTAMP"/>
+		<result column="talk_content" property="talk_content" jdbcType="VARCHAR"/>
+		<association property="from_user" column="from_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="to_user" column="to_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="cs" column="cs_id" select="com.redpigmall.dao.ComplaintSubjectMapper.selectByPrimaryKey"/>
+		<association property="handle_user" column="handle_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="from_acc1" column="from_acc1_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="from_acc2" column="from_acc2_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="from_acc3" column="from_acc3_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="to_acc1" column="to_acc1_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="to_acc2" column="to_acc2_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="to_acc3" column="to_acc3_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="of" column="of_id" select="com.redpigmall.dao.OrderFormMapper.selectByPrimaryKey"/>
+		<collection property="cgs" column="id" select="com.redpigmall.dao.ComplaintGoodsMapper.getComplaintByComplaintId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Complaint">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="from_user_content" property="from_user_content" jdbcType="VARCHAR"/>
+		<result column="to_user_content" property="to_user_content" jdbcType="VARCHAR"/>
+		<result column="appeal_time" property="appeal_time" jdbcType="TIMESTAMP"/>
+		<result column="handle_content" property="handle_content" jdbcType="VARCHAR"/>
+		<result column="handle_time" property="handle_time" jdbcType="TIMESTAMP"/>
+		<result column="talk_content" property="talk_content" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,from_user_id,to_user_id,type,status,cs_id,from_user_content,to_user_content,appeal_time,handle_content,handle_time,handle_user_id,from_acc1_id,from_acc2_id,from_acc3_id,to_acc1_id,to_acc2_id,to_acc3_id,of_id,talk_content
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="addTime_more_than_equal != null">and addTime  <![CDATA[ >= ]]> #{addTime_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="addTime_less_than_equal != null">and addTime  <![CDATA[ <= ]]> #{addTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="type != null">and type = #{type,jdbcType=VARCHAR}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="status_more_than_equal != null">and status <![CDATA[ >= ]]> #{status_more_than_equal,jdbcType=INTEGER}</if>
+		<if test="from_user_content != null">and from_user_content = #{from_user_content,jdbcType=VARCHAR}</if>
+		<if test="to_user_content != null">and to_user_content = #{to_user_content,jdbcType=VARCHAR}</if>
+		<if test="appeal_time != null">and appeal_time = #{appeal_time,jdbcType=TIMESTAMP}</if>
+		<if test="handle_content != null">and handle_content = #{handle_content,jdbcType=VARCHAR}</if>
+		<if test="handle_time != null">and handle_time = #{handle_time,jdbcType=TIMESTAMP}</if>
+		<if test="talk_content != null">and talk_content = #{talk_content,jdbcType=VARCHAR}</if>
+		<if test="from_user_id != null">and from_user_id = #{from_user_id,jdbcType=BIGINT}</if>
+		<if test="to_user_id != null">and to_user_id = #{to_user_id,jdbcType=BIGINT}</if>
+		<if test="cs_id != null">and cs_id = #{cs_id,jdbcType=BIGINT}</if>
+		<if test="from_acc1_id != null">and from_acc1_id = #{from_acc1_id,jdbcType=BIGINT}</if>
+		<if test="from_acc2_id != null">and from_acc2_id = #{from_acc2_id,jdbcType=BIGINT}</if>
+		<if test="from_acc3_id != null">and from_acc3_id = #{from_acc3_id,jdbcType=BIGINT}</if>
+		<if test="to_acc1_id != null">and to_acc1_id = #{to_acc1_id,jdbcType=BIGINT}</if>
+		<if test="to_acc2_id != null">and to_acc2_id = #{to_acc2_id,jdbcType=BIGINT}</if>
+		<if test="to_acc3_id != null">and to_acc3_id = #{to_acc3_id,jdbcType=BIGINT}</if>
+		<if test="of_id != null">and of_id = #{of_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		<if test="from_user == null or from_user.id == null">from_user_id = null,</if>
+		<if test="from_user != null and from_user.id != null">from_user_id = #{from_user.id,jdbcType=BIGINT},</if>
+		<if test="to_user == null or to_user.id == null">to_user_id = null,</if>
+		<if test="to_user != null and to_user.id != null">to_user_id = #{to_user.id,jdbcType=BIGINT},</if>
+		type= #{type},
+		status= #{status},
+		<if test="cs == null or cs.id == null">cs_id = null,</if>
+		<if test="cs != null and cs.id != null">cs_id = #{cs.id,jdbcType=BIGINT},</if>
+		from_user_content= #{from_user_content},
+		to_user_content= #{to_user_content},
+		appeal_time= #{appeal_time},
+		handle_content= #{handle_content},
+		handle_time= #{handle_time},
+		<if test="handle_user == null or handle_user.id == null">handle_user_id = null,</if>
+		<if test="handle_user != null and handle_user.id != null">handle_user_id = #{handle_user.id,jdbcType=BIGINT},</if>
+		<if test="from_acc1 != null and from_acc1.id != null">from_acc1_id = #{from_acc1.id,jdbcType=BIGINT},</if>
+		<if test="from_acc1 == null or from_acc1.id == null">from_acc1_id = null,</if>
+		<if test="from_acc2 != null and from_acc2.id != null">from_acc2_id = #{from_acc2.id,jdbcType=BIGINT},</if>
+		<if test="from_acc2 == null or from_acc2.id == null">from_acc2_id = null,</if>
+		<if test="from_acc3 != null and from_acc3.id != null">from_acc3_id = #{from_acc3.id,jdbcType=BIGINT},</if>
+		<if test="from_acc3 == null or from_acc3.id == null">from_acc3_id = null,</if>
+		<if test="to_acc1 != null and to_acc1.id != null">to_acc1_id = #{to_acc1.id,jdbcType=BIGINT},</if>
+		<if test="to_acc1 == null or to_acc1.id == null">to_acc1_id = null,</if>
+		<if test="to_acc2 != null and to_acc2.id != null">to_acc2_id = #{to_acc2.id,jdbcType=BIGINT},</if>
+		<if test="to_acc2 == null or to_acc2.id == null">to_acc2_id = null,</if>
+		<if test="to_acc3 != null and to_acc3.id != null">to_acc3_id = #{to_acc3.id,jdbcType=BIGINT},</if>
+		<if test="to_acc3 == null or to_acc3.id == null">to_acc3_id = null,</if>
+		<if test="of == null or of.id == null">of_id = null,</if>
+		<if test="of != null and of.id != null">of_id = #{of.id,jdbcType=BIGINT},</if>
+		talk_content= #{talk_content},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_complaint 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_complaint obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_complaint obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getFromUserByUserId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			from_user_id = #{from_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getToUserByUserId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			to_user_id = #{to_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getCsByComplaintSubjectId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			cs_id = #{cs_id,jdbcType=BIGINT}
+	</select>
+	<select id="getHandleUserByUserId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			handle_user_id = #{handle_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getFromAcc1ByAccessoryId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			from_acc1_id= #{from_acc1_id,jdbcType=BIGINT}
+	</select>
+	<select id="getFromAcc2ByAccessoryId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			from_acc2_id= #{from_acc2_id,jdbcType=BIGINT}
+	</select>
+	<select id="getFromAcc3ByAccessoryId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			from_acc3_id= #{from_acc3_id,jdbcType=BIGINT}
+	</select>
+	<select id="getToAcc1ByAccessoryId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			to_acc1_id= #{to_acc1_id,jdbcType=BIGINT}
+	</select>
+	<select id="getToAcc2ByAccessoryId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			to_acc2_id= #{to_acc2_id,jdbcType=BIGINT}
+	</select>
+	<select id="getToAcc3ByAccessoryId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			to_acc3_id= #{to_acc3_id,jdbcType=BIGINT}
+	</select>
+	<select id="getOfByOrderFormId" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where
+			of_id = #{of_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="map">
+		select
+		obj.*
+		from redpigmall_complaint obj 			
+		<if test="from_user_userName !=null">
+			join redpigmall_user from_user on obj.from_user_id = from_user.id and from_user.userName=#{from_user_userName,jdbcType=VARCHAR}
+		</if>
+		<if test="to_user_userName !=null">
+			join redpigmall_user to_user on obj.to_user_id = to_user.id and to_user.userName=#{to_user_userName,jdbcType=VARCHAR}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Complaint" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_complaint(addTime,deleteStatus,type,status,from_user_content,to_user_content,appeal_time,handle_content,handle_time,talk_content,from_user_id,to_user_id,cs_id,handle_user_id,from_acc1_id,from_acc2_id,from_acc3_id,to_acc1_id,to_acc2_id,to_acc3_id,of_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{type,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{from_user_content,jdbcType=VARCHAR},#{to_user_content,jdbcType=VARCHAR},#{appeal_time,jdbcType=TIMESTAMP},#{handle_content,jdbcType=VARCHAR},#{handle_time,jdbcType=TIMESTAMP},#{talk_content,jdbcType=VARCHAR},#{from_user.id,jdbcType=BIGINT},#{to_user.id,jdbcType=BIGINT},#{cs.id,jdbcType=BIGINT},#{handle_user.id,jdbcType=BIGINT},#{from_acc1.id,jdbcType=BIGINT},#{from_acc2.id,jdbcType=BIGINT},#{from_acc3.id,jdbcType=BIGINT},#{to_acc1.id,jdbcType=BIGINT},#{to_acc2.id,jdbcType=BIGINT},#{to_acc3.id,jdbcType=BIGINT},#{of.id,jdbcType=BIGINT}
+	)</insert>
+	
+	<update id="updateById" parameterType="com.redpigmall.domain.Complaint">
+		update redpigmall_complaint
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_complaint where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_complaint where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_complaint obj 			
+		<if test="from_user_userName !=null">
+			join redpigmall_user from_user on obj.from_user_id = from_user.id and from_user.userName=#{from_user_userName,jdbcType=VARCHAR}
+		</if>
+		<if test="to_user_userName !=null">
+			join redpigmall_user to_user on obj.to_user_id = to_user.id and to_user.userName=#{to_user_userName,jdbcType=VARCHAR}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_complaint obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Complaint" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_complaint
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_complaint where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	
+	
+</mapper>

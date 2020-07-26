@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.InformationMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Information">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="article" property="article" jdbcType="VARCHAR"/>
+		<result column="cover" property="cover" jdbcType="BIGINT"/>
+		<result column="synopsis" property="synopsis" jdbcType="VARCHAR"/>
+		<result column="author_id" property="author_id" jdbcType="BIGINT"/>
+		<result column="author" property="author" jdbcType="VARCHAR"/>
+		<result column="infoSource" property="infoSource" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="store" property="store" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="failreason" property="failreason" jdbcType="VARCHAR"/>
+		<result column="classid" property="classid" jdbcType="BIGINT"/>
+		<result column="clicktimes" property="clicktimes" jdbcType="INTEGER"/>
+		<result column="infoUserData" property="infoUserData" jdbcType="VARCHAR"/>
+		<result column="infoIconData" property="infoIconData" jdbcType="VARCHAR"/>
+		<result column="recommend" property="recommend" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Information">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="article" property="article" jdbcType="VARCHAR"/>
+		<result column="cover" property="cover" jdbcType="BIGINT"/>
+		<result column="synopsis" property="synopsis" jdbcType="VARCHAR"/>
+		<result column="author_id" property="author_id" jdbcType="BIGINT"/>
+		<result column="author" property="author" jdbcType="VARCHAR"/>
+		<result column="infoSource" property="infoSource" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="store" property="store" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="failreason" property="failreason" jdbcType="VARCHAR"/>
+		<result column="classid" property="classid" jdbcType="BIGINT"/>
+		<result column="clicktimes" property="clicktimes" jdbcType="INTEGER"/>
+		<result column="infoUserData" property="infoUserData" jdbcType="VARCHAR"/>
+		<result column="infoIconData" property="infoIconData" jdbcType="VARCHAR"/>
+		<result column="recommend" property="recommend" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,sequence,title,article,cover,synopsis,author_id,author,infoSource,store_id,store,type,status,failreason,classid,clicktimes,infoUserData,infoIconData,recommend
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="addTime_more_than !=null">and addTime <![CDATA[ > ]]> #{addTime_more_than,jdbcType=INTEGER}  </if>
+		<if test="addTime_less_than !=null">and addTime <![CDATA[ < ]]> #{addTime_less_than,jdbcType=INTEGER}  </if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="sequence != null">and sequence = #{sequence,jdbcType=INTEGER}</if>
+		<if test="title != null">and title = #{title,jdbcType=VARCHAR}</if>
+		<if test="article != null">and article = #{article,jdbcType=VARCHAR}</if>
+		<if test="cover != null">and cover = #{cover,jdbcType=BIGINT}</if>
+		<if test="synopsis != null">and synopsis = #{synopsis,jdbcType=VARCHAR}</if>
+		<if test="author_id != null">and author_id = #{author_id,jdbcType=BIGINT}</if>
+		<if test="author != null">and author = #{author,jdbcType=VARCHAR}</if>
+		<if test="infoSource != null">and infoSource = #{infoSource,jdbcType=VARCHAR}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="store != null">and store = #{store,jdbcType=VARCHAR}</if>
+		<if test="type != null">and type = #{type,jdbcType=INTEGER}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="failreason != null">and failreason = #{failreason,jdbcType=VARCHAR}</if>
+		<if test="classid != null">and classid = #{classid,jdbcType=BIGINT}</if>
+		
+		<if test="classIds !=null and classIds.size() &gt;0">
+			and classid in 
+			<foreach collection="classIds" index="index" item="item" open="(" separator="," close=")"> 
+            	#{item}
+        	</foreach>
+		</if>
+		
+		<if test="clicktimes != null">and clicktimes = #{clicktimes,jdbcType=INTEGER}</if>
+		<if test="infoUserData != null">and infoUserData = #{infoUserData,jdbcType=VARCHAR}</if>
+		<if test="infoIconData != null">and infoIconData = #{infoIconData,jdbcType=VARCHAR}</if>
+		<if test="recommend != null">and recommend = #{recommend,jdbcType=INTEGER}</if>
+		<if test="title_like != null and author_like!=null">and (title like CONCAT('%',#{title_like},'%') or author like CONCAT('%',#{author_like},'%') )</if>
+		<!-- <if test="author_like != null">and author like CONCAT('%',#{author_like},'%') </if> -->
+	</sql>
+	<sql id="ifStatement">
+		sequence= #{sequence},
+		title= #{title},
+		article= #{article},
+		cover= #{cover},
+		synopsis= #{synopsis},
+		author_id= #{author_id},
+		author= #{author},
+		infoSource= #{infoSource},
+		store_id= #{store_id},
+		store= #{store},
+		type= #{type},
+		status= #{status},
+		failreason= #{failreason},
+		classid= #{classid},
+		clicktimes= #{clicktimes},
+		infoUserData= #{infoUserData},
+		infoIconData= #{infoIconData},
+		recommend= #{recommend},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Information" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_information 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Information" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_information obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_information obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Information" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_information obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Information" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_information(addTime,deleteStatus,sequence,title,article,cover,synopsis,author_id,author,infoSource,store_id,store,type,status,failreason,classid,clicktimes,infoUserData,infoIconData,recommend)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{sequence,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{article,jdbcType=VARCHAR},#{cover,jdbcType=BIGINT},#{synopsis,jdbcType=VARCHAR},#{author_id,jdbcType=BIGINT},#{author,jdbcType=VARCHAR},#{infoSource,jdbcType=VARCHAR},#{store_id,jdbcType=BIGINT},#{store,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{failreason,jdbcType=VARCHAR},#{classid,jdbcType=BIGINT},#{clicktimes,jdbcType=INTEGER},#{infoUserData,jdbcType=VARCHAR},#{infoIconData,jdbcType=VARCHAR},#{recommend,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Information">
+		update redpigmall_information
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_information where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_information where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Information" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_information obj 			
+		<where>
+			1=1
+			<if test="classIds !=null and classIds.size() &gt;0">
+			and classid in 
+				<foreach collection="classIds" index="index" item="item" open="(" separator="," close=")"> 
+            	#{item.id}
+        	</foreach>
+			</if>
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Information" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_information obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Information" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_information
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_information where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

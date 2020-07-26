@@ -1,0 +1,1576 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-wap-web-app-capable" content="yes">
+    <meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+    <title>$!obj.goods_name - $!config.title</title>
+    <link type="text/css" href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet"/>
+    <script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+    <script src="$!cdnServer/resources/js/TouchSlide.1.1.js"></script>
+    <script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+    <script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+    <script src="$!cdnServer/resources/js/wap/jquery.wap.common.js"></script>
+    <script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+    <script src="$!cdnServer/resources/js/wap/iscroll-lite.js"></script>
+
+    <link href="$!cdnServer/resources/style/common/css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="$!cdnServer/resources/yingerMall/css/common.css" />
+    <script src="$!cdnServer/resources/yingerMall/js/mui.min.js"></script>
+    <script type="text/javascript" src="$!cdnServer/resources/yingerMall/js/jquery-1.9.1.min.js" ></script>
+    <script type="text/javascript" src="$!cdnServer/resources/yingerMall/js/myslideup.js" ></script>
+    <style>
+        .ovfHiden{overflow: hidden;height:100%;}
+        .fl{float: left}
+        .fr{float: right}
+        .clearfix:after {
+            content:"";
+            display: block;
+            clear:both;
+        }
+        .clearfix{
+            zoom: 1;
+        }
+    </style>
+    <script>
+        var endDate=null;
+        function timeCount(remain_id){
+            function _fresh(){
+                var nowDate = new Date();                              //当前时间
+                // endDate = new Date(jQuery("#"+remain_id).attr('din_endtime'));   //截止时间
+                if(endDate==null){
+                    endDate = new Date(jQuery("#din_endtime_"+remain_id).val());   //截止时间
+                }
+                var totalS  = parseInt((endDate.getTime() - nowDate.getTime()) / 1000);
+                var _day    = parseInt(totalS / 3600 / 24);
+                var _hour   = parseInt((totalS / 3600) % 24);
+                var _minute = parseInt((totalS / 60) % 60);
+                var _second = parseInt(totalS % 60);
+                jQuery("#"+remain_id).html('剩余：' + _day +'天' + _hour + '小时' + _minute + '分' + _second + '秒');
+                jQuery("#remaind_din span").html('(预定中!)');
+                if( totalS <= 0){
+                    jQuery("#remaind_din span").html('(已结束!)');
+                    jQuery("#"+remain_id).html('剩余：0天0小时0分0秒');
+                    jQuery("#judge").val("no");
+                    jQuery("#buy_din").attr("class","g_detail_presell").removeAttr("onclick");
+                    clearInterval(sh);
+                }
+            }
+            _fresh();
+            var sh = setInterval(_fresh,1000);
+        }
+        <!--如果用户登录了，且参与了活动-->
+        var goods_cod = "$!obj.goods_cod";
+        var store_price="$!obj.goods_current_price";
+        #if($!{obj.activity_status}==2 && $!user)
+        #set($level_name=$!goodsViewTools.query_user_level_name("$!user.id"))
+        store_price=$!activityViewTools.getActivityGoodsInfo("$!obj.id","$!user.id").rate_price;
+        #end
+
+        jQuery(document).ready(function(){
+            jQuery("li[id^=ad_]").each(function(index){
+                var val = jQuery(this).attr("mark");
+                timeCount(val);
+            });
+            <!--商品中自定义的规格值赋值-->
+        #if($!obj.goods_specs_info)
+            var goods_specs_info=eval($!obj.goods_specs_info);
+            jQuery.each(goods_specs_info,function(index,item){
+                var a=jQuery("a[gsp="+item.id+"]");
+                a.attr("sname",item.name);
+                a.text(item.name);
+            });
+        #end
+            <!--商品中自定义的规格值赋值结束-->
+
+        #if($!obj.transport)
+            jQuery("#freight_amount_transport").addClass("freight_amount");
+        #else
+            jQuery("#freight_amount_id").addClass("freight_amount");
+        #end
+        #if($!mark == 1)
+            jQuery("#g_detail_collect_id").addClass("this");
+            jQuery("#g_detail_collect_id").attr("mark","1")
+        #else
+            jQuery("#g_detail_collect_id").removeClass("this");
+            jQuery("#g_detail_collect_id").attr("mark","0")
+        #end
+
+            <!--商品收藏-->
+            jQuery(".g_detail_collect").click(function(){
+                if(jQuery("#g_detail_collect_id").attr("mark")==0){
+                    jQuery.post("$!webPath/add_goods_favorite",{"id":"$!obj.id"},function(data){
+                        if(data==0){
+                            jQuery("#g_detail_collect_id").addClass("this");
+                            jQuery("#g_detail_collect_id").attr("mark","1")
+                            Wap_alert("收藏成功");
+                        }
+                        if(data==2){
+                            window.location.href="$!webPath/login";
+                        }
+                    },"text");
+                }
+                if(jQuery("#g_detail_collect_id").attr("mark")==1){
+                    jQuery.post("$!webPath/add_goods_favorite_del",{"id":"$!obj.id"},function(data){
+
+                        if(data==0){
+                            jQuery("#g_detail_collect_id").removeClass("this");
+                            jQuery("#g_detail_collect_id").attr("mark","0")
+                            Wap_alert("已取消收藏");
+                        }
+                        if(data==2){
+                            window.location.href="$!webPath/login";
+                        }
+                    },"text");
+                }
+            });
+            // 如果商品参与了秒杀，获取商品的规格，根据秒杀选择默认规格
+            if("$!obj.nuke_buy"==2){
+                var specs= "$!nukeGoods.goods_spec_id";
+                // 将属性分割，点亮所有的li属性
+                var specsArray = specs.split("_");
+                // 删除分隔后的空格
+                specsArray.pop();
+                // 先移除所有的li标签的this属性
+                jQuery("li[mark^=spec_][class=this]").each(function(){
+                    jQuery(this).removeAttr("class");
+                });
+                // 点亮属性
+                jQuery.each(specsArray,function(index,item){
+                    var a=jQuery("a[gsp="+item+"]");
+                    a.parent().addClass("this");
+                    a.trigger('click');
+                    // 选择规格，显示价格和库存
+                    //goods_spec_set(a.parent()[0]);
+                    // 设定已选的规格
+                    var sname="";
+                    var sec = "已选规格:"
+                    jQuery(".model_standard ul").each(function(){
+                        sname="&quot;"+jQuery(this).find("li[class='this']").find("a").attr("sname")+"&quot;&nbsp;"+sname;
+                    })
+                    jQuery("#choose_spec").html(sec+sname);
+                });
+                // 如果用户已经选择相应的规格，则显示秒杀的banner
+                jQuery("#nukeBanner").show();
+            }
+        });
+        function menu_right(){
+            if(jQuery("#menu_list").attr("style") != ""){
+                jQuery("#menu_list").attr("style","");
+                jQuery("#menu_ht").css("height","101px");
+            }else{
+                jQuery("#menu_list").attr("style","display:none");
+                jQuery("#menu_ht").css("height","50px");
+            }
+        }
+        <!--打开规格页面-->
+        function open_choose_spec(){
+            jQuery("#g_detail_model_mask").show();
+            jQuery("#g_detail_model").animate({bottom:"0px"});
+            jQuery('html,body').addClass('ovfHiden');
+            jQuery("#g_detail_model_mask").click(function(){
+                close_choose_spec();
+            });
+        }
+
+        <!--关闭规格页面-->
+        function close_choose_spec(){
+            if(jQuery("#g_detail_model").css("display")=="hide");
+            if(goods_cod=="0"){
+                jQuery("#show_count").html("数量&nbsp&nbsp&nbsp&nbsp"+"x"+jQuery("#count").val()+"&nbsp&nbsp支持货到付款");
+            }else{
+                jQuery("#show_count").html("数量&nbsp&nbsp&nbsp&nbsp"+"x"+jQuery("#count").val());
+            }
+            var sname="";
+            var sec = "已选规格:"
+            jQuery(".model_standard ul").each(function(){
+                sname="&quot;"+jQuery(this).find("li[class='this']").find("a").attr("sname")+"&quot;&nbsp;"+sname;
+            })
+            jQuery("#choose_spec").html(sec+sname);
+            jQuery("#g_detail_model_mask").hide();
+            jQuery("#g_detail_model").animate({bottom:"-380px"});
+            jQuery('html,body').removeClass('ovfHiden'); //使网页恢复可滚动
+        }
+        function add_combin_parts(){
+            var gsp="";
+            jQuery("li[mark^=spec_][class=this]").each(function(){
+                gsp = jQuery(this).find("a").attr("gsp")+","+gsp;
+            });
+            window.location.href="$!webPath/combin_items?id=$!obj.id&gsp="+gsp;
+        }
+        jQuery(document).ready(function(){
+            if(goods_cod=="0"){
+                jQuery("#show_count").html("x"+jQuery("#count").val()+"&nbsp&nbsp支持货到付款");
+            }else{
+                jQuery("#show_count").html("x"+jQuery("#count").val());
+            }
+            <!--判断是否自营-->
+        #if(!$!obj.goods_store){
+                jQuery(".g_detail_shop_in").hide();
+                jQuery(".g_detail_consult").css("width","18%");
+                jQuery(".g_detail_collect").css("width","18%");
+                jQuery(".g_detail_shop").hide();
+            }
+        #else
+            jQuery(".basic_service").hide();
+        #end
+        });
+
+        <!--加入购物车-->
+        function add_cart(){
+            var str=jQuery("#city_info").find("span").eq(0).html()
+            if(jQuery.trim(str)=="局域网"&&!"$!obj.goods_store"){
+                Wap_alert("请选择配送地区");
+                return;
+            }
+        #if($!user.id && ($!user.id==$!obj.goods_store.user.id))
+            Wap_alert("无法购买自己的商品");
+        #else
+            var add=true
+            var gsp="";
+        #foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+        #if($!velocityCount==1)
+            if(jQuery("li[mark^=spec][class=this]").length==0){
+                add=false;
+            }
+        #end
+        #end
+            if(add){
+                jQuery("li[mark^=spec_][class=this]").each(function(){
+                    gsp = jQuery(this).find("a").attr("gsp")+","+gsp;
+                });
+            }
+
+            if(add){
+            #if($!obj.activity_status==2 && $!user)
+                store_price = $!activityViewTools.getActivityGoodsInfo("$!obj.id","$!user.id").rate_price;
+            #end
+                var count = jQuery("#count").val()-0;
+                var goods_inventory = jQuery("#goods_inventory").attr("inventory")-0;
+                if(goods_inventory!=0){
+                    if(goods_inventory<count){
+                        count = goods_inventory;
+                    }
+                    jQuery.ajax({type:'POST',
+                        url:'$!webPath/add_goods_cart',
+                        dataType: "json",
+                        data:{"id":"$!{obj.id}",
+                            "price":store_price,
+                            "gsp":gsp,
+                            "count":count},
+                        success:function(data){
+                            if(data.code=="0"){
+                                Wap_alert("成功加入购物车！");
+                            }
+                            if(data.code==-1){
+                                Wap_alert("添加失败，请刷新重试");
+                            }
+                            if(data.code==-2){
+                                Wap_alert("商品已下架，添加失败");
+                            }
+                            if(data.code==-3){
+                                Wap_alert("库存不足，添加失败");
+                            }
+                            if(data.code==-4){
+                                Wap_alert("您已超过限购数量");
+                            }
+                        }
+                    });
+                }
+            }else{
+                Wap_alert("请选择规格！")
+            }
+        #end
+        }
+
+        <!--F码购买-->
+        function f_code_buy_goods(){
+            var str=jQuery("#city_info").find("span").eq(0).html();
+            if(jQuery.trim(str)=="局域网"&&!"$!obj.goods_store"){
+                Wap_alert("请选择配送地区");
+                return;
+            }
+        #if($!user.id && ($!user.id==$!obj.goods_store.user.id))
+            Wap_alert("无法购买自己的商品");
+        #else
+            var add=true;
+            var id = "$!{obj.id}";
+            var gsp ="";
+        #foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+        #if($!velocityCount==1)
+            if(jQuery("li[mark^=spec][class=this]").length==0){
+                add=false;
+            }
+        #end
+        #end
+            if(add){
+                jQuery("li[mark^=spec_][class=this]").each(function(){
+                    gsp = jQuery(this).find("a").attr("gsp")+","+gsp;
+                });
+            }
+            window.location.href="$!webPath/f_code_cart?goods_id="+id + "&gsp="+gsp;
+        #end
+        }
+
+        <!--立即购买-->
+        function buy_goods(){
+
+            var str=jQuery("#city_info").find("span").eq(0).html();
+            if(jQuery.trim(str)=="局域网"&&!"$!obj.goods_store"){
+                Wap_alert("请选择配送地区");
+                return;
+            }
+        #if($!user.id && ($!user.id==$!obj.goods_store.user.id))
+
+            Wap_alert("无法购买自己的商品");
+        #else
+            var add=true
+            var gsp="";
+        #foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+        #if($!velocityCount==1)
+            if(jQuery("li[mark^=spec][class=this]").length==0){
+                add=false;
+            }
+        #end
+        #end
+            if(add){
+                jQuery("li[mark^=spec_][class=this]").each(function(){
+                    gsp = jQuery(this).find("a").attr("gsp")+","+gsp;
+                });
+            }
+            if(add){
+            #if($!obj.activity_status==2 && $!user)
+                store_price = $!activityViewTools.getActivityGoodsInfo("$!obj.id","$!user.id").rate_price;
+            #end
+                <!--如果秒杀，设为秒杀价格-->
+            #set($isValiad=$!activityViewTools.isBetweenStartAndEnd($!obj))
+            #if($!{obj.nuke_buy}==2)
+            #if($!isValiad)
+            #set($store_price="$!obj.goods_current_price")
+            #end
+            #end
+                var count = jQuery("#count").val()-0;
+                var goods_inventory = jQuery("#goods_inventory").attr("inventory")-0;
+                if(goods_inventory!=0){
+                    if(goods_inventory<count){
+                        count = goods_inventory;
+                    }
+                    var buy_type=arguments[0];
+                    var combin_ids=arguments[1];
+                    jQuery.post("$!current_webPath/add_goods_cart",{"id":"$!obj.id","count":count,"gsp":gsp,"buy_type":buy_type,"combin_ids":combin_ids},function(data){																																							  			   if(data.code==0){
+                        if(data.cart_id!=""){
+                            window.location.href="$!webPath/goods_cart2?gcs="+data.cart_id;
+                        }else{
+                            window.location.href="$!webPath/goods_cart1";
+                        }
+                    }
+                        if(data.code==1|| data.code==2){//组合配件添加成功
+                            window.location.href="$!webPath/goods_cart1";
+                        }
+                        if(data.code==-1){
+                            showDialog("msg_info","","添加失败，请刷新重试！",2,"warning",3,'');
+                        }
+                        if(data.code==-2){
+                            showDialog("msg_info","","商品已下架，添加失败！",2,"warning",3,'');
+                        }
+                        if(data.code==-3){
+                            showDialog("msg_info","","库存不足，添加失败！",2,"warning",3,'');
+                        }
+                        if(data.code==-4){
+                            Wap_alert("您已超过限购数量");
+                        }
+                    },"json");
+                }
+
+            }else{
+                Wap_alert("请选择规格！")
+            }
+        #end
+        }
+
+        <!--控制数量-->
+        jQuery(function(){
+            jQuery("#count").keyup(function(e) {
+                var count=jQuery("#count").val().replace(/\D/g,'');
+                if(count==""){
+                    count=1;
+                }
+                if($!obj.f_sale_type==1){
+                    count=1;
+                    Wap_alert("F码商品只能买一件");
+                }
+                var goods_inventory = jQuery("#goods_inventory").attr("goods_inventory")-0;
+                if(count>=$!{limit_count} && $!{limit_count}!=-1){
+                    jQuery("#count").val($!{limit_count});
+                }else if(count>goods_inventory){
+                    jQuery("#count").val(goods_inventory);
+                }else if(count<1){
+                    jQuery("#count").val(1);
+                }else{
+                    jQuery("#count").val(count);
+                }
+                if(goods_cod=="0"){
+                    jQuery("#show_count").html("x"+jQuery("#count").val()+"&nbsp&nbsp支持货到付款");
+                }else{
+                    jQuery("#show_count").html("x"+jQuery("#count").val());
+                }
+            });
+        });
+        <!--增加数量-->
+        function plus(){
+            if($!obj.f_sale_type==1){
+                Wap_alert("F码商品只能买一件");
+            }else{
+                var cc = jQuery("#count").val()-0;
+                var goods_inventory = jQuery("#goods_inventory").attr("goods_inventory")-0;
+                if(cc>=$!{limit_count} && $!{limit_count}!=-1){
+                    jQuery("#count").val($!{limit_count});
+                }else if(cc>=goods_inventory){
+                    jQuery("#count").val(goods_inventory);
+                }else{
+                    jQuery("#count").val(cc+1);
+                }
+                if(goods_cod=="0"){
+                    jQuery("#show_count").html("x"+jQuery("#count").val()+"&nbsp&nbsp支持货到付款");
+                }else{
+                    jQuery("#show_count").html("x"+jQuery("#count").val());
+                }
+            }
+        }
+        <!--减少数量-->
+        function minus(){
+            var cc = jQuery("#count").val()-0;
+            if(cc==0)return;
+            if(cc==1){
+                jQuery("#count").val(1);
+            }else{
+                jQuery("#count").val(cc-1);
+            }
+            if(goods_cod=="0"){
+                jQuery("#show_count").html("x"+jQuery("#count").val()+"&nbsp&nbsp支持货到付款");
+            }else{
+                jQuery("#show_count").html("x"+jQuery("#count").val());
+            }
+        }
+
+        <!--打开店铺活动详情-->
+        function open_detail_activity(){
+            jQuery(".detail_activity").animate({bottom:"0px"});
+            jQuery("#g_detail_model_mask").show();
+            jQuery('html,body').addClass('ovfHiden');
+            var count = 0;
+        #if($!enoughreduce)
+            if(count==0){
+                jQuery.ajax({type:'POST',
+                    url:'$!webPath/enoughreduce/index',
+                    data:{"id":"$!obj.order_enough_reduce_id"},
+                    success:function(data){
+                        if(data){
+                            jQuery(".activity_box").html(data);
+                            jQuery(".activity_item_2").show();
+                            count = 1;
+                        }
+                    }
+                });
+            }
+        #elseif($!{obj.order_enough_if_give}==1&&$!isGive||$!{obj.buyGift_id}&&$!{obj.order_enough_give_status}==1&&$!isGift)
+            if(count==0){
+                jQuery.ajax({type:'POST',
+                    url:'$!webPath/buygift/index',
+                    data:{"id":"$!obj.buyGift_id"},
+                    success:function(data){
+                        if(data){
+                            jQuery(".activity_box").html(data);
+                            jQuery(".activity_item_1").show();
+                            count = 1;
+                        }
+                    }
+                });
+            }
+        #end
+            jQuery("#g_detail_model_mask").click(function(){
+                close_detail_activity();
+            });
+        }
+        <!--关闭店铺活动详情-->
+        function close_detail_activity(){
+            jQuery(".detail_activity").animate({bottom:"-350px"})
+            jQuery("#g_detail_model_mask").hide();
+            jQuery('html,body').removeClass('ovfHiden'); //使网页恢复可滚动
+        }
+
+        var eva_count=1;
+        var goods_intro_count=1;
+        jQuery(document).ready(function(){
+            var tObj;
+            jQuery(".hd a").each(function(){
+                if(jQuery(this).attr("class").indexOf("this") == 0){tObj = jQuery(this)}
+                jQuery(this).click(function(){
+                    var c = jQuery(this).attr("class");
+                    if(c.indexOf("this") == 0){return;}
+                    var ref = jQuery(this).attr("ref");
+                    var ref_t = tObj.attr("ref");
+                    tObj.attr("class","nor");
+                    jQuery(this).attr("class","this");
+                    jQuery(ref_t).hide();
+                    jQuery(ref).show();
+                    tObj = jQuery(this);
+                    if("#tab_2"==ref){
+                        if(goods_intro_count==1){
+                            jQuery.ajax({type:'POST',
+                                url:'$!webPath/goods_introduce',
+                                data:{"id":"$!obj.id"},
+                                success:function(data){
+                                    if(data){
+                                        jQuery("#g_detail_c_id").empty();
+                                        jQuery("#g_detail_c_id").append(data);
+                                        goods_intro_count=2;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    if("#tab_3"==ref){
+                        var currentPage=1;
+                        if(eva_count==1){
+                            jQuery.ajax({type:'POST',
+                                url:'$!webPath/goods_eva',
+                                data:{"currentPage":currentPage,"goods_id":"$!obj.id","goods_eva":"$!{goods_eva}"},
+                                success:function(data){
+                                    if(data){
+                                        jQuery("#goods_evas_list").append(data);
+                                        eva_count=2;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        <!--获取库存-->
+        function get_goods_inventory(gsp){
+            var city_id =jQuery("#city_info").find("span").eq(2).attr("city_id");
+            var city_name =jQuery("#city_info").find("span").eq(1).html();
+            jQuery.ajax({type:'POST',url:'$!current_webPath/goods_inventory',dataType:'json',data:{"city_name":city_name,"goods_id":"$!{obj.id}","city_id":city_id,"gsp":gsp},
+                success:function(json){
+                #if($!obj.transport)
+                    jQuery("#goods_mail_fee").html('￥'+json.mail_fee);
+                    jQuery("#goods_express_fee").html('￥'+json.express_fee);
+                    jQuery("#goods_ems_fee").html('￥'+json.ems_fee);
+                #end
+                    goods_inventory = json.inventory;
+                    jQuery("#goods_inventory").attr("goods_inventory",goods_inventory);
+                    var count = jQuery("#goods_count").val();
+                    if(count>goods_inventory){
+                        jQuery("#goods_count").val(goods_inventory);
+                    }
+                    jQuery("#goods_inventory").html(json.inventory);
+                    if(goods_inventory==0){
+                        set_cannot_buy();
+                        jQuery("#show_inventory").html("无货")
+                        jQuery("#goods_inventory").attr("style","color:#F00; font-size:16px");
+                        jQuery("#buy_din").attr("class","g_detail_presell");
+                        jQuery("#count").val("0");
+                    }else{
+                        jQuery("#goods_inventory").removeAttr("style");
+                    #if($!{obj.activity_status}==2)
+                    #if($!user)
+                        set_can_buy();
+                        jQuery("#show_inventory").html("有货");
+                        jQuery("#count").val("1");
+                    #end
+                    #else
+                        set_can_buy();
+                        jQuery("#show_inventory").html("有货");
+                        jQuery("#count").val("1");
+                    #end
+                    }
+                }
+            });
+        }
+
+        function set_can_buy(){
+            var judge=jQuery("#judge").val();
+            if(judge=="yes"){
+                jQuery("#buy_din").attr("class","g_detail_presell_after g_detail_presell").attr("onclick","buy_goods();");
+            }
+            jQuery("#g_detail_shopcar_in_id").attr("class","g_detail_shopcar_in").attr("onclick","add_cart()");
+            jQuery("#g_detail_buy_now_id").attr("class","g_detail_buy_now").attr("onclick","buy_goods()");
+            jQuery("#g_detail_f_id").attr("class","g_detail_f").attr("onclick","f_code_buy_goods();");
+            jQuery("#g_detail_shopcar_in_id2").attr("class","g_detail_shopcar_in").attr("onclick","add_cart()");
+            jQuery("#g_detail_buy_now_id2").attr("class","g_detail_buy_now").attr("onclick","buy_goods()");
+            jQuery("#g_detail_f_id2").attr("class","g_detail_f").attr("onclick","f_code_buy_goods();");
+        }
+
+        function set_cannot_buy(){
+            var judge=jQuery("#judge").val();
+            if(judge=="yes"){
+                jQuery("#buy_din").attr("class","g_detail_presell").attr("onclick","buy_goods();");
+            }
+            jQuery("#g_detail_shopcar_in_id").attr("class","g_detail_shopcar_in detail_none_goods").removeAttr("onclick");
+            jQuery("#g_detail_buy_now_id").attr("class","g_detail_buy_now detail_none_goods").removeAttr("onclick");
+            jQuery("#g_detail_f_id").attr("class","g_detail_f detail_none_goods").removeAttr("onclick");
+            jQuery("#g_detail_shopcar_in_id2").attr("class","g_detail_shopcar_in detail_none_goods").removeAttr("onclick");
+            jQuery("#g_detail_buy_now_id2").attr("class","g_detail_buy_now detail_none_goods").removeAttr("onclick");
+            jQuery("#g_detail_f_id2").attr("class","g_detail_f detail_none_goods").removeAttr("onclick");
+        }
+        <!--规格点击事件,动态获取不同规格的价格-->
+        function goods_spec_set(obj){
+            var spec=jQuery(obj).find("a").attr("spec");
+            var gsp=jQuery(obj).find("a").attr("gsp");
+            var gsp_this;
+            jQuery("a[spec="+spec+"]").each(function(){
+                var temp =jQuery(this).parent("[class='this']").find("a").attr("gsp");
+                if(temp){
+                    gsp_this=temp;
+                }
+            })
+            // 暂时注释掉 by whc 20180914
+            //if(gsp==gsp_this)return;
+            jQuery("a[spec="+spec+"][gsp="+gsp_this+"]").parent().removeAttr("class");
+            jQuery(obj).addClass("this");
+            var gsps="";
+            jQuery(".model_standard ul").each(function(){
+                jQuery.each(jQuery(this).find("li[class=this]"),function(){
+                    gsps=jQuery(this).find("a").attr("gsp")+","+gsps;
+                });
+            })
+            get_goods_inventory(gsps);
+            jQuery.post("$!webPath/load_goods_gsp",{"id":"$!{obj.id}","gsp":gsps},function(data){
+                jQuery("#store_price").html(data.price);
+                jQuery("#store_price2").html(data.price);
+            },"json");
+            get_goods_inventory(gsp);
+
+            var tmp = gsps.replace(/\,/g,"_")
+            if(tmp!="$!nukeGoods.goods_spec_id".trim()){
+                jQuery(".price").show();
+                jQuery("#nukeBanner").hide();
+            }else{
+                jQuery(".price").hide();
+                jQuery("#nukeBanner").show();
+            }
+        }
+
+
+
+        <!--滑动添加商品详情-->
+        jQuery(document).ready(function(){
+            var  ret = 1;
+            jQuery(window).scroll(function(){
+                var temp = jQuery("#g_detail_c_id2").html();
+                var g_detail_c =temp.replace(/[\r\n]/g,"").replace(/[ ]/g,"")
+                if (g_detail_c==""&&jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+                    jQuery.ajax({type:'POST',
+                        url:'$!webPath/goods_introduce',
+                        data:{"id":"$!obj.id"},
+                        beforeSend:function(){
+                            jQuery("#loading_none").hide();
+                            jQuery("#loading").show();
+                            ret = 2;
+                        },
+                        success:function(data){
+                            ret = 1;
+                            if(data){
+                                jQuery("#g_detail_c_id2").append(data);
+                                jQuery(".g_detail_continue").hide();
+                            }else{
+                                Wap_alert("系统繁忙 ！")
+                            }
+                        }
+                    });
+                }
+            });
+
+        });<!--end-->
+    </script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<input name="judge" id="judge" value="yes" type="hidden">
+<div class="g_detail_wrap">
+    <div class="g_detail_title">
+        <a  class="back"href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+        <ul class="hd">
+            <li><a href="javascript:void(0);" ref="#tab_1" class="this">商品</a></li>
+            <li><a href="javascript:void(0);" ref="#tab_2" class="nor">详情</a></li>
+            <li><a href="javascript:void(0);" ref="#tab_3" class="nor">评价$!eva_count</a></li>
+        </ul>
+        <a class="g_filter" href="javascript:void(0);" onClick="menu_right();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/c_shortcut.png"></a>
+    </div>
+
+    <div class="hide_layer lay_other" style="display:none" id="menu_list">
+        <ul class="hide_layer_ul">
+            <li>
+                <a href="$!webPath/index">
+                    <span class="shortcut_home"></span>
+                    <strong>首页</strong>
+                </a>
+            </li>
+            <li>
+                <a href="$!webPath/search">
+                    <span class="shortcut_search"></span>
+                    <strong>搜索</strong>
+                </a>
+            </li>
+            <li>
+                <a href="$!webPath/goods_cart1">
+                    <span class="shortcut_car"></span>
+                    <strong>购物车</strong>
+                </a>
+            </li>
+            <li>
+                <a href="$!webPath/buyer/center">
+                    <span class="shortcut_my"></span>
+                    <strong>我的</strong>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div style="width:100%; height:50px;" id="menu_ht"></div><!--当菜单收回时此div高度变为50px-->
+
+    #if($config.app_download==0)
+    <div class="skip_box">
+        <div class="close_skip" onClick="close_skip_box();"></div>
+        <img class="logo" src="$!cdnServer/resources/style/system/front/default/images/weixin/skip_logo.png">
+        <p class="text">进入$!{config.title}客户端</p>
+        <div class="skip_open"><a id="skip_open_id" href="javascript:void(0);" onClick="skip_open();">立即打开</a></div>
+    </div>
+    #end
+
+    <script>
+        <!--判断是否开启下载app-->
+        #if($config.app_download!=1){
+            jQuery("#skip_bottom_box").attr("style","width:100%;height:50px");
+        }
+        #end
+
+        function close_skip_box(){
+            jQuery(".skip_box").hide();
+            jQuery("#skip_bottom_box").attr("style","width:100%;height:50px");
+        }
+
+        function skip_open(){
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)){
+                var timeout, t = 1000, hasApp = true ,url='redpigmall://app_download?open_type=goods&value=$!{obj.id}';
+                setTimeout(function () {
+                    if (!hasApp) {
+                        jQuery.ajax({type:'POST',
+                            url:'$!webPath/app_download',
+                            success:function(data){
+                                if(data){
+                                    var obj = eval("("+data+")");
+                                    window.location.href = obj.url;
+                                }else{
+                                    Wap_alert("系统繁忙 ！")
+                                }
+                            }
+                        });
+                    }
+                    document.body.removeChild(ifr);
+                }, 1500)
+
+                var t1 = Date.now();
+                var ifr = document.createElement("iframe");
+                ifr.setAttribute('src', url);
+                ifr.setAttribute('style', 'display:none');
+                document.body.appendChild(ifr);
+                timeout = setTimeout(function () {
+                    var t2 = Date.now();
+                    if (!t1 || t2 - t1 < t + 100) {
+                        hasApp = false;
+                    }
+                }, t);
+            } else if (navigator.userAgent.match(/android/i)){
+                window.location = "$!webPath/app_download?open_type=goods&value=$!{obj.id}";
+            }else{
+                alert("还没有该产品app!");
+            }
+        }
+    </script>
+
+
+    <!--商品基本信息-->
+    <div id="tab_1">
+        <div class="g_detail_info" id="g_detail_info">
+            <div class="g_detail_pic" id="g_detail_pic">
+                <div class="slideBox">
+                    <div class="bd">
+                        <ul>
+                            <li><img src="$!imageWebServer/$!obj.goods_main_photo.path/$!obj.goods_main_photo.name"></li>
+                            #if($!obj.goods_photos.size()>0)
+                            #foreach($acc in $obj.goods_photos)
+                            <li><img src="$!imageWebServer/$!acc.path/$!acc.name"></li>
+                            #end
+                            #end
+                        </ul>
+                    </div>
+                    #if($!obj.goods_photos.size()>0)
+                    <div class="hd">
+                        <ul>
+                            #foreach($!photos in $!obj.goods_photos)
+                            #if($velocityCount==1)
+                            <li class="on"></li>
+                            <li></li>
+                            #else
+                            <li></li>
+                            #end
+                            #end
+                        </ul>
+                    </div>
+                    #end
+                </div>
+            </div>
+            <script type="text/javascript">
+                TouchSlide({
+                    slideCell:"#g_detail_info",
+                    mainCell:".g_detail_pic ul",
+                    effect:"left",
+                    autoPlay:true,//自动播放
+                    switchLoad:"_src" //切换加载，真实图片路径为"_src"
+                });
+            </script>
+            <div class="prod_name_price">
+                <ul>
+                    <li class="name">$!obj.goods_name </li>
+                    #if($!{obj.nuke_buy}!=2)
+                    <li class="price">
+                        <dl>
+                            #set($price_info="商城价")
+                            #set($price_real="$!obj.goods_current_price")
+                            #if($!{group}==1)
+                            #set($price_info="团购价")
+                            #end
+                            #if($!{obj.activity_status}==2 && $!user)
+                            #set($activity_map=$!activityViewTools.getActivityGoodsInfo("$!obj.id","$!user.id"))
+                            #set($price_info="促销价")
+                            #set($price_real="$!{activity_map.get('rate_price')}")
+                            #set($cheap_info2="您当前为$!{activity_map.get('level_name')}，享受商城价格$!{activity_map.get('rate')}折的优惠")
+                            #end
+                            ##如果在秒杀区范围内，且商品秒杀状态为已审核，则设为秒杀价
+                            #if($!{obj.collage_buy}==2)
+                            #set($price_info="")
+                            #set($price_real="")
+                            <script type="text/javascript">
+                                onload=function(){
+                                    $("#presell").hide();
+                                }
+                            </script>
+
+                            <div class="mui-content">
+                                <!--详情里面的秒抢-->
+                                <div class="sec-detail-box" id="secDetail">
+                                    <div class="mui-pull-left">
+                                        <div>
+                                            <span class="d-unit1">￥</span>
+                                            <span class="d-price1">$userCollageList.collageBuy.cg_price</span>
+                                            <span class="d-la">赚</span>
+                                            <span class="d-unit2">￥</span>
+                                            #set($prices = $userCollageList.goods.goods_price - $userCollageList.collageBuy.cg_price)
+                                            <span class="d-price2">$prices</span>
+                                        </div>
+
+
+                                        <div>
+                                            <span class="d-sec">团拼价</span>
+                                            <span class="d-origin">原价：￥</span>
+                                            <span class="d-origin">$userCollageList.goods.goods_price</span>
+                                        </div>
+                                    </div>
+                                    <div class="mui-pull-right d-time-tragger">
+                                        <div class="d-time-box">
+                                            <span class="d-time hour">15</span>&nbsp;:&nbsp;
+                                            <span class="d-time minute">25</span>&nbsp;:&nbsp;
+                                            <span class="d-time second">50</span>
+                                        </div>
+                                        <p class="d-info">后恢复原价</p>
+                                    </div>
+                                </div>
+                                <!--详情里的拼团-->
+                                <div class="detail-group-box">
+                                    <div class="mui-clearfix group-t">
+                                        <div class="mui-pull-left">
+                                            <span class="g-t">$!cg_status</span>
+                                            <span class="g-t">人在拼团，可直接参与</span>
+                                        </div>
+                                        <a class="mui-pull-right" href="group-list.html"><span class="g-t">查看更多</span><img class="icon-t" src="$!cdnServer/resources/yingerMall/images/open.png" alt="箭头"/></a>
+                                    </div>
+
+                                    <div>
+                                        <ul class="mui-table-view g-table" id="RunTopic">
+
+
+                                            <li class="mui-table-view-cell mui-clearfix" timeStamp="4830000" style="margin-top: 0;">
+                                                <div class="mui-pull-left">
+                                                    <img src="$!cdnServer/resources/yingerMall/images/list.jpg" alt="头像" class="g-head"/>
+                                                    <span class="g-name mui-ellipsis">$!selectCollageBuyList.collageBuy.user.userName</span>
+                                                </div>
+                                                <div class="mui-pull-right mui-clearfix g-remain-box">
+                                                    <div class="mui-pull-left">
+                                                        <p class="g-data">还差<span>1</span><span>人</span>拼成</p>
+
+
+                                                        <p class="g-remain">剩余
+                                                            <span class="hour">15</span>&nbsp;:&nbsp;
+                                                            <span class="minute">25</span>&nbsp;:&nbsp;
+                                                            <span class="second">50</span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="mui-pull-left g-btn">
+                                                        <button type="button" class="mui-btn" >去拼单</button>
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                            <li class="mui-table-view-cell mui-clearfix" timeStamp="4830000" style="margin-top: 0;">
+                                                <div class="mui-pull-left">
+                                                    <img src="$!cdnServer/resources/yingerMall/images/list.jpg" alt="头像" class="g-head"/>
+                                                    <span class="g-name mui-ellipsis">$!selectCollageBuyList.collageBuy.user.userName</span>
+                                                </div>
+                                                <div class="mui-pull-right mui-clearfix g-remain-box">
+                                                    <div class="mui-pull-left">
+                                                        <p class="g-data">还差<span>1</span><span>人</span>拼成</p>
+
+
+                                                        <p class="g-remain">剩余
+                                                            <span class="hour">15</span>&nbsp;:&nbsp;
+                                                            <span class="minute">25</span>&nbsp;:&nbsp;
+                                                            <span class="second">50</span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="mui-pull-left g-btn">
+                                                        <button type="button" class="mui-btn" >去拼单</button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            #end
+
+                            #if($!obj.advance_sale_type==0)
+                            <dt>
+                                <em>$price_info</em>
+                                <span id="store_price">$!price_real
+                            </span>
+                            </dt>
+                            #else
+                            #foreach($!ad in $!advance_list)
+                            <dt id="prese">
+                                <em>预售价:￥</em><span id="store_price">$!ad.advance_price</span>
+                            </dt>
+                            #end
+                            #end
+                            <dd id="presell">￥222$!{obj.goods_price}</dd>
+                        </dl>
+                        <dl >
+                            #foreach($!ad in $!advance_list)
+                            <dt><em>定金:￥</em><span id="store_price">#if($!ad.earnest)$!ad.earnest #else 0 #end</span></dt>
+                            #end
+                        </dl>
+                    </li>
+                    #end
+
+
+                    #if($!{obj.nuke_buy}==2)
+                    #set($isValiad=$!activityViewTools.isBetweenStartAndEnd($!obj))
+                    #if($!isValiad)
+                    #set($price_info="秒杀价")
+                    #set($price_real= $!nukeGoods.ng_price)
+                    <li id="nukeBanner">
+                        <div class="sec-detail-box" id="secDetail" style="box-sizing: border-box">
+                            <div class="fl">
+                                <div>
+                                    <span class="d-unit1">￥</span>
+                                    <span class="d-price1">$price_real</span>
+                                    <span class="d-la">赚</span>
+                                    <span class="d-unit2">￥</span>
+                                    #set($cheap = $obj.store_price - $price_real)
+                                    <span class="d-price2">$cheap</span>
+                                </div>
+                                <div>
+                                    <span class="d-sec">秒杀价</span>
+                                    <span class="d-origin">云品仓原价：￥</span>
+                                    <span class="d-origin">$obj.store_price</span>
+                                </div>
+                            </div>
+                            <div class="fr d-time-tragger">
+                                <div class="d-time-box">
+                                    <span class="d-time hour">--</span>&nbsp;:&nbsp;<span class="d-time minute">--</span>&nbsp;:&nbsp;<span class="d-time second">--</span>
+                                </div>
+                                <p class="d-info">后恢复原价</p>
+                            </div>
+                        </div>
+                    </li>
+                    #end
+                    #end
+                    #if($!goodsViewTools.getCombinPlans("$!obj.id","suit").size()>0)
+                    <li class="group">促销：<b>组合套装</b><a href="$!webPath/combin_items?id=$!{obj.id}">详情</a></li>
+                    #end
+                    #if($!goodsViewTools.getCombinPlans("$!obj.id","parts").size()>0)
+                    <li class="group">促销：<b>组合配件</b><a href="javascript:void(0);" onClick="add_combin_parts();">详情</a></li>
+                    #end
+                </ul>
+            </div>
+            <div class="basic_info">
+                <!-- 新加的地区选择开始-->
+                <div class="delivery_site" style="margin-bottom:0px;">
+                    <i>送至：</i>
+                    <span id="show_areas" onClick="show_areas()">
+                <span city_name="$!{city.parent.areaName}" city_id="$!{city.parent.id}" id="city_info">
+                #if($!city)
+                <span city_id="$!{city.parent.parent.id}" class="province_name">$!{city.parent.parent.areaName}</span>
+                <span city_id="$!{city.parent.id}" class="city_name">$!{city.parent.areaName}</span>
+                <span style="display:none;" city_id="$!{city.id}" class="county_name">$!{city.areaName}</span></span>
+                #else
+                <span>$!current_city</span>
+                <span></span>
+                <span style="display:none;" city_id=""></span>
+               #end
+                <b class="delivery_icon" style="cursor:pointer"></b>
+            	</span>
+                    <span class="inventory" id="show_inventory"></span>
+                </div>
+                <script>
+                    var myScroll;
+                    function show_areas(){
+                        load_area();
+
+                    }
+                    function load_area(){
+                        jQuery.ajax({type:'POST',
+                            url:'$!webPath/area_list',
+                            data:{"pid":""},
+                            success:function(data){
+                                jQuery(".pop_nav").remove();
+                                jQuery(".all_list_right").show();
+                                jQuery(".black_bg").show();
+                                jQuery("#g_detail_model_mask").after(data);
+                                new_scroll();
+                                jQuery(".pop_nav").animate({ left: "10%" });
+                                jQuery('html,body').addClass('ovfHiden');
+                            }
+                        });
+                    }
+                    function load_area_second(obj){
+                        jQuery(obj).siblings("li").attr("class","");
+                        jQuery(obj).attr("class","this");
+                        var pid = jQuery(obj).attr("id");
+                        var level = jQuery(obj).attr("level");
+                        if(level==2){
+                            hideClass();
+                            go_goods_inventory();
+                            return;
+                        }
+                        jQuery.ajax({type:'POST',
+                            url:'$!webPath/load_area',
+                            data:{"pid":pid},
+                            success:function(data){
+                                var obj = jQuery.parseJSON(data);
+                                var text ="";
+                                jQuery.each(obj, function(index,item){
+                                    text=text+"<li style='height:45px; line-height:45px; background:#fff;' onclick='load_area_second(this);' id="+item.id+" level="+item.level+">"+item.areaName+"</li>";
+                                });
+                                if(text!=""&&level==0){
+                                    jQuery("#first_child_list").hide();
+                                    jQuery("#three_child_list").hide();
+                                    jQuery("#second_child_list").html(text).show();
+                                    new_scroll();
+                                }else{
+                                    jQuery("#first_child_list").hide();
+                                    jQuery("#second_child_list").hide();
+                                    jQuery("#three_child_list").html(text).show();
+                                    new_scroll();
+                                }
+                            }
+                        });
+                    }
+                    /*隐藏地区选择框*/
+                    function hideClass(){
+                        jQuery(".pop_nav").hide();
+                        jQuery(".all_list_right").hide();
+                        jQuery(".black_bg").hide();
+                        jQuery("html,body").attr("class","");
+                    }
+                    function go_goods_inventory(){
+                        set_area_info();
+                        var gsps="";
+                        jQuery(".model_standard").each(function(){
+                            jQuery.each(jQuery(this).find("li[class=this]"),function(){
+                                gsps=jQuery(this).find("a").attr("gsp")+","+gsps;
+                            });
+                        });
+                        get_goods_inventory(gsps)
+                    }
+                    function set_area_info(){
+                        jQuery("#scroller2 ul").each(function(){
+                            var id = jQuery(this).find("li[class='this']").attr("id");
+                            var name = jQuery(this).find("li[class='this']").html();
+                            var index =jQuery(this).index();
+
+                            jQuery("#city_info").find("span").eq(index).html(name).attr("city_id",id)
+                        });
+                    }
+                    function area_back(){
+                        var level = 0;
+                        jQuery("#scroller2 ul").each(function(){
+                            if(jQuery(this).css("display")=="block"){
+                                level=jQuery(this).attr("level");
+                            }
+                        })
+                        if(level==0){
+                            hideClass();
+                        }else if(level==1){
+                            jQuery("#second_child_list").hide();
+                            jQuery("#three_child_list").hide();
+                            jQuery("#first_child_list").show();
+                            new_scroll();
+                        }else if(level==2){
+                            jQuery("#first_child_list").hide();
+                            jQuery("#three_child_list").hide();
+                            jQuery("#second_child_list").show();
+                            new_scroll();
+                        }
+                    }
+                    function new_scroll(){
+                        var text1 = jQuery("#scroller2").html();
+                        var text2 = "<div class='pop_nav_left' id='wrapper2'  style='width:100%;'><div id='scroller2' style='width:100%;'>"+text1+"</div></div>";
+                        jQuery(".pop_nav_left").remove();
+                        jQuery("#pop_nav_top").after(text2);
+                        myScroll = new IScroll('#wrapper2', {
+                            scrollbars: false,
+                            mouseWheel: true,
+                            interactiveScrollbars: true,
+                            shrinkScrollbars: 'scale',
+                            click: true,
+                            fadeScrollbars: true
+                        });
+                    }
+                </script>
+                <!-- 新加的地区选择结束-->
+                <ul style="padding: 5px 0;">
+
+                    #if($!obj.goods_transfee==1)<li><span>免运费</span> </li>
+                    #else
+                    #if($!obj.transport)
+
+                    <li id="freight_amount_transport">#if($!obj.transport.trans_mail)<span >平邮：</span> <span  id="goods_mail_fee">￥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","mail","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}")</span>#end
+                        #if($!obj.transport.trans_express)<span>快递：</span> <span id="goods_mail_fee">￥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","express","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}")</span>#end
+                        #if($!obj.transport.trans_ems)<span>EMS：</span> <span id="goods_mail_fee">￥$!transportTools.cal_goods_trans_fee("$!obj.transport.id","ems","$!obj.goods_weight","$!obj.goods_volume","$!{current_city}")</span>#end
+                    </li>
+
+                    #else
+                    <li id="freight_amount_id"><span > 平邮:￥$!CommUtil.null2Float($!{obj.mail_trans_fee})
+					            快递:￥$!CommUtil.null2Float($!{obj.express_trans_fee})
+					     EMS:￥$!CommUtil.null2Float($!{obj.ems_trans_fee}) </span>
+                    </li>
+                    #end
+                    #end
+                    <li><span>总销量：</span>$!obj.goods_salenum件</li>
+                </ul>
+            </div>
+            #if(!$!store)
+            <div class="basic_service" style="margin-top:0px;">
+                <ul>
+                    <li><span></span>服务支持</li>
+                    <li><span></span>货到付款</li>
+                    <li><span></span>正品保障</li>
+                    <li><span></span>差价返还</li>
+                    <li><span></span>15天质量问题换货</li>
+                    <li><span></span>七天无理由退货</li>
+                </ul>
+            </div>
+            #end
+        </div>
+
+        <!--商品所参与的活动-->
+        #if($!enoughreduce)
+        #set($cheap_info=$!{enoughreduce.ertag})
+        #set($cheap_mark="reduce")
+        #end
+        #if($!{obj.buyGift_id}&&$!{obj.order_enough_give_status}==1&&$!isGift)
+        #set($cheap_info="当前商品为满$!obj.buyGift_amount元即赠送商品")
+        #set($cheap_mark="send")
+        #end
+        #if($!{obj.order_enough_if_give}==1&&$!isGive)
+        #set($cheap_info="当前商品为满$!obj.buyGift_amount元即赠送商品")
+        #set($cheap_mark="send")
+        #end
+        #if(!$!cheap_info2)
+        #if($!{obj.activity_status}==2)
+        #set($cheap_info2="促销商品，用户登录后方可享受促销价格！")
+        #set($cheap_mark="sales")
+        #end
+        #end
+        #if($!{obj.group_buy}==2)
+        #set($cheap_info2="当前商品为团购商品")
+        #set($cheap_mark="group")
+        #end
+        <!--新增是否秒杀商品的判断-->
+        #if($!{obj.nuke_buy}==2)
+        #set($cheap_info2="当前商品为秒杀商品")
+        <!--设置样式-->
+        #set($cheap_mark="nuke")
+        #end
+
+        #if($!cheap_info)
+
+        <div class="g_detail_activity"  onclick="open_detail_activity();">
+            <ul><!--满就送加send;满就减加reduce;团购加group;促销加sales-->
+                <li id="g_detail_activity_li" class="$!cheap_mark"><span></span>$cheap_info</li>
+            </ul>
+            <div class="icon"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_3.png"></div>
+        </div>
+        #end
+        #if($!cheap_info2)
+        <div class="g_detail_activity">
+            <ul>
+                <li id="g_detail_activity_li" class="sales"><span></span>$!cheap_info2</li>
+            </ul>
+
+        </div>
+        #end
+        #if($!obj.advance_sale_type==1)
+        <div class="g_detail_activity">
+            <ul>
+                <li id="g_detail_activity_li" class="presell"><span></span>当前商品为预售商品</li>
+            </ul>
+        </div>
+        #end
+        #if($!obj.advance_sale_type==1)
+        #foreach($!ad in $!advance_list)
+        <!--预售全过程-->
+        <div class="presell_pro">
+            <h2 class="pre_title">预售全过程</h2>
+            <div class="step_info">
+                <em class="step">1</em>
+                <ul class="step_text">
+                    <li class="l_title" id="remaind_din">付定金<span>(预定中!)</span></li>
+                    <input name="din_endtime_ad_$!obj.id" id="din_endtime_ad_$!obj.id" type="hidden" value="$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss', $!CommUtil.formatDate($!{ad.rest_end_date}))"/>
+                    <li id="ad_$!obj.id" din_endtime="$!CommUtil.formatTime('MM/dd/yyyy HH:mm:ss', $!CommUtil.formatDate($!{ad.rest_end_date}))" mark="ad_$!obj.id"></li>
+
+                </ul>
+            </div>
+            <div class="step_info">
+                <em class="step">2</em>
+                <ul class="step_text">
+                    <li class="l_title">付尾款<span></span></li>
+                    <li>$!ad.rest_start_date 00:00~$!ad.rest_end_date 23:59</li>
+                </ul>
+            </div>
+            <div class="step_info">
+                <em class="step">3</em>
+                <ul class="step_text">
+                    <li class="l_title">组织生产</li>
+                    <li>生产中，请耐心等待</li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="step_info">
+                <em class="step">4</em>
+                <ul class="step_text">
+                    <li class="l_title">发货</li>
+                    <li>$!ad.advance_date</li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+        #end
+        #end
+        <!--商品规格-->
+        <div class="g_detail_sel" onClick="open_choose_spec();">
+            <span id="choose_spec">选择：#foreach($spec in $goodsViewTools.generic_spec("$!obj.id")) #if($!velocityCount==1) $!{spec.name} #end #end &nbsp;数量&nbsp;&nbsp;&nbsp;</span>
+            <span id="show_count"></span>
+            <div class="icon"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_4.png"></div>
+        </div>
+        #if($!store)
+        #set($store_url="$!webPath/store?id=$!{store.id}")
+        #set($store_logo="$!cdnServer/resources/style/shop/images/store_default/logo.jpg")
+        #if($!config.storeImage)
+        #set($store_logo="$!imageWebServer/$!config.storeImage.path/$!config.storeImage.name")
+        #end
+        #if($!store.store_logo)
+        #set($store_logo="$!imageWebServer/$!store.store_logo.path/$!store.store_logo.name")
+        #end
+        <!--店铺信息-->
+        <div class="g_detail_shop">
+            <dl class="logo">
+                <dt><img src="$!store_logo"></dt>
+                <dd><a href="$!store_url">$!store.store_name</a>#if($!{store.license_c_area})<span class="s_address">[$!{store.license_c_area.parent.parent.areaName}]$!{store.license_c_area.parent.areaName}</span>#end</dd>
+            </dl>
+            <ul class="comprehensive">
+                <li class="$!{description_css}">描述相符<span>#if(!$!{store.point.description_evaluate})0#else $!{store.point.description_evaluate} #end<b></b></span></li>
+                <li class="$!{service_css}">服务态度<span>#if(!$!{store.point.service_evaluate})0#else $!{store.point.service_evaluate} #end</span></li>
+                <li class="$!{ship_css}">发货速度<span>#if(!$!{store.point.ship_evaluate})0#else $!{store.point.ship_evaluate} #end</span></li>
+            </ul>
+            <ul class="g_detail_shop_in">
+                <li class="all_p"><a href="$!webPath/store_items?store_id=$!store.id&submit_type=store&all=all">全部商品</a></li>
+                <li class="shop_in"><a href="$store_url">进入店铺</a></li>
+            </ul>
+        </div>
+        #end
+        <!--猜你喜欢-->
+        $!httpInclude.include("/goods_list_bottom")
+        <div class="g_detail_continue">继续拖动，查看详情</div>
+        <div class="g_detail_c" id="g_detail_c_id2">
+        </div>
+    </div>
+    <!--商品详情-->
+    <div id="tab_2" style="display: none">
+        <div class="g_detail_c" id="g_detail_c_id">
+        </div>
+    </div>
+
+    <!--商品详情中的评价，该页面在点击评价按钮时显示-->
+    <div id="tab_3" style="display: none">
+
+        <div class="evaluate_box" tab_id="goods_evas">
+            <ul class="evaluate_title">
+                <li class="this">全部</li>
+                <li goods_eva="1">好评</li>
+                <li goods_eva="0">中评</li>
+                <li goods_eva="-1">差评</li>
+                <li goods_eva="100">有晒单</li>
+                #if($!whether_free==1)
+                <li class="zero_test" target_id="goods_fal" goods_eva="100">0元试用</li>
+                #end
+            </ul>
+            <div id="goods_evas_list" >
+            </div>
+        </div>
+        <script>
+            jQuery(".evaluate_box[tab_id=goods_evas] li").css("cursor","pointer").click(function(){
+                jQuery(".evaluate_box[tab_id=goods_evas] li").removeClass("this");
+                jQuery(this).addClass("this");
+                var t_id=jQuery(this).attr("target_id");
+                if(t_id=="goods_fal"){
+                    jQuery.ajax({type:'POST',url:"$!webPath/free_eva?",data:{"currentPage":1,"id":"$!obj.id"},
+                        success:function(data){
+                            jQuery("#goods_evas_list").html(data);
+                        }
+                    });
+                }else{
+                    var goods_eva=jQuery(this).attr("goods_eva");
+                    jQuery.ajax({type:'POST',url:"$!webPath/goods_eva?",data:{"currentPage":1,"goods_id":"$!obj.id","goods_eva":goods_eva},
+                        success:function(data){
+                            jQuery("#goods_evas_list").html(data);
+                        }
+                    })
+                }
+            });
+        </script>
+    </div>
+</div>
+
+<!--底部导航操作-->
+<div class="g_detail_nav_h"></div>
+<div class="g_detail_nav" id="g_detail_nav_id">
+    <ul>
+        <li class="g_detail_consult">
+            #if($!userTools.adminOnLine()=="true") <a  #if(!$!user) href="$!webPath/login" #else onClick="open_im('$!obj.id','$!webPath','user','plat','','before-sales');" #end > #else <a  #if(!$!user) href="$!webPath/login" #else onclick="if(confirm('客服当前不在线，是否继续?'))open_im('$!obj.id','$!webPath','user','plat','','before-sales');" #end  > #end
+            <dl>
+                <dt></dt>
+                <dd>咨询</dd>
+            </dl>
+        </a>
+        </li>
+        <li class="g_detail_shop_in">
+            <a href="$!webPath/store?id=$!{obj.goods_store.id}">
+                <dl>
+                    <dt></dt>
+                    <dd>进店</dd>
+                </dl>
+            </a>
+        </li>
+        <li class="g_detail_collect">
+            <a else href="javascript:void(0)" >
+                <!--已收藏加this-->
+                <dl id="g_detail_collect_dl">
+                    <dt id="g_detail_collect_id" mark="0"></dt>
+                    <dd>收藏</dd>
+                </dl>
+            </a>
+        </li>
+        #if($!obj.f_sale_type==0 && $!obj.advance_sale_type==0)
+        #if($!{obj.collage_buy}==2)
+        <li class="g_detail_buy_now" id="g_detail_buy_now_id2" onClick="buy_goods()">单独购买</li>
+        <li class="g_detail_shopcar_in" id="" onClick="open_choose_spec();">发起拼单</li>
+        #else
+        <li class="g_detail_shopcar_in" id="g_detail_shopcar_in_id2" onClick="add_cart()">加入购物车</li>
+        <li class="g_detail_buy_now" id="g_detail_buy_now_id2" onClick="buy_goods()">立即购买</li>
+        #end
+        #elseif($!obj.f_sale_type==1)
+        <li class="g_detail_f" id="g_detail_f_id2" onClick="f_code_buy_goods()">F码购买</li>
+        #elseif($!obj.advance_sale_type==1)
+        <li #if($!count > 0 || ($!count < 0)) onclick="buy_goods();" class="g_detail_presell_after g_detail_presell" #else class="g_detail_presell" #end id="buy_din">立即付定金</li>
+        <!--/*登陆后按钮颜色改变加g_detail_presell_afte-->
+        #end
+
+    </ul>
+    <script type="text/javascript">
+        onload=function(){
+            $("#presell").hide();
+        }
+    </script>
+
+    <a class="cart_link" href="$!webPath/goods_cart1"></a>
+
+</div>
+<!--点击颜色分类按钮后从底部弹出，同时g_detail_model_mask一起显示-->
+<div id="g_detail_model" class="g_detail_model" style="bottom: -380px;">
+    <div class="model_info">
+        <div class="model_pic"><img src="$!imageWebServer/$!obj.goods_main_photo.path/$!obj.goods_main_photo.name"></div>
+        <ul class="model_text">
+            <li class="value">￥<span  id="store_price2"></span></li>
+            <li class="amount">库存：<span id="goods_inventory" goods_inventory="$!{obj.goods_inventory}">$!{obj.goods_inventory}件</span></li>
+        </ul>
+    </div>
+    <div class="model_standard_box">
+        <div class="model_standard">
+            #foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+            <h4 class="standard_title">$!{spec.name}：</h4>
+            <ul>
+                #set($index=1)
+                #foreach($gsp in $obj.goods_specs)
+                #if($!{gsp.spec.id}==$!spec.id)
+                #if($index==1)
+                #if($!spec.type=="img") <li class="this" mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);"  sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"><img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="29" height="29" />$!gsp.value</a></li>#end
+                #if($!spec.type=="text") <li class="this" mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);" onClick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">$!gsp.value</a></li>#end
+
+                #else
+                #if($!spec.type=="img") <li mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id"><img src="$!imageWebServer/$!gsp.specImage.path/$!gsp.specImage.name" width="29" height="29" />$!gsp.value</a></li>#end
+                #if($!spec.type=="text") <li mark="spec_$!{spec_id}" onClick="goods_spec_set(this);"><a href="javascript:void(0);"  sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">$!gsp.value</a></li>#end
+                #end
+                #set($index=$index+1)
+                #end
+                #end
+            </ul>
+            #end
+        </div>
+        <div class="model_amount">
+            <h4 class="amount_title">数量<span>#if($!obj.goods_limit==1 && $!obj.goods_limit_count>0 && $!limit_count<$!{obj.goods_inventory} && $!limit_count!=-1) (限购$!obj.goods_limit_count件  #if($!obj.goods_limit_count>$!limit_count && $!limit_count>0) ,可以购买$!limit_count 件 #elseif($!limit_count==0),您已超过购买数量！#end) #end</span></h4>
+            <ul  style="overflow:hidden">
+                <li class="add"><a href="javascript:void(0)" onClick="minus();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_14.png"></a></li>
+                <li class="input_text"><input type="text" id="count" name="count"  value="1"/></li>
+                <li class="reduce"><a href="javascript:void(0)" onClick="plus();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_15.png"></a></li>
+            </ul>
+        </div>
+    </div>
+    <ul class="model_standard_btns">
+        #if( $!obj.f_sale_type == 0)
+        <li class="g_detail_shopcar_in"  id="g_detail_shopcar_in_id" onClick="add_cart()" style="color:white">加入购物车</li>
+        <li class="g_detail_buy_now" id="g_detail_buy_now_id" onClick="buy_goods()" style="color:white">立即购买</li>
+        #else
+        <li class="g_detail_f" id="g_detail_f_id" onClick="f_code_buy_goods()">F码购买</li>
+        #end
+    </ul>
+    <div class="close_btn">
+        <a href="javascript:void(0)" onClick="close_choose_spec();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_13.png"></a>
+    </div>
+</div>
+<script>
+    //普通规格解析
+    var gsp="";
+    jQuery(".model_standard").each(function(){
+        jQuery.each(jQuery(this).find("li[class=this]"),function(){
+            gsp=jQuery(this).find("a").attr("gsp")+","+gsp;
+        });
+    });
+    //解析默认价格
+    jQuery.post("$!webPath/load_goods_gsp",{"id":"$!{obj.id}","gsp":gsp},function(data){
+        /*jQuery("#store_price").html(data.price);*/
+        jQuery("#store_price2").html(data.price);
+    },"json");
+    //解析默认库存
+    get_goods_inventory(gsp);
+
+    // 以下是倒计时
+    mui.ready(function() {
+        var time2 = new Date();
+        if($!{obj.nuke_buy}==2){
+            var time1 = new Date('$!CommUtil.formatLongDate($!obj.nuke.endTime)');
+            var minus = Math.abs(Date.parse(time1) - Date.parse(time2));
+        }else if($!{obj.collage_buy}==2){
+            var time3 = new Date('$!CommUtil.formatLongDate($!userCollageList.collageBuy.endTime)');
+            var minus = Math.abs(Date.parse(time3) - Date.parse(time2));
+        }
+
+        //详情页的倒计时
+        timeInFun($("#secDetail"),minus);
+        // $("#secDetail").find('.hour').text(formatHours(timeStamp));
+    })
+    //
+    function timeInFun(_this,timeStamp){
+        var timeInt = setInterval(function(){
+            //判断是否大于1S
+            //var t = formatSecond(timeStamp);
+            if(timeStamp/1000 > 0){
+                _this.find(".hour").text(formatHours(timeStamp));
+                _this.find(".minute").text(formatMinutes(timeStamp));
+                _this.find(".second").text(formatSecond(timeStamp));
+                timeStamp = (timeStamp/1000 - 1)*1000;
+            }else{
+                //
+                timeInt = null;
+            }
+        },1000)
+    }
+    //获取小时
+    function formatHours(mss) {
+        var hours = parseInt(mss / (1000 * 60 * 60));
+        hours = hours < 10 ? ('0' + hours) : hours;
+        return  hours;
+    }
+    //获取分钟
+    function formatMinutes(mss) {
+        var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+        minutes = minutes < 10 ? ('0' + minutes) : minutes;
+        return minutes;
+    }
+    //获取秒
+    function formatSecond(mss) {
+        var seconds = (mss % (1000 * 60)) / 1000;
+        //console.log(seconds);
+        seconds = seconds < 10 ? ('0' + seconds) : seconds;
+        //seconds = seconds < 10 && seconds >= 1 ? ('0' + seconds) : seconds;
+        return seconds;
+    }
+    $("#RunTopic").slideUp();
+    //给列表添加倒计时
+    $("#RunTopic").find(".mui-table-view-cell").each(function(e){
+        var timeStamp = $(this).attr("timeStamp");
+        console.log($(this).index());
+        var index = $(this).index();
+        var _this = $(this);
+        var name = "timeInt" + index;
+
+        timeInFun(_this,timeStamp);
+
+    })
+    //去拼单
+    mui('#RunTopic').on('tap', '.mui-btn', function() {
+        open_choose_spec();
+    })
+
+</script>
+<div class="g_detail_model_mask" id="g_detail_model_mask"></div>
+
+<!--点击商品所参加活动按钮后从底部弹出，同时g_detail_model_mask一起显示-->
+<div class="detail_activity" style="bottom:-350px;">
+    <h3 class="activity_title">店铺活动</h3>
+    <div class="activity_box">
+    </div>
+    <a class="finish_btn" href="javascript:void(0);" onClick="close_detail_activity();">完成</a>
+</div>
+<div class="g_detail_model_mask" id="g_detail_model_mask"></div>
+<div class="all_list_right" onClick="hideClass();" style="left:-4px; display:none"><a class="back_top" href="javascript:void(0);"><ul><li>点</li><li>击</li><li>此</li><li>处</li><li>返</li><li>回</li><li><img style="-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);-ms-transform:rotate(180deg);-o-transform:rotate(180deg);transform:rotate(180deg);" src="$!cdnServer/resources/style/system/front/default/images/weixin/back_left.png" /></li></ul></a></div>
+<div class="black_bg" style="display:none"></div>
+
+<!--地区信息开始-->
+
+</body>
+</html>

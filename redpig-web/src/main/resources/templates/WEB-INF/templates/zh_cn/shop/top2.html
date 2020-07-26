@@ -1,0 +1,199 @@
+<div id="shortcut">
+    <div class="inner">
+      <div id="logo" class="logo">
+        <a href="$!webPath/index">
+        #set($img="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name")
+					<img src="$!img">
+				</a>
+      </div>
+      <div class="location dropdown">
+        <div class="li_text dd-icon">
+          <i class="iconfont style-red">&#xe601;</i>
+          <span class="ui-areamini-text" data-id="27" title="江苏">江苏</span>
+        </div>
+        <div class="dropdown-layer">
+          <div class="arealist">
+            <div class="item">
+              <a data-id="1" href="#">北京</a>
+            </div>
+            <div class="item">
+              <a data-id="2" href="#">上海</a>
+            </div>
+            <div class="item">
+              <a data-id="3" href="#">天津</a>
+            </div>
+            
+            <div class="item">
+              <a data-id="12" href="#" class="selected">江苏</a>
+            </div>
+            
+            <div class="item">
+              <a data-id="19" href="#">广东</a>
+            </div>
+            <div class="item">
+              <a data-id="20" href="#">广西</a>
+            </div>
+            <div class="item">
+              <a data-id="21" href="#">江西</a>
+            </div>
+            <div class="item">
+              <a data-id="22" href="#">四川</a>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <ul class="fr">
+        <li class="fl">
+          #if($!user)
+          	你好，<a href="$!webPath/buyer/index">$!CommUtil.substring("$!{user.userName}",20)</a>，欢迎来到$!{config.websiteName}
+          	<a href="$!webPath/redpigmall_logout" class="style-red">退出</a>
+          #else
+	          <a href="$!webPath/user/login">你好，请登录</a>
+	          <a href="$!webPath/register" class="style-red">免费注册</a>
+          #end
+        </li>
+        <li class="spacer"></li>
+        <li class="fl">
+          <div class="li_text">
+            <a href="$!webPath/buyer/order">我的订单</a>
+          </div>
+        </li>
+        <li class="spacer"></li>
+        <li class="myjd fl dropdown">
+          <div class="li_text dd-icon">
+            <a href="$!webPath/buyer/index" class="havei">个人中心</a>
+            <i class="iconfont dd-i">&#xe600;</i>
+          </div>
+          <div class="dropdown-layer">
+            <div class="myjdlist">
+              <div class="fore1">
+                <div class="item">
+                  <a href="$!webPath/buyer/order">我的订单<span id="num-unfinishedorder"></span></a>
+                </div>
+                <div class="item">
+                  <a href="$!webPath/buyer/order?order_status=order_submit">待付款订单</a>
+                </div>
+                <div class="item">
+                  <a href="$!webPath/buyer/order?order_status=order_shipping">待收货订单</a>
+                </div>
+              </div>
+              <div class="fore2">
+                <div class="item">
+                  <a href="$!webPath/buyer/message">站内消息<span id="num-tip">($!msg_size)</span></a>
+                </div>
+                <div class="item">
+                  <a href="#">返修退换货<span id="num-consultation"></span></a>
+                </div>
+                <div class="item">
+                  <a href="$!webPath/buyer/order?order_status=order_receive">待评价订单</a>
+                </div>
+              </div>
+            </div>
+            <div class="myjdlist myjdlist_2">
+              <div class="fore1">
+                <div class="item">
+                  <a href="$!webPath/buyer/favorite_goods">我的收藏</a>
+                </div>
+                <div class="item baitiao">
+                  <a href="$!webPath/buyer/integral_order_list">积分兑换</a>
+                </div>
+              </div>
+              <div class="fore2">
+                <div class="item">
+                  <a href="$!webPath/buyer/coupon">我的优惠券<span id="num-ticket"></span></a>
+                </div>
+                <div class="item">
+                  <a href="$!webPath/buyer/account">我的账号</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        
+        <li class="spacer"></li>
+        <li class="fl">
+          <div class="li_text">
+            <a href="$!config.sellerUrl">商家入口</a>
+          </div>
+        </li>
+        
+        <li class="spacer"></li>
+        <li class="fl">
+          <div class="li_text">
+            <a href="#">京东会员</a>
+          </div>
+        </li>
+        <li class="spacer"></li>
+        <li class="fl">
+          <div class="li_text">
+            <a href="#">企业采购</a>
+          </div>
+        </li>
+        <li class="spacer"></li>
+        <li class="client-service fl dropdown">
+          <div class="li_text dd-icon">
+            <a href="#" class="havei">客户服务</a>
+            <i class="iconfont">&#xe600;</i>
+          </div>
+          <div class="dropdown-layer">
+            <div class="cslist">
+              <div class="item-hd">客户</div>
+              <div class="item"><a href="$!webPath/articlelist_help" true="">帮助中心</a></div>
+              <div class="item"><a href="$!webPath/doc_service" true="">售后服务</a></div>
+              <div class="item"><a href="$!webPath/doc_online" true="">在线客服</a></div>
+              <div class="item"><a href="$!webPath/doc_complaint" true="">意见建议</a></div>
+              <div class="item"><a href="$!webPath/doc_online" true="">电话客服</a></div>
+              <div class="item"><a href="$!webPath/doc_email" true="">客服邮箱</a></div>
+              <div class="item"><a href="$!webPath/doc_online" true="">金融咨询</a></div>
+              <div class="item"><a href="$!webPath/doc_online" true="">售全球客服</a></div>
+            </div>
+            <div class="cslist cslist_2">
+              <div class="item-hd">商户</div>
+              <div class="item"><a href="$!webPath/articlelist_help_19" true="">合作招商</a></div>
+              <div class="item"><a href="#" true="">商学院</a></div>
+              <div class="item"><a href="#" true="">商家后台</a></div>
+              <div class="item"><a href="#" true="">商家帮助</a></div>
+              <div class="item"><a href="#" true="">规则平台</a></div>
+            </div>
+          </div>
+        </li>
+        
+        <li class="spacer"></li>
+        <li id="J_mobile" class="shortcut_btn fore10 mobile" clstag="h|keycount|head|topbar_09">
+          <div class="dt mobile_txt">手机京东</div>
+          <div class="mobile_static">
+            <div class="mobile_static_qrcode"></div>
+          </div>
+          <div id="J_mobile_pop" class="mobile_pop">
+        
+            <div class="mobile_pop_item">
+              <div class="mobile_pop_qrcode mobile_pop_qrcode_1"><img src="$!cdnServer/front/images/59141d25N16b222f0.png"></div>
+              <div class="mobile_pop_info">
+                <h5 class="mobile_pop_tit"><a href="//app.jd.com/" target="_blank">手机京东</a></h5>
+                <p class="mobile_pop_value">新人专享大礼包</p>
+                <p class="mobile_pop_device"> <a class="mobile_pop_device_lk mobile_pop_device_ios" href="https://itunes.apple.com/cn/app/id414245413" target="_blank">APP Store</a> <a class="mobile_pop_device_lk mobile_pop_device_and" href="https://storage.jd.com/jdmobile/JDMALL-PC2.apk" target="_blank">安卓市场</a> <a class="mobile_pop_device_lk mobile_pop_device_pad" href="https://itunes.apple.com/cn/app/jing-dong-hd/id434374726" target="_blank">APP Store</a> </p>
+              </div>
+            </div>
+            <div class="mobile_pop_item">
+              <div class="mobile_pop_qrcode mobile_pop_qrcode_2"><img src="$!cdnServer/front/images/5874a54dNcec29924.jpg"></div>
+              <div class="mobile_pop_info">
+                <h5 class="mobile_pop_tit">关注京东微信</h5>
+                <p class="mobile_pop_value">微信扫一扫关注
+                  <br>新粉最高180元
+                  <br>惊喜礼包</p>
+              </div>
+            </div>
+            <div class="mobile_pop_item">
+              <div class="mobile_pop_qrcode mobile_pop_qrcode_3"><img src="$!cdnServer/front/images/5874a555Ne8192324.jpg"></div>
+              <div class="mobile_pop_info">
+                <h5 class="mobile_pop_tit"><a href="https://m.jr.jd.com/helppage/downApp/jrAppPromote.html" target="_blank">京东金融客户端</a></h5>
+                <p class="mobile_pop_value">新人专享大礼包</p>
+                <p class="mobile_pop_device"> <a class="mobile_pop_device_lk mobile_pop_device_ios" href="https://itunes.apple.com/cn/app/jing-dong-jin-rong-hui-li/id895682747?mt=8" target="_blank">APP Store</a> <a class="mobile_pop_device_lk mobile_pop_device_and" href="http://211.151.9.66/downapp/jrapp_jr188.apk" target="_blank">安卓市场</a> </p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>

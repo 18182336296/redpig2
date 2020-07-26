@@ -1,0 +1,77 @@
+<style type="text/css">
+
+</style>
+
+<script>
+function search_form(){
+	  var keyword=arguments[0];
+	  var type=arguments[1];
+	  if(keyword!=""&&keyword!=undefined){
+	   jQuery("#keyword").val(keyword);
+	  }
+	  if(type!=""&&type!=undefined){
+	    jQuery("#type").val(type);
+	  }
+	  jQuery("#searchForm").submit();
+	  jQuery("#keyword").val("");
+}
+
+</script>
+
+<div class="header-wrap">
+  <header class="public-head-layout wrapper">
+    <h1 class="site-logo"><a href="http://localhost:8800/index"><img src="http://localhost:8001//upload/system/f474ac2f-b435-45cb-8669-9d70f71ee5cb.jpg" class="pngFix"></a></h1>
+        <div class="head-app"><span class="pic"></span>
+      <div class="download-app">
+       <div class="qrcode"><img src="http://localhost:8001//data/upload/shop/common/mb_app.png"></div>
+        <div class="hint">
+          <h4>扫描二维码</h4>
+          下载手机客户端</div>
+        <div class="addurl">
+                        <a href=http://localhost:8800 target="_blank"><i class="icon-android"></i>Android</a>
+                                    <a href="http://localhost:8800" target="_blank"><i class="icon-apple"></i>iPhone</a>
+                        </div>
+      </div>
+    </div>
+        
+    <div id="search" class="head-search-bar">
+	<!--商品和店铺-->
+      
+      <form  target="_blank" id="searchForm" method="post" action="http://localhost:8800/search">
+        <input name="config" type="hidden" id="config" value="小米,男装,女装,羽绒服,OPPO,香水,五粮液,白酒,美妆个护,冰箱" />
+        <input name="type" type="hidden" id="type" value="" />
+        <!-- 
+        <input placeholder="请输入您要搜索的商品关键字" name="keyword" id="keyword"  class="input-text"  maxlength="60" type="text" lang="zh-CN">
+        <input id="button" value="搜索" class="input-submit" type="submit" >
+      	 -->
+<table style="background-color:#E4393C;width:100%;border-color:#E4393C;height:40px;" border="0" align="center" cellpadding="0" cellspacing="0" class="tab_search">
+  <tbody><tr>
+		<td style="width:380px;text-align:left">
+			<input type="text" name="keyword" id="keyword" title="Search" class="searchinput" onkeydown="if (event.keyCode==13) {}" onblur="if(this.value=='')value='请输入您要搜索的商品关键字';" onfocus="if(this.value=='请输入您要搜索的商品关键字')value='';" value="请输入您要搜索的商品关键字" size="10" style="width:380px;height:40px;">
+		</td>
+		<td style="text-align: center;">
+			<span class="searchaction" onclick="search_form();" style="font-size:20px;width:40px;color:white;font-weight:bold;cursor:pointer;">搜索</span>
+		</td>
+	</tr>
+</tbody></table>
+      	
+      </form>
+      
+      	  <!--搜索关键字-->
+      <div class="keyword">热门搜索：        <ul>
+                          <li><a href="javascript:void(0);" onclick="search_form('小米','goods');">小米</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('男装','goods');">男装</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('女装','goods');">女装</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('羽绒服','goods');">羽绒服</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('OPPO','goods');">OPPO</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('香水','goods');">香水</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('五粮液','goods');">五粮液</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('白酒','goods');">白酒</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('美妆个护','goods');">美妆个护</a></li>
+                          <li><a href="javascript:void(0);" onclick="search_form('冰箱','goods');">冰箱</a></li>
+            </ul>
+      </div>
+          </div>
+    
+  </header>
+</div>

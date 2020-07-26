@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="63e227fa-dc59-4e55-81f7-90d7d873cf42" name="Default" comment="修改配置文件" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>whereStatement</find>
+      <find>selectCount</find>
+      <find>CollageBuyMapper</find>
+      <find>人在拼团</find>
+      <find>cg_status</find>
+      <find>com.redpigmall.dao.collagelistmapper.foratement5</find>
+      <find>public UserCollageList</find>
+      <find>selectUserCollageBuyInfo</find>
+      <find>UserCollageList</find>
+      <find>selectByPrimaryKey</find>
+      <find>&lt;!--没有登录时head_img下的不显示，login显示，info不显示；登录后head_img下的img为头像的链接，login不显示，info显示--&gt;</find>
+      <find>imageWebServer</find>
+      <find>secDetail</find>
+      <find>remain_id</find>
+      <find>g-remain</find>
+      <find>collageBuy</find>
+      <find>剩余</find>
+      <find>hour</find>
+      <find>userName</find>
+      <find>BaseResultMap1</find>
+      <find>BaseResultMap3</find>
+      <find>selectObjByCollage</find>
+      <find>--&gt;</find>
+      <find>group_Id</find>
+      <find>CollageListMapper</find>
+      <find>selectCountGroup</find>
+      <find>selectByGroupHostPrimdaryKey</find>
+      <find>/items</find>
+      <find>&lt;!--点击商品所参加活动按钮后从底部弹出，同时g_detail_model_mask一起显示--&gt;</find>
+      <find>拼团</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>var time1 = new Date('$!CommUtil.formatLongDate($!obj.nuke.endTime)');</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>E:\yinger_mall_idea\ye_maill\redpig-web-h5\src\main\resources</dir>
+      <dir>E:\yinger_mall_idea\ye_maill\redpig-h5</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="6ebf8fe2-7918-406f-b625-cb2988a90c84" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\yemaill4\ye_maill\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="userSettingsFile" value="D:\yemaill-tool\apache-maven-3.6.0\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1WQYx3Bb7PcrkxDkmfXxwFAGEFT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.redpigmall.domain" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.RedPigWebWap">
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedPigWebAdmin" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="redpig-web-admin" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.redpigmall.boot.RedPigWebAdmin" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedPigWebApp" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="redpig-web" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.redpigmall.boot.RedPigWebApp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedPigWebStore" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="redpig-web-store" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.redpigmall.boot.RedPigWebStore" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedPigWebWap" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="redpig-web-h5" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.redpigmall.boot.RedPigWebWap" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Spring Boot.RedPigWebApp" />
+      <item itemvalue="Spring Boot.RedPigWebWap" />
+      <item itemvalue="Spring Boot.RedPigWebAdmin" />
+      <item itemvalue="Spring Boot.RedPigWebStore" />
+    </list>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="Spring Boot" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+            </expand>
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="63e227fa-dc59-4e55-81f7-90d7d873cf42" name="Default" comment="" />
+      <created>1537323627160</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1537323627160</updated>
+      <workItem from="1537323630343" duration="658000" />
+      <workItem from="1537324442313" duration="28105000" />
+      <workItem from="1537404644610" duration="19667000" />
+      <workItem from="1537429741797" duration="18422000" />
+      <workItem from="1537491683595" duration="311000" />
+      <workItem from="1537492528613" duration="22232000" />
+      <workItem from="1537522670735" duration="5988000" />
+      <workItem from="1537584007098" duration="19000" />
+      <workItem from="1537584066041" duration="5087000" />
+      <workItem from="1579083530757" duration="1630000" />
+      <workItem from="1579091485854" duration="372000" />
+      <workItem from="1589096601525" duration="1375000" />
+      <workItem from="1589560717163" duration="91000" />
+      <workItem from="1594805119993" duration="940000" />
+      <workItem from="1595448562608" duration="1345000" />
+      <workItem from="1595450241363" duration="1565000" />
+      <workItem from="1595648301831" duration="261000" />
+    </task>
+    <task id="LOCAL-00001" summary="修改配置文件">
+      <created>1537324095036</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1537324095036</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="修改配置文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改配置文件" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="604" y="188" key="FileChooserDialogImpl" timestamp="1595449828999">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="604" y="188" key="FileChooserDialogImpl/0.0.1440.860@0.0.1440.860" timestamp="1595449828999" />
+    <state x="306" y="317" width="274" height="208" key="Github.ShareDialog" timestamp="1595451216592">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="306" y="317" width="274" height="208" key="Github.ShareDialog/0.0.1440.860@0.0.1440.860" timestamp="1595451216592" />
+    <state x="120" y="129" key="Github.UntrackedFilesDialog" timestamp="1595451725654">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="120" y="129" key="Github.UntrackedFilesDialog/0.0.1440.860@0.0.1440.860" timestamp="1595451725654" />
+    <state x="171" y="150" key="SettingsEditor" timestamp="1595648558736">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="171" y="150" key="SettingsEditor/0.0.1440.860@0.0.1440.860" timestamp="1595648558736" />
+    <state x="412" y="258" key="com.intellij.ide.util.TipDialog" timestamp="1595648324505">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="412" y="258" key="com.intellij.ide.util.TipDialog/0.0.1440.860@0.0.1440.860" timestamp="1595648324505" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="SpringBootApplicationConfigurationType">
+        <watch expression="this.collageListService" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>

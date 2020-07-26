@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(e) {
+    var status = "$!{status}";
+	if(status){
+		jQuery(".nav_list a").removeClass("this");
+		jQuery("#nav_list_li_"+status).find("a").addClass("this");
+	}
+});
+function refund_audit(apply_form_id,result){
+	showDialog("msg_info","","操作不可撤销，是否继续?",1,"warning",3,function(){
+	   window.location.href="$!webPath/refund_audit?apply_form_id="+apply_form_id+"&&result="+result+"&&currentPage="+$!{currentPage};
+	});	
+}
+</script>
+</head>
+<body>
+
+<div class="cont">
+  <h3 class="seth">售后管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/self_refund_apply_form"  class="this"><b>待退款申请</b></a></li>
+        <li id="nav_list_li_all"><a href="$!webPath/self_refund_apply_form?status=all"><b>所有申请</b></a></li>
+        <li id="nav_list_li_10"><a href="$!webPath/self_refund_apply_form?status=10"><b>审核通过</b></a></li>
+        <li id="nav_list_li_5"><a href="$!webPath/self_refund_apply_form?status=5"><b>审核被拒绝</b></a></li>
+        <li id="nav_list_li_15"><a href="$!webPath/self_refund_apply_form?status=15"><b>已退款申请</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/self_refund_apply_form" method="post" id="ListForm" >
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="5%"></th>
+        <th width="15%"><span class="form_btna">订单号</span></th>
+        <th width="12%"><span class="form_btna">买家名称</span></th>
+        <th width="15%"><span class="form_btna">申请时间</span></th>
+        <th width="12%"><span class="form_btna">审核人</span></th>
+        <th width="15%"><span class="form_btna">审核时间</span></th>
+        <th width="10%">退款金额</th>
+        <th align="center"><b class="form_btnb">操作</b></th>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!velocityCount</td>
+        <td align="center">$!obj.order_id</td>
+        <td align="center">$!obj.user_name</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+         <td align="center">#if($!obj.audit_user_name)$!obj.audit_user_name#else暂无数据#end</td>
+                  <td align="center">#if($!obj.audit_date)$!CommUtil.formatLongDate($!obj.audit_date)#else暂无数据#end</td>
+        <td align="center">$!obj.refund_price</td>
+       	
+        <td class="hui oprate_con" align="center">
+        #if($!{obj.status}==0)
+        <a href="javascript:void(0);" class="blue" onclick="refund_audit('$!{obj.id}','true')">审核通过</a>
+        <a href="javascript:void(0);" class="blue"  onclick="refund_audit('$!{obj.id}','')">审核拒绝</a>
+        #end
+        #if($!{obj.status}==5)
+        申请已拒绝
+        #end
+        #if($!{obj.status}==10)
+        申请已通过
+        #end
+        #if($!{obj.status}==15)
+        已退款
+        #end
+        <a href="$!webPath/refund_orderform_view?order_id=$!{obj.order_form_id}" class="blue">查看详情</a>
+        </td>
+      </tr>
+     #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+        <input name="status" type="hidden" id="status" value="$!status" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+    </div>   
+  </div>
+  <div class="fenye">
+    </div>
+  </form>
+</div>
+</body>
+</html>

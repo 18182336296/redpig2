@@ -1,0 +1,576 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-wap店铺装修-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery1.42.min.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/TouchSlide.1.1.js"></script>
+<script>
+jQuery(document).ready(function(){
+	phone_preview();
+	var album_id = jQuery("#album_id").val();
+	jQuery.post("$!webPath/seller/wap_index_imgs",{"album_id":album_id},function(text){
+		jQuery("#img_list").empty();																				
+		jQuery("#img_list").append(text);		
+	},"text");
+	jQuery("#album_id").live("change",function(element){
+		var album_id = jQuery("#album_id").val();
+	jQuery.post("$!webPath/seller/wap_index_imgs",{"album_id":album_id},function(text){
+		jQuery("#img_list").empty();																					
+		jQuery("#img_list").append(text);		
+	},"text");		
+	});
+	//选择模板类型
+	jQuery("#choose_type li").live("click",function(){
+		jQuery(this).parent().children().removeClass();
+		jQuery(this).addClass("this");
+		var mark = jQuery(this).attr("use");
+		if(mark == "multi"){
+		jQuery("#choose_template").find("li[use='single']").hide();
+		jQuery("#choose_template").find("li[use='goods']").hide();
+		jQuery("#choose_template").find("li[use='slide']").hide();
+		jQuery("#choose_template").find("li[use='multi']").show();	
+		}
+		if(mark == "single"){
+		jQuery("#choose_template").find("li[use='multi']").hide();
+		jQuery("#choose_template").find("li[use='goods']").hide();
+		jQuery("#choose_template").find("li[use='slide']").hide();
+		jQuery("#choose_template").find("li[use='single']").show();
+		}
+		if(mark == "slide"){
+		jQuery("#choose_template").find("li[use='single']").hide();
+		jQuery("#choose_template").find("li[use='multi']").hide();
+		jQuery("#choose_template").find("li[use='goods']").hide();
+		jQuery("#choose_template").find("li[use='slide']").show();
+		}
+		if(mark == "goods"){
+		jQuery("#choose_template").find("li[use='single']").hide();
+		jQuery("#choose_template").find("li[use='multi']").hide();
+		jQuery("#choose_template").find("li[use='slide']").hide();
+		jQuery("#choose_template").find("li[use='goods']").show();
+		}
+	});
+	//开关显示
+	jQuery("#status_button").live("click",function(){	
+		var val = jQuery(this).siblings("input").val();
+		if(val=="true"){
+		jQuery("#status_button").attr("src", 		     "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/no.jpg");
+	jQuery("#status").val("false");
+		}else{
+	jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	jQuery("#status").val("true");
+		}
+	});
+	//点击模板编辑
+	jQuery("#choose_template li").live("click",function(){		
+	var tem = jQuery(this).attr("tem");
+	jQuery(this).siblings().removeClass();
+	jQuery("li[tem="+tem+"]").attr("class","this");
+	jQuery("#edit_mo").val(tem);
+	if(tem==1){
+			str="<div class='android_floor_01 wh500'><ul><li style='width:100%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg'  width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li></ul></div>";
+		}
+		if(tem==2){
+			str="<div class='android_floor_01 wh500'><ul><li style='width:50%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:50%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li></ul></div>";
+		}
+		if(tem==5){
+			str="<a href='javascript:void(0);' onclick='add_f();' class='blue_btn' >新增幻灯图片</a><i class='base_i'>幻灯图片将按照模板的顺序播放，一个楼层允许添加六张图片</i><div class='android_floor_01'><ul id='sli'></ul></div>";
+		}
+		if(tem==6){
+			str="<div class='android_floor_01 wh500'><ul><li style='width:324px;height:324px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='317px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:175px;height:158px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='158px'; width='175px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li><li style='height:158px; width:175px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='158px'; width='175px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_3' name='line_info_3' /></li></ul></div>";
+		}
+		if(tem==7){
+			str="<a href='javascript:void(0);'style='cursor:pointer;' class='blue_btn' dialog_uri=$!webPath/seller/wap_show_items?id=$!obj.id dialog_title='选择首页显示的商品' dialog_width='770' dialog_height='300' dialog_id='buy_goods'>编辑商品</a><table class='choose_tb' cellpadding='0' cellspacing='0' border='0'><tbody id='tgift'></tbody></table>";
+		}
+		jQuery("#template_tr").show();
+		jQuery("#template_td").empty();
+		jQuery("#template_td").append(str);
+	
+	});
+	jQuery(".and_tem_edit").live("click",function(){
+		var str=jQuery(this).next("input").val();
+		if(str!=""){
+			var type="";
+		jQuery.each(str.split(","),function(index,item){
+			if(index==0){
+				type=item;	
+				jQuery("div[use^='click_type_']").hide();
+				jQuery("input[name='click_type'][value='"+item+"']").attr("checked","checked");
+				jQuery("div[use='click_type_"+item+"']").show();
+			}
+			if(index==1){
+				if(type=="url")
+					jQuery("#url_link").val(item);
+				else
+					jQuery("#goods_id").val(item);
+			}
+			if(index==2){
+				jQuery("#img_url").val(item);
+			}
+		});
+		}
+		jQuery(".android_app_add_bg").show();
+		jQuery(".android_app_add_up").show();
+		jQuery(this).next("input").attr("edit","now");
+		
+	});
+jQuery(".android_app_add_up_top").find("span").live("click",function(){
+		if(jQuery(this).attr("class")!="this"){
+			jQuery(".android_app_add_up_top").find("span").attr("class","");
+			jQuery(this).attr("class","this");
+			if(jQuery(this).html()=="点击类型"){
+				jQuery(".android_app_add_up_center").show();
+				jQuery(".android_app_add_up_center_zt").hide();				
+			}else{
+				jQuery(".android_app_add_up_center").hide();
+				jQuery(".android_app_add_up_center_zt").show();		
+			}
+		}
+	});
+});
+//类型选择
+jQuery("input[name='click_type']:checked").live("click",function(){
+		var type=jQuery(this).val();
+		jQuery("div[use^='click_type_']").hide();
+		jQuery("div[use='click_type_"+type+"']").show();
+		if(type=="url"){			
+			jQuery("div[use='img_type_goods']").hide();
+			jQuery("div[use='img_type_goods']").find("ul").empty();
+			jQuery("#img_type_goods").hide();
+			
+			if(jQuery("input[name='img_type']:checked").val()=="goods"){
+				jQuery("input[name='img_type']:checked").attr("checked","unchecked");				
+				jQuery.each(jQuery("input[name='img_type']"),function(index,item){
+					if(index==0){
+						jQuery(item).attr("checked","checked");
+						jQuery("div[use='img_type_album']").show();
+					}
+				});
+			}
+			jQuery("#goods_id").val("");
+		}
+	});
+	//图片选择
+jQuery("input[name='img_type']:checked").live("click",function(){
+		var type=jQuery(this).val();
+		jQuery("div[use^='img_type_']").hide();
+		jQuery("div[use='img_type_"+type+"']").show();
+	});	
+	//上传图片
+	jQuery("#upload_img").live("change",function(){
+		jQuery.ajaxFileUpload({
+                url: '$!webPath/seller/store_index_image_upload',
+                fileElementId: ["upload_img"],
+                fileFilter: "$!imageSuffix1",
+                data: {
+                },
+                dataType: 'json',
+                success: function(text) {
+                    var img = "<img src='$!webPath/" + text.url + "'/>";
+					jQuery("#uploaded_img").empty();
+                    jQuery("#uploaded_img").append(img);
+					jQuery("#img_url").val(text.url);
+                }
+          });
+});
+function add_f(obj){
+	if(jQuery("#sli li").length<6){
+	var nid = 1;
+	if(jQuery("#sli li").length>0){
+	 nid = parseInt(jQuery("#sli li:last-child").find("input").attr("id").slice(-1))+1;
+	}
+	var st = "<li style='width:100%;' id='fl_"+nid+"'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' width='100%' height='90' /></a><a class='and_tem_edit' href='javascript:void(0)' onclick='del_f("+nid+");'>删除</a><a class='and_tem_edit and_tem_del' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_"+nid+"' name='line_info_"+nid+"' /><a href='javascript:void(0);' onclick='add_f("+nid+");' class='blue_btn' >在此插入幻灯图片</a></li>";
+	if(obj){
+	   jQuery("#fl_"+obj).after(st); 	
+	}else{
+	   jQuery("#sli").append(st);
+	}
+	}else{
+		alert("幻灯最多允许插入六张图片");
+		}
+	}	
+function del_f(obj){
+		jQuery("#line_info_"+obj).parent().remove();
+	}	
+function floor_submit(){
+    var str = "";
+    var add = 1;
+    var img_url = "";
+    if (jQuery("input[name='click_type']:checked").val() == "goods") {
+        str = str + "goods,"
+        var goods_id = jQuery("#goods_id").val();
+        if (goods_id != "") {
+            str = str + goods_id + ",";
+        } else {
+            add = 0;
+            showDialog("msg_info", "", "请选择商品！", 2, "warning", 3, '');
+        }
+    } else {
+        str = str + "url,"
+        var url_link = jQuery("#url_link").val();
+        if (url_link != "") {
+            str = str + url_link + ",";
+        } else {
+            add = 0;
+            showDialog("msg_info", "", "请编辑点击链接！", 2, "warning", 3, '');
+        }
+    }
+    if (add == 1) {
+        img_url = jQuery("#img_url").val();
+        if (img_url != "") {
+            str = str + img_url;
+        } else {
+            add = 0;
+            showDialog("msg_info", "", "请选择图片！", 2, "warning", 3, '');
+        }
+    }
+    if (add == 1) {        
+        jQuery("input[edit='now']").val(str);
+        jQuery("input[edit='now']").parent().find("img").attr("src", "$!webPath/"+img_url);
+		if(jQuery("#line_type").val()<6){
+			jQuery("input[edit='now']").parent().find("img").attr("height", "100%");
+			jQuery("input[edit='now']").parent().parent().attr("height","100%");
+		}
+        jQuery("input[edit='now']").attr("edit", "");
+        jQuery(".android_app_add_bg").hide();
+        jQuery(".android_app_add_up").hide();
+		reset_dialog();
+    }
+}
+
+	//搜索商品	
+function search_goods(){
+    var goods_name = jQuery("#goods_name").val();
+    var gc_id = jQuery("#gc_id").val();
+	var activity_name = jQuery("#activity_name").val();
+    jQuery.post("$!webPath/seller/wap_store_goods_search", {
+        "goods_name": goods_name,
+        "gc_id": gc_id,
+		"activity_name": activity_name
+    },
+    function(text) {
+        if (text != null) {
+            jQuery("#goods_list").empty();
+            jQuery("#goods_list").append(text);
+        }
+    },
+    "text");
+} 
+	//商品分页
+function ajaxPage(url, page, obj) {
+    var list = jQuery(obj).parent().parent().attr("use");
+    var album_id = jQuery("#album_id").val();
+    jQuery.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+            "currentPage": page,
+            "album_id": album_id
+        },
+        success: function(data) {
+            jQuery("#" + list).empty().append(data);
+        }
+    });
+}
+function goods_list_set(element) {
+    jQuery(element).parent().find("span").attr("class", "");
+    jQuery(element).find("span").attr("class", "this");
+    var goods_id = jQuery(element).attr("goods_id");
+    jQuery("#goods_id").val(goods_id);
+    jQuery("#img_type_goods").show();
+    jQuery("div[use='img_type_goods']").find("ul").empty();
+    var img_uri = jQuery(element).attr("img_uri");
+    jQuery.each(img_uri.split(","),
+    function(index, item) {
+        jQuery("div[use='img_type_goods']").find("ul").append("<li><span><img onclick='select_img(this)' src='$!webPath/" + item + "' im_uri='"+item+"' /><i></i></span></li>");
+    });
+}	
+	//选择图片
+function select_img(element) {
+    jQuery(element).parent().parent().parent().find("span").attr("class", "");
+    var src = jQuery(element).attr("im_uri");
+    jQuery(element).parent().attr("class", "this");
+	jQuery("#img_url").val(src);
+}
+function phone_preview() {
+    jQuery.post("$!webPath/seller/wap_index_preview", "",
+    function(text) {
+        if (text != null) {
+            jQuery("#edit_table").empty();
+            jQuery(".and_preview").empty();
+            jQuery(".and_preview").append(text);
+            jQuery(".and_add").html("添加楼层");
+        }
+    },
+    "text");
+}
+	//取消编辑
+function cancle_edit() {
+    reset_dialog();
+    jQuery(".android_app_add_bg").hide();
+    jQuery(".android_app_add_up").hide();
+}
+function add_floor() {
+    if (jQuery(".and_add").html() == "添加楼层") {
+        jQuery.post("$!webPath/seller/wap_floor_add", "",
+        function(text) {
+            if (text != null) {
+                jQuery("#edit_table").empty();
+                jQuery("#edit_table").append(text);
+                jQuery(".and_add").html("取消");
+            }
+        },
+        "text");
+    } else {
+        jQuery("#edit_table").empty();
+        jQuery(".and_add").html("添加楼层");
+    }
+}
+function edit_floor(id) {
+    jQuery.post("$!webPath/seller/wap_floor_edit", {
+        "id": id
+    },
+    function(text) {
+        if (text != null) {
+            jQuery("#edit_table").empty();
+            jQuery("#edit_table").append(text);
+            jQuery(".and_add").html("取消");
+        }
+    },
+    "text");
+}
+function del_floor(id) {
+    showDialog('msg_info', '', '确认删除楼层吗?', 1, 'question', 3,
+    function() {
+        jQuery.post("$!webPath/seller/wap_floor_del", {
+            "id": id
+        },
+        function(text) {
+            if (text != null && text == "true") {
+                phone_preview();
+            }
+        },
+        "text");
+    });
+}
+function reset_dialog() {
+    jQuery("#goods_id").val("");
+    jQuery("#url_link").val("");
+    jQuery("#img_url").val("");
+    jQuery("#goods_list").empty();
+    jQuery("#uploaded_img").empty();
+    jQuery("div[use='img_type_goods']").hide();
+    jQuery("div[use='img_type_goods']").find("ul").empty();
+    jQuery("#img_type_goods").hide();
+    jQuery(".android_app_add_up_top").find("span").attr("class", "");
+    jQuery(".android_app_add_up_top").find("span").each(function(index, element) {
+        if (index == 0) jQuery(element).attr("class", "this");
+    });
+    jQuery(".android_app_add_up_center").show();
+    jQuery(".android_app_add_up_center_zt").hide();
+	jQuery("#img_list").find("span").attr("class","");
+}
+function submit_line() {
+    var line_info = "";
+    var edit_type = jQuery("#edit_type").val();
+    var submit_able = 1;
+    jQuery.each(jQuery("input[id^='line_info_']"),
+    function(index, value) {
+        var sb = jQuery(value).val();
+		if (sb != "") {
+			var po = jQuery(this).attr("name").slice(-1);
+            line_info = line_info + sb + "," + po+ ";";
+        }
+    });
+    if (submit_able == 1) {
+        jQuery("#line_info").val(line_info);
+    } else {
+        submit_able = 0;
+    }
+    if (submit_able == 1) {
+        var params = jQuery("#theForm").serialize();
+        jQuery.ajax({
+            type: 'POST',
+            url: '$!webPath/seller/wap_index_save',
+            data: params,
+            success: function(data) { 
+                phone_preview();
+            }
+        });
+    }
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/seller/top")
+<div class="main">
+  <div class="seller_center"> $!httpInclude.include("/seller/nav?op=wap_store_decorate")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index">商家中心</a></b>><b>我的店铺</b>><b>wap店铺装修</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li class="this"><a href="$!webPath/seller/store_notice"><i></i>wap店铺装修</a></li>
+          </ul>
+        </div>
+        <div class="operation_n">
+    <h3>友情提示</h3>
+    <ul>
+    <li>
+    * 单行类两张图片和商品类在wap端可以显示标题
+	</li>
+    <li>
+    * 建议为首页专美制作图片而不是使用商品图片，可以提高首页的美观程度。单行类模板高度不限，但需要保持同一行高度相同才能获得最佳效果。跨行类模板按照模板比例添加图片。幻灯类显示高度按照最高的图片显示，建议保证每张图片高度一致
+	</li>
+    <li>
+    * 本站内链接直接写请求名称即可，站外连接请写完整的链接（包括http://或https://）。
+	</li>
+    </ul>
+  </div>
+        <div class="seller_list_box">
+          <div class="android_app_template">
+            <div class="and_fl"><a class="and_add" href="javascript:void(0)" onclick="add_floor()">添加楼层</a>
+              <div class="and_scroll_box">
+                <div class="and_preview"></div>
+              </div>
+            </div>
+            <div class="and_fr">
+              <div id="edit_table"> </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="android_app_add_bg" style="display:none"></div>
+<div class="android_app_add_up" style="display:none">
+  <div class="android_app_add_up_top"> <span class="this">点击类型</span> <span>图片选择</span> </div>
+  <!--商品选择 -->
+  <div class="android_app_add_up_center"> 
+    
+    <!--类型选择 -->
+    <div class="add_up_center_select"> <span class="add_up_center_select_left">选择类型：</span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="click_type" type="radio" value="goods" checked="checked"/>
+        </i><b>商品</b></label>
+      </span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="click_type" type="radio" value="url" />
+        </i><b>手机专题页</b></label>
+      </span> </div>
+    <!-- 商品 -->
+    <div class="add_up_center_select_left_sp" use="click_type_goods"> 
+      <!--查找 -->
+      <div class="add_up_center_select_search">
+        <div class="add_up_center_select_search_left">
+       	<span class="fl">商品名称：</span>
+          <input name="goods_name" id="goods_name" type="text" placeholder="商品名称关键字" />
+        </div>
+        <div class="add_up_center_select_search_left">
+          <select name="gc_id" id="gc_id">
+            <option value="">请选择商品分类...</option>
+        		#genericTree($!gcs)                         
+          </select>
+        </div>
+        <div class="add_up_center_select_search_left" style="margin-left:16px">
+         <select name="activity_name" id="activity_name" class="channal_goods_select">
+             <option value="">全部商品...</option>
+              <option value="group_buy">团购商品</option>
+              <option value="combin_status">组合销售商品</option>
+              <option value="enough_reduce">满就减商品</option>
+              <option value="order_enough_give_status">满就送商品</option>
+              <option value="order_enough_if_give">满就送赠品</option>
+              <option value="f_sale_type">F码商品</option>
+              <option value="advance_sale_type">预售</option>
+              <option value="activity_status">商城促销</option>
+          </select>
+        </div>
+        <div class="add_up_center_select_search_right"><a href="javascript:void(0)" onclick="search_goods()">搜索</a></div>
+      </div>
+      <!--商品列表 -->
+      <div class="add_up_center_select_list" id="goods_list"> </div>
+    </div>
+    <input type="hidden" id="goods_id" name="goods_id" />
+    <input type="hidden" id="img_url" name="img_url" />
+    <!-- 手机专题页 -->
+    <div class="add_up_center_select_left_sj"  style="display:none;" use="click_type_url">
+      <div class="add_up_center_select_left_sj_c"> <span>专题链接：</span> <b>
+        <input name="url_link" id="url_link" type="text" />
+        </b> </div>
+    </div>
+    <!--确定按钮 --> 
+  </div>
+  <!-- 手机专题 -->
+  <div class="android_app_add_up_center_zt" style="display:none;"> 
+    <!--类型选择 -->
+    <div class="add_up_center_select"> <span class="add_up_center_select_left">图片选择：</span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="img_type" type="radio" value="album"  checked="checked" />
+        </i><b>相册</b></label>
+      </span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="img_type" type="radio" value="upload" />
+        </i><b>上传</b></label>
+      </span><span class="add_up_center_select_right" style="display:none;" id="img_type_goods">
+      <label><i>
+        <input name="img_type" type="radio" value="goods" />
+        </i><b>商品</b></label>
+      </span> </div>
+    <!--相册 -->
+    <div class="add_up_center_select_search_left_photo"  use="img_type_album"> 
+      <!--查找 -->
+      <div class="add_up_center_select_search">
+        <div class="add_up_center_select_search_left_name">选择相册</div>
+        <div class="add_up_center_select_search_left">
+          <select name="album_id" id="album_id">
+            
+          #foreach($album in $albums)      		
+            
+            <option value="$!album.id">$!album.album_name</option>
+                      
+          #end         
+          
+          </select>
+        </div>
+      </div>
+      <div class="add_up_center_select_list" id="img_list">
+        <ul>
+        </ul>
+      </div>
+      <div class="add_up_fy"></div>
+    </div>
+    <!--上传 -->
+    <div class="add_up_center_up" style="display:none;" use="img_type_upload">
+      <div class="add_up_center_up_t"> <b>
+        <input  id="upload_img" name="upload_img" type="file" />
+        </b> <i>点击上传图片</i> <span>若替换图片请重新上传</span> </div>
+      <div class="add_up_center_up_b"> <span> <i id="uploaded_img"></i> </span> </div>
+    </div>
+    <!--商品列表 -->
+    <div class="add_up_center_select_list" use="img_type_goods" style="display:none;">
+      <ul>
+      </ul>
+      <div class="floor_page"></div>
+    </div>
+  </div>
+  <div class="app_add_up_bottom"> <span><a href="javascript:void(0)" onclick="floor_submit()">确定</a></span> <span class="this"><a href="javascript:void(0)" onclick="cancle_edit()">取消</a></span> </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

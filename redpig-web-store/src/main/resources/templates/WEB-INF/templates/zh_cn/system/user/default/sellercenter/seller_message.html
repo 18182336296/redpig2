@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-系统通知- $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script>
+jQuery(document).ready(function(){
+						
+});<!--end-->
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+<div class="store_main">
+<div class="seller_center">
+<div class="seller_center_left"> $!httpInclude.include("/nav?op=store_message") </div>
+<div class="seller_right">
+  <div class="seller_position"><span><b><a href="$!webPath/index">商家中心</a></b>><b>我的店铺</b>><b>系统通知</b></span></div>
+  <div class="seller_list">
+    <div class="seller_list_title">
+      <ul class="seller_title_ul">
+        <li class="this"><a href="$!webPath/message"><i></i>通知列表</a></li>
+      </ul>
+    </div>
+          #if($!objs.size()>0)
+        <form method="post" name="ListForm" id="ListForm" action="$!webPath/message">
+          <div class="user_list_box">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_order_table">
+              <tr>
+                <th width="6%"></th>
+                <th width="22%">时间</th>
+                <th width="30%">内容</th>
+                <th width="15%">发送人</th>
+                <th>操作</th>
+              </tr>
+              #foreach($obj in $objs)
+              <tr>
+                <td align="center">
+                 <span class="checkpro" style="padding-left:0px">
+                  <label ><input name="checkbox"  class="ace" type="checkbox" id="checkbox" value="$!obj.id" /><span class="lbl"></span></label>
+                 </span>
+                </td>
+                <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                <td align="center">$!CommUtil.substring("$!obj.content",50)</td>
+                <td align="center"> 
+                #if($!obj.status==0)<span style="color:#FF0000;">未读#else<span>已读</span>#end
+                <td align="center">
+                <a href="$!webPath/message_info?id=$!obj.id" class="del_c_b" >查看</a>
+                <a href="javascript:void(0);"  onclick="showDialog('msg_info','','是否确定删除短信?',1,'question',3,function(){window.location.href='$!webPath/message_del?mulitId=$!obj.id'});"text");       
+                " class="del_c_b">删除</a>
+                </td>
+              </tr>
+              #end
+            </table>
+          </div>
+         <div class="userlist_allop">
+          <input name="mulitId" type="hidden" id="mulitId" />
+           <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          <div class="operation_box">
+        	<div class="operation_left">
+        	 <ul>
+            	<li style="margin-left:12px">
+                  <label>
+                     <input class="ace" type="checkbox" onclick="selectAll(this);" /><span class="lbl"> 全选</span>
+                  </label>
+                </li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/message_del')">批量删除</a></li>
+             </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="page"> 
+                  $!gotoPageFormHTML 
+                </div>
+            </div>
+          </div>
+         </div>
+       </form>
+          #else
+        <table>
+                <tr>
+              <td colspan="4" align="center"><div class="seller_center_nothing">
+                  <div class="seller_center_nothing_left"><img src="$!cdnServer/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                  <div class="seller_center_nothing_right">暂时没有数据</div>
+                </div></td>
+            </tr>
+            </table>
+        #end
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

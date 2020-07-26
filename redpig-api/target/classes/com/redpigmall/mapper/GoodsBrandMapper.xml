@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoodsBrandMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoodsBrand">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="recommend" property="recommend" jdbcType="BIT"/>
+		<result column="audit" property="audit" jdbcType="INTEGER"/>
+		<result column="userStatus" property="userStatus" jdbcType="INTEGER"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+		<result column="first_word" property="first_word" jdbcType="VARCHAR"/>
+		<result column="show_index" property="show_index" jdbcType="BIT"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<association property="brandLogo" column="brandLogo_id" fetchType="lazy" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="category" column="category_id" fetchType="lazy" select="com.redpigmall.dao.GoodsBrandCategoryMapper.selectByPrimaryKey"/>
+		<association property="gc" column="gc_id" fetchType="lazy" select="com.redpigmall.dao.GoodsClassMapper.selectByPrimaryKey"/>
+		<collection property="types" column="id" fetchType="lazy" select="com.redpigmall.dao.GoodsTypeMapper.getGbsByGoodsBrandId"/>
+		<collection property="goods_list" column="id" fetchType="lazy" select="com.redpigmall.dao.GoodsMapper.getGoodsBrandByGoodsBrandId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoodsBrand">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="sequence" property="sequence" jdbcType="INTEGER"/>
+		<result column="recommend" property="recommend" jdbcType="BIT"/>
+		<result column="audit" property="audit" jdbcType="INTEGER"/>
+		<result column="userStatus" property="userStatus" jdbcType="INTEGER"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+		<result column="first_word" property="first_word" jdbcType="VARCHAR"/>
+		<result column="show_index" property="show_index" jdbcType="BIT"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,name,sequence,brandLogo_id,recommend,audit,userStatus,store_id,remark,category_id,first_word,show_index,gc_id,mobile_recommend,mobile_recommendTime,weixin_recommend,weixin_recommendTime
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="redPig_id != null">and id != #{redPig_id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="name != null">and name = #{name,jdbcType=VARCHAR}</if>
+		<if test="name_like != null">and obj.name like CONCAT('%',#{name_like},'%') </if>
+		<if test="sequence != null">and sequence = #{sequence,jdbcType=INTEGER}</if>
+		<if test="recommend != null">and recommend = #{recommend,jdbcType=BIT}</if>
+		<if test="audit != null">and audit = #{audit,jdbcType=INTEGER}</if>
+		<if test="userStatus != null">and userStatus = #{userStatus,jdbcType=INTEGER}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="remark != null">and remark = #{remark,jdbcType=VARCHAR}</if>
+		<if test="first_word != null">and first_word = #{first_word,jdbcType=VARCHAR}</if>
+		<if test="show_index != null">and show_index = #{show_index,jdbcType=BIT}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=INTEGER}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="weixin_recommend != null">and weixin_recommend = #{weixin_recommend,jdbcType=INTEGER}</if>
+		<if test="weixin_recommendTime != null">and weixin_recommendTime = #{weixin_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="redPig_name!=null">and name like CONCAT('%','${redPig_name}','%' )</if>
+		<if test="category_id != null">and category_id = #{category_id,jdbcType=BIGINT}</if>
+		<if test="gc_id != null">and gc_id = #{gc_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		name= #{name},
+		sequence= #{sequence},
+		<if test="brandLogo != null and brandLogo.id != null">brandLogo_id = #{brandLogo.id,jdbcType=BIGINT},</if>
+		<if test="brandLogo == null or brandLogo.id == null">brandLogo_id = null,</if>
+		recommend= #{recommend},
+		audit= #{audit},
+		userStatus= #{userStatus},
+		store_id= #{store_id},
+		remark= #{remark},
+		<if test="category == null or category.id == null">category_id = null,</if>
+		<if test="category != null and category.id != null">category_id = #{category.id,jdbcType=BIGINT},</if>
+		first_word= #{first_word},
+		show_index= #{show_index},
+		<if test="gc == null or gc.id == null">gc_id = null,</if>
+		<if test="gc != null and gc.id != null">gc_id = #{gc.id,jdbcType=BIGINT},</if>
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+		weixin_recommend= #{weixin_recommend},
+		weixin_recommendTime= #{weixin_recommendTime},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodsbrand 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_goodsbrand obj 
+		<if test="category_name_like != null">
+			JOIN redpigmall_brandcategory bc 
+			ON  (bc.name LIKE CONCAT('%','${category_name_like}','%' ) AND obj.category_id=bc.id)
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/>
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+					ORDER BY ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+					ORDER BY obj.sequence asc
+			</otherwise>
+		</choose> 
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_goodsbrand obj 
+		<if test="category_name_like != null">
+			JOIN redpigmall_brandcategory bc
+			ON  (bc.name LIKE CONCAT('%','${category_name_like}','%' ) AND obj.category_id=bc.id)
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType !=null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<update id="update" parameterType="com.redpigmall.domain.GoodsBrand">
+		update redpigmall_goodsbrand 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<insert id="save" parameterType="com.redpigmall.domain.GoodsBrand" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_goodsbrand(
+			addTime,
+			deleteStatus,
+			name,
+			sequence,
+			recommend,
+			audit,
+			userStatus,
+			store_id,
+			remark,
+			first_word,
+			show_index,
+			mobile_recommend,
+			mobile_recommendTime,
+			weixin_recommend,
+			weixin_recommendTime
+		)
+		values(
+			#{addTime,jdbcType=TIMESTAMP},
+			#{deleteStatus,jdbcType=INTEGER},
+			#{name,jdbcType=VARCHAR},
+			#{sequence,jdbcType=INTEGER},
+			#{recommend,jdbcType=BIT},
+			#{audit,jdbcType=INTEGER},
+			#{userStatus,jdbcType=INTEGER},
+			#{store_id,jdbcType=BIGINT},
+			#{remark,jdbcType=VARCHAR},
+			#{first_word,jdbcType=VARCHAR},
+			#{show_index,jdbcType=BIT},
+			#{mobile_recommend,jdbcType=INTEGER},
+			#{mobile_recommendTime,jdbcType=TIMESTAMP},
+			#{weixin_recommend,jdbcType=INTEGER},
+			#{weixin_recommendTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<delete id="deleteGoodsBrandAndGoodsType" parameterType="java.util.List">
+		delete from redpigmall_goodstype_brand
+		where 
+		<foreach collection="list" index="index" item="item" separator="or"> 
+            (type_id=#{item.type_id} and brand_id=#{item.brand_id})
+        </foreach>
+	</delete>
+	<insert id="saveGoodsBrandAndGoodsType" parameterType="java.util.List" >
+		insert into redpigmall_goodstype_brand (type_id,brand_id) 
+		values
+		<foreach collection="list" index="index" item="item" separator=","> 
+            (#{item.type_id,jdbcType=BIGINT} , #{item.brand_id,jdbcType=BIGINT})
+        </foreach>
+	</insert>
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from
+			redpigmall_goodsbrand
+		where
+			id = #{id,jdbcType=BIGINT}
+	</delete>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_goodsbrand obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getBrandLogoByAccessoryId" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsbrand
+		where
+			brandLogo_id= #{brandLogo_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getGbsByGoodsBrandId" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT GoodsType.* FROM redpigmall_goodstype GoodsType
+		JOIN redpigmall_goodstype_brand ftn ON ftn.type_id = GoodsType.id AND ftn.brand_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getCategoryByGoodsBrandCategoryId" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsbrand
+		where
+			category_id = #{category_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGcByGoodsClassId" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsbrand
+		where
+			gc_id = #{gc_id,jdbcType=BIGINT}
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoodsBrand" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_goodsbrand(addTime,deleteStatus,name,sequence,recommend,audit,userStatus,store_id,remark,first_word,show_index,mobile_recommend,mobile_recommendTime,weixin_recommend,weixin_recommendTime,brandLogo_id,category_id,gc_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{sequence,jdbcType=INTEGER},#{recommend,jdbcType=BIT},#{audit,jdbcType=INTEGER},#{userStatus,jdbcType=INTEGER},#{store_id,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR},#{first_word,jdbcType=VARCHAR},#{show_index,jdbcType=BIT},#{mobile_recommend,jdbcType=INTEGER},#{mobile_recommendTime,jdbcType=TIMESTAMP},#{weixin_recommend,jdbcType=INTEGER},#{weixin_recommendTime,jdbcType=TIMESTAMP},#{brandLogo.id,jdbcType=BIGINT},#{category.id,jdbcType=BIGINT},#{gc.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoodsBrand">
+		update redpigmall_goodsbrand
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_goodsbrand where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_goodsbrand where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_goodsbrand obj 
+		<if test="category_name_like != null">
+			JOIN redpigmall_brandcategory bc
+			ON  (bc.name LIKE CONCAT('%','${category_name_like}','%' ) AND obj.category_id=bc.id)
+		</if>
+		
+		<where>
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType !=null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap2" parameterType="map">
+		select obj.* from redpigmall_goodsbrand obj 
+		<if test="category_name_like != null">
+			JOIN redpigmall_brandcategory bc
+			ON  (bc.name LIKE CONCAT('%','${category_name_like}','%' ) AND obj.category_id=bc.id)
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.sequence asc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodsbrand
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_goodsbrand where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<select id="getGbsByGoodsTypeId" resultType="com.redpigmall.domain.GoodsBrand" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT GoodsBrand.* FROM redpigmall_goodsbrand GoodsBrand 
+		JOIN redpigmall_goodstype_brand ftn ON ftn.brand_id = GoodsBrand.id AND ftn.type_id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryListWithNoRelations" parameterType="map" resultType="map">
+		select brands.id, brands.first_word, brands.name, acc.path, acc.name as photoName
+		from redpigmall_goodsbrand as brands, redpigmall_accessory as acc
+		where 1 = 1
+		<if test="deleteStatus != null">
+		and brands.deleteStatus = #{deleteStatus}
+		</if>
+		<if test="audit != null">
+		and brands.audit = #{audit}
+		</if>
+		and brands.brandLogo_id = acc.id
+		order by brands.sequence asc
+
+		
+	</select>
+</mapper>

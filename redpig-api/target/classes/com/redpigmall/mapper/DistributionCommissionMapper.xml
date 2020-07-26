@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.DistributionCommissionMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.DistributionCommission">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<!--<result column="user_id" property="user_id" jdbcType="BIGINT"/>-->
+        <result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+        <result column="balance_price" property="balance_price" jdbcType="DECIMAL" />
+        <result column="sum_price" property="sum_price" jdbcType="DECIMAL" />
+        <result column="down_sum_price" property="down_sum_price" jdbcType="DECIMAL" />
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+		<result column="grade" property="grade" jdbcType="VARCHAR"/>
+		<result column="grade_id" property="grade_id" jdbcType="BIGINT"/>
+		<result column="nickName" property="nickName" jdbcType="VARCHAR"/>
+		<result column="sum_order" property="sum_order" jdbcType="INTEGER"/>
+		<result column="sum_user" property="sum_user" jdbcType="INTEGER"/>
+
+		<association property="user" column="user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,user_id,user_name,balance_price,sum_price,sum_deal_price,down_sum_price,addTime,update_time,grade,grade_id,nickName,sum_order,sum_user
+	</sql>
+
+	<sql id="ifStatement">
+		user_name= #{user_name},
+		balance_price= #{balance_price},
+		sum_price= #{sum_price},
+		sum_deal_price= #{sum_deal_price},
+		down_sum_price= #{down_sum_price},
+		grade= #{grade},
+		grade_id=#{grade_id},
+		nickName= #{nickName},
+		sum_order= #{sum_order},
+		sum_user= #{sum_user}
+	</sql>
+
+	<sql id="whereStatement">
+		<if test="id!=null">and id =#{id,jdbcType=BIGINT}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=INTEGER}</if>
+	</sql>
+
+	<sql id="whereStatement2">
+		<if test="grade_id !=null">
+			obj.grade_id = #{grade_id,jdbcType=INTEGER}
+		</if>
+		<if test="beginTime !=null and endTime !=null">
+			and DATE_FORMAT(ud.addTime, '%Y-%m-%d') <![CDATA[ >= ]]> #{beginTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="endTime !=null">
+			and DATE_FORMAT(ud.addTime, '%Y-%m-%d') <![CDATA[ <= ]]> #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="mobile !=null">
+			and u.mobile = #{mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="type==1">
+			<choose>
+				<when test="parent_user_id !=null and type==1">
+					and ud.parent_user_id=#{parent_user_id,jdbcType=VARCHAR}
+				</when>
+				<otherwise>
+					and ud.parent_user_id=0
+				</otherwise>
+			</choose>
+		</if>
+		<if test="type==2">
+			<choose>
+				<when test="parent_user_id !=null and type==2">
+					and ud.parent_user_id  in (select ud2.id from redpigmall_user_distribution as ud2 WHERE ud2.parent_user_id=#{parent_user_id,jdbcType=VARCHAR})
+				</when>
+				<otherwise>
+					and ud.parent_user_id  in (select ud2.id from redpigmall_user_distribution as ud2 WHERE ud2.parent_user_id=0)
+				</otherwise>
+			</choose>
+		</if>
+
+	</sql>
+
+	<!--主键查询-->
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.DistributionCommission" resultMap="BaseResultMap" useCache="true" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_distribution_commission
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<!--通过分销商id查询-->
+	<select id="selectByUserId" resultType="com.redpigmall.domain.DistributionCommission" resultMap="BaseResultMap" useCache="true" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_distribution_commission
+		where user_id = #{user.id,jdbcType=BIGINT}
+	</select>
+
+
+    <!--分页查询-->
+    <select id="queryPageList" resultType="com.redpigmall.domain.DistributionCommission" resultMap="BaseResultMap" parameterType="map">
+        SELECT obj.* FROM redpigmall_distribution_commission obj
+		LEFT JOIN redpigmall_user_distribution AS ud
+		ON  ud.user_id =obj.user_id
+		<if test="mobile !=null">
+			LEFT JOIN redpigmall_user u on  u.id=obj.user_id and ud.user_id=u.id
+		</if>
+
+		where 1=1
+		<include refid="whereStatement2"/>
+		<choose>
+            <when test="orderBy != null and orderType !=null">
+                order by ${orderBy} ${orderType}
+            </when>
+            <otherwise>
+                order by obj.addTime desc
+            </otherwise>
+        </choose>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryPages" resultType="com.redpigmall.domain.DistributionCommission" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_distribution_commission obj
+		LEFT JOIN redpigmall_user_distribution AS ud
+		ON  ud.user_id =obj.user_id
+		<if test="mobile !=null">
+			LEFT JOIN redpigmall_user u on  u.id=obj.user_id and ud.user_id=u.id
+		</if>
+		where 1=1
+		<include refid="whereStatement2"/>
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+				ORDER BY ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+				ORDER BY obj.addTime desc
+			</otherwise>
+		</choose>
+        <if test="currentPage !=null and pageSize !=null">
+            LIMIT #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <!--统计-->
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from redpigmall_distribution_commission obj
+		LEFT JOIN redpigmall_user_distribution AS ud
+		ON  ud.user_id =obj.user_id
+		<if test="mobile !=null">
+			LEFT JOIN redpigmall_user u on  u.id=obj.user_id and ud.user_id=u.id
+		</if>
+		where 1=1
+		<include refid="whereStatement2"/>
+    </select>
+
+	<update id="updateById" parameterType="com.redpigmall.domain.DistributionCommission">
+		update redpigmall_distribution_commission
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+    <!--插入语句-->
+    <insert id="saveEntity" parameterType="com.redpigmall.domain.DistributionAgreement" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_distribution_commission(user_id,user_name,balance_price,sum_price,addTime,grade,grade_id,nickName,sum_order,sum_user,down_sum_price)
+				values (
+				#{user.id,jdbcType=BIGINT},
+				#{user_name,jdbcType=VARCHAR},
+				#{balance_price,jdbcType=DECIMAL},
+				#{sum_price,jdbcType=DECIMAL},
+				#{addTime,jdbcType=TIMESTAMP},
+				#{grade,jdbcType=VARCHAR},
+				#{grade_id,jdbcType=BIGINT},
+				#{nickName,jdbcType=VARCHAR},
+				#{sum_order,jdbcType=INTEGER},
+				#{sum_user,jdbcType=INTEGER},
+				#{down_sum_price,jdbcType=DECIMAL}
+				)
+	</insert>
+
+</mapper>

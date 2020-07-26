@@ -1,0 +1,580 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/blue/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.base.js"></script>
+<script src="$!cdnServer/resources/js/jquery.metadata.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js"  charset="utf-8"></script>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<script>
+jQuery(document).ready(function(){
+	phone_preview();
+	
+	var album_id = jQuery("#album_id").val();
+	jQuery.post("$!webPath/weixinchannelfloor_imgs",{"album_id":album_id},function(text){
+		jQuery("#img_list").empty();																					  
+		jQuery("#img_list").append(text);		
+	},"text");
+	
+	jQuery("#album_id").live("change",function(element){
+		var album_id = jQuery("#album_id").val();
+	jQuery.post("$!webPath/weixinchannelfloor_imgs",{"album_id":album_id},function(text){
+		jQuery("#img_list").empty();																					  
+		jQuery("#img_list").append(text);		
+	},"text");		
+	});
+	
+	jQuery("#upload_img").live("change",function(){
+		jQuery.ajaxFileUpload({
+                url: '/admin/weixinchannelfloor_image_upload',
+                fileElementId: ["upload_img"],
+                fileFilter: "$!imageSuffix1",
+                data: {
+                },
+                dataType: 'json',
+                success: function(text) {
+                    var img = "<img src='$!imageWebServer/" + text.url + "'/>";
+					jQuery("#uploaded_img").empty();
+                    jQuery("#uploaded_img").append(img);
+					jQuery("#img_url").val(text.url);
+                }
+            });
+	});
+	
+	jQuery("#choose_type").find("li").live("click",function(){
+		if(jQuery(this).attr("class")!="this"){
+		jQuery(this).parent().find("li[class='this']").attr("class","");
+		jQuery(this).attr("class","this");
+		var use=jQuery(this).attr("use");
+		jQuery("#choose_template").find("li[use!='"+use+"']").hide();
+		jQuery("#choose_template").find("li[use='"+use+"']").show();
+		}
+	});
+	jQuery("#choose_url").find("li").live("click",function(){
+		if(jQuery(this).attr("class")!="this"){
+		jQuery(this).parent().find("li[class='this']").attr("class","");
+		jQuery(this).attr("class","this");
+		var url=jQuery(this).attr("url");
+		jQuery("#more_link").val(url);
+		}
+	});
+	jQuery("#choose_template").find("li").live("click",function(){
+		if(jQuery(this).attr("class")!="this"){
+			jQuery(this).parent().find("li[class='this']").attr("class","");
+			jQuery(this).attr("class","this");
+			var tem=jQuery(this).attr("tem");
+			jQuery("#template_tr").show();
+			jQuery("#template_td").empty();
+			var str="";
+			jQuery("#line_type").val(tem);
+			if(tem==1){
+				str="<div class='android_floor_01 wh700'><ul><li style='width:100%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li></ul></div>";
+			}
+			if(tem==2){
+				str="<div class='android_floor_01 wh700'><ul><li style='width:50%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:50%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li></ul></div>";
+			}
+			if(tem==11){
+				str="<div class='android_floor_01 wh700'><div style='text-align:right;width:642px; position:relative;'><span>更多</span></div><ul><li style='width: 324px; height: 326px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='325px' width='323px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='height: 162x; width: 325px'><ul> <li style='width: 162px; height: 161px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='161px' ; width='162px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li><li style='width: 162px; height: 161px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='161px' ; width='162px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_3' name='line_info_3' /></li></ul></li><li style='height: 162x; width: 325px'><ul> <li style='width: 162px; height: 161px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='161px' ; width='162px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_4' name='line_info_4' /></li><li style='width: 162px; height: 161px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='161px' ; width='162px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_5' name='line_info_5' /></li></ul></li></ul></div>";
+			}
+			jQuery("#template_td").append(str);
+		}
+	});
+	jQuery("#title").live("keyup",function(){
+		var title=jQuery(this).val();
+		jQuery("span[use='title']").html(title);
+	});
+	jQuery("#title").live("focusout",function(){
+		var title=jQuery(this).val();
+	});
+	jQuery("#status_button").live("click",function() {
+        var status = jQuery("#status").val();
+        if (status == "true") {
+            jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/blue/images/no.jpg");
+            jQuery("#status").val("false");
+        } else {
+            jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/blue/images/yes.jpg");
+            jQuery("#status").val("true");
+        }
+    });
+	jQuery(".and_tem_edit").live("click",function(){
+		var str=jQuery(this).next("input").val();
+		if(str!=""){
+			var type="";
+		jQuery.each(str.split(","),function(index,item){
+			if(index==0){
+				type=item;	
+				jQuery("div[use^='click_type_']").hide();
+				jQuery("input[name='click_type'][value='"+item+"']").attr("checked","checked");
+				jQuery("div[use='click_type_"+item+"']").show();
+			}
+			if(index==1){
+				if(type=="url")
+					jQuery("#url_link").val(item);
+				else
+					jQuery("#goods_id").val(item);
+			}
+			if(index==2){
+				jQuery("#img_url").val(item);
+			}
+		});
+		}
+		jQuery(".android_app_add_bg").show();
+		jQuery(".android_app_add_up").show();
+		jQuery(this).next("input").attr("edit","now");
+	});
+	jQuery("input[name='click_type']:checked").live("click",function(){
+		var type=jQuery(this).val();
+		jQuery("div[use^='click_type_']").hide();
+		jQuery("div[use='click_type_"+type+"']").show();
+		if(type=="url"){			
+			jQuery("div[use='img_type_goods']").hide();
+			jQuery("div[use='img_type_goods']").find("ul").empty();
+			jQuery("#img_type_goods").hide();
+			
+			if(jQuery("input[name='img_type']:checked").val()=="goods"){
+				jQuery("input[name='img_type']:checked").attr("checked","unchecked");				
+				jQuery.each(jQuery("input[name='img_type']"),function(index,item){
+					if(index==0){
+						jQuery(item).attr("checked","checked");
+						jQuery("div[use='img_type_album']").show();
+					}
+				});
+			}
+			jQuery("#goods_id").val("");
+		}
+	});
+	jQuery("input[name='img_type']:checked").live("click",function(){
+		var type=jQuery(this).val();
+		jQuery("div[use^='img_type_']").hide();
+		jQuery("div[use='img_type_"+type+"']").show();
+	});	
+	jQuery(".android_app_add_up_top").find("span").live("click",function(){
+		if(jQuery(this).attr("class")!="this"){
+			jQuery(".android_app_add_up_top").find("span").attr("class","");
+			jQuery(this).attr("class","this");
+			if(jQuery(this).index()==0){
+				jQuery(".android_app_add_up_center").show();
+				jQuery(".android_app_add_up_center_zt").hide();				
+			}else{
+				jQuery(".android_app_add_up_center").hide();
+				jQuery(".android_app_add_up_center_zt").show();		
+			}
+		}
+	});
+	
+	jQuery("#choose_url").find("li").live("click",function(){
+		if(jQuery(this).attr("class")!="this"){
+		jQuery(this).parent().find("li[class='this']").attr("class","");
+		jQuery(this).attr("class","this");
+		var url=jQuery(this).attr("url");
+		jQuery("#more_link").val(url);
+		}
+	});
+})
+function add_floor() {
+    if (jQuery(".and_add").html() == "添加楼层") {
+        jQuery.post("$!webPath/weixinchannelfloor_add", {"channel_id":$!channel_id},
+        function(text) {
+            if (text != null) {
+                jQuery("#edit_table").empty();
+                jQuery(".and_add").html("取消");
+                jQuery("#edit_table").append(text);
+            }
+        },
+        "text");
+    } else {
+        jQuery("#edit_table").empty();
+        jQuery(".and_add").html("添加楼层");
+    }
+}
+function edit_floor(id) {
+    jQuery.post("$!webPath/weixinchannelfloor_edit", {
+        "id": id,"channel_id":$!channel_id
+    },
+    function(text) {
+        if (text != null) {
+            jQuery("#edit_table").empty();
+            jQuery("#edit_table").append(text);
+            jQuery(".and_add").html("取消");
+        }
+    },
+    "text");
+}
+function del_floor(id) {
+    showDialog('msg_info', '', '确认删除楼层吗?', 1, 'question', 3,
+    function() {
+        jQuery.post("$!webPath/weixinchannelfloor_del", {
+            "mulitId": id
+        },
+        function(text) {
+            if (text != null && text == "true") {
+                phone_preview();
+            }
+        },
+        "text");
+    });
+}
+
+function edit_line(id, num) {
+    jQuery.post("$!webPath/weixinchannelfloor_line_edit", {
+        "id": id,
+        "num": num
+    },
+    function(text) {
+        if (text != null) {
+            jQuery("#edit_table").empty();
+            jQuery("#edit_table").append(text);
+            jQuery(".and_add").html("取消");
+        }
+    },
+    "text");
+}
+
+function submit_line() {
+    var line_info = "";
+    var edit_type = jQuery("#edit_type").val();
+    var submit_able = 1;
+
+    jQuery.each(jQuery("input[id^='line_info_']"),
+    function(index, value) {
+        var sb = jQuery(value).val();
+        if (sb != "") {
+            line_info = line_info + sb + ";";
+        } else {
+            submit_able = 0;
+        }
+    });
+    if (submit_able == 1) {
+        jQuery("#line_info").val(line_info)
+    } else {
+        submit_able = 1;
+    }
+
+    if (edit_type == "all") {
+        if (submit_able == 1 && jQuery("#title").val() == "") {
+            showDialog("msg_info", "", "请填写楼层标题！", 2, "warning", 3, '');
+            submit_able = 0;
+        }
+        if (submit_able == 1 && jQuery("#line_type").val() == "") {
+            showDialog("msg_info", "", "请选择模板！", 2, "warning", 3, '');
+            submit_able = 0;
+        }
+        if (submit_able == 1 && jQuery("#line_info").val() == "") {
+            showDialog("msg_info", "", "请编辑行信息！", 2, "warning", 3, '');
+            submit_able = 0;
+        }
+    }
+    if (edit_type == "floor") {
+        if (submit_able == 1 && jQuery("#title").val() == "") {
+            showDialog("msg_info", "", "请填写楼层标题！", 2, "warning", 3, '');
+            submit_able = 0;
+        }
+    }
+    if (edit_type == "line") {
+        if (submit_able == 1 && jQuery("#line_type").val() == "") {
+            showDialog("msg_info", "", "请选择模板！", 2, "warning", 3, '');
+            submit_able = 0;
+        }
+        if (submit_able == 1 && jQuery("#line_info").val() == "") {
+            showDialog("msg_info", "", "请编辑行信息！", 2, "warning", 3, '');
+            submit_able = 0;
+        }
+    }
+    if (submit_able == 1) {
+        var params = jQuery("#theForm").serialize();
+        jQuery.ajax({
+            type: 'POST',
+            url: '$!webPath/weixinchannelfloor_line_save',
+            data: params,
+            success: function(data) {
+                data = eval("(" + data + ")");
+                phone_preview();
+            }
+        });
+    }
+}
+function phone_preview() {
+    jQuery.post("$!webPath/weixinchannelfloor_list_preview",{"channel_id":$!channel_id},
+    function(text) {
+        if (text != null) {
+            jQuery("#edit_table").empty();
+            jQuery(".and_preview").empty();
+            jQuery(".and_preview").append(text);
+            jQuery(".and_add").html("添加楼层");
+        }
+    },
+    "text");
+}
+function cancle_edit() {
+    reset_dialog();
+    jQuery(".android_app_add_bg").hide();
+    jQuery(".android_app_add_up").hide();
+}
+function search_goods() {
+    var goods_name = jQuery("#goods_name").val();
+    var gc_id = jQuery("#gc_id").val();
+    jQuery.post("$!webPath/weixinchannelfloor_goods_search", {
+        "goods_name": goods_name,
+        "gc_id": gc_id
+    },
+    function(text) {
+        if (text != null) {
+            jQuery("#goods_list").empty();
+            jQuery("#goods_list").append(text);
+        }
+    },
+    "text");
+}
+function ajaxPage(url, page, obj) {
+    var list = jQuery(obj).parent().parent().attr("use");
+    var album_id = jQuery("#album_id").val();
+    jQuery.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+            "currentPage": page,
+            "album_id": album_id
+        },
+        success: function(data) {
+            jQuery("#" + list).empty().append(data);
+        }
+    });
+}
+function goods_list_set(element) {
+    jQuery(element).parent().find("span").attr("class", "");
+    jQuery(element).find("span").attr("class", "this");
+    var goods_id = jQuery(element).attr("goods_id");
+    jQuery("#goods_id").val(goods_id);
+
+    jQuery("#img_type_goods").show();
+    jQuery("div[use='img_type_goods']").find("ul").empty();
+
+    var img_uri = jQuery(element).attr("path");
+    jQuery.each(img_uri.split(","),
+    function(index, item) {
+        jQuery("div[use='img_type_goods']").find("ul").append("<li><span><img onclick='select_img(this)' path='"+item+"'  src='$!imageWebServer/" + item + "' /><i></i></span></li>");
+    });
+	jQuery(".android_app_add_up_top span").removeClass("this");
+	jQuery(".android_app_add_up_top span:eq(1)").addClass("this");
+	jQuery(".android_app_add_up_center").hide();
+    jQuery(".android_app_add_up_center_zt").show();	
+	jQuery("div[use^='img_type_']").hide();
+	jQuery(":radio[name=img_type]").attr("checked",true);
+	select_img(jQuery("div[use='img_type_goods'] li:eq(0)").find("img"));
+	jQuery("div[use='img_type_goods']").show();
+}
+function select_img(element) {
+    jQuery(element).parent().parent().parent().find("span").attr("class", "");
+    var src = jQuery(element).attr("path");
+    jQuery(element).parent().attr("class", "this");
+    jQuery("#img_url").val(src);
+}
+function floor_submit() {
+    var str = "";
+    var add = 1;
+    var img_url = "";
+    if (jQuery("input[name='click_type']:checked").val() == "goods") {
+        str = str + "goods,"
+        var goods_id = jQuery("#goods_id").val();
+        if (goods_id != "") {
+            str = str + goods_id + ",";
+        } else {
+            add = 0;
+            showDialog("msg_info", "", "请选择商品！", 2, "warning", 3, '');
+        }
+    } else {
+        str = str + "url,"
+        var url_link = jQuery("#url_link").val();
+        if (url_link != "") {
+            str = str + url_link + ",";
+        } else {
+            add = 0;
+            showDialog("msg_info", "", "请编辑点击链接！", 2, "warning", 3, '');
+        }
+    }
+    if (add == 1) {
+        img_url = jQuery("#img_url").val();
+        if (img_url != "") {
+            str = str + img_url;
+        } else {
+            add = 0;
+            showDialog("msg_info", "", "请选择图片！", 2, "warning", 3, '');
+        }
+    }
+    if (add == 1) {        
+        jQuery("input[edit='now']").val(str);
+        jQuery("input[edit='now']").parent().find("img").attr("src", "$!imageWebServer/"+img_url);
+		if(jQuery("#line_type").val()<6){
+			jQuery("input[edit='now']").parent().find("img").attr("height", "100%");
+			jQuery("input[edit='now']").parent().parent().attr("height","100%");
+		}
+        jQuery("input[edit='now']").attr("edit", "");
+        jQuery(".android_app_add_bg").hide();
+        jQuery(".android_app_add_up").hide();
+		reset_dialog();
+    }
+}
+function reset_dialog() {
+    jQuery("#goods_id").val("");
+    jQuery("#url_link").val("");
+    jQuery("#img_url").val("");
+    jQuery("#goods_list").empty();
+    jQuery("#uploaded_img").empty();
+    jQuery("div[use='img_type_goods']").hide();
+    jQuery("div[use='img_type_goods']").find("ul").empty();
+    jQuery("#img_type_goods").hide();
+    jQuery(".android_app_add_up_top").find("span").attr("class", "");
+    jQuery(".android_app_add_up_top").find("span").each(function(index, element) {
+        if (index == 0) jQuery(element).attr("class", "this");
+    });
+    jQuery(".android_app_add_up_center").show();
+    jQuery(".android_app_add_up_center_zt").hide();
+	jQuery("#img_list").find("span").attr("class","");
+}
+</script>
+</head>
+<body>
+<div class="android_app_template">
+  <div class="operation">
+    <h3>操作指南</h3>
+    <ul>
+      <li>微商城二级频道使用楼层布局，每个楼层由一个标题和多行组成。每一行提供多种模板，供您自由组合，打造特色的微商城首页。</li>
+      <li>建议为二级频道专美制作图片而不是使用商品图片，可以提高首页的美观程度。单行类模板高度不限，但需要保持同一行高度相同才能获得最佳效果。跨行类模板只支持固定的图片比例。</li>
+      <li>本站内链接直接写请求名称即可，站外连接请写完整的链接（包括http://或https://）。</li>
+    </ul>
+  </div>
+  <div class="and_fl"> <a class="and_add" href="javascript:void(0)" onclick="add_floor()">添加楼层</a>
+    <div class="and_scroll_box">
+      <div class="and_preview"> </div>
+    </div>
+  </div>
+  <div class="and_fr">
+    <div id="edit_table"> </div>
+  </div>
+</div>
+<!--APP 商品选择 弹出 -->
+<div class="android_app_add_bg" style="display:none"></div>
+<div class="android_app_add_up" style="display:none">
+  <div class="android_app_add_up_top"> <span class="this">点击类型</span> <span>图片选择</span> </div>
+  <!--商品选择 -->
+  <div class="android_app_add_up_center"> 
+    
+    <!--类型选择 -->
+    <div class="add_up_center_select"> <span class="add_up_center_select_left">选择类型：</span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="click_type" type="radio" value="goods" checked="checked"/>
+        </i><b>商品</b></label>
+      </span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="click_type" type="radio" value="url" />
+        </i><b>微商城专题页</b></label>
+      </span> </div>
+    <!-- 商品 -->
+    <div class="add_up_center_select_left_sp" use="click_type_goods"> 
+      <!--查找 -->
+      <div class="add_up_center_select_search">
+        <div class="add_up_center_select_search_left">
+          <input name="goods_name" id="goods_name" type="text" placeholder="商品名称关键字" />
+        </div>
+        <div class="add_up_center_select_search_left">
+          <select name="gc_id" id="gc_id">
+            <option value="">请选择商品分类...</option>
+            
+            
+        #genericTree($!gcs)       
+          
+          
+          </select>
+        </div>
+        <div class="add_up_center_select_search_right"><a href="javascript:void(0)" onclick="search_goods()">搜索</a></div>
+      </div>
+      
+      <!--商品列表 -->
+      <div class="add_up_center_select_list" id="goods_list"> </div>
+    </div>
+    <input type="hidden" id="goods_id" name="goods_id" />
+    <input type="hidden" id="img_url" name="img_url" />
+    
+    <!-- 手机专题页 -->
+    <div class="add_up_center_select_left_sj"  style="display:none;" use="click_type_url">
+      <div class="add_up_center_select_left_sj_c"> <span>专题链接：</span> <b>
+        <input name="url_link" id="url_link" type="text" />
+        </b> </div>
+    </div>
+    <!--确定按钮 --> 
+    
+  </div>
+  
+  <!-- 手机专题 -->
+  <div class="android_app_add_up_center_zt" style="display:none;"> 
+    <!--类型选择 -->
+    <div class="add_up_center_select"> <span class="add_up_center_select_left">图片选择：</span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="img_type" type="radio" value="album"  checked="checked" />
+        </i><b>相册</b></label>
+      </span> <span class="add_up_center_select_right">
+      <label><i>
+        <input name="img_type" type="radio" value="upload" />
+        </i><b>上传</b></label>
+      </span><span class="add_up_center_select_right" style="display:none;" id="img_type_goods">
+      <label><i>
+        <input name="img_type" type="radio" value="goods" />
+        </i><b>商品</b></label>
+      </span> </div>
+    
+    <!--相册 -->
+    <div class="add_up_center_select_search_left_photo"  use="img_type_album"> 
+      <!--查找 -->
+      <div class="add_up_center_select_search">
+        <div class="add_up_center_select_search_left_name">选择相册</div>
+        <div class="add_up_center_select_search_left">
+          <select name="album_id" id="album_id">
+            
+          #foreach($album in $albums)
+      		
+            <option value="$!album.id">$!album.album_name</option>
+            
+          #end
+          
+          </select>
+        </div>
+      </div>
+      <div class="add_up_center_select_list" id="img_list">
+        <ul>
+        </ul>
+      </div>
+      <div class="add_up_fy"></div>
+    </div>
+    
+    <!--上传 -->
+    <div class="add_up_center_up" style="display:none;" use="img_type_upload">
+      <div class="add_up_center_up_t"> <b>
+        <input  id="upload_img" name="upload_img" type="file" />
+        </b> <i>点击上传图片</i> <span>若替换图片请重新上传</span> </div>
+      <div class="add_up_center_up_b"> <span> <i id="uploaded_img"></i> </span> </div>
+    </div>
+    <!--商品列表 -->
+    <div class="add_up_center_select_list" use="img_type_goods" style="display:none;">
+      <ul>
+      </ul>
+      <div class="floor_page"></div>
+    </div>
+  </div>
+  <div class="app_add_up_bottom"> <span><a href="javascript:void(0)" onclick="floor_submit()">确定</a></span> <span class="this"><a href="javascript:void(0)" onclick="cancle_edit()">取消</a></span> </div>
+</div>
+</body>
+</html>

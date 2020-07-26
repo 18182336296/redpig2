@@ -1,0 +1,11 @@
+﻿<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.wap.common.js"></script>
+<div class="store_foot">
+	<ul>
+    	<li><a href="$!webPath/wap/index">首页</a></li>
+        <li><a href="$!webPath/wap/store_class_list?id=$!store.id">宝贝分类</a></li>
+        <li><a href="$!webPath/wap/store_items?store_id=$!store.id&submit_type=store&all=all">全部宝贝</a></li>
+        <li class="service"> #if($!userTools.adminOnLine()=="true") <a  #if(!$!user) href="$!webPath/wap/login"  #else  href="javascript:void(0);"  onClick="open_im('','$!webPath','user','plat','$!store.id','before-sales');" #end > #else <a  #if(!$!user) href="$!webPath/wap/login"  #else href="javascript:void(0);" onclick="if(confirm('客服当前不在线，是否继续?'))open_im('','$!webPath','user','plat','$!store.id','before-sales');" #end  > #end<p><img src="$!cdnServer/resources/style/system/front/default/images/weixin/store_service.png" /></p><p>客服</p></a></li>
+    </ul>
+</div>

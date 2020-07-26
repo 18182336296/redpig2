@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>商品物流</title>
+<link type="text/css" href="$!cdnServer/resources/style/common/css/queryShipAjax.css" rel="stylesheet"/>
+</head>
+
+<body>
+#foreach($transInfo in $transInfo_list)
+#if($!transInfo.status==0)
+<div class="wrap">
+	<div class="main">
+    	<div class="logistics_title">
+        	<span>物流公司： <strong>$!transInfo.express_company_name</strong></span>
+            <span>物流单号：<strong>$!transInfo.express_ship_code</strong></span>
+        </div>
+        
+        <div class="logistics_info">
+        	<table  border="0" cellspacing="0" cellpadding="0">
+            	<tbody>
+                	<tr>
+                        $!transInfo.message
+                	</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+#end
+#if($!transInfo.status==2)
+<div class="wrap">
+	<div class="main">
+    	<div class="logistics_title">
+        	<span>物流公司： <strong>$!transInfo.express_company_name</strong></span>
+            <span>物流单号：<strong>$!transInfo.express_ship_code</strong></span>
+        </div>
+        
+        <div class="logistics_info">
+        	<table  border="0" cellspacing="0" cellpadding="0">
+            	<tbody>
+                	<tr>
+                        $!transInfo.message
+                	</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+#end
+#end
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>商品列表 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.cookie.js"></script>
+<script>
+var currentPage =2;
+jQuery(document).ready(function(){
+	/*点击弹出搜索框*/
+	jQuery(document).on("click",'li[mark=key]',function(){
+		jQuery("#search_key").val(jQuery(this).attr("key"));
+		jQuery("#theForm").submit();	
+	}); 
+	jQuery("#key_word").click(function(){
+		jQuery("#search_result").hide();
+		jQuery("#search_html").show();
+		jQuery("#search_key").focus();
+		var data = jQuery.cookie("search_history");
+		if(data==null){
+			jQuery("#head_search_history_list").remove();
+		}else{
+		jQuery("#head_search_history_list").empty();	
+		jQuery.each(data.split(","),function(index,item){
+			if(index<10){
+				jQuery("#head_search_history_list").append("<li mark='key' key = "+item+"><a href='javascript:void(0)'>"+item+"</a></li>");
+			}
+		});
+	}
+	});
+	/*搜索框后退*/
+	jQuery("#search_back").click(function(){
+		jQuery("#search_html").hide();
+		jQuery("#search_result").show();
+	});	
+   
+   jQuery("#top_$!{orderBy}").addClass("this");
+   if("$!{orderBy}"=="store_price"){
+	  if("$!{orderType}"=="desc"){
+				jQuery("#top_store_price img").attr("src","$!cdnServer/resources/style/system/front/default/images/weixin/goodsclass_down.png");
+		  
+	  }else{
+			  jQuery("#top_store_price img").attr("src","$!cdnServer/resources/style/system/front/default/images/weixin/goodsclass_up.png");
+	  	  
+	  }
+   }else{
+		   jQuery("#top_$!{orderBy} img").attr("src","$!cdnServer/resources/style/system/front/default/images/weixin/goodsclass_down.png");
+   	  
+   }
+   /*下拉显示其他图片*/
+   var  ret = 1;
+   var totalPage = "$!totalPage";
+   var size = "$!objs.size()";
+   jQuery(window).scroll(function(){
+	 if(size>0){
+	 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1) {  
+		 if(currentPage<=totalPage){
+		 var big_map = "大图";
+		 if(jQuery("#map_type").val()){
+			big_map = jQuery("#map_type").val();	 	
+		 }	 
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/search',
+				  data:{"currentPage":currentPage,
+		  				"gc_id":"$!{gc_id}",
+						"orderBy":"$!{orderBy}",
+						"orderType":"$!{orderType}",
+						"big_map":big_map,
+						"keyword":"$!{keyword}",
+				  },
+				beforeSend:function(){
+					currentPage = parseInt(currentPage) +1;
+				  jQuery("#loading_none").hide();
+				  if(jQuery("#big_map").html() == "大图"){
+				  	  jQuery("#loading").show();
+				  	  jQuery("#loading_last").hide();
+				  }else{
+					  jQuery("#loading").hide();
+					  jQuery("#loading_last").show();
+				  }
+				  ret = 2;
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();	
+				 jQuery("#loading_last").hide();
+				 jQuery("#loading_none_last").hide();
+				 ret = 1;
+				 if(jQuery("#big_map").html() == "大图"){
+	             	if(data!=""){
+				 		 jQuery(".g_list").find("li").last().after(data);
+			 		 }else{
+					 	jQuery("#loading_none").show();
+				 	 }    
+              		}else{
+						if(data!=""){
+				 	 		jQuery(".small_g_list").find("li").last().after(data);
+			 			 }else{
+						 	jQuery("#loading_none_last").show();
+				 		 }    
+              		}
+		 		}
+	    });
+		 }else{
+			 if(currentPage>totalPage){
+				 if(jQuery("#big_map").html() == "大图"){
+					/* var display =jQuery('#d1').css('display');
+					  if(display != 'none'){
+						  	jQuery("#loading_none").hide();
+						  }else{
+							  alert()*/
+							  	jQuery("#loading_none").show();
+				 }else{
+					
+							 	jQuery("#loading_none_last").show(); 
+							 
+				 }
+			}
+		 } 
+	 }
+	 }
+	});		 
+	/*人气、销量、价格进行转换*/
+	jQuery(".pad_change_ul li[id^=top_]").click(function(){
+		var orderBy = jQuery(this).attr("id").substring(4);
+		jQuery(".pad_change_ul li[class$='this']").removeClass("this");
+		 jQuery(this).addClass("this");
+		var backorderby = "$!orderBy";
+		var properties=jQuery("#properties").val();
+		var flag=1;
+		if(orderBy==backorderby){
+			if("$!{orderType}"=="asc"){
+				search_goods2(flag);
+			}else{
+				search_goods2(flag);
+			}	
+		}else{
+			search_goods2(flag);
+		}
+	});
+});	
+	function re_fresh(){
+		window.location.href="$!webPath/class_goods_$!{gc.id}?";
+	}
+	function screen(){
+		if(jQuery("#screen").attr("style") != ""){
+				jQuery("#screen").attr("style","");
+			}else{
+					jQuery("#screen").attr("style","display:none");
+				}
+		}	
+	function search_data_del_all(){
+		jQuery.cookie("search_history",null);
+		jQuery("#head_search_history_list").remove();
+	}
+	function search_form(){
+	jQuery("#search_key").val(arguments[0]);
+  	jQuery("#theForm").submit();	
+}	
+function save_form(){
+  	jQuery("#theForm").submit();	
+}
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div id="search_result">
+  <div class="g_search_header"> <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+    <input id="map_type" value="$!big_map" type="hidden" />
+    <div class="s_input">
+      <input placeholder="搜索商品/店铺" name="search" value="$!keyword" id="key_word"/>
+      <ul class="standard_locate">
+        #if($!goods_property.size()>0)
+        #foreach($map in $goods_property)
+        <li><span>$!map.get("value")</span><a class="close" href="javascript:void(0);" onclick="goods_property_remove('$!map.get("type")','$!map.get("id"),$!map.get("value")')">X</a></li>
+        #end
+        #end
+      </ul>
+    </div>
+    <a class="g_filter" href="javascript:void(0);"  onClick="screen();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/c_shortcut.png"></a> </div>
+  <div class="hide_layer" style="display:none" id="screen">
+    <ul class="hide_layer_ul">
+      <li> <a href="$!wabPath/index"> <span class="shortcut_home"></span> <strong>首页</strong> </a> </li>
+      <li  onClick="search_goods1();"> <a href="javascript:void(0);"> <span class="shortcut_search"></span> <strong>搜索</strong> </a> </li>
+      <li> <a href="$!webPath/goods_cart1"> <span class="shortcut_car"></span> <strong>购物车</strong> </a> </li>
+      <li> <a href="$!webPath/buyer/center"> <span class="shortcut_my"></span> <strong>我的</strong> </a> </li>
+    </ul>
+  </div>
+  <input id="currentPage" value="$!currentPage" type="hidden" />
+  <div class="group_top">
+    <ul class="pad_change_ul">
+      <li id="top_goods_salenum"><a href="javascript:void(0)">销量</a></li>
+      <!--当前选中的排行方式加“this”-->
+      <li id="top_goods_collect" ><a href="javascript:void(0)">人气</a></li>
+      <!--当价格由高向低时加value_up,反之由低向高时加value_down-->
+      <li id="top_store_price" class="change_value"> <a href="javascript:void(0)">价格</a></li>
+    </ul>
+  </div>
+  <script>
+  function search_goods1(){
+		var orderBy="goods_salenum";
+		var orderType="desc";
+		jQuery(".pad_change_ul li[class$='this']").each(function(){
+		    orderBy = jQuery(this).attr("id").substring(4);
+			var backorderby = "$!orderBy";
+			if(orderBy==backorderby){
+				if("$!{orderType}"=="asc"){
+					orderType="desc";
+				}else{
+					orderType="asc";        						
+				}	
+			}
+		})
+		 var key_word = jQuery("#key_word").val();
+		 window.location.href="$!webPath/search?gc_id=$!{gc_id}&orderBy="+orderBy+"&orderType="+orderType+"&keyword="+key_word
+	}
+	
+	function search_goods2(flag){
+		 var key_word = jQuery("#key_word").val();
+		  if(key_word){
+			 flag=2;
+			  search_goods1();
+		  }else{
+			alert("请输入关键字");
+		  }
+	}
+  </script>
+  <div class="g_list" id="g_list"> 
+  	#if($!stores.size()>0)
+    #foreach($store in $stores)
+    <div class="supplier_shop"> #if($!store.store_logo)
+      #set($store_logo="$!imageWebServer/$!store.store_logo.path/$!store.store_logo.name")
+      #else
+      #set($store_logo="$!imageWebServer/$!config.storeImage.path/$!config.storeImage.name")
+      #end <a href="$!webPath/store?id=$!store.id">
+      <div class="s_shop_logo"><img src="$!store_logo"></div>
+      <div class="s_shop_name">$!store.store_name</div>
+      </a> </div>
+      #end
+     #end
+    #if($!objs.size()>0)
+    <ul class="g_list_box">
+      #foreach($obj in $objs)
+      <li> <a href="$!webPath/items?id=$!{obj.vo_id}">
+        <div class="goods_pic"><img src="$!imageWebServer/$!obj.vo_main_photo_url"></div>
+        <div  class="goods_info">
+          <div class="goods_name">$!obj.vo_title</div>
+          <div  class="goods_amount">销量$!{obj.vo_goods_salenum}笔</div>
+        </div>
+        <div class="goods_value">
+        <span class="value">¥$!obj.vo_store_price</span> #set($actName="")
+        #if($!goodsViewTools.query_activity_status("$!obj.vo_id","group_buy")=="true")
+        #set($actName="团购")
+        #end
+        #if($!goodsViewTools.query_activity_status("$!obj.vo_id","activity_status")=="true")
+        #set($actName="促销")
+        #end
+        #if($!goodsViewTools.query_activity_status("$!obj.vo_id","combin_status")=="true")
+        #set($actName="组合")
+        #end
+        #if($!goodsViewTools.query_activity_status("$!obj.vo_id","order_enough_give_status")=="true")
+        #set($actName="满送")
+        #end
+        #if($!goodsViewTools.query_activity_status("$!obj.vo_id","enough_reduce")=="true")
+        #set($actName="满减")
+        #end
+        #if($!goodsViewTools.query_activity_status("$!obj.vo_id","f_sale_type")=="true")
+        #set($actName="F码")
+        #end
+        #if($!goodsViewTools.query_activity_status("$!obj.vo_id","advance_sale_type")=="true")
+        #set($actName="预售")
+        #end
+        #if($!actName!="") <span class="promotion">$!CommUtil.substring($!actName,1)</span>#end</span> </a> </li>
+      #end
+    </ul>
+    #else
+    <div class="loading" id="d1" style="position:absolute;">
+      <ul>
+        <li style="width:100%; background:none;">暂无商品数据....</li>
+      </ul>
+    </div>
+    #end </div>
+  <div class="loading" id="loading_last" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+  <div class="loading" id="loading_none_last" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>
+</div>
+<!--点击搜索显示框-->
+<div id="search_html" style="display:none">
+  <form action="$!webPath/search" method="post" id="theForm">
+    <div class="g_search_header"> <a  class="back"href="javascript:void(0);" id="search_back"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+      <div class="s_input input_margin">
+        <input placeholder="搜索商品/店铺" name="keyword" id="search_key" value="$!keyword">
+      </div>
+      <a class="g_filter" href="javascript:void(0);" onClick="save_form();"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_search_1.png"></a> </div>
+    <div class="search_group">
+      <div class="r_search search_c" id="head_search_history">
+        <h4><i class="r_icon"></i>最近搜索<i class="i_del" onClick="search_data_del_all();"></i></h4>
+        <ul id="head_search_history_list">
+        </ul>
+      </div>
+      #if($!config.hotSearch!="")
+      <div class="h_search  search_c">
+        <h4><i class="h_icon"></i>热门搜索</h4>
+        <ul>
+          #foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+          <li onclick="search_form('$!info');"><a href="javascript:void(0);" >$!info</a></li>
+          #end
+        </ul>
+      </div>
+      #end </div>
+  </form>
+</div>
+<!--点击搜索显示框-->
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){	
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  
+  jQuery("#gc_id").change(function(){
+     var show=jQuery("#error").css("display");
+	 var id=jQuery("#gc_id").val();
+	 if(id!=null && id!=""){
+	     jQuery("#error").hide();
+	 }else{
+	     jQuery("#error").show();
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  gf_name:{required :true},
+	  gf_sequence:{required:true,digits:true}
+	 },
+	messages:{
+	  gf_name:{required:"楼层标题不能为空"},
+	  gf_sequence:{required:"排序不能为空",digits:"请填写合法数字"}
+	}
+  });
+});
+//
+function saveForm(method){
+	var gc_id=jQuery("#gc_id").val();
+	jQuery("#gf_gc_id").val(gc_id);
+	if(gc_id!=null && gc_id!=""){
+		jQuery("#error").hide();
+	    jQuery("#theForm").submit();
+	}else{
+	    jQuery("#error").show();
+	}
+}
+
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">团购设置</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/groupfloor_list" ><b>团购楼层列表</b></a> </li>
+      <li> <a href="$!webPath/groupfloor_add" #if(!$!edit) class="this" #end><b>新增团购楼层</b></a> </li>
+      #if($!edit)
+      <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+      #end
+       <li> <a href="$!webPath/groupindex_design" ><b>团购首页设计</b></a> </li>
+    </ul>
+  </div>
+  <form action="$!webPath/groupfloor_save" method=post enctype="multipart/form-data" name="theForm" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/groupfloor_list" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/groupfloor_add" />
+    <input name="gf_gc_id" type="hidden" id="gf_gc_id" value="$!obj.gf_group_class_id"> 
+    <div class="edit">
+      <div class="editul setcont ">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>团购楼层标题</li>
+          <li><span class="webname">
+            <input name="gf_name" type="text" id="gf_name" value="$!obj.gf_name" size="40" />
+            </span></li>
+        </ul>
+         <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>排序</li>
+          <li><span class="webname">
+            <input name="gf_sequence" type="text" id="gf_sequence" value="$!obj.gf_sequence" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>关联团购分类</li>
+          <li><span class="webname">
+               <select id="gc_id" style="width:272px">
+                  <option value="">请选择关联的团购分类</option>
+                  #foreach($gc in $!groupClass_list)
+                  <option value="$!gc.id" #if($!gc.id==$!obj.gf_group_class_id) selected="selected" #end>$!gc.gc_name</option>
+                  #end
+               </select>
+            </span>
+            <span id="error" style="margin-left:8px;color:red;display:none">请先关联团购分类</span>
+            <span id="nothis"><strong class="q"></strong><strong class="w">请选择一个团购分类信息</strong><strong class="c"></strong></span></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="no">
+<meta name="format-detection" content="telephone=no,address=no">
+<title>优惠券列表 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/style.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+		var currentPage = 2;
+		var  ret = 1;
+		var totalPage = "$!totalPage";
+		if(totalPage>1){
+	   jQuery(window).scroll(function(){								  
+		 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+			if(currentPage<=totalPage){
+			jQuery("#loading").hide();
+			jQuery.ajax({type:'POST',
+		              url:'$!webPath/coupon/goods_coupon',
+					  data:{"currentPage":currentPage},
+					beforeSend:function(){
+					  jQuery("#loading_none").hide();
+					  jQuery("#loading").show();
+					  ret = 2;
+					},
+				   success:function(data){
+					   currentPage = currentPage+1;
+					 ret = 1;
+		             if(data){ 
+					  jQuery(".coupon").append(data);
+					  jQuery("#loading").hide();	
+				 	 }else{ 
+					 jQuery("#loading_none").show();
+					  }    
+	              	}
+		    });
+		 }
+		 }else{
+			if(currentPage>totalPage){
+				jQuery("#loading_none").show();
+			}else{
+				jQuery("#loading_none").hide();
+				}
+		}
+		});
+		}
+	});<!--end-->
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>领券中心<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="mt50"></div>
+<div class="phone_main">
+	<div class="coupon">
+    	#foreach($!coupon in $!coupons)
+    	#if($!{coupon.coupon_surplus_amount}<1||$!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+    	<div class="coupon_item cou_none">
+		#else
+    	<div class="coupon_item">
+    	#end
+        	<dl>
+            	<dt><img src="$!imageWebServer/$!coupon.coupon_acc.path/$!coupon.coupon_acc.name" /></dt>
+                <dd><p>¥<span class="big">$!coupon.coupon_amount</span></p><p class="bg">满$!coupon.coupon_order_amount使用</p></dd>
+            </dl>
+            <p class="shop_name">#if(!$coupon.store)$!config.title自营#else<a href="$!webPath/store?id=$!{coupon.store.id}">$!coupon.store.store_name</a>#end</p>
+            <div class="time"><span class="fl">$!CommUtil.formatShortDate($!coupon.coupon_begin_time)--$!CommUtil.formatShortDate($!coupon.coupon_end_time)</span><span class="fr">剩余：#if($!coupon.coupon_surplus_amount<1) 0 #else $!coupon.coupon_surplus_amount #end</span></div>
+            
+            <span class="cou_fl">#if(!$!coupon.store)<img src="$!cdnServer/resources/style/system/front/default/images/weixin/coupon_04.png" />
+            					#else<img src="$!cdnServer/resources/style/system/front/default/images/weixin/coupon_05.png" />
+            					#end	
+            </span>
+            #if($!coupon.coupon_surplus_amount<1)
+	    	   <a class="draw_btn" href="javascript:void(0)">立即领取</a>
+	    	  <span class="state state_none"></span>
+	    	#elseif($!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+	    	<div class="draw_btn"><a href="javascript:void(0)">立即领取</a></div>
+    	     <span class="state state_used"></span>  
+			#else
+            <a class="draw_btn" href="$!webPath/coupon/to_capture_coupon?id=$!coupon.id">立即领取</a>
+	    	#end
+        </div>
+        #end
+        #if(!$!coupons)
+        <div class="main">
+          <div class="mt50" style="height:49px;"></div>
+          <div class="error_page1">
+            <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+            <p>没有可领取的优惠券！</p>
+          </div>
+        </div>
+        #end
+       
+    </div>
+</div>
+<div class="loading" id="loading" style="display:none">
+<ul>
+  <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+  <li>正在加载....</li>
+</ul>
+</div>
+<div class="loading" id="loading_none" style="display:none">
+<ul>
+  <li>没有更多了....</li>
+</ul>
+</div>
+ </div>
+$!httpInclude.include("/layer")
+</body>
+</html>

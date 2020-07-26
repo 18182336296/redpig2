@@ -1,0 +1,19 @@
+<span class="shop_list_c_b" id="pppp" > <em></em> #if($!store.store_name)<b><i>店名：</i><strong><a href="$!webPath/store_$!{store.id}" target="_blank">$!store.store_name</a></strong></b> #end<b>#if($!store.store_address)<i>地址：</i>#end<strong><a href="$!webPath/store_$!{store.id}" target="_blank">$!store.store_address</a></strong></b> #if($!store.store_telephone)<b><i>电话：</i><strong><a href="$!webPath/store_$!{store.id}" target="_blank">$!store.store_telephone</a></strong></b> #end #if($!gc_list.size()>0) <b>
+<i>主营：</i>
+#foreach($!gc in $!gc_list)
+<strong style="width:auto; padding-right:10px;"><a href="$!webPath/store_$!{store.id}" target="_blank">$!gc.className</a></strong>
+#end</b>#end <b>
+</b>
+<b>
+#if($!new_infor)
+<i>公告：</i>
+#end
+<strong style="font-size:12px; color:#33F"><a href="$!webPath/cms/detail?id=$!new_infor.id" target="_blank">$!new_infor.title</a></strong>
+#foreach($!obj in $news_list)
+<strong style="font-size:12px; margin-left:40px;"><a href="$!webPath/cms/detail?id=$!obj.id" target="_blank">$!obj.title</a></strong>
+#end
+</b>
+#if($!goods.size()>0)<i>本店推荐商品：</i>#end
+<div class="shop_list_c_b_img"> 
+#foreach($!good in $goods) <a href="$!webPath/items_$!{good.id}" target="_blank"><b class="shop_list_c_b_img_b"> <i><img src="#if($!good.goods_main_photo)$!imageWebServer/$!good.goods_main_photo.path/$!good.goods_main_photo.name #else $!cdnServer/resources/style/common/images/good.jpg #end" /></i> <strong>$!good.goods_name</strong> </b></a>  #end</div>
+</span>

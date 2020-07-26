@@ -1,0 +1,20 @@
+<div class="left_buy_box"> #foreach($goods in $left_ztc_goods)
+          #if($!goods.goods_main_photo)
+          #set($bigimg="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}")
+          #set($img="$!{bigimg}_middle.$!{goods.goods_main_photo.ext}")
+          #else
+          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+          
+          #set($goods_url="$!webPath/items_$!{goods.id}")
+          #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+          #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+          #end
+          <ul>
+            <li class="buy_one_img"><span>
+              <p><a href="$!goods_url" target="_blank"><img src="$!img" width="150" height="150" /></a></p>
+              </span></li>
+            <li class="buy_one_name"><a href="$!goods_url" target="_blank">$!goods.goods_name</a></li>
+            <li class="buy_one_price">商城价：<b>¥$!goods.goods_current_price</b></li>
+          </ul>
+ #end </div>

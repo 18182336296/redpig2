@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.StoreStatMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.StoreStat">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="predepositcash_apply_count" property="predepositcash_apply_count" jdbcType="INTEGER"/>
+		<result column="order_amount" property="order_amount" jdbcType="DECIMAL"/>
+		<result column="next_time" property="next_time" jdbcType="TIMESTAMP"/>
+		<result column="week_user" property="week_user" jdbcType="INTEGER"/>
+		<result column="week_live_user" property="week_live_user" jdbcType="INTEGER"/>
+		<result column="week_goods" property="week_goods" jdbcType="INTEGER"/>
+		<result column="week_store" property="week_store" jdbcType="INTEGER"/>
+		<result column="week_order" property="week_order" jdbcType="INTEGER"/>
+		<result column="week_complaint" property="week_complaint" jdbcType="INTEGER"/>
+		<result column="week_goods_group" property="week_goods_group" jdbcType="INTEGER"/>
+		<result column="week_life_group" property="week_life_group" jdbcType="INTEGER"/>
+		<result column="week_ztc" property="week_ztc" jdbcType="INTEGER"/>
+		<result column="week_delivery" property="week_delivery" jdbcType="INTEGER"/>
+		<result column="week_circle" property="week_circle" jdbcType="INTEGER"/>
+		<result column="week_information" property="week_information" jdbcType="INTEGER"/>
+		<result column="week_invitation" property="week_invitation" jdbcType="INTEGER"/>
+		<result column="all_user" property="all_user" jdbcType="INTEGER"/>
+		<result column="all_store" property="all_store" jdbcType="INTEGER"/>
+		<result column="store_audit" property="store_audit" jdbcType="INTEGER"/>
+		<result column="all_goods" property="all_goods" jdbcType="INTEGER"/>
+		<result column="not_payoff_num" property="not_payoff_num" jdbcType="INTEGER"/>
+		<result column="not_refund" property="not_refund" jdbcType="INTEGER"/>
+		<result column="not_grouplife_refund" property="not_grouplife_refund" jdbcType="INTEGER"/>
+		<result column="all_sale_amount" property="all_sale_amount" jdbcType="INTEGER"/>
+		<result column="all_commission_amount" property="all_commission_amount" jdbcType="INTEGER"/>
+		<result column="all_payoff_amount" property="all_payoff_amount" jdbcType="INTEGER"/>
+		<result column="all_payoff_amount_reality" property="all_payoff_amount_reality" jdbcType="INTEGER"/>
+		<result column="all_user_balance" property="all_user_balance" jdbcType="DECIMAL"/>
+		<result column="ztc_audit_count" property="ztc_audit_count" jdbcType="INTEGER"/>
+		<result column="delivery_audit_count" property="delivery_audit_count" jdbcType="INTEGER"/>
+		<result column="information_audit_count" property="information_audit_count" jdbcType="INTEGER"/>
+		<result column="self_goods" property="self_goods" jdbcType="INTEGER"/>
+		<result column="self_storage_goods" property="self_storage_goods" jdbcType="INTEGER"/>
+		<result column="self_order_shipping" property="self_order_shipping" jdbcType="INTEGER"/>
+		<result column="self_order_pay" property="self_order_pay" jdbcType="INTEGER"/>
+		<result column="self_order_evaluate" property="self_order_evaluate" jdbcType="INTEGER"/>
+		<result column="self_all_order" property="self_all_order" jdbcType="INTEGER"/>
+		<result column="self_return_apply" property="self_return_apply" jdbcType="INTEGER"/>
+		<result column="self_grouplife_refund" property="self_grouplife_refund" jdbcType="INTEGER"/>
+		<result column="goods_audit" property="goods_audit" jdbcType="INTEGER"/>
+		<result column="self_goods_consult" property="self_goods_consult" jdbcType="INTEGER"/>
+		<result column="self_activity_goods" property="self_activity_goods" jdbcType="INTEGER"/>
+		<result column="self_group_goods" property="self_group_goods" jdbcType="INTEGER"/>
+		<result column="self_group_life" property="self_group_life" jdbcType="INTEGER"/>
+		<result column="self_free_goods" property="self_free_goods" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.StoreStat">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="predepositcash_apply_count" property="predepositcash_apply_count" jdbcType="INTEGER"/>
+		<result column="order_amount" property="order_amount" jdbcType="DECIMAL"/>
+		<result column="next_time" property="next_time" jdbcType="TIMESTAMP"/>
+		<result column="week_user" property="week_user" jdbcType="INTEGER"/>
+		<result column="week_live_user" property="week_live_user" jdbcType="INTEGER"/>
+		<result column="week_goods" property="week_goods" jdbcType="INTEGER"/>
+		<result column="week_store" property="week_store" jdbcType="INTEGER"/>
+		<result column="week_order" property="week_order" jdbcType="INTEGER"/>
+		<result column="week_complaint" property="week_complaint" jdbcType="INTEGER"/>
+		<result column="week_goods_group" property="week_goods_group" jdbcType="INTEGER"/>
+		<result column="week_life_group" property="week_life_group" jdbcType="INTEGER"/>
+		<result column="week_ztc" property="week_ztc" jdbcType="INTEGER"/>
+		<result column="week_delivery" property="week_delivery" jdbcType="INTEGER"/>
+		<result column="week_circle" property="week_circle" jdbcType="INTEGER"/>
+		<result column="week_information" property="week_information" jdbcType="INTEGER"/>
+		<result column="week_invitation" property="week_invitation" jdbcType="INTEGER"/>
+		<result column="all_user" property="all_user" jdbcType="INTEGER"/>
+		<result column="all_store" property="all_store" jdbcType="INTEGER"/>
+		<result column="store_audit" property="store_audit" jdbcType="INTEGER"/>
+		<result column="all_goods" property="all_goods" jdbcType="INTEGER"/>
+		<result column="not_payoff_num" property="not_payoff_num" jdbcType="INTEGER"/>
+		<result column="not_refund" property="not_refund" jdbcType="INTEGER"/>
+		<result column="not_grouplife_refund" property="not_grouplife_refund" jdbcType="INTEGER"/>
+		<result column="all_sale_amount" property="all_sale_amount" jdbcType="INTEGER"/>
+		<result column="all_commission_amount" property="all_commission_amount" jdbcType="INTEGER"/>
+		<result column="all_payoff_amount" property="all_payoff_amount" jdbcType="INTEGER"/>
+		<result column="all_payoff_amount_reality" property="all_payoff_amount_reality" jdbcType="INTEGER"/>
+		<result column="all_user_balance" property="all_user_balance" jdbcType="DECIMAL"/>
+		<result column="ztc_audit_count" property="ztc_audit_count" jdbcType="INTEGER"/>
+		<result column="delivery_audit_count" property="delivery_audit_count" jdbcType="INTEGER"/>
+		<result column="information_audit_count" property="information_audit_count" jdbcType="INTEGER"/>
+		<result column="self_goods" property="self_goods" jdbcType="INTEGER"/>
+		<result column="self_storage_goods" property="self_storage_goods" jdbcType="INTEGER"/>
+		<result column="self_order_shipping" property="self_order_shipping" jdbcType="INTEGER"/>
+		<result column="self_order_pay" property="self_order_pay" jdbcType="INTEGER"/>
+		<result column="self_order_evaluate" property="self_order_evaluate" jdbcType="INTEGER"/>
+		<result column="self_all_order" property="self_all_order" jdbcType="INTEGER"/>
+		<result column="self_return_apply" property="self_return_apply" jdbcType="INTEGER"/>
+		<result column="self_grouplife_refund" property="self_grouplife_refund" jdbcType="INTEGER"/>
+		<result column="goods_audit" property="goods_audit" jdbcType="INTEGER"/>
+		<result column="self_goods_consult" property="self_goods_consult" jdbcType="INTEGER"/>
+		<result column="self_activity_goods" property="self_activity_goods" jdbcType="INTEGER"/>
+		<result column="self_group_goods" property="self_group_goods" jdbcType="INTEGER"/>
+		<result column="self_group_life" property="self_group_life" jdbcType="INTEGER"/>
+		<result column="self_free_goods" property="self_free_goods" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,predepositcash_apply_count,order_amount,next_time,week_user,week_live_user,week_goods,week_store,week_order,week_complaint,week_goods_group,week_life_group,week_ztc,week_delivery,week_circle,week_information,week_invitation,all_user,all_store,store_audit,all_goods,not_payoff_num,not_refund,not_grouplife_refund,all_sale_amount,all_commission_amount,all_payoff_amount,all_payoff_amount_reality,all_user_balance,ztc_audit_count,delivery_audit_count,information_audit_count,self_goods,self_storage_goods,self_order_shipping,self_order_pay,self_order_evaluate,self_all_order,self_return_apply,self_grouplife_refund,goods_audit,self_goods_consult,self_activity_goods,self_group_goods,self_group_life,self_free_goods
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="predepositcash_apply_count != null">and predepositcash_apply_count = #{predepositcash_apply_count,jdbcType=INTEGER}</if>
+		<if test="order_amount != null">and order_amount = #{order_amount,jdbcType=DECIMAL}</if>
+		<if test="next_time != null">and next_time = #{next_time,jdbcType=TIMESTAMP}</if>
+		<if test="week_user != null">and week_user = #{week_user,jdbcType=INTEGER}</if>
+		<if test="week_live_user != null">and week_live_user = #{week_live_user,jdbcType=INTEGER}</if>
+		<if test="week_goods != null">and week_goods = #{week_goods,jdbcType=INTEGER}</if>
+		<if test="week_store != null">and week_store = #{week_store,jdbcType=INTEGER}</if>
+		<if test="week_order != null">and week_order = #{week_order,jdbcType=INTEGER}</if>
+		<if test="week_complaint != null">and week_complaint = #{week_complaint,jdbcType=INTEGER}</if>
+		<if test="week_goods_group != null">and week_goods_group = #{week_goods_group,jdbcType=INTEGER}</if>
+		<if test="week_life_group != null">and week_life_group = #{week_life_group,jdbcType=INTEGER}</if>
+		<if test="week_ztc != null">and week_ztc = #{week_ztc,jdbcType=INTEGER}</if>
+		<if test="week_delivery != null">and week_delivery = #{week_delivery,jdbcType=INTEGER}</if>
+		<if test="week_circle != null">and week_circle = #{week_circle,jdbcType=INTEGER}</if>
+		<if test="week_information != null">and week_information = #{week_information,jdbcType=INTEGER}</if>
+		<if test="week_invitation != null">and week_invitation = #{week_invitation,jdbcType=INTEGER}</if>
+		<if test="all_user != null">and all_user = #{all_user,jdbcType=INTEGER}</if>
+		<if test="all_store != null">and all_store = #{all_store,jdbcType=INTEGER}</if>
+		<if test="store_audit != null">and store_audit = #{store_audit,jdbcType=INTEGER}</if>
+		<if test="all_goods != null">and all_goods = #{all_goods,jdbcType=INTEGER}</if>
+		<if test="not_payoff_num != null">and not_payoff_num = #{not_payoff_num,jdbcType=INTEGER}</if>
+		<if test="not_refund != null">and not_refund = #{not_refund,jdbcType=INTEGER}</if>
+		<if test="not_grouplife_refund != null">and not_grouplife_refund = #{not_grouplife_refund,jdbcType=INTEGER}</if>
+		<if test="all_sale_amount != null">and all_sale_amount = #{all_sale_amount,jdbcType=INTEGER}</if>
+		<if test="all_commission_amount != null">and all_commission_amount = #{all_commission_amount,jdbcType=INTEGER}</if>
+		<if test="all_payoff_amount != null">and all_payoff_amount = #{all_payoff_amount,jdbcType=INTEGER}</if>
+		<if test="all_payoff_amount_reality != null">and all_payoff_amount_reality = #{all_payoff_amount_reality,jdbcType=INTEGER}</if>
+		<if test="all_user_balance != null">and all_user_balance = #{all_user_balance,jdbcType=DECIMAL}</if>
+		<if test="ztc_audit_count != null">and ztc_audit_count = #{ztc_audit_count,jdbcType=INTEGER}</if>
+		<if test="delivery_audit_count != null">and delivery_audit_count = #{delivery_audit_count,jdbcType=INTEGER}</if>
+		<if test="information_audit_count != null">and information_audit_count = #{information_audit_count,jdbcType=INTEGER}</if>
+		<if test="self_goods != null">and self_goods = #{self_goods,jdbcType=INTEGER}</if>
+		<if test="self_storage_goods != null">and self_storage_goods = #{self_storage_goods,jdbcType=INTEGER}</if>
+		<if test="self_order_shipping != null">and self_order_shipping = #{self_order_shipping,jdbcType=INTEGER}</if>
+		<if test="self_order_pay != null">and self_order_pay = #{self_order_pay,jdbcType=INTEGER}</if>
+		<if test="self_order_evaluate != null">and self_order_evaluate = #{self_order_evaluate,jdbcType=INTEGER}</if>
+		<if test="self_all_order != null">and self_all_order = #{self_all_order,jdbcType=INTEGER}</if>
+		<if test="self_return_apply != null">and self_return_apply = #{self_return_apply,jdbcType=INTEGER}</if>
+		<if test="self_grouplife_refund != null">and self_grouplife_refund = #{self_grouplife_refund,jdbcType=INTEGER}</if>
+		<if test="goods_audit != null">and goods_audit = #{goods_audit,jdbcType=INTEGER}</if>
+		<if test="self_goods_consult != null">and self_goods_consult = #{self_goods_consult,jdbcType=INTEGER}</if>
+		<if test="self_activity_goods != null">and self_activity_goods = #{self_activity_goods,jdbcType=INTEGER}</if>
+		<if test="self_group_goods != null">and self_group_goods = #{self_group_goods,jdbcType=INTEGER}</if>
+		<if test="self_group_life != null">and self_group_life = #{self_group_life,jdbcType=INTEGER}</if>
+		<if test="self_free_goods != null">and self_free_goods = #{self_free_goods,jdbcType=INTEGER}</if>
+	</sql>
+	<sql id="ifStatement">
+		predepositcash_apply_count= #{predepositcash_apply_count},
+		order_amount= #{order_amount},
+		next_time= #{next_time},
+		week_user= #{week_user},
+		week_live_user= #{week_live_user},
+		week_goods= #{week_goods},
+		week_store= #{week_store},
+		week_order= #{week_order},
+		week_complaint= #{week_complaint},
+		week_goods_group= #{week_goods_group},
+		week_life_group= #{week_life_group},
+		week_ztc= #{week_ztc},
+		week_delivery= #{week_delivery},
+		week_circle= #{week_circle},
+		week_information= #{week_information},
+		week_invitation= #{week_invitation},
+		all_user= #{all_user},
+		all_store= #{all_store},
+		store_audit= #{store_audit},
+		all_goods= #{all_goods},
+		not_payoff_num= #{not_payoff_num},
+		not_refund= #{not_refund},
+		not_grouplife_refund= #{not_grouplife_refund},
+		all_sale_amount= #{all_sale_amount},
+		all_commission_amount= #{all_commission_amount},
+		all_payoff_amount= #{all_payoff_amount},
+		all_payoff_amount_reality= #{all_payoff_amount_reality},
+		all_user_balance= #{all_user_balance},
+		ztc_audit_count= #{ztc_audit_count},
+		delivery_audit_count= #{delivery_audit_count},
+		information_audit_count= #{information_audit_count},
+		self_goods= #{self_goods},
+		self_storage_goods= #{self_storage_goods},
+		self_order_shipping= #{self_order_shipping},
+		self_order_pay= #{self_order_pay},
+		self_order_evaluate= #{self_order_evaluate},
+		self_all_order= #{self_all_order},
+		self_return_apply= #{self_return_apply},
+		self_grouplife_refund= #{self_grouplife_refund},
+		goods_audit= #{goods_audit},
+		self_goods_consult= #{self_goods_consult},
+		self_activity_goods= #{self_activity_goods},
+		self_group_goods= #{self_group_goods},
+		self_group_life= #{self_group_life},
+		self_free_goods= #{self_free_goods},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.StoreStat" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_store_stat 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.StoreStat" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_store_stat obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_store_stat obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.StoreStat" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_store_stat obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.StoreStat" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_store_stat(addTime,deleteStatus,predepositcash_apply_count,order_amount,next_time,week_user,week_live_user,week_goods,week_store,week_order,week_complaint,week_goods_group,week_life_group,week_ztc,week_delivery,week_circle,week_information,week_invitation,all_user,all_store,store_audit,all_goods,not_payoff_num,not_refund,not_grouplife_refund,all_sale_amount,all_commission_amount,all_payoff_amount,all_payoff_amount_reality,all_user_balance,ztc_audit_count,delivery_audit_count,information_audit_count,self_goods,self_storage_goods,self_order_shipping,self_order_pay,self_order_evaluate,self_all_order,self_return_apply,self_grouplife_refund,goods_audit,self_goods_consult,self_activity_goods,self_group_goods,self_group_life,self_free_goods)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{predepositcash_apply_count,jdbcType=INTEGER},#{order_amount,jdbcType=DECIMAL},#{next_time,jdbcType=TIMESTAMP},#{week_user,jdbcType=INTEGER},#{week_live_user,jdbcType=INTEGER},#{week_goods,jdbcType=INTEGER},#{week_store,jdbcType=INTEGER},#{week_order,jdbcType=INTEGER},#{week_complaint,jdbcType=INTEGER},#{week_goods_group,jdbcType=INTEGER},#{week_life_group,jdbcType=INTEGER},#{week_ztc,jdbcType=INTEGER},#{week_delivery,jdbcType=INTEGER},#{week_circle,jdbcType=INTEGER},#{week_information,jdbcType=INTEGER},#{week_invitation,jdbcType=INTEGER},#{all_user,jdbcType=INTEGER},#{all_store,jdbcType=INTEGER},#{store_audit,jdbcType=INTEGER},#{all_goods,jdbcType=INTEGER},#{not_payoff_num,jdbcType=INTEGER},#{not_refund,jdbcType=INTEGER},#{not_grouplife_refund,jdbcType=INTEGER},#{all_sale_amount,jdbcType=INTEGER},#{all_commission_amount,jdbcType=INTEGER},#{all_payoff_amount,jdbcType=INTEGER},#{all_payoff_amount_reality,jdbcType=INTEGER},#{all_user_balance,jdbcType=DECIMAL},#{ztc_audit_count,jdbcType=INTEGER},#{delivery_audit_count,jdbcType=INTEGER},#{information_audit_count,jdbcType=INTEGER},#{self_goods,jdbcType=INTEGER},#{self_storage_goods,jdbcType=INTEGER},#{self_order_shipping,jdbcType=INTEGER},#{self_order_pay,jdbcType=INTEGER},#{self_order_evaluate,jdbcType=INTEGER},#{self_all_order,jdbcType=INTEGER},#{self_return_apply,jdbcType=INTEGER},#{self_grouplife_refund,jdbcType=INTEGER},#{goods_audit,jdbcType=INTEGER},#{self_goods_consult,jdbcType=INTEGER},#{self_activity_goods,jdbcType=INTEGER},#{self_group_goods,jdbcType=INTEGER},#{self_group_life,jdbcType=INTEGER},#{self_free_goods,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.StoreStat">
+		update redpigmall_store_stat
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_store_stat where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_store_stat where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.StoreStat" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_store_stat obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.StoreStat" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_store_stat obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.StoreStat" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_store_stat
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_store_stat where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

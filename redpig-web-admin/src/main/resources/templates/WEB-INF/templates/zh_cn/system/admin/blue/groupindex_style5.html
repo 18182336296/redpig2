@@ -1,0 +1,95 @@
+<script>
+jQuery(document).ready(function(){
+	  jQuery("#gc_id").change(function(){							   
+	var gc_id=jQuery(this).val();	
+	if(gc_id!=null){
+     jQuery.ajax({type:'POST',
+	 url:'$!webPath/getSecondClass',
+	 data:{"pid":gc_id,"type":"1"},
+	 success:function(data){
+	   if(data!=null && data!=""){
+	       jQuery(".box_edit_li").append(data);
+	   }
+	 }});
+	}
+  });	
+});
+function save_form(){
+	 //var value=jQuery("input[name='aps_type']:checked").val();
+	var ids="";
+	jQuery(".box_edit_li a").each(function(){	
+		var pid=jQuery(this).attr("pid");								  
+	 	if(pid!=undefined){
+             ids += ","+pid;
+		}
+   });
+   if(ids!=""){
+	   ids=ids.substring(1);
+	   }
+	jQuery("#gcid").val(ids);
+	jQuery("#theForm").submit();
+	
+  }
+function deleteClass(val){
+	jQuery("#goodsContainer input[type=checkbox]").each(function() {
+		if(jQuery(this).val()==jQuery(val).val()){
+			jQuery(this).prop("disabled", false);
+			this.checked=false;
+		}
+	});
+	jQuery(val).parent().remove();
+}
+function setClass(val){
+	var id=jQuery(val).val();
+	var name=jQuery(val).parent().text();
+	jQuery(val).prop("disabled", true);
+	jQuery("#goodsContainer1").append("<b style='background:#f9f9f9' ><input type='checkbox' id='"+id+"' checked='checked' onClick='deleteClass(this);' value='"+id+"'/>"+name+"</b>");
+}
+</script>
+<style>
+.floor_adv_s {
+	width: 280px;
+}
+.floor_adv_s select {
+	width: 70px;
+	height: 25px;
+	line-height: 25px;
+	border: solid 1px #DBDBDB;
+	border-radius: 3px;
+	margin-right: 10px;
+}
+</style>
+<form action="$!webPath/groupindex_style_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id">
+  <input name="seq" type="hidden" id="seq" value="$!seq">
+  <input name="type" type="hidden" id="type" value="$!style">
+  <input name="gcid" type="hidden" id="gcid" value="$!obj.gid_nav_hot_class"> 
+   <div class="box_floor">
+    <!--分类开始-->
+    <h6 class="box_floor_h6">当前分类</h6>
+    <em class="floor_warning" style="margin-left:20px;margin-bottom:5px;">注释:只能显示二级分类，双击删除已选分类，按下鼠标拖动分类次序</em>
+    <div class="box_edits">
+      <ul class="box_edit_class" id="box_edit_class">
+        <li class="box_edit_li">
+        #foreach($gc in $!group_tools.getHotClass($!obj.gid_nav_hot_class))
+  <span style="width:auto"><a href="javascript:void(0);" ondblclick="javascript:jQuery(this.parentNode).remove();" pid="$!gc.id">$!gc.gc_name</a></span>
+  #end
+</li>
+      </ul>
+    </div>
+    <div class="box_floor_class" id="goods_class"><b>选择商品分类：</b>
+     <span> <select name="gc_id" id="gc_id">
+        <option value="">请选择商品分类...</option>
+      #foreach($gc in $gpcs)
+        <option value="$!gc.id">$!gc.gc_name</option>
+      <!-- #foreach($c_gc in $gc.childs)
+        <option value="$!c_gc.id">&nbsp;&nbsp;&nbsp;$!c_gc.className</option>
+       #end-->
+      #end
+      </select></span>
+    </div>
+    <div class="submit">
+      <input name="按钮" type="button" value="保存" onClick="save_form();" />
+    </div>
+  </div>
+</form>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.EnoughReduceMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.EnoughReduce">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ertitle" property="ertitle" jdbcType="VARCHAR"/>
+		<result column="erbegin_time" property="erbegin_time" jdbcType="TIMESTAMP"/>
+		<result column="erend_time" property="erend_time" jdbcType="TIMESTAMP"/>
+		<result column="ersequence" property="ersequence" jdbcType="INTEGER"/>
+		<result column="erstatus" property="erstatus" jdbcType="INTEGER"/>
+		<result column="failed_reason" property="failed_reason" jdbcType="VARCHAR"/>
+		<result column="ercontent" property="ercontent" jdbcType="VARCHAR"/>
+		<result column="ertag" property="ertag" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="VARCHAR"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="er_type" property="er_type" jdbcType="INTEGER"/>
+		<result column="ergoods_ids_json" property="ergoods_ids_json" jdbcType="VARCHAR"/>
+		<result column="er_json" property="er_json" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.EnoughReduce">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ertitle" property="ertitle" jdbcType="VARCHAR"/>
+		<result column="erbegin_time" property="erbegin_time" jdbcType="TIMESTAMP"/>
+		<result column="erend_time" property="erend_time" jdbcType="TIMESTAMP"/>
+		<result column="ersequence" property="ersequence" jdbcType="INTEGER"/>
+		<result column="erstatus" property="erstatus" jdbcType="INTEGER"/>
+		<result column="failed_reason" property="failed_reason" jdbcType="VARCHAR"/>
+		<result column="ercontent" property="ercontent" jdbcType="VARCHAR"/>
+		<result column="ertag" property="ertag" jdbcType="VARCHAR"/>
+		<result column="store_id" property="store_id" jdbcType="VARCHAR"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="er_type" property="er_type" jdbcType="INTEGER"/>
+		<result column="ergoods_ids_json" property="ergoods_ids_json" jdbcType="VARCHAR"/>
+		<result column="er_json" property="er_json" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ertitle,erbegin_time,erend_time,ersequence,erstatus,failed_reason,ercontent,ertag,store_id,store_name,er_type,ergoods_ids_json,er_json
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ertitle != null">and ertitle = #{ertitle,jdbcType=VARCHAR}</if>
+		<if test="ertitle_like != null">and ertitle like CONCAT('%',#{ertitle_like},'%') </if>
+		<if test="erbegin_time != null">and erbegin_time = #{erbegin_time,jdbcType=TIMESTAMP}</if>
+		<if test="erend_time != null">and erend_time = #{erend_time,jdbcType=TIMESTAMP}</if>
+		<if test="erend_time_more_than_equal != null">and erend_time <![CDATA[ >= ]]> #{erend_time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="erend_time_less_than_equal != null">and erend_time <![CDATA[ <= ]]> #{erend_time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="ersequence != null">and ersequence = #{ersequence,jdbcType=INTEGER}</if>
+		<if test="erstatus != null">and erstatus = #{erstatus,jdbcType=INTEGER}</if>
+		<if test="erstatus1 != null and erstatus2 !=null">and (erstatus = #{erstatus1,jdbcType=INTEGER} or erstatus = #{erstatus2,jdbcType=INTEGER})</if>
+		<if test="failed_reason != null">and failed_reason = #{failed_reason,jdbcType=VARCHAR}</if>
+		<if test="ercontent != null">and ercontent = #{ercontent,jdbcType=VARCHAR}</if>
+		<if test="ertag != null">and ertag = #{ertag,jdbcType=VARCHAR}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=VARCHAR}</if>
+		<if test="store_name != null">and store_name = #{store_name,jdbcType=VARCHAR}</if>
+		<if test="er_type != null">and er_type = #{er_type,jdbcType=INTEGER}</if>
+		<if test="ergoods_ids_json != null">and ergoods_ids_json = #{ergoods_ids_json,jdbcType=VARCHAR}</if>
+		<if test="er_json != null">and er_json = #{er_json,jdbcType=VARCHAR}</if>
+		<if test="erbegin_time_more_than_equal !=null">
+			<![CDATA[
+			      and DATE_FORMAT(erbegin_time, '%Y-%m-%d') >=  #{erbegin_time_more_than_equal,jdbcType=TIMESTAMP}
+			]]>
+		</if>
+		<if test="erend_time_less_than_equal !=null">
+			<![CDATA[
+			      and DATE_FORMAT(erend_time, '%Y-%m-%d') <=  #{erend_time_less_than_equal,jdbcType=TIMESTAMP}
+			]]>
+		</if>
+	</sql>
+	<sql id="ifStatement">
+		ertitle= #{ertitle},
+		erbegin_time= #{erbegin_time},
+		erend_time= #{erend_time},
+		ersequence= #{ersequence},
+		erstatus= #{erstatus},
+		failed_reason= #{failed_reason},
+		ercontent= #{ercontent},
+		ertag= #{ertag},
+		store_id= #{store_id},
+		store_name= #{store_name},
+		er_type= #{er_type},
+		ergoods_ids_json= #{ergoods_ids_json},
+		er_json= #{er_json},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.EnoughReduce" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_enough_reduce 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.EnoughReduce" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_enough_reduce obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_enough_reduce obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.EnoughReduce" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_enough_reduce obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.EnoughReduce" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_enough_reduce(addTime,deleteStatus,ertitle,erbegin_time,erend_time,ersequence,erstatus,failed_reason,ercontent,ertag,store_id,store_name,er_type,ergoods_ids_json,er_json)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ertitle,jdbcType=VARCHAR},#{erbegin_time,jdbcType=TIMESTAMP},#{erend_time,jdbcType=TIMESTAMP},#{ersequence,jdbcType=INTEGER},#{erstatus,jdbcType=INTEGER},#{failed_reason,jdbcType=VARCHAR},#{ercontent,jdbcType=VARCHAR},#{ertag,jdbcType=VARCHAR},#{store_id,jdbcType=VARCHAR},#{store_name,jdbcType=VARCHAR},#{er_type,jdbcType=INTEGER},#{ergoods_ids_json,jdbcType=VARCHAR},#{er_json,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.EnoughReduce">
+		update redpigmall_enough_reduce
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_enough_reduce where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_enough_reduce where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.EnoughReduce" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_enough_reduce obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.EnoughReduce" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_enough_reduce obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.EnoughReduce" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_enough_reduce
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_enough_reduce where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

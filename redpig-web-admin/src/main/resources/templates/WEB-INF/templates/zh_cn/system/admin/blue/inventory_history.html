@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  tipStyle();
+});
+// 
+</script>
+<body>
+<div class="cont">
+  <h3 class="seth">库存管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/inventory_list"><b>管理</b></a></li>
+      <li><a href="$!webPath/inventory_history" class="this"><b>操作记录</b></a></li>
+      <li><a href="$!webPath/inventory_add" ><b>库存操作</b></a></li>
+    </ul>
+  </div>
+  <form name="queryForm" id="queryForm" action="" method="post">
+    <div class="search"> <span>库房名称</span><span class="size150">
+      <input name="storehouse_name" type="text" id="storehouse_name" value="$!storehouse_name"/>
+      <input name="id" type="hidden" id="id" value="$!id"/>
+      </span><span>商品名称</span><span class="size150">
+      <input name="goods_name" type="text" id="goods_name" value="$!goods_name"/>
+      </span><span class="btn_search">
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn" />
+      </span> </div>
+  </form>
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>通过商品库存操作记录，你可以产看商品的每一次入库或出库操作。</li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/inventory_history" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="20%"><span class="form_btna">库房名称</span></th>
+          <th width="20%"><span class="form_btna">商品名称</span></th>
+          <th width="10%"><span class="form_btna">规格</span></th>
+          <th width="8%"><span class="form_btna">操作类型</span></th>
+          <th width="8%"><span class="form_btna">操作数量</span></th>
+          <th width="8%"><span class="form_btna">操作时间</span></th>
+          <th align="center"><b class="form_btnb">操作说明</b></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <tr>
+          <td align="center">$!obj.storehouse_name</td>
+          <td align="center">$!obj.goods_name</td>
+          <td align="center">$!obj.spec_name</td>
+          <td align="center">#if($!obj.type==1)进库#elseif($!obj.type==2)销售出库#elseif($!obj.type==3)手动出库#end</td>
+          <td align="center">$!obj.count</td>
+          <td align="center">$!obj.addTime</td>
+          <td align="center">$!obj.operation_info</td>
+        </tr>
+        #end
+        #else
+        <tr>
+          <td colspan="7"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+        </tr>
+        #end
+      </table>
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        <div class="operation_left">
+          <ul>
+          </ul>
+        </div>
+        <div class="operation_right">
+          <div class="fenye" id="queryCondition">
+            <input name="store_house_name" type="hidden" id="store_house_name" value="$!store_house_name" />
+            <input name="mulitId" type="hidden" id="mulitId" />
+            <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+            $!gotoPageFormHTML </div>
+        </div>
+      </div>
+      #end </div>
+  </form>
+</div>
+</body>
+</html>

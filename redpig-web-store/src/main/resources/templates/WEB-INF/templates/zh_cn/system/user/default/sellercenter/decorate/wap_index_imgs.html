@@ -1,0 +1,8 @@
+﻿#if($photos.size()>0)
+<ul>
+  #foreach($photo in $photos)
+  <li><span><img onclick="select_img(this);"src="$!imageWebServer/$!photo.path/$!{photo.name}?$!{photo.height}&$!{photo.width}" im_uri="$!photo.path/$!{photo.name}"/><i></i></span></li>
+  #end
+</ul>
+#end
+<div class="floor_page" use="img_list"><span>$!gotoPageAjaxHTML</span></div>

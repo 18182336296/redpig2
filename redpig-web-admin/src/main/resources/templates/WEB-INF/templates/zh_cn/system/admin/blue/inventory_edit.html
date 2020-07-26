@@ -1,0 +1,54 @@
+<script>
+jQuery(document).ready(function(){
+	#if($!obj.goods_specs_info)
+	#foreach($map in $!CommUtil.Json2List("$!obj.goods_specs_info"))
+		jQuery.each(jQuery("#theForm").find(".size150"),function(index,element){
+			var str1=jQuery(element).html();
+			var str2="$!{map.get('id')}_";
+			if(str1.indexOf(str2)>=0){
+				str1=str1.replace(str2," $!{map.get('name')} ");
+				jQuery(element).html(str1);
+				jQuery(element).next("input").val(str1);
+			}
+		});		
+	#end
+	#end
+	#foreach($map in $!obj.goods_specs)
+		jQuery.each(jQuery("#theForm").find(".size150"),function(index,element){
+			var str1=jQuery(element).html();
+			var str2="$!{map.id}_";
+			if(str1.indexOf(str2)>=0){
+				str1=str1.replace(str2," $!{map.value} ");
+				jQuery(element).html(str1);
+				jQuery(element).next("input").val(str1);
+			}
+		});		
+	#end
+});
+</script>
+#if($!inventory_detail.size()>0)
+<div class="fshoptb">
+  <form action="$!webPath/inventory_save" method="post"  name="theForm" id="theForm">
+    <input type="hidden" id="type" name="type" value="$!type" />
+    <input type="hidden" id="goods_id" name="goods_id" value="$!goods_id" />
+    <input type="hidden" id="storehouse_id" name="storehouse_id" value="$!storehouse_id" />
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tbody>
+        <tr>
+          <th width="33.3%"><span class="form_btna">规格名称</span></th>
+          <th width="33.3%"><span class="form_btna">现有数量</span></th>
+          <th align="center"><b class="form_btnb">操作数量</b></th>
+        </tr>
+      #foreach($obj in $!inventory_detail)
+      <tr>
+        <td align="center"><span class="size150">#if($obj.get("id"))$obj.get("id")#else无#end</span><input type="hidden" id="specname_$!obj.get('id')" name="specname_$!obj.get('id')"/></td>
+        <td align="center">$obj.get("count")</td>
+        <td align="center"><input type="text" id="spec_$!obj.get('id')" name="spec_$!obj.get('id')" out_max="$!obj.get('count')" value="0"/></td>
+      </tr>
+      #end
+        </tbody>
+    </table>
+  </form>
+  <div class="repertory_bottom"> <span><a href="javascript:void(0)" onclick="submit_form()">确 定</a></span> </div>
+</div>
+#end

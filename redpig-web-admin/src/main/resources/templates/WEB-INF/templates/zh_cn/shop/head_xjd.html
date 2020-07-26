@@ -1,0 +1,71 @@
+<script src="$!cdnServer/resources/js/jquery.cookie.js"></script>
+<script>
+function do_search(){
+	 var key = jQuery("#keyword").val();
+	 jQuery("#searchForm").submit();
+}
+
+function search_form(){
+	  var keyword=arguments[0];
+	  var type=arguments[1];
+	  if(keyword!=""&&keyword!=undefined){
+	   jQuery("#keyword").val(keyword);
+	  }
+	  if(type!=""&&type!=undefined){
+	    jQuery("#type").val(type);
+	  }
+	  jQuery("#searchForm").submit();
+	  jQuery("#keyword").val("");
+}
+
+
+</script>
+<div class="header">
+  #if($!config.websiteLogo)
+    #set($img="$!imageWebServer/$!{config.websiteLogo.path}/$!{config.websiteLogo.name}")
+  #else
+    #set($img="$!cdnServer/resources/style/system/front/default/images/logo.png")
+  #end
+	<div class="w1210">
+  		<div class="mall-logo"> 
+  			<a href="$!webPath/index">
+  				<img src="$!img" width="250">
+  			</a> </div>
+  		
+  		<div class="mall-search">
+    <div id="search-tips" style="display:none;"></div>
+    <form class="mallSearch-form" method="post" name="searchForm" id="searchForm" 
+    action=$!webPath/search >
+    <input name="config" type="hidden" id="config" value="$!config.hotSearch" />
+      <input name="type" id="searchtype" value="goods" type="hidden">
+      <div class="mallSearch-input">
+        <ul style="height: 32px; overflow: hidden;" class="search-type">
+          <li class="cur" num="0">宝贝<i class="icon-down"></i></li>
+          <li num="1">店铺<i class="icon-down"></i></li>
+        </ul>
+        <div class="s-combobox">
+          <div class="s-combobox-input-wrap">
+            <input aria-haspopup="true" role="combobox" class="s-combobox-input" name="keyword" id="keyword" tabindex="9" accesskey="s"  value="请输入关键词" onfocus="if(this.value=='请输入关键词'){this.value='';}else{this.value=this.value;}" onblur="if(this.value=='')this.value='请输入关键词'" type="text">
+          </div>
+        </div>
+        <input value="搜索" class="button main-bg-color" onClick="do_search();" type="button">
+      </div>
+    </form>
+    	#if($!config.hotSearch!="")
+    	
+		<ul class="hot-query">
+			#foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+        		#if($!velocityCount!=1) 
+            		<li style="border-left: none;"> <a href="javascript:void(0);" onclick="search_form('$info','goods');" title="$!info">$!info</a> </li>  
+				#end 
+				
+		    #end 
+		#end
+        </ul>
+  </div>
+  		<ul class="header-right"> 
+    <li style="z-index: 100;"> <a href="javascript:void(0);"><img style="z-index: 0; top: 0px; left: 0px; width: 60px;" src="$!cdnServer/resources/index/themes/68ecshopcom_360buy/images/common/7day.jpg"></a></li>
+    <li style="z-index: 100;"> <a href="javascript:void(0);"><img style="z-index: 0; top: 0px; left: 0px; width: 60px;" src="$!cdnServer/resources/index/themes/68ecshopcom_360buy/images/common/guarantee.jpg"></a></li>
+    <li style="z-index: 100;"> <a href="javascript:void(0);"><img style="z-index: 0; top: 0px; left: 0px; width: 60px;" src="$!cdnServer/resources/index/themes/68ecshopcom_360buy/images/common/delivery.jpg"></a></li>
+</ul> 	</div>
+</div>

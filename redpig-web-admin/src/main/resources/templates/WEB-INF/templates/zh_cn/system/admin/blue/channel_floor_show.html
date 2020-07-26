@@ -1,0 +1,566 @@
+
+#foreach($!obj in $!channelfloor_list)
+
+<div class="cont">
+    <div class="floor_editor"> 
+    <!--楼层样式0--> 
+    #if($!obj.cf_type==0)
+    <div class="left_four" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+       
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+      #foreach($rc in $!channelFloorTools.getrc_list($!obj.id))
+        	<a href="$!rc.url" target="_blank">$!rc.name</a>
+      #end           
+        </dd>
+      </dl>
+      <div class="left_four_wrap">
+        <div class="col_ads" id="position_1_$!obj.id"> <a href="javascript:void(0);" ></a>
+        </div>
+        <div class="col_product">
+          <ul>
+            <li id="position_2_$!obj.id" class="large"><a href="javascript:void(0);"></a>
+            </li>
+            <li id="position_3_$!obj.id" class="large"> <a href="javascript:void(0);"></a>
+            </li>
+            <li id="position_4_$!obj.id"  class="fore3 large" ><a href="javascript:void(0);"></a>
+            </li>
+            <li id="position_5_$!obj.id"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+            <li id="position_6_$!obj.id"> <a class="product_img" href="javascript:void(0);"></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+            <li id="position_7_$!obj.id" class="fore6"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==1)
+    <div class="left_two" style="clear:left">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+      #foreach($rc in $!channelFloorTools.getrc_list($!obj.id))
+        	<a href="$!rc.url" target="_blank">$!rc.name</a>
+      #end    
+        </dd>
+      </dl>
+      <div class="left_two_wrap">
+      	<div class="col_ads" id="position_1_$!obj.id"> <a href="javascript:void(0);" ></a>
+        </div>
+        <div class="col_product">
+          <ul>
+          
+            <li id="position_2_$!obj.id" class="large"><a href="javascript:void(0);"></a>
+            </li>
+            <li id="position_3_$!obj.id" class="fore2 large"> <a href="javascript:void(0);"></a>
+            </li>
+            <li id="position_4_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+            </li>
+            <li id="position_5_$!obj.id"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+            <li id="position_6_$!obj.id" class="fore5"> <a class="product_img" href="javascript:void(0);"></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+            <li id="position_7_$!obj.id" class="fore6"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==2)
+    <div class="lr_four" style="clear:left">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom" >
+      #foreach($rc in $!channelFloorTools.getrc_list($!obj.id))
+        	<a href="$!rc.url" target="_blank">$!rc.name</a>
+      #end 
+        </dd>
+      </dl>
+      <div class="lr_four_wrap">
+        <div class="lr_four_ads" id="position_1_$!obj.id"> <a href="javascript:void(0);" ></a>
+        </div>
+        <div class="lr_four_product">
+          <ul>
+            <li id="position_2_$!obj.id" class="large"><a href="javascript:void(0);" ></a>
+            </li>
+            <li id="position_3_$!obj.id" class="large"> <a href="javascript:void(0);"></a>
+            </li>
+             <li id="position_4_$!obj.id"  class="fore3 large"> <a href="javascript:void(0);"  ></a>
+            </li>
+             <li id="position_5_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+            </li>
+            <li id="position_6_$!obj.id"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+            <li id="position_7_$!obj.id"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+            <li id="position_8_$!obj.id" class="fore7"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+             <li id="position_9_$!obj.id"> <a class="product_img" href="javascript:void(0);" ></a>
+              <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==3)
+    <div class="right_eight" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+      		#foreach($rc in $!channelFloorTools.getrc_list($!obj.id))
+        		<a href="$!rc.url" target="_blank">$!rc.name</a>
+      		#end      
+        </dd>
+      </dl>
+      <div class="right_eight_wrap">
+      <div class="right_eight_ads" id="position_1_$!obj.id"> <a href="javascript:void(0);" ></a>
+       
+      </div>
+        <div class="right_eight_product">
+          <ul>
+            <li id="position_2_$!obj.id" class="large"><a href="javascript:void(0);"></a>
+           
+            </li>
+            <li id="position_3_$!obj.id" class="large"> <a href="javascript:void(0);"></a>
+             
+            </li>
+             <li id="position_4_$!obj.id"  class="large"> <a href="javascript:void(0);"  ></a>
+             
+            </li>
+             <li id="position_5_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+            </li>
+          </ul>
+          <ul>
+            <li id="position_6_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong> </dd>
+              </dl>
+            </li>
+            <li id="position_7_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong> </dd>
+              </dl>
+            </li>
+            <li id="position_8_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong> </dd>
+              </dl>
+              
+            </li>
+            <li id="position_9_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+              <strong class="product_price"></strong> </dd>
+              </dl>
+              
+            </li>
+          </ul>
+        </div>
+    </div>
+    </div>
+    #end
+    #if($!obj.cf_type==4)
+    <div class="right_seven" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+ 
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+   #foreach($rc in $!channelFloorTools.getrc_list($!obj.id))
+        	<a href="$!rc.url" target="_blank">$!rc.name</a>
+      #end     
+        </dd>
+      </dl>
+      <div class="right_seven_wrap">
+        <div class="right_seven_ads" id="position_1_$!obj.id"> <a href=""></a>
+
+        </div>
+        <div class="right_seven_product">
+          <ul>
+           <li id="position_2_$!obj.id"  class="large_width" > <a href="javascript:void(0);"  ></a>
+
+            </li>
+            <li id="position_3_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+
+            </li>
+            <li id="position_4_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+
+            </li>
+          </ul>
+          <ul>
+            <li id="position_5_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+                  <strong class="product_price"></strong>
+                  <del></del> </dd>
+              </dl>
+            </li>
+            <li id="position_6_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+                  <strong class="product_price"></strong>
+                  <del></del> </dd>
+              </dl>
+
+            </li>
+            <li id="position_7_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+                  <strong class="product_price"></strong> <del></del> </dd>
+              </dl>
+
+            </li>
+            <li id="position_8_$!obj.id">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+                <dd>
+                  <p class="product_name"><a href=""></a></p>
+                  <strong class="product_price"></strong> <del></del> </dd>
+              </dl>
+              
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==5)
+    <div class="right_six" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+     #foreach($rc in $!channelFloorTools.getrc_list($!obj.id))
+        	<a href="$!rc.url" target="_blank">$!rc.name</a>
+      #end   
+        </dd>
+      </dl>
+      <div class="right_six_wrap">
+        <div class="right_six_ads" id="position_1_$!obj.id"> <a href=""></a>
+        </div>
+        <div class="right_six_product">
+          <ul>
+            <li id="position_2_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+            </li>
+            <li id="position_3_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+            </li>
+            <li id="position_4_$!obj.id"  class="large" > <a href="javascript:void(0);"  ></a>
+            </li>
+          </ul>
+          <ul>
+            <li id="position_5_$!obj.id">
+              <dl>
+                <dt>
+                  <p class="product_name"><a href=""></a></p>
+                  <strong class="product_price"></strong> </dt>
+                <dd> <a class="product_img" href=""></a> </dd>
+              </dl>
+            </li>    
+            <li id="position_6_$!obj.id">
+              <dl>
+                <dt>
+                  <p class="product_name"><a href=""></a></p>
+                  <strong class="product_price"></strong></dt>
+                <dd> <a class="product_img" href=""></a></dd>
+              </dl>
+            </li>
+            <li id="position_7_$!obj.id">
+              <dl>
+                <dt>
+                  <p class="product_name"><a href=""></a></p>
+                  <strong class="product_price"></strong></dt>
+                <dd> <a class="product_img" href=""></a></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end </div>
+</div>
+<script>
+jQuery(document).ready(function(){
+	 var cf_id =   "$!obj.id";
+	 var cf_type = "$!obj.cf_type";
+  	 jQuery.ajax({type:'POST',
+	 			url:'$!webPath/channelfloor_load',
+	 			data:{"cf_id":cf_id},
+	 			dataType:"json",
+			    success:function(data){	
+			    jQuery.each(data, function(index,item){
+				if(cf_type==0){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","large");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore3 large");	
+					}
+					if(item.position==7){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore6 large");	
+					}
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a href='"+item.img_url+"' target='_blank'><img src=$!webPath"+item.photo_url+"></a>");		
+				}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore3");	
+					}
+					if(item.position==7){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore6");	
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong>");
+					}else{
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a>");	
+					}
+				}
+				}
+				if(cf_type==1){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position==2||item.position==4||item.position==5||item.position==7){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","large");
+					}
+					if(item.position==3){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore2 large");	
+					}
+					if(item.position==6){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore5 large");	
+					}
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a href='"+item.img_url+"' target='_blank'><img src=$!webPath"+item.photo_url+"></a>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position==2||item.position==4||item.position==5||item.position==7){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","");
+					}
+					if(item.position==3){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore2");	
+					}
+					if(item.position==6){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore5");	
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong>");
+					}else{
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a>");	
+					}
+				}
+				}
+				if(cf_type==2){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6||item.position==7||item.position==9){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","large");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore3 large");	
+					}
+					if(item.position==8){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore7 large");	
+					}
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a href='"+item.img_url+"' target='_blank'><img src=$!webPath"+item.photo_url+"></a>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6||item.position==7||item.position==9){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore3");	
+					}
+					if(item.position==8){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","fore7");	
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong>");
+					}else{
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a>");
+					}
+				}
+				}
+				if(cf_type==3){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","large");
+					}
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a href='"+item.img_url+"' target='_blank'><img src=$!webPath"+item.photo_url+"></a>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","");
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).append("<dl><dt><a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src='$!webPath"+item.photo_url+"'></a></dt><dd><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong></dd></dl>");	
+					}else{
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a>");
+					}
+				}
+				}
+				if(cf_type==4){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position!=2&&item.position!=1){
+						jQuery("#position_"+item.position+"_"+cf_id).attr("class","large");
+					}
+					if(item.position==2){
+						jQuery("#position_"+item.position+"_"+cf_id).attr("class","large_width");
+					}
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a href='"+item.img_url+"' target='_blank'><img src=$!webPath"+item.photo_url+"></a>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position!=2&&item.position!=1){
+						jQuery("#position_"+item.position+"_"+cf_id).attr("class","");
+					}
+					if(item.position==2){
+						jQuery("#position_"+item.position+"_"+cf_id).attr("class","large_width");
+					}
+					if(item.position!=2&&item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).append("<dl><dt><a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a></dt><dd><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong><del>￥"+item.before_price+"</del></dd></dl>");	
+					}else{
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a>");
+					}
+				}
+				}
+				if(cf_type==5){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","large");
+					}
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a href='"+item.img_url+"' target='_blank'><img src=$!webPath"+item.photo_url+"></a>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position+"_"+cf_id).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).attr("class","");
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position+"_"+cf_id).append("<dl><dt><p class='product_name'><a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong> </dt><dd> <a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a> </dd></dl>");
+					}else{
+					jQuery("#position_"+item.position+"_"+cf_id).append("<a target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!webPath"+item.photo_url+"></a>");
+					}	
+				}
+				}
+				});
+			}
+	 });	
+  jQuery(".storey_tab ul li").attr("cursor","pointer").click(function(){
+	jQuery(this).siblings().removeClass("this");
+	jQuery(this).addClass("this");
+	var i = jQuery(this).index();
+	jQuery(this).parent().parent().siblings().not(".hot_sell").hide();
+	jQuery(this).parent().parent().siblings().eq(i).show();
+  });
+  //
+  jQuery(".storey_list li").mouseenter(function(){
+	  jQuery(".storey_list li").stop();											 
+      jQuery(this).parent().parent().find("li").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+   }).mouseleave(function(){
+	  jQuery(".storey_list li").stop();
+      jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+   });	
+   jQuery(".storey_list").mouseleave(function(){
+	  jQuery(".storey_list li").stop();
+      jQuery(this).parent().parent().find("li").css("opacity","1.0"); 
+	});
+   jQuery(".hot_sell_ul li").mouseenter(function(){		
+	  jQuery(".hot_sell_ul li").stop();											 
+	  jQuery(this).parent().find("li").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+   }).mouseleave(function(){
+	  jQuery(".hot_sell_ul li").stop();
+      jQuery(this).animate({"opacity":"1.0"},{queue:false, duration:1000});
+   });
+   jQuery(".hot_sell_ul").mouseleave(function(){
+      jQuery(".hot_sell_ul li").stop();
+      jQuery(this).parent().find("li").css("opacity","1.0");
+   });
+   //
+   jQuery(".storey_show_2_right li").mouseenter(function(event){
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+	  jQuery(".storey_show_2_right li").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(".storey_show_2_left").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+	  jQuery(this).find(".storey_show_on").show();
+   }).mouseleave(function(){
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+      jQuery(this).animate({"opacity":"1.0"},{queue:false, duration:1000});
+	  jQuery(this).find(".storey_show_on").hide(); 
+   });
+   jQuery(".storey_show_2_right").mouseleave(function(){
+      jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+      jQuery(".storey_show_2_right li").css("opacity","1.0");
+	  jQuery(".storey_show_2_left").css("opacity","1.0");
+	  jQuery(this).find(".storey_show_on").hide(); 
+   });
+   //
+   jQuery(".storey_show_2_left").mouseenter(function(){	
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();												 
+	  jQuery(this).css("opacity","0.2");												
+	  jQuery(".storey_show_2_right li").animate({"opacity":"0.2"},{queue:false, duration:1000});											
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+	  jQuery(this).find(".storey_show_on").show();
+   }).mouseleave(function(){
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+      jQuery(".storey_show_2_right li").css("opacity","1.0");
+	  jQuery(this).css("opacity","1.0");
+	  jQuery(this).find(".storey_show_on").hide();
+   });
+   //
+});
+</script>
+#end

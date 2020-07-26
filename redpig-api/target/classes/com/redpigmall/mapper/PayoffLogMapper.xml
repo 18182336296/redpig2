@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.PayoffLogMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.PayoffLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="out_order_id" property="out_order_id" jdbcType="VARCHAR"/>
+		<result column="pl_sn" property="pl_sn" jdbcType="VARCHAR"/>
+		<result column="pl_info" property="pl_info" jdbcType="VARCHAR"/>
+		<result column="order_id" property="order_id" jdbcType="VARCHAR"/>
+		<result column="o_id" property="o_id" jdbcType="VARCHAR"/>
+		<result column="total_amount" property="total_amount" jdbcType="DECIMAL"/>
+		<result column="reality_amount" property="reality_amount" jdbcType="DECIMAL"/>
+		<result column="commission_amount" property="commission_amount" jdbcType="DECIMAL"/>
+		<result column="order_total_price" property="order_total_price" jdbcType="DECIMAL"/>
+		<result column="goods_info" property="goods_info" jdbcType="VARCHAR"/>
+		<result column="apply_time" property="apply_time" jdbcType="TIMESTAMP"/>
+		<result column="complete_time" property="complete_time" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="payoff_type" property="payoff_type" jdbcType="INTEGER"/>
+		<result column="finance_userName" property="finance_userName" jdbcType="VARCHAR"/>
+		<result column="payoff_remark" property="payoff_remark" jdbcType="VARCHAR"/>
+		<result column="refund_userName" property="refund_userName" jdbcType="VARCHAR"/>
+		<result column="refund_user_id" property="refund_user_id" jdbcType="BIGINT"/>
+		<result column="return_service_id" property="return_service_id" jdbcType="VARCHAR"/>
+		<result column="return_goods_info" property="return_goods_info" jdbcType="VARCHAR"/>
+		<association property="seller" column="seller_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="admin" column="admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.PayoffLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="out_order_id" property="out_order_id" jdbcType="VARCHAR"/>
+		<result column="pl_sn" property="pl_sn" jdbcType="VARCHAR"/>
+		<result column="pl_info" property="pl_info" jdbcType="VARCHAR"/>
+		<result column="order_id" property="order_id" jdbcType="VARCHAR"/>
+		<result column="o_id" property="o_id" jdbcType="VARCHAR"/>
+		<result column="total_amount" property="total_amount" jdbcType="DECIMAL"/>
+		<result column="reality_amount" property="reality_amount" jdbcType="DECIMAL"/>
+		<result column="commission_amount" property="commission_amount" jdbcType="DECIMAL"/>
+		<result column="order_total_price" property="order_total_price" jdbcType="DECIMAL"/>
+		<result column="goods_info" property="goods_info" jdbcType="VARCHAR"/>
+		<result column="apply_time" property="apply_time" jdbcType="TIMESTAMP"/>
+		<result column="complete_time" property="complete_time" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="payoff_type" property="payoff_type" jdbcType="INTEGER"/>
+		<result column="finance_userName" property="finance_userName" jdbcType="VARCHAR"/>
+		<result column="payoff_remark" property="payoff_remark" jdbcType="VARCHAR"/>
+		<result column="refund_userName" property="refund_userName" jdbcType="VARCHAR"/>
+		<result column="refund_user_id" property="refund_user_id" jdbcType="BIGINT"/>
+		<result column="return_service_id" property="return_service_id" jdbcType="VARCHAR"/>
+		<result column="return_goods_info" property="return_goods_info" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,out_order_id,pl_sn,pl_info,seller_id,order_id,o_id,total_amount,reality_amount,commission_amount,order_total_price,goods_info,apply_time,complete_time,status,admin_id,payoff_type,finance_userName,payoff_remark,refund_userName,refund_user_id,return_service_id,return_goods_info
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="out_order_id != null">and out_order_id = #{out_order_id,jdbcType=VARCHAR}</if>
+		<if test="pl_sn != null">and pl_sn = #{pl_sn,jdbcType=VARCHAR}</if>
+		<if test="pl_info != null">and pl_info = #{pl_info,jdbcType=VARCHAR}</if>
+		<if test="order_id != null">and order_id = #{order_id,jdbcType=VARCHAR}</if>
+		<if test="o_id != null">and o_id = #{o_id,jdbcType=VARCHAR}</if>
+		<if test="total_amount != null">and total_amount = #{total_amount,jdbcType=DECIMAL}</if>
+		<if test="total_amount_more_than_equal != null">and total_amount <![CDATA[ >= ]]> #{total_amount_more_than_equal,jdbcType=DECIMAL}</if>
+		<if test="total_amount_less_than_equal != null">and total_amount <![CDATA[ <= ]]> #{total_amount_less_than_equal,jdbcType=DECIMAL}</if>
+		<if test="reality_amount != null">and reality_amount = #{reality_amount,jdbcType=DECIMAL}</if>
+		<if test="commission_amount != null">and commission_amount = #{commission_amount,jdbcType=DECIMAL}</if>
+		<if test="order_total_price != null">and order_total_price = #{order_total_price,jdbcType=DECIMAL}</if>
+		<if test="goods_info != null">and goods_info = #{goods_info,jdbcType=VARCHAR}</if>
+		<if test="apply_time != null">and apply_time = #{apply_time,jdbcType=TIMESTAMP}</if>
+		<if test="apply_time_more_than_equal != null">and apply_time <![CDATA[ >= ]]> #{apply_time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="apply_time_less_than_equal != null">and apply_time <![CDATA[ <= ]]> #{apply_time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="complete_time != null">and complete_time = #{complete_time,jdbcType=TIMESTAMP}</if>
+		<if test="complete_time_more_than_equal != null">and complete_time <![CDATA[ >= ]]> #{complete_time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="complete_time_less_than_equal != null">and complete_time <![CDATA[ <= ]]> #{complete_time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="status_1 != null and status_2 != null">and (status = #{status_1,jdbcType=INTEGER} or status = #{status_2,jdbcType=INTEGER})</if>
+		<if test="payoff_type != null">and payoff_type = #{payoff_type,jdbcType=INTEGER}</if>
+		<if test="finance_userName != null">and finance_userName = #{finance_userName,jdbcType=VARCHAR}</if>
+		<if test="payoff_remark != null">and payoff_remark = #{payoff_remark,jdbcType=VARCHAR}</if>
+		<if test="refund_userName != null">and refund_userName = #{refund_userName,jdbcType=VARCHAR}</if>
+		<if test="refund_user_id != null">and refund_user_id = #{refund_user_id,jdbcType=BIGINT}</if>
+		<if test="return_service_id != null">and return_service_id = #{return_service_id,jdbcType=VARCHAR}</if>
+		<if test="return_goods_info != null">and return_goods_info = #{return_goods_info,jdbcType=VARCHAR}</if>
+		<if test="seller_id != null">and seller_id = #{seller_id,jdbcType=BIGINT}</if>
+		<if test="admin_id != null">and admin_id = #{admin_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		out_order_id= #{out_order_id},
+		pl_sn= #{pl_sn},
+		pl_info= #{pl_info},
+		<if test="seller == null or seller.id == null">seller_id = null,</if>
+		<if test="seller != null and seller.id != null">seller_id = #{seller.id,jdbcType=BIGINT},</if>
+		order_id= #{order_id},
+		o_id= #{o_id},
+		total_amount= #{total_amount},
+		reality_amount= #{reality_amount},
+		commission_amount= #{commission_amount},
+		order_total_price= #{order_total_price},
+		goods_info= #{goods_info},
+		apply_time= #{apply_time},
+		complete_time= #{complete_time},
+		status= #{status},
+		<if test="admin == null or admin.id == null">admin_id = null,</if>
+		<if test="admin != null and admin.id != null">admin_id = #{admin.id,jdbcType=BIGINT},</if>
+		payoff_type= #{payoff_type},
+		finance_userName= #{finance_userName},
+		payoff_remark= #{payoff_remark},
+		refund_userName= #{refund_userName},
+		refund_user_id= #{refund_user_id},
+		return_service_id= #{return_service_id},
+		return_goods_info= #{return_goods_info},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_payoff_log 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		obj.*
+		from redpigmall_payoff_log obj 
+		<if test="seller_userName !=null">
+			join 
+				redpigmall_user user 
+			on 
+				user.id = obj.user_id and user.userName=#{seller_userName,jdbcType=VARCHAR}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_payoff_log obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getSellerByUserId" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_payoff_log
+		where
+			seller_id = #{seller_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAdminByUserId" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_payoff_log
+		where
+			admin_id = #{admin_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		obj.*
+		from redpigmall_payoff_log obj 			
+		<if test="seller_userName !=null">
+			join 
+				redpigmall_user user 
+			on 
+				user.id = obj.user_id and user.userName=#{seller_userName,jdbcType=VARCHAR}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.PayoffLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_payoff_log(addTime,deleteStatus,out_order_id,pl_sn,pl_info,order_id,o_id,total_amount,reality_amount,commission_amount,order_total_price,goods_info,apply_time,complete_time,status,payoff_type,finance_userName,payoff_remark,refund_userName,refund_user_id,return_service_id,return_goods_info,seller_id,admin_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{out_order_id,jdbcType=VARCHAR},#{pl_sn,jdbcType=VARCHAR},#{pl_info,jdbcType=VARCHAR},#{order_id,jdbcType=VARCHAR},#{o_id,jdbcType=VARCHAR},#{total_amount,jdbcType=DECIMAL},#{reality_amount,jdbcType=DECIMAL},#{commission_amount,jdbcType=DECIMAL},#{order_total_price,jdbcType=DECIMAL},#{goods_info,jdbcType=VARCHAR},#{apply_time,jdbcType=TIMESTAMP},#{complete_time,jdbcType=TIMESTAMP},#{status,jdbcType=INTEGER},#{payoff_type,jdbcType=INTEGER},#{finance_userName,jdbcType=VARCHAR},#{payoff_remark,jdbcType=VARCHAR},#{refund_userName,jdbcType=VARCHAR},#{refund_user_id,jdbcType=BIGINT},#{return_service_id,jdbcType=VARCHAR},#{return_goods_info,jdbcType=VARCHAR},#{seller.id,jdbcType=BIGINT},#{admin.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.PayoffLog">
+		update redpigmall_payoff_log
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_payoff_log where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_payoff_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_payoff_log obj 			
+		<if test="seller_userName !=null">
+			join 
+				redpigmall_user user 
+			on 
+				user.id = obj.user_id and user.userName=#{seller_userName,jdbcType=VARCHAR}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_payoff_log obj 
+		<if test="seller_userName !=null">
+			join 
+				redpigmall_user user 
+			on 
+				user.id = obj.user_id and user.userName=#{seller_userName,jdbcType=VARCHAR}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.PayoffLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_payoff_log
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_payoff_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

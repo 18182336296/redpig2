@@ -1,0 +1,41 @@
+ #foreach($!obj in $!objs)
+ #set($var = $weixinChannelFloorTools.getGcBySecondShowClass($!obj).size())
+    <div class="c_goods_box">
+    	<div class="nav_main_c">
+        	<div class="nav_main">
+            	<ul class="SecondShowClass" id="SecondShowClass$!velocityCount">
+                	<li class="this"><span>$!obj.showName</span></li>
+                	#foreach($!sec_sh_class in $weixinChannelFloorTools.getGcBySecondShowClass($!obj))
+                    <li><a href="$!webPath/class_items?gc_id=$!sec_sh_class.id"><span>$!sec_sh_class.className</span></a></li>
+                    #end
+                </ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+        	var i = 1+$var;
+        	var li = jQuery(document).width();
+        	jQuery("#SecondShowClass$!velocityCount").attr("style","width:"+li/4*i+"px")
+        	jQuery("#SecondShowClass$!velocityCount li").attr("style","width:"+li/4+"px");
+        </script>
+        <div class="g_list">
+        <ul class="g_list_box">
+        	#foreach($goods in $weixinChannelFloorTools.getGoodsByGc($weixinChannelFloorTools.getGcBySecondShowClass($!obj)))
+        	<li>
+        	#if($!goods.goods_main_photo)
+	          #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_middle.$!{goods.goods_main_photo.ext}")
+	          #else
+	          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	          #end
+            	<a href="$!webPath/items?id=$goods.id">
+                	<div class="goods_pic"><img src="$img"></div>
+                    <div class="goods_name">$goods.goods_name</div>
+                    <div  class="goods_info">
+                        <span class="goods_value">￥$goods.store_price</span>
+                    </div>
+                </a>
+            </li>
+            #end
+        </ul>
+    </div>
+    </div>
+    #end

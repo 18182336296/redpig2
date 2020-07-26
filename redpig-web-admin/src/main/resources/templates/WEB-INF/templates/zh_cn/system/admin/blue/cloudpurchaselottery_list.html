@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ 
+});
+</script>
+<body>
+<div class="cont">
+  <h3 class="seth">云购期号管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/cloudpurchaselottery_list"  class="this"><b>管理</b></a></li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/cloudpurchaselottery_list" method="post">
+  <div class="search"> <span>商品名称</span> <span class="size100">
+    <input name="goods_name" type="text" id="goods_name" value="$!goods_name" />
+    </span> 
+    <span>状态</span> <span>
+    <select name="status" id="status">
+      <option value="">所有状态</option>
+      <option value="5" #if($!status == 5)selected="selected"#end>正在进行</option>
+      <option value="10" #if($!status == 10)selected="selected"#end>即将揭晓</option>
+      <option value="15" #if($!status == 15)selected="selected"#end>已揭晓</option>
+    </select>
+    </span> <span>
+    <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+    </span> </div>
+  
+  <div class="fshoptb2">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table2">
+        <tr>
+          <th width="4%">&nbsp;</th>
+          <th width="10%" align="center"><span class="form_btna">期号</span></th>
+          <th width="20%" align="center"><span class="form_btna">商品名</span></th>
+          <th width="10%" align="center"><span class="form_btna">总人次</span></th>
+          <th width="10%" align="center"><span class="form_btna">剩余人次</span></th>
+          <th width="15%" align="center"><span class="form_btna">状态</span></th>
+          <th width="25%" align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <tr id="$!obj.id">
+          <td class="check_position"><label for="ids_$!obj.id">
+              <input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" />
+              <span class="lbl"></span> </label></td>
+          <td  align="center"><span class="num"> $!obj.period</span></td>
+          <td  align="center"><span class="num"> $!obj.cloudPurchaseGoods.goods_name</span></td>
+          <td  align="center"><span class="num"> $!obj.cloudPurchaseGoods.goods_price 人次</span></td>
+          <td  align="center"><span class="num"> $!obj.purchased_left_times 人次</span></td>
+          <td  align="center"><span class="num"> #if($!obj.status==5)正在进行#elseif($!obj.status==10)即将揭晓#elseif($!obj.status==15)已揭晓#end</span></td>
+          <td align="center" class="hui oprate_con"><a href="$!webPath/cloudbuy/items?id=$!obj.id" class="blue" target="_blank">查看</a> #if($!obj.status==15 && $!obj.delivery_status==0) |<a class="blue" href="javascript:void(0);" dialog_uri="$!webPath/cloudpurchaselottery_delivery?id=$!obj.id&currentPage=$!currentPage" dialog_title="确认发货" dialog_width="510" dialog_height="100" >立即发货</a>#end #if($!obj.status==15 && $!obj.delivery_status==-1)|<a class="blue">未提交收货地址</a>#end #if($!obj.status==15 && $!obj.delivery_status==1)|<a class="blue">已发货</a>#end #if($!obj.status==15 && $!obj.delivery_status==2)|<a class="blue">已收货</a>#end</td>
+        </tr>
+        #end   
+        #else
+        <tr>
+          <td colspan="5"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+        </tr>
+        #end
+      </table>
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        <div class="operation_left">
+          <ul>
+            <li>
+              <label for="currentAll">
+                <input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" />
+                <span class="lbl"> 本页全选</span></label>
+            </li>
+            <li><a href="javascript:void(0);" onclick="cmd('$!webPath/app_topics_del')">删除</a></li>
+          </ul>
+        </div>
+        <div class="operation_right">
+          <div class="fenye">
+            <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+            <input name="mulitId" type="hidden" id="mulitId" />
+            $!gotoPageFormHTML </div>
+        </div>
+      </div>
+      #end
+   </form>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>商品列表</title>
+    	<link href="$!cdnServer/resources/yingerMall/css/mui.min.css" rel="stylesheet"/>
+    	<link rel="stylesheet" href="$!cdnServer/resources/yingerMall/css/common.css" />
+	</head>
+	<body style="background-color: #fff;">
+		<header class="mui-bar mui-bar-nav mui-common-bar">
+			<a class="mui-icon mui-action-back mui-pull-left mui-icon-back-black"></a>
+			<h1 class="mui-title">商品列表</h1>
+		</header>
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<ul class="mui-table-view product-table-view">
+					#if($!objs.size()>0)
+					#foreach($obj in $objs)
+				    <li class="mui-table-view-cell mui-media" id="$!obj.id">
+			            <img class="mui-media-object mui-pull-left pro-nicimg" src="$!imageWebServer/$!obj.goods_main_photo.path/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}">
+			            <div class="mui-media-body">
+			            	<div class="pro-r-box">
+			                	<p class="mui-ellipsis-2 pro-title">$!obj.goods_ad_words</p>
+			                	<div class="mui-clearfix">
+			                		<div class="mui-pull-left">
+			                			<div class="pro-font-0">
+			                				<span class="now-unit">￥</span>
+			                				<span class="now-price">$!obj.goods_current_price</span>
+			                				<span class="profits">&nbsp;&nbsp;赚￥</span>
+											#set($cheap = $obj.goods_price - $obj.goods_current_price)
+			                				<span class="profits">$!cheap</span>
+			                			</div>
+			                			<div class="pro-font-0">
+			                				<del class="ori-com">￥</del>
+			                				<del class="ori-com">$!obj.goods_price</del>
+											#set($discount = ($obj.goods_current_price / $obj.goods_price) * 10)
+											<span class="ori-com ori-ma">$!discount折</span>
+											<!--这里要统计每个商品的购买人数，此次暂用销量才代替-->
+			                				<span class="ori-com">$!obj.goods_salenum人已购买</span>
+			                			</div>
+			                		</div>
+			                		<div class="mui-pull-right">
+			                			<button type="button" class="mui-btn mui-sell">卖</button>
+			                		</div>
+			                	</div>
+		                	</div>
+			            </div>
+				    </li>
+					#end
+					#end
+				</ul>
+				
+			</div>
+		</div>
+		
+		<!--分享弹窗-->
+		<div id="popover" class="mui-popover mui-popover-bottom" style="height: 250px;">
+			<div class="mui-text-center share-profits"><span class="share-lable">赚￥</span><span class="share-price">99.99</span></div>
+			<div class="mui-text-center share-info">
+				<p class="info">任何人通过此链接购买商品，您都能赚钱</p>
+				<p class="info">(收益仅自己可见)</p>
+			</div>
+			<!--分享-->
+			<div class="mui-clearfix share-icons">
+				<a class="share-item mui-pull-left mui-text-center">
+					<span class="share-friend-span">
+						<img src="$!cdnServer/resources/yingerMall/images/share-friend.png" class="share-friend"/>
+					</span>
+					<p class="share-text" style="margin-top: 5px;">分享到朋友圈</p>
+				</a>
+				<a class="share-item mui-pull-left mui-text-center">
+					<img src="$!cdnServer/resources/yingerMall/images/share-wechat.png" class="share-com"/>
+					<p class="share-text">微信</p>
+				</a>
+				<a class="share-item mui-pull-left mui-text-center">
+					<img src="$!cdnServer/resources/yingerMall/images/share-qq.png" class="share-com"/>
+					<p class="share-text">QQ</p>
+				</a>
+				<a class="share-item mui-pull-left mui-text-center">
+					<img src="$!cdnServer/resources/yingerMall/images/share-weibo.png" class="share-com"/>
+					<p class="share-text">微博</p>
+				</a>
+			</div>
+		</div>
+		<script src="$!cdnServer/resources/yingerMall/js/jquery-1.9.1.min.js"></script>
+	    <script src="$!cdnServer/resources/yingerMall/js/mui.min.js"></script>
+	    <script>
+	    	mui.ready(function() {
+	            mui('#pullrefresh').on('tap', '.mui-sell', function() {
+	            	mui("#popover").popover('show');
+	            })
+	        })
+	    </script>
+	    <script>
+	    	mui.init({
+			    pullRefresh : {
+			        container:"#pullrefresh",//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+			        down: {//下拉刷新
+						callback: pulldownRefresh
+					},
+					up: {//上拉加载更多
+						auto:true,//可选,默认false.自动上拉加载一次
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+			    }
+			});
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 1500);
+			}
+			var count = 0;//用来判断数据是否已经加载完整
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					ajaxData();
+				}, 1500);
+			}
+			function ajaxData(){
+				//这里的数据应该是请求ajax获取
+				/*jQuery.ajax({
+					url:"$!webPath/income/goods_extension_list_ajax",
+                    type: "get",
+                    dataType:"json",
+					async:"false",
+					success:function(result) {
+                        //resultData = result.data;
+						/!*console.log(result.data);
+						console.log(result.code);
+						console.log(result.msg);*!/
+
+                    },
+					error:function (e) {
+						console.log(e);
+                    }
+                })*/
+
+                var resultData = [{id:1},{id:2},{id:3},{id:4}];
+				count++;
+
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh((count > 10)); //参数为true代表没有更多数据了。
+				var table = document.body.querySelector('.mui-table-view');
+				var cells = document.body.querySelectorAll('.mui-table-view-cell');
+				/*for (var i = 0; i < resultData.length; i++) {
+					var li = document.createElement('li');
+					li.className = 'mui-table-view-cell mui-media';
+					li.innerHTML = '<img class="mui-media-object mui-pull-left pro-nicimg" src="$!cdnServer/resources/yingerMall/images/list.jpg">'+
+			            '<div class="mui-media-body">'+
+			            	'<div class="pro-r-box">'+
+			                	'<p class="mui-ellipsis-2 pro-title">2018秋装新款长袖女修身长款拖地晚宴 灰色 订制礼服</p>'+
+			                	'<div class="mui-clearfix">'+
+			                		'<div class="mui-pull-left">'+
+			                			'<div class="pro-font-0">'+
+			                				'<span class="now-unit">￥</span>'+
+			                				'<span class="now-price">2999.0</span>'+
+			                				'<span class="profits">&nbsp;&nbsp;赚￥</span>'+
+			                				'<span class="profits">199</span>'+
+			                			'</div>'+
+			                			'<div class="pro-font-0">'+
+			                				'<del class="ori-com">￥</del>'+
+			                				'<del class="ori-com">3999.9</del>'+
+			                				'<span class="ori-com ori-ma">7.8折</span>'+
+			                				'<span class="ori-com">100人已买</span>'+
+			                			'</div>'+
+			                		'</div>'+
+			                		'<div class="mui-pull-right">'+
+			                			'<button type="button" class="mui-btn mui-sell">卖</button>'+
+			                		'</div>'+
+			                	'</div>'+
+		                	'</div>'+
+			            '</div>'
+					table.appendChild(li);
+				}*/
+
+				
+			}
+	    </script>
+	</body>
+</html>

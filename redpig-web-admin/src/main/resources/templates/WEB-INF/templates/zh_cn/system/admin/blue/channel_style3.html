@@ -1,0 +1,51 @@
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<script>
+function save_form(){
+	var value=jQuery("input[name='aps_type']:checked").val();
+	var adv=jQuery("#adv_id").val();
+    if(adv!=undefined && adv!=null && adv!=""){
+	   jQuery("#advp_id").val(adv);
+	   jQuery("#adv_type").val("adv");
+	   jQuery("#theForm").submit();
+	}else{
+	   alert("请选择商城广告信息！");
+	}
+  }
+</script>
+<form action="$!webPath/channel_style_save_on" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id">
+  <input name="seq" type="hidden" id="seq" value="$!seq">
+  <input name="type" type="hidden" id="type" value="$!style">
+  <input name="adv_type" type="hidden" id="adv_type" value="">
+  <input name="advp_id" type="hidden" id="advp_id" />
+<div class="box_floor">
+  <div class="floor_advertisment">
+   <em class="floor_warning">注释：可以选择上传广告图片或者使用商城广告</em>
+    <ul class="floor_adv">
+       <li id="system_adv_info"> <b class="left">广告位选择：</b>
+       <span class="floor_adv_sp">
+       <select name="adv_id" id="adv_id">
+       #if($!obj.ch_nav_advp_id=="")
+        <option value="">请选择图片广告位</option>
+       #end
+       #foreach($ap in $aps)
+          <option value="$!ap.id" #if($!obj.ch_nav_advp_id==$!ap.id) selected="selected" #end>$!{ap.ap_title} $!{ap.ap_width}*$!{ap.ap_height}</option>
+       #end
+       </select>
+        </span>
+        <i class="floor_adv_i">建议：#if($!obj.ch_nav_style=="blue") 690*505 #elseif($!obj.ch_nav_style=="brown") 950*355 #else 750*330 #end幻灯广告位</i> 
+      </li>
+    </ul>
+  </div>
+  <div class="submit">
+      <input name="按钮" type="button" value="保存" onClick="save_form();" />
+    </div>
+</div>
+</form>

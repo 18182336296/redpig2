@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+     app_op_v:{required:true},
+	 acc:{
+	    accept:"$!config.imageSuffix"
+	  }
+	 },
+    messages:{
+	 app_op_v:{required:"版本号不能为空"},
+	 acc:{
+	    accept:"不允许的图片格式"
+	  }
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+    //
+  jQuery("#logoShow").mouseover(function(){
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+  //
+  jQuery("#idx_pop_img").change(function(){
+	 jQuery("#textfield1").val(jQuery("#idx_pop_img").val());
+   })
+  jQuery("#icon_a").change(function(){
+	 jQuery("#textfield2").val(jQuery("#icon_a").val());
+   })
+  jQuery("#icon_b").change(function(){
+	 jQuery("#textfield3").val(jQuery("#icon_b").val());
+   })
+  jQuery("#icon_c").change(function(){
+	 jQuery("#textfield4").val(jQuery("#icon_c").val());
+   })
+  jQuery("#icon_d").change(function(){
+	 jQuery("#textfield5").val(jQuery("#icon_d").val());
+   })
+	//
+  jQuery("#ap_type").val("$!obj.ap_type");
+  jQuery(":radio[id=ap_sys_type][value=$!obj.ap_sys_type]").attr("checked","checked");
+  jQuery(":radio[id=ap_show_type][value=$!obj.ap_show_type]").attr("checked",true); 
+  jQuery(":radio[id=ap_status][value=$!obj.ap_status]").attr("checked",true); 
+  #if($!obj.ap_type=="text")
+	jQuery("#advert_text").show();
+	jQuery("#advert_img").hide();
+  #else
+ 	jQuery("#advert_text").hide();
+	jQuery("#advert_img").show();	  
+  #end
+  #if($!obj.idx_pop)
+  jQuery(":radio[id=idx_pop][value='$!{obj.idx_pop}']").attr("checked",true); 
+  #end
+  #if($!obj.tab_icon_dft)
+  jQuery(":radio[id=tab_icon_dft][value='$!{obj.tab_icon_dft}']").attr("checked",true); 
+  #end
+  #if($!obj.in_use)
+  jQuery(":radio[id=in_use][value='$!{obj.in_use}']").attr("checked",true); 
+  #end
+  //
+  jQuery("#ap_type").change(function(){
+    var type=jQuery(this).val();
+	if(type=="text"){
+	  jQuery("#advert_text").show();
+	  jQuery("#advert_img").hide();
+	}else{
+	  jQuery("#advert_text").hide();
+	  jQuery("#advert_img").show();	  
+	}
+  });
+});
+
+function saveForm(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">运营版本管理</h1>
+  <div class="nav_list">
+    <ul>
+    	<li><a href="$!webPath/app_op_version_list"><b>所有版本</b></a></li>
+        <li><a href="$!webPath/app_op_version_add" class="this"><b>新增版本</b></a></li>
+        #if($!edit) 
+          <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+	    #end
+    </ul>
+  </div>
+  <form action="$!webPath/app_op_version_save" method="post" enctype="multipart/form-data" id="theForm">
+    <div class="edit">
+      <div class="editul setcont">
+        <!--鼠标经过样式-->
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>版本号</li>
+          <li><span class="webname">
+            <input name="app_op_v" type="text" id="app_op_v" value="$!obj.app_op_v" />
+            </span></li>
+        </ul>
+         <ul class="set1">
+          <li class="setcont_bg">首页是否弹出框</li>
+          <li class="radiosp">
+            <label> <span>
+              <input name="idx_pop" id="idx_pop" type="radio" value="1" checked="checked"  />
+              </span><span>是</span> </label>
+            <label> <span>
+              <input name="idx_pop" id="idx_pop" type="radio" value="0" />
+              </span><span>否</span> </label>
+          </li>
+        </ul>
+        <ul class="set1" id="advert_img">
+          <li class="setcont_bg">弹出框图片</li>
+          <li> <span class="size13" >
+            <input name="textfield" type="text" id="textfield1" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="idx_pop_img" type="file" id="idx_pop_img" class="file-text" size="30"/>
+            </span> <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.idx_pop_img)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>#end
+            #if($!obj.ap_acc)
+            <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj.ap_acc.path/$!obj.ap_acc.name"  width="$!obj.ap_width" height="$!obj.ap_height" id="logoShow2"/> </div>
+            #end </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">弹出框链接</li>
+          <li><span class="webname">
+            <input name="idx_pop_url" type="text" id="idx_pop_url" value="$!obj.idx_pop_url" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">是否用默认icon</li>
+          <li class="radiosp">
+            <label> <span>
+              <input name="tab_icon_dft" id="tab_icon_dft" type="radio" value="0" checked="checked"  />
+              </span><span>默认icon</span> </label>
+            <label> <span>
+              <input name="tab_icon_dft" id="tab_icon_dft" type="radio" value="1" />
+              </span><span>广告icon</span> </label>
+          </li>
+        </ul>
+        <ul class="set1" id="advert_img">
+          <li class="setcont_bg">icon a图片</li>
+          <li> <span class="size13" >
+            <input name="textfield" type="text" id="textfield2" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="icon_a" type="file" id="icon_a" class="file-text" size="30"/>
+            </span> <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.ap_acc)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>#end
+            #if($!obj.ap_acc)
+            <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj.ap_acc.path/$!obj.ap_acc.name"  width="$!obj.ap_width" height="$!obj.ap_height" id="logoShow2"/> </div>
+            #end </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">icon a描述</li>
+          <li><span class="webname">
+            <input name="icon_a_txt" type="text" id="icon_a_txt" value="$!obj.icon_a_txt" />
+            </span></li>
+        </ul>
+        <ul class="set1" id="advert_img">
+          <li class="setcont_bg">icon b图片</li>
+          <li> <span class="size13" >
+            <input name="textfield" type="text" id="textfield3" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="icon_b" type="file" id="icon_b" class="file-text" size="30"/>
+            </span> <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.ap_acc)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>#end
+            #if($!obj.ap_acc)
+            <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj.ap_acc.path/$!obj.ap_acc.name"  width="$!obj.ap_width" height="$!obj.ap_height" id="logoShow2"/> </div>
+            #end </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">icon b描述</li>
+          <li><span class="webname">
+            <input name="icon_b_txt" type="text" id="icon_b_txt" value="$!obj.icon_b_txt" />
+            </span></li>
+        </ul>
+        <ul class="set1" id="advert_img">
+          <li class="setcont_bg">icon c图片</li>
+          <li> <span class="size13" >
+            <input name="textfield" type="text" id="textfield4" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="icon_c" type="file" id="icon_c" class="file-text" size="30"/>
+            </span> <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.ap_acc)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>#end
+            #if($!obj.ap_acc)
+            <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj.ap_acc.path/$!obj.ap_acc.name"  width="$!obj.ap_width" height="$!obj.ap_height" id="logoShow2"/> </div>
+            #end </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">icon c描述</li>
+          <li><span class="webname">
+            <input name="icon_c_txt" type="text" id="icon_c_txt" value="$!obj.icon_c_txt" />
+            </span></li>
+        </ul>
+        <ul class="set1" id="advert_img">
+          <li class="setcont_bg">icon d图片</li>
+          <li> <span class="size13" >
+            <input name="textfield" type="text" id="textfield5" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="icon_d" type="file" id="icon_d" class="file-text" size="30"/>
+            </span> <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.ap_acc)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>#end
+            #if($!obj.ap_acc)
+            <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj.ap_acc.path/$!obj.ap_acc.name"  width="$!obj.ap_width" height="$!obj.ap_height" id="logoShow2"/> </div>
+            #end </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">icon d描述</li>
+          <li><span class="webname">
+            <input name="icon_d_txt" type="text" id="icon_d_txt" value="$!obj.icon_d_txt" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">是否应用版本</li>
+          <li class="radiosp">
+            <label> <span>
+              <input name="in_use" id="in_use" type="radio" value="0" checked="checked"  />
+              </span><span>否</span> </label>
+            <label> <span>
+              <input name="in_use" id="in_use" type="radio" value="1" />
+              </span><span>是</span> </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit"> <span class="pad120">
+      <input name="" type="button" value="提交" onclick="saveForm();" />
+      <input name="add_url" type="hidden" id="add_url" value="$!webPath/app_op_version_add" />
+      <input name="list_url" type="hidden" id="list_url" value="$!webPath/app_op_version_list" />
+      <input name="id" type="hidden" id="id" value="$!obj.id" />
+      </span> </div>
+  </form>
+</div>
+</body>
+</html>

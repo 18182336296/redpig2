@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>自提点查询 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/style/system/front/default/css/delivery.css"/>
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/style/system/front/default/css/public.css"/>
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/style/system/front/default/css/public_auto.css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+$!httpInclude.include("/top")
+<!--head-->
+$!httpInclude.include("/head")
+<!--head-->
+<!--nav1-->
+<script>
+jQuery(document).ready(function(){
+  jQuery("#navul li").each(function(){
+    var original_url=jQuery(this).attr("original_url");
+	if("$!{current_url}".indexOf(original_url)>=0){
+	   jQuery(this).addClass("this");	
+	}
+  });
+ //鼠标经过左侧分类							
+ jQuery(".left_menu_dl").mouseover(function(){	
+	var child_count = jQuery(this).attr("child_count");
+		if(child_count>0){
+		 var id=jQuery(this).attr("id");
+		  jQuery("#dts_"+id).addClass("left_menu_this").removeClass("left_menu_dt");	
+		  jQuery("#child_"+id).show();			
+		}
+		var gc_id=jQuery(this).attr("id");
+		var gc_color=jQuery(this).attr("gc_color");
+		jQuery("#left_menu_con_"+gc_id).attr("style","border:1px solid "+gc_color+"; border-left:1px solid "+gc_color+";").find(".menu_con_right_top").css("background-color",gc_color);
+	var z = -35;
+	var eq =jQuery(this).index();
+	var x = eq*z;
+	jQuery("#left_menu_con_"+gc_id).css('margin-top',x+'px');
+  }).mouseleave(function(){
+	 jQuery("dt[id^=dts_]").removeAttr("style");
+	jQuery("div[id^=left_menu_con_]").removeAttr("style"); 
+	 var child_count = jQuery(this).attr("child_count");
+	if(child_count>0){ 
+     var id=jQuery(this).attr("id");
+	  jQuery("#dts_"+id).removeClass("left_menu_this").addClass("left_menu_dt");	
+      jQuery("#child_"+id).hide();
+	}
+  });
+ //
+  jQuery(".nav_left").mouseover(function(){
+	  jQuery("#other_menu").show();
+   });
+  jQuery(".nav_left").mouseleave(function(){
+	  jQuery("#other_menu").hide();	  
+   });	 
+});
+</script>
+<style type="text/css">
+.left_menu_con_center_left dd a { font-weight:normal; font-size:12px;}
+.nav ul li a:hover{ color:#0086C6;}
+.head_seartxt .h_sear_btn{background: none repeat scroll 0% 0% #1F96CF;}
+.head_seartxt .h_sear_txt{border: 3px solid #1F96CF;}
+.nav_left{ background:#0086C6}
+.nav{border-bottom: 3px solid #0086C6;}
+.left_menu {background-color:#0074ac;}
+.left_menu_dl { background-color:#0074ac;}
+.left_menu_this {background-color:#00689a;}
+</style>
+$!httpInclude.include("/nav1")
+<!--nav1-->
+
+
+<!-- 专题主体-->
+<script>
+jQuery(document).ready(function(){
+		var pro =jQuery("#pro_ul").find("li:first");
+		set_province(pro);	
+	});
+
+	function set_province(obj){
+				jQuery(obj).parent().find("li").removeClass();
+					jQuery(obj).addClass("this");
+					var name = jQuery(obj).find("a").html();
+					var obj_id=jQuery(obj).attr("obj_id");
+					jQuery.post("$!webPath/load_area",
+								{"pid":obj_id},
+								function(data){
+									jQuery("#city_ul").html("");
+									jQuery.each(data, function(index,item){				   
+										jQuery("#city_ul").append("<li obj_id="+item.id+" onclick='set_city(this);'><a href='javascript:void(0);'>"+item.areaName+"</a></li>");
+										jQuery("#current_city").html(name);
+										var city =jQuery("#city_ul").find("li:first");
+										set_city(city);
+									  });											  
+									},"json");
+
+	}
+	
+	function set_city(obj){
+		jQuery(obj).parent().find("li").removeClass();
+		jQuery(obj).addClass("this");
+		var city_name = jQuery(obj).find("a").html();
+		var city_id = jQuery(obj).attr("obj_id");
+		jQuery.post("$!webPath/query_area_delivery",
+					{"city_id":city_id},
+					function(data){
+					jQuery("#delivery_list").html(data);
+					var pro_name= jQuery("#pro_ul").find("li[class='this']").find("a").html();
+					jQuery("#current_city").html(pro_name+">"+city_name);
+					},"text");
+				}
+	
+function ajaxPage(url,currentPage,obj){
+	var city_id =jQuery("#city_ul li[class='this']").attr("obj_id");
+    jQuery.ajax({type:'POST',url:url,data:{"currentPage":currentPage,"city_id":city_id},
+			  beforeSend:function(){
+			   },
+			  success:function(data){
+				jQuery("#delivery_list").html(data);																									                
+			  }
+		})
+  }
+</script>
+<div class="self_place">
+	<div class="self_place_banner"></div>
+
+    <div class="self_place_main">
+    <div class="main_center_particular_join">       
+            <a href="$!webPath/delivery/index">自提点管理</a>
+             	<a href="$!webPath/delivery_apply1">加入自提点</a>
+        </div>
+    	<div class="self_place_main_top">自提点查询</div>
+        
+        <div class="self_place_main_center">
+        	<ul id="pro_ul">
+            #foreach($area in $areas)
+            	<li obj_id="$!area.id" onclick="set_province(this);"><a href="javascript:void(0);">$!area.areaName</a></li>
+            #end   
+            </ul>
+        </div>
+        <div class="self_place_main_center_b">
+        	<ul id="city_ul">
+            </ul>
+        </div>
+        <div class="self_place_main_center_particular" style=" min-height:200px">
+        	<h3>当前查询城市：<b id="current_city">暂无数据</b></h3>
+            <div class="main_center_particular_place" id="delivery_list">
+            </div>
+        </div>
+    </div>
+  $!httpInclude.include("/footer")
+</div>
+  
+</body>
+</html>

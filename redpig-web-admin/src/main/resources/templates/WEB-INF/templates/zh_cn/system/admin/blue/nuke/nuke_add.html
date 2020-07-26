@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title></title>
+  <link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+  <link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+  <script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+  <script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+  <script src="$!cdnServer/resources/js/jquery.zh.cn.js"  charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/icon.css">
+    <script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/locale/easyui-lang-zh_CN.js"></script>
+  <script>
+      jQuery(document).ready(function(){
+      #if($!obj)
+          jQuery("#nuke_type").val($!obj.nuke_type);
+      #end
+          $('#beginTime').datebox().datebox('calendar').calendar({
+              validator: function(date){
+                  var now = new Date();
+                  var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                  return d1<=date;
+              }
+          });
+          $('#endTime').datebox().datebox('calendar').calendar({
+              validator: function(date){
+                  var now = new Date();
+                  var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                  return d1<=date;
+              }
+          });
+          jQuery("#theForm").validate({
+              errorPlacement: function(error, element) {
+                  error.appendTo(element.parent());
+              },
+              rules:{
+                  nuke_name:{required:true},
+                  timeout:{digits:true,min:1}
+              },
+              messages:{
+                  nuke_name:{required:"秒杀标题不能为空"},
+                  timeout:{digits:"必须输入整数",min:"至少大于1"}
+              }
+          });
+          //校验结束时间是否大于起始时间
+          $.extend($.fn.validatebox.defaults.rules, {
+              endTimeMin: {
+                  validator: function (value, param) {
+                      var d1 = $(''+param[0]+'').datebox('getValue')
+                      return value >= d1;
+                  },
+                  message: '结束时间必须大于或等于开始时间'
+              },
+              // 校验活动的设定时间是否在已有活动的区间范围内
+              beginTimeValidate: {
+                  validator: function (value, param) {
+                      var flag = true;
+                      jQuery.ajax({type:'POST',
+                          async:false,
+                          url:'$!webPath/verify_time',
+                          data:{"time":value,"id":"$!obj.id"},
+                          success:function(data){
+                              if (data=="true"){
+                                  flag = true;
+                              } else{
+                                  flag = false;
+                              }
+                          },
+                          error:function () {
+                             flag = false;
+                          }
+                      });
+                      return flag;
+                  },
+                  message: '在该区间已有秒杀活动'
+              },
+              endTimeValidate: {
+                  validator: function (value, param) {
+                      var flag = true;
+                      jQuery.ajax({type:'POST',
+                          async:false,
+                          url:'$!webPath/verify_time',
+                          data:{"time":value,"id":"$!obj.id"},
+                          success:function(data){
+                              if (data=="true"){
+                                  flag = true;
+                              } else{
+                                  flag = false;
+                              }
+                          },
+                          error:function () {
+                              flag = false;
+                          }
+                      });
+                      return flag;
+                  },
+                  message: '在该区间已有秒杀活动'
+              }
+          })
+          //改变系统提示的样式
+          jQuery("span .w").mousemove(function(){
+              var id=jQuery(this.parentNode).attr("id");
+              if(id="nothis"){
+                  jQuery(this.parentNode).attr("id","this")
+              }
+          }).mouseout(function(){
+              var id=jQuery(this.parentNode).attr("id");
+              if(id="this"){
+                  jQuery(this.parentNode).attr("id","nothis")
+              }
+          });
+
+          // 如果是编辑，设置日期控件的值
+          jQuery('#beginTime').datetimebox('setValue', "$!CommUtil.formatTime('yyyy-MM-dd HH:mm:ss ',$!obj.beginTime)");
+          jQuery('#endTime').datetimebox('setValue', "$!CommUtil.formatTime('yyyy-MM-dd HH:mm:ss ',$!obj.endTime)");
+      });
+
+      function saveForm(){
+          if(jQuery("#theForm").form('enableValidation').form('validate')){
+              jQuery("#theForm").submit();
+          }
+      }
+  </script>
+</head>
+<body>
+<form action="$!webPath/nuke_save" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="goods_last_time" type="hidden" id="goods_last_time" value="$!{goods_last_time}" />
+  <input name="life_last_time" type="hidden" id="life_last_time" value="$!{life_last_time}" />
+  <div class="cont">
+    <h1 class="seth">秒杀管理</h1>
+    <div class="nav_list">
+
+      <ul>
+        <li><a href="$!webPath/nuke_list"><b>秒杀列表</b></a> </li>
+        #if($!edit)
+        <li><a href="javascript:void(0);" class="this"><b>编辑</b></a> </li>
+        #else
+        <li> <a href="$!webPath/nuke_add" class="this"><b>新增秒杀</b></a></li>
+        #end
+      </ul>
+
+    </div>
+    <div class="edit">
+      <div class="editul setcont" id="base">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>秒杀标题
+            <input name="id" type="hidden" id="id" value="$!obj.id"/>
+            <input name="nuke_time" type="hidden" id="nuke_time" value="$!CommUtil.formatShortDate($!nuke.endTime)" />
+          </li>
+          <li><span class="webname">
+          <input name="nuke_name" type="text" id="nuke_name" value="$!obj.nuke_name"/>
+          </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>秒杀类型</li>
+          <li> <span class="size100">
+          <select name="nuke_type" id="nuke_type">
+            <option value="0" selected="selected">商品类秒杀</option>
+            <option value="1">生活类秒杀</option>
+          </select>
+          </span><span id="nothis"><strong class="q"></strong><strong
+                  class="w">商品类秒杀为实物商品，生活类为虚拟商品 如：电影票秒杀</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>开始时间</li>
+          <li> <span class="size200">
+                <input type="text" id="beginTime" name="beginTime" value="$!CommUtil.formatLongDate($!obj.beginTime)" required
+                       class="easyui-datetimebox"  data-options="editable:false" labelPosition="top" validType="beginTimeValidate" style="width:100%;" >
+          </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>结束时间</li>
+          <li> <span class="size200">
+              <input type="text" id="endTime" name="endTime" value="$!CommUtil.formatLongDate($!obj.endTime)" class="easyui-datetimebox" required
+                     data-options="validType:['endTimeValidate','endTimeMin[\'#beginTime\']'],editable:false" labelPosition="top" style="width:100%;">
+          </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">活动说明：</li>
+          <li><textarea name="remark" rows="6" cols="40" id="remark">$!obj.remark</textarea></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">订单取消</li>
+          <li><span class="size200"><input name="timeout" type="text" id="timeout" value="$!obj.timeout"/>分钟未付款，取消订单</span></li>
+        </ul>
+      </div>
+      <div class="editul setcont">
+      </div>
+    </div>
+
+  </div>
+  <div class="submit">
+    <span class="pad80"> <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/></span>
+  </div>
+</form>
+</body>
+</html>

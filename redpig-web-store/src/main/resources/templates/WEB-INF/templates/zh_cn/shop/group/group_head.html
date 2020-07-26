@@ -1,0 +1,152 @@
+﻿<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script>
+jQuery(document).ready(function(){
+	#if($!type=="life")
+	 jQuery(".toph_bgsear li").find("a").first().html("生活惠<s></s>");
+	  jQuery("#searchForm").attr("action","$!{webPath}/grouplife/search?type=life");
+		  jQuery(".toph_bgsear>li").last().attr("mark","goods");
+		   jQuery(".toph_bgsear li").find("a").last().html("商品惠");
+		  jQuery("#type").val("life");
+	#end
+    jQuery(".toph_bgsear li").mouseover(function(){
+      jQuery(".toph_bgsear>li").show();
+  }).mouseleave(function(){
+       jQuery(".toph_bgsear>li").last().hide();
+  }).click(function(){
+	 var index=jQuery(this).index();
+	 var mark = jQuery(this).attr("mark");
+	 if(mark=="life"){
+		 jQuery("#searchForm").attr("action","$!{webPath}/grouplife/search");
+		  jQuery(".toph_bgsear>li").last().attr("mark","goods");
+		  jQuery("#type").val("life");
+		 }else{
+			 jQuery("#searchForm").attr("action","$!{webPath}/group/search");
+			 jQuery(".toph_bgsear>li").last().attr("mark","life");
+			  jQuery("#type").val("goods");
+			 }
+	 if(index==1){
+	   var f_text=jQuery(".toph_bgsear li").find("a").first().text();
+       jQuery(".toph_bgsear li").find("a").first().html(jQuery(this).find("a").text()+"<s></s>");
+	   jQuery(".toph_bgsear li").find("a").last().text(f_text);
+	   jQuery(".toph_bgsear>li").last().hide();
+	 }
+  });
+
+	jQuery("#area_click").css("cursor","pointer").hover(function(){
+		 var show=jQuery("#group_areas").css("display");
+	     if(show=="none"){
+	         jQuery("#group_areas").show();
+	     }else{
+	         jQuery("#group_areas").hide();  
+	     }
+    });
+	
+	
+	jQuery("#toph_bgsear").click(function(){
+		jQuery(this).children().show();								  
+										  });
+   
+   //鼠标经过购物车
+   jQuery("#goodscar_sp").mouseover(function(){
+			  jQuery.ajax({type:'POST',url:'$!webPath/cart_menu_detail',data:'',
+						   beforeSend:function(){
+							     jQuery("#goodscar_con_box").empty().html(' <div><span class="top_user_loading"><img src="$!cdnServer/resources/style/system/front/default/images/loading.gif" /></span><b class="top_user_warning">加载中，请稍后...</b></div>');
+							     jQuery("#goodscar_con_box").show();
+							   },
+						  success:function(data){
+							     jQuery("#goodscar_con_box").empty();
+								 jQuery("#goodscar_con_box").html(data);
+							   }
+						});
+			  jQuery("#goodscar_sp").addClass("goodscar_sp_this");
+		   });
+		   jQuery("#goodscar").mouseleave(function(){
+			  jQuery("#goodscar_con_box").hide();
+			  jQuery("#goodscar_sp").removeClass("goodscar_sp_this");
+		   });
+		   
+});
+
+//切换城市
+function area_click(){
+	window.location.href="$!webPath/group/city_index?type=$!{type}";
+}
+
+function search_form(){
+  var keyword=arguments[0];
+  var type=arguments[1];
+  if(keyword!=""&&keyword!=undefined){
+   jQuery("#keyword").val(keyword);
+  }
+  if(type!=""&&type!=undefined){
+    jQuery("#type").val(type);
+	if(type=="life"){
+  	jQuery("#searchForm").attr("action","$!{webPath}/grouplife/search");
+	}else{
+		jQuery("#searchForm").attr("action","$!{webPath}/group/search");
+		}
+  }
+  
+  jQuery("#searchForm").submit();	
+  jQuery("#keyword").val("");
+}
+</script>
+<div class="head">
+  <h1 class="logo"><span class="img_cspan">
+   #if($!config.websiteLogo)
+    #set($img="$!imageWebServer/$!{config.websiteLogo.path}/$!{config.websiteLogo.name}")
+    #else
+    #set($img="$!cdnServer/resources/style/system/front/default/images/logo.png")
+    #end
+    #if($!type)
+    #if($!type==""||$!type=="goods")
+      #set($t="goods")
+      #else
+      #set($t="life")
+      #end
+    #else
+     #set($t="goods")
+    #end
+    <p><a href="$!webPath/index"><img src="$!img" border="0" /></a></p>
+    </span></h1>
+    <input name="group_area_id" id="group_area_id" value="$!group_area_id" type="hidden"/>
+    
+  <div class="group_head" style="width:auto"> <strong>团购</strong> <span class="change_address"><b>
+      #if($!city)
+      <a href="javascript:void(0);" onclick="area_click();" style="cursor:pointer;" id="area_click">$!city.areaName</a>
+      <input type="hidden" id="areaId" name="areaId"  value="$!city.id"/>
+      #else
+       <a href="javascript:void(0);" onclick="area_click();" style="cursor:pointer;" id="area_click">全国</a>
+      #end
+      <a href="javascript:void(0);" onclick="area_click();" style="cursor:pointer;">[更换]</a></b>
+    </span> </div>
+    
+ 
+   <!-- <div class="change_hid" style="display:none;width:150px" id="group_areas">
+      <ul>
+       <li style="text-align:center;"><a href="javascript:void(0);"> #if($!city) $!city.areaName #else 全国  #end</a></li>
+      </ul>
+    </div>-->
+    
+     <form name="searchForm" id="searchForm" action="$!webPath/group/search" method="post" lang="zh-CN">
+     <input type="hidden" name="type" value="goods" id="type" />
+  <div class="head_search" style="margin-left:15px;width:520px"> 
+  <span class="head_seartxt">
+ <b style="width:430px">
+  <ul class="toph_bgsear" id="toph_bgsear">
+        <li class="this" mark="goods"><a href="javascript:void(0);">商品惠<s></s></a></li>
+        <li style="display:none" mark="life"><a href="javascript:void(0);">生活惠</a></li>
+      </ul>
+    <input style="width:350px" name="keyword" type="text" class="g_sear_txt" id="keyword" value="$!keyword" x-webkit-speech lang="zh-CN" onwebkitspeechchange="jQuery('#searchForm').submit()" charset="utf-8"/></b>
+    <input name="" type="button"  class="h_sear_btn" onclick="search_form();" value="搜索"/>
+    </span>
+    </div>
+    </form>
+    <div class="head_search_right">  
+	<script src="$!webPath/advert_invoke?id=16"></script>
+    </div>
+    <style type="text/css">
+	.head_search_right { width:150px; height:70px; float:right; margin-top:15px;}
+	.head_search_right a:hover {}
+	</style>
+</div>

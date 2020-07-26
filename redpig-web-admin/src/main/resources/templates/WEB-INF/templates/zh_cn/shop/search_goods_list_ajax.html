@@ -1,0 +1,147 @@
+<script>
+jQuery(document).ready(function(){ 
+  <!--图片加载-->
+  jQuery(".img_cspan img").lazyload({effect:"fadeIn",width:210,height:210});
+  jQuery(".pro_them_team img").lazyload({effect:"fadeIn",width:30,height:30});
+});
+</script>
+ #if($!objs.size()>0)
+          <div class="pro_list">
+          <div class="goods_list_loaing" id="goods_load" style="display:none">
+                    <img src="$!cdnServer/resources/style/system/front/default/images/goods_list_loaing.gif"/>
+                </div>
+           #set($isAdminOnline=$!userTools.adminOnLine())
+           #foreach($obj in $objs)
+            <div class="pro_list_one" data-bind="$!obj.vo_id">
+              <ul class="">
+                <li class="pro_list_img"> #set($goods_url="$!webPath/items_$!{obj.vo_id}")
+                  #set($store=$!goodsViewTools.query_LuceneVo_goods_store("$!obj.vo_id"))
+                  #if($!config.second_domain_open && $!obj.vo_goods_type==1 && $!store.store_second_domain!="")
+                  #set($goods_url="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{obj.vo_id}")
+                  #end 
+                  #if($!obj.vo_main_photo_url!='')
+                  #set($main_photos_url=$!obj.vo_main_photo_url)
+                  #else
+                  #set($main_photos_url="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end <a href="$!goods_url" target="_blank"> <span class="img_cspan">
+                  <p> <img id="$!{obj.vo_id}_main_img" src="$!cdnServer/resources/style/common/images/loader.gif" original="$!main_photos_url" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" /> </p>
+                  </span> </a> </li>
+                <li class="pro_them">
+                  <div class="pro_them_team">
+                    <p style="position:absolute; width:700px; left:0px;display:block;"> <b class="pro_team_b this_b" goods_id="$!{obj.vo_id}" middle_img="$!imageWebServer/$!main_photos_url"> <img src="$!cdnServer/resources/style/common/images/loader.gif" original="$!imageWebServer/$!main_photos_url"  width="30" height="30"   onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';"/> <i class="team_san"></i></b>
+                     #set($color_json=$!goodsViewTools.query_goods_color_img_json("$!{obj.vo_id}")) 
+                     #if($!color_json=="")
+                     #set($photos_url=$!goodsViewTools.query_LuceneVo_photos_url($obj.vo_photos_url)) 
+                      #foreach($img in $photos_url) <b class="pro_team_b" goods_id="$!{obj.vo_id}" middle_img="$!imageWebServer/$!img"> <img original="$!imageWebServer/$!img" src="$!cdnServer/resources/style/common/images/loader.gif"   onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" /> <i class="team_san" style="display:none"></i></b> #end 
+                      #else
+                       #foreach($img in $!$!goodsViewTools.analysis_goods_list_img("$!color_json")) <b class="pro_team_b" goods_id="$!{obj.vo_id}" middle_img="$!imageWebServer/$!img.path/$!{img.name}_small.$!{img.ext}"> <img original="$!imageWebServer/$!img.path/$!{img.name}_small.$!{img.ext}" src="$!cdnServer/resources/style/common/images/loader.gif"   onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" /> <i class="team_san" style="display:none"></i></b> #end 
+                      #end
+                      </p>
+                  </div>
+                </li>
+                <li class="pro_list_name"><a href="$!goods_url" target="_blank">$!{obj.vo_title}</a></li>
+                <li class="pro_list_price"><b>¥$!{obj.vo_store_price}</b>
+                  #set($actName="")
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","group_buy")=="true")
+                  #set($actName="团购")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","activity_status")=="true")
+                  #set($actName="促销")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","combin_status")=="true")
+                  #set($actName="组合")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","order_enough_give_status")=="true")
+                  #set($actName="满送")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","enough_reduce")=="true")
+                  #set($actName="满减")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","f_sale_type")=="true")
+                  #set($actName="F码")
+                  #end
+                  #if($!goodsViewTools.query_activity_status("$!obj.vo_id","advance_sale_type")=="true")
+                  #set($actName="预售")
+                  #end
+                  #if($!actName!="")
+                    <span><i>$!CommUtil.substring($!actName,1)</i><b>$!actName</b></span>
+                  #end
+                  </li>
+                <li class="pro_list_evaluate" style="display:none;">
+                  <dl>
+                    <dt>$!{obj.vo_goods_salenum}</dt>
+                    <dd>商品销量</dd>
+                  </dl>
+                  <dl>
+                    <dt>$!{obj.vo_goods_evas}</dt>
+                    <dd>用户评论$!{obj.vo_goods_class}</dd>
+                  </dl>
+                  <dl style=" border-right:none;">
+                    #if($!obj.vo_goods_type==0)
+                   #if($!isAdminOnline)
+                    <dt class="content"  #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.vo_id','$!webPath','user','plat','');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #else
+                    <dt class="content_unonline" #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.vo_id','$!webPath','user','plat','');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #end
+                    #else
+                    #set($store=$!goodsViewTools.query_LuceneVo_goods_store("$!obj.vo_id"))
+                    #if($!userTools.userOnLine('$!obj.vo_store_userName')=="true")
+                    <dt class="content"  #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.vo_id','$!webPath','user','store','$!store.id');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #else
+                    <dt class="content_unonline" #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.vo_id','$!webPath','user','store','$!store.id');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #end
+                    #end
+                  </dl>
+                </li>
+                <li class="list_contrast" style="display:none;">
+                  #if($!{actName}=="促销"||$!{actName}=="F码" || $!{actName}=="预售")
+                 		 #if($!user)
+                            #if($!{actName}=="F码")
+                            <div class="list_contrast_buy"><a href="javascript:void(0);" goods_id="$!obj.vo_id" goods_type="$!obj.vo_goods_type"  id="f_goods_cart_$!{obj.vo_id}"> F码购买</a></div>
+                            #elseif( $!{actName}=="预售")
+                            <div class="list_contrast_buy"><a href="$!webPath/items_$!{obj.id}"> 立即抢购</a></div>
+                            #else
+                            <div class="list_contrast_buy"><a href="javascript:void(0);" goods_img="$!imageWebServer/$!obj.vo_main_photo_url" goods_id="$!obj.vo_id" goods_type="$!obj.vo_goods_type" id="goods_cart_$!{obj.vo_id}">加入购物车</a></div>
+                            #end
+                         #else
+                         <div class="list_contrast_buy"><a href="javascript:void(0);"  dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn">#if($!{actName}=="F码")F码购买#elseif($!{actName}=="预售")立即抢购#else加入购物车#end</a></div>
+                         #end   
+                 #else
+                   <div class="list_contrast_buy"><a href="javascript:void(0);" goods_img="$!imageWebServer/$!obj.vo_main_photo_url" goods_id="$!obj.vo_id" goods_type="$!obj.vo_goods_type" id="goods_cart_$!{obj.vo_id}">加入购物车</a></div>
+                 #end
+                  
+                  #set($compare_display="")
+                  #set($compare_mark="off")
+                  #foreach($c_goods in $goods_compare_list)
+                  #if($c_goods.id==$!obj.vo_id)
+                  #set($compare_display="this")
+                  #set($compare_mark="on")
+                  #end
+                  #end
+                  <div class="goods_list_contrast"><a class="$!{compare_display}" goods_id="$!obj.vo_id" goods_main_img="$!imageWebServer/$!obj.vo_main_photo_url" href="javascript:void(0);" mark="$!compare_mark">对比</a></div>
+                 
+                  <div class="goods_list_collect"><i class="this"></i><a class="#if($!goodsViewTools.queryFavoriteStatus("$!{user.id}","$!{obj.vo_id}")) this #end" href="javascript:void(0);" #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="120" dialog_id="user_login"#end goods_id="$!obj.vo_id" seller_id="$!obj.vo_seller_id" goods_img="$!imageWebServer/$!obj.vo_main_photo_url">收藏</a></div>
+                </li>
+                <li class="pro_list_shop" style="display:none;"> #if($!obj.vo_goods_type==1)
+                  #set($store=$!goodsViewTools.query_LuceneVo_goods_store("$!obj.vo_id"))
+                  #set($store_url="$!webPath/store_"+$!store.id+"")
+                  #if($!config.second_domain_open)
+                  #set($store_url="http://$!{store.store_second_domain}.$!{domainPath}")
+                  #end <a href="$!store_url" target="_blank">$!{store.store_name}</a> #else
+                  自营商品
+                  #end </li>
+              </ul>
+            </div>
+            #end </div>
+          <div class="fenye"><span> $!{search_gotoPageAjaxHTML}</span></div>
+          #else
+          <div class="main_list_box">
+            <div class="main_list_none"> <span class="main_none_box"> <i></i>
+              <p>抱歉，没有找到符合条件的商品！<a href="$!webPath/index">查看全部商品</a></p>
+              </span></div>
+          </div>
+          #end 

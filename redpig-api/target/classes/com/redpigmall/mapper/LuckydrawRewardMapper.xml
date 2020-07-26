@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.LuckydrawRewardMapper">
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.LuckydrawReward">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+
+		<result column="grade" property="grade" jdbcType="INTEGER"/>
+		<result column="reward_type" property="reward_type" jdbcType="INTEGER"/>
+		<result column="integral_number" property="integral_number" jdbcType="INTEGER"/>
+		<result column="reward_amout" property="reward_amout" jdbcType="INTEGER"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+
+		<association property="luckydraw" column="luckydraw_id" select="com.redpigmall.dao.LuckydrawMapper.selectByPrimaryKey"/>
+		<association property="coupon" column="coupon_id" select="com.redpigmall.dao.CouponMapper.selectByPrimaryKey"/>
+		<association property="goods" column="goods_id" select="com.redpigmall.dao.GoodsMapper.selectByPrimaryKey"/>
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.LuckydrawReward">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+
+		<result column="grade" property="grade" jdbcType="INTEGER"/>
+		<result column="reward_type" property="reward_type" jdbcType="INTEGER"/>
+		<result column="integral_number" property="integral_number" jdbcType="INTEGER"/>
+		<result column="reward_amout" property="reward_amout" jdbcType="INTEGER"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,grade,reward_type,integral_number,reward_amout,
+		remark,luckydraw_id,coupon_id,goods_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+
+		<if test="grade != null">and grade = #{grade,jdbcType=INTEGER}</if>
+		<if test="reward_type != null">and reward_type = #{reward_type,jdbcType=INTEGER}</if>
+		<if test="integral_number != null">and integral_number = #{integral_number,jdbcType=INTEGER}</if>
+		<if test="reward_amout != null">and reward_amout = #{reward_amout,jdbcType=INTEGER}</if>
+		<if test="remark != null">and remark = #{remark,jdbcType=VARCHAR}</if>
+
+		<if test="luckydraw_id != null">and luckydraw_id = #{luckydraw_id,jdbcType=BIGINT}</if>
+		<if test="coupon_id != null">and coupon_id = #{coupon_id,jdbcType=BIGINT}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+	</sql>
+	
+	<sql id="ifStatement">
+		id= #{id},
+		addTime = #{addTime},
+		deleteStatus= #{deleteStatus},
+
+		grade= #{grade},
+		reward_type= #{reward_type},
+		integral_number= #{integral_number},
+		reward_amout= #{reward_amout},
+		remark= #{remark},
+
+		<if test="luckydraw == null or luckydraw.id == null">luckydraw_id = null,</if>
+		<if test="luckydraw != null and luckydraw.id != null">luckydraw_id = #{luckydraw.id,jdbcType=BIGINT},</if>
+		<if test="coupon == null or coupon.id == null">coupon_id = null,</if>
+		<if test="coupon != null and coupon.id != null">coupon_id = #{coupon.id,jdbcType=BIGINT},</if>
+		<if test="goods == null or goods.id == null">goods_id = null,</if>
+		<if test="goods != null and goods.id != null">goods_id = #{goods.id,jdbcType=BIGINT},</if>
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.LuckydrawReward" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_luckydraw_reward
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.LuckydrawReward" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_luckydraw_reward obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_luckydraw_reward obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.LuckydrawReward" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_luckydraw_reward obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.LuckydrawReward" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_luckydraw_reward(addTime,deleteStatus,
+		grade,reward_type,integral_number,reward_amout,remark,luckydraw_id,coupon_id,goods_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},
+		#{grade,jdbcType=INTEGER},#{reward_type,jdbcType=INTEGER},#{integral_number,jdbcType=INTEGER},
+		#{reward_amout,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR},
+		 #{luckydraw.id,jdbcType=BIGINT},
+		 #{coupon.id,jdbcType=BIGINT},
+		 #{goods.id,jdbcType=BIGINT},
+	)</insert>
+	
+	<update id="updateById" parameterType="com.redpigmall.domain.LuckydrawReward">
+		update redpigmall_luckydraw_reward
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_luckydraw_reward where id=#{id,jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_luckydraw_reward where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.LuckydrawReward" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_luckydraw_reward obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.LuckydrawReward" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_luckydraw_reward obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.LuckydrawReward" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_luckydraw_reward
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_luckydraw_reward where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+</mapper>

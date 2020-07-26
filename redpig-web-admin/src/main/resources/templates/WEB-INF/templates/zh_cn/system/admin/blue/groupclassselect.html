@@ -1,0 +1,17 @@
+#if($!container)
+#foreach($goods in $!goodslist)
+	<b style="background:#f9f9f9" ><input type="checkbox" id="$!goods.id"  value="$!goods.id" onClick="setClass(this);"/>$!goods.gg_name</b>
+#end
+#else
+#if($!gclist)
+	<option>请选择</option>
+#foreach($gc in $!gclist)
+	<option id="$gc.id" value="$!gc.id">$!gc.gc_name</option>
+#end
+#end
+#if($!secondClass)
+#foreach($gc in $!secondClass)
+  <span  style="width:auto"><a href="javascript:void(0);" ondblclick="javascript:jQuery(this.parentNode).remove();" pid="$!gc.id">$!gc.gc_name</a></span>
+#end
+#end
+#end

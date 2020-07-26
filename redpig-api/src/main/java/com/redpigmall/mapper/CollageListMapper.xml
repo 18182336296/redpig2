@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.CollageListMapper">
+
+	<resultMap id="BaseResultMap3" type="com.redpigmall.domain.UserCollageList">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="goods_spec_id" property="goods_spec_id" jdbcType="VARCHAR"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+		<association property="goods" column="goods_id" select="com.redpigmall.dao.GoodsMapper.selectByPrimaryKey"/>
+		<association property="collageBuy" column="collage_shaped_id" select="com.redpigmall.dao.CollageBuyMapper.selectByPrimaryKey"/>
+		<association property="user" column="user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="group" column="group_id" select="com.redpigmall.dao.CollageListMapper.selectByGroupHostPrimdaryKey"/>
+
+	</resultMap>
+
+	<select id="selectObjByCollage" resultType="com.redpigmall.domain.UserCollageList" resultMap="BaseResultMap3" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_collage_list
+		where 1 = 1
+		<include refid="whereStatement"/>
+
+	</select>
+	<sql id="Base_Column_List">
+	  id,addTime,collage_shaped_id,user_id,goods_id,goods_spec_id,remark,group_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="collage_shaped_id != null">and collage_shaped_id = #{collage_id,jdbcType=BIGINT}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+		<if test="goods_spec_id != null">and goods_spec_id = #{goods_spec_id,jdbcType=VARCHAR}</if>
+		<if test="remark != null">and remark = #{remark,jdbcType=VARCHAR}</if>
+		<if test="group_id != null">and group_id = #{group,jdbcType=BIGINT}</if>
+	</sql>
+
+
+	<!--拼团人数统计-->
+
+	<select id="selectCounts" resultType="java.lang.Integer" parameterType="map">
+		select count(*)
+		from redpigmall_collage_buy
+		where 1 = 1
+		<include refid="whereStatement5"/>
+	</select>
+
+	<sql id="whereStatement5">
+		<if test="cg_status != null">and cg_status = #{cg_status,jdbcType=BIGINT}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+	</sql>
+
+	<!--还差多少人拼成团统计-->
+	<!--
+	<select id="selectCountGroup" resultType="java.lang.Integer"  parameterType="java.lang.Long">
+		select count(*)
+		from redpigmall_user_collage_list
+		where 1 = 1
+		<include refid="whereStatement6"/>
+	</select>
+	<sql id="whereStatement6">
+		<if test="group_id != null">and group_id = #{maps,jdbcType=BIGINT}</if>
+	</sql>-->
+
+	<!--得到团对象-->
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.UserCollageList" resultMap="BaseResultMap3" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_collage_list
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!--得到团长对象-->
+	<select id="selectByGroupHostPrimdaryKey" resultType="com.redpigmall.domain.UserCollageBuyInfo" resultMap="BaseResultMap1" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Collage_In"/>
+		from redpigmall_collage_buy_info
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+
+	<!--拼团列表-->
+	<resultMap id="BaseResultMap1" type="com.redpigmall.domain.UserCollageBuyInfo">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
+		<result column="finish_time" property="finishTime" jdbcType="TIMESTAMP"/>
+		<result column="status" property="status" jdbcType="BIGINT"/>
+		<result column="image_head_url" property="ImageHeadurl" jdbcType="VARCHAR"/>
+		<result column="collage_number" property="collageNumber" jdbcType="VARCHAR"/>
+		<association property="user" column="create_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="collageBuy" column="collage_buy_id" select="com.redpigmall.dao.CollageListMapper.selectByPrimaryKey"/>
+	</resultMap>
+
+	<select id="selectUserCollageBuyInfo" resultType="com.redpigmall.domain.UserCollageBuyInfo" resultMap="BaseResultMap1" parameterType="map">
+		select
+		<include refid="Base_Collage_In"/>
+		from redpigmall_collage_buy_info
+		where 1 = 1
+		<include refid="whereStatements6"/>
+
+	</select>
+	<sql id="Base_Collage_In">
+	   id,collage_buy_id,addTime,create_user_id,collage_number,status,finish_time,remark,image_head_url
+	</sql>
+	<sql id="whereStatements6">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="collage_buy_id != null">and collage_buy_id = #{collageBuy,jdbcType=BIGINT}</if>
+		<if test="create_user_id != null">and create_user_id = #{user,jdbcType=BIGINT}</if>
+		<if test="collage_number != null">and collage_number = #{collageNumber,jdbcType=BIGINT}</if>
+		<if test="status != null">and status = #{status,jdbcType=BIGINT}</if>
+		<if test="finish_time != null">and finish_time = #{finishTime,jdbcType=TIMESTAMP}</if>
+		<if test="image_head_url != null">and image_head_url = #{ImageHeadurl,jdbcType=VARCHAR}</if>
+		<if test="remark != null">and remark = #{remark,jdbcType=VARCHAR}</if>
+	</sql>
+</mapper>

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor-min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+<body>
+<div class="cont">
+  <h1 class="seth">客户管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/crm_list"  class="this"><b>客户管理</b></a> </li>
+    </ul>
+  </div>
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/crm_list" method="post">
+    <div class="search"> <span class="size150">
+      <input name="userName" type="text" class="user_title_txt" id="userName" placeholder="用户名" value="$!userName"  />
+      </span> <span>
+      <select name="email" id="email">
+        <option value="">发送邮件历史</option>
+        <option value="yes" #if($!email=="yes") selected="selected" #end>已发送</option>
+        <option value="no" #if($!email=="no") selected="selected" #end>未发送</option>
+      </select>
+      </span> <span>
+      <select name="message" id="message">
+        <option value="">发送短信历史</option>
+        <option value="yes" #if($!message=="yes") selected="selected" #end>已发送</option>
+        <option value="no"  #if($!message=="no") selected="selected" #end>未发送</option>
+      </select>
+      </span><span>
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+      </span> </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+        <th width="4%"></th>
+        <th width="15%"><span class="form_btna">用户名</span></th>
+        <th width="10%"><span class="form_btna">时间</span></th>
+        <th width="10%"><span class="form_btna">行为</span></th>
+        <th width="20%"><span class="form_btna">商品</span></th>
+        <th width="12%"><span class="form_btna">发送邮件历史</span></th>
+        <th width="12%"><span class="form_btna">发送短信历史</span></th>
+        <th align="center"><span class="form_btna">操作</span></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($!obj in $objs)
+        <tr>
+          <td class="check_position"><label for="ids_$!obj.id">
+        	<input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" />
+            <span class="lbl"></span>
+        </label></td>
+          <td align="center">$!obj.userName</td>
+          <td align="center">$!CommUtil.formatShortDate($!obj.addTime)</td>
+          <td align="center">#if($!obj.cus_type==0) 下单  #end #if($!obj.cus_type==1) 咨询  #end #if($!obj.cus_type==2) 收藏  #end</td>
+          <td align="center"><a href="$!webPath/items_$!{obj.goods_id}"  target="_blank">$!obj.goods_name</a></td>
+          <td align="center">#if($!obj.whether_send_email==1) 已发送  #end #if($!obj.whether_send_email==0) 未发送  #end</td>
+          <td align="center">#if($!obj.whether_send_message==1) 已发送  #end #if($!obj.whether_send_message==0) 未发送  #end</td>
+          <td align="center" class="hui oprate_con" style="min-width:80px"><a href="javascript:void(0);" dialog_uri="$!webPath/send_crm_info?mulitId=$!obj.id&type=email" dialog_title="发送邮件内容编辑" dialog_width="850" dialog_height="200" dialog_id="send_infos" class="blue">发送邮件</a>|<a href="javascript:void(0);" dialog_uri="$!webPath/send_crm_info?mulitId=$!obj.id&type=message" dialog_title="发送短信内容编辑" dialog_width="500" dialog_height="200" dialog_id="send_infos"  class="blue">发送短信</a>|<a href="javascript:void(0);" onclick="javascript:if(confirm('数据删除后不可恢复，是否继续?'))window.location.href='$!webPath/crm_del?mulitId=$!obj.id'" class="blue">删除</a></td>
+        </tr>
+        #end
+                #else
+<tr>
+	<td colspan="8">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+      </table>
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/crm_del')">删除</a></li>
+                 <li><a href="javascript:void(0);" ck_dialog_uri="$!webPath/send_crm_info?type=email" ck_dialog_title="发送邮件内容编辑" ck_dialog_width="850" ck_dialog_height="200" ck_dialog_id="send_infos">群发邮件</a></li>
+                  <li><a href="javascript:void(0);" ck_dialog_uri="$!webPath/send_crm_info?type=message" ck_dialog_title="发送短信内容编辑" ck_dialog_width="500" ck_dialog_height="200" ck_dialog_id="send_infos">群发短信</a></li>
+            </ul>
+            </div>
+            
+            <div class="operation_right">
+            	<div class="fenye"> 
+        <input id="type" name="type" type="hidden" value="$!type"/>
+            	<input id="currentPage" name="currentPage" type="hidden" value="$!currentPage"/>
+           		<input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+            </div>
+            
+        </div>
+        #end
+    </div>
+  </FORM>
+</div>
+</body>
+</html>

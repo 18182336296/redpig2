@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-系统通知- $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+						
+});<!--end-->
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+<div class="store_main">
+<div class="seller_center">
+<div class="seller_center_left"> $!httpInclude.include("/nav?op=store_message") </div>
+<div class="seller_right">
+  <div class="seller_position"><span><b><a href="$!webPath/index">商家中心</a></b>><b>我的店铺</b>><b>系统通知</b></span></div>
+  <div class="seller_list">
+    <div class="seller_list_title">
+      <ul class="seller_title_ul">
+        <li class="this"><a href="$!webPath/message"><i></i>通知列表</a></li>
+      </ul>
+    </div>
+        <div class="user_list_box">
+          <!-- 站内信详细 start -->
+          <div class="add_usercenter">
+            <div class="usercenter_mail">
+              <div class="usercenter_mail_one" style="border-bottom:none;"> 
+<!--<style>
+.usercenter_mail_one_t{ width:100%;}
+.usercenter_mail_one_t h3{ width:100%; text-align:center; height:20px; line-height:20px; float:left; font-size:16px;}
+.usercenter_mail_one_t span{ width:100%; float:left; text-align:center; line-height:35px; height:35px; color:#a0a0a0;  border-bottom:1px dashed #eee; margin-bottom:10px;}
+.usercenter_mail_one_c{ width:96%; padding:0 2%; float:left; font-size:14px;} 
+</style>-->
+              <div class="usercenter_mail_one_t">
+              	<h3>系统通知</h3>
+                <span>$!CommUtil.formatLongDate($!obj.addTime)  系统管理员</span>
+              </div>
+              <div class="usercenter_mail_one_c">
+              	&nbsp;&nbsp;&nbsp;&nbsp;$!obj.content
+              </div>
+              #if($!obj.fromUser.photo)
+              #set($user_photo="$!imageWebServer/$!obj.fromUser.photo.path/$!obj.fromUser.photo.name")
+              #else 
+              #set($user_photo="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+              #end
+                <div class="usercenter_mail_one_left" style="margin-top:15px; display:none;"><img src="$!user_photo" /></div>
+                <div class="usercenter_mail_one_right" style="width:940px; display:none;" >
+                  <div class="usercenter_mail_one_right_top">系统管理员<i> 说：</i><span>$!CommUtil.formatLongDate($!obj.addTime)</span></div>
+                  <div class="usercenter_mail_one_right_center" style="width:920px"> &nbsp;&nbsp;$!obj.content</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 站内信详细 end -->
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  $!httpInclude.include("/footer1")
+</body>
+</html>

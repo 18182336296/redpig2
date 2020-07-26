@@ -1,0 +1,101 @@
+<div id="seckill">
+    <div class="aui-content-max">
+      <div class="aui-sale-time">
+        <a href="javascript:;" class="aui-sale-time-link">
+          <div class="aui-sale-title">${nuke.nuke_name}</div>
+          <div class="aui-sale-second">FLASH DEALS</div>
+          <div class="aui-sale-icon-sd"></div>
+          <div class="aui-sale-ends">本场距离结束还剩</div>
+          <div class="aui-sale-count">
+            <div class="aui-sale-count-item">
+              <span id="hour_show">00</span>
+            </div>
+            <div class="aui-sale-count-item">
+              <span id="minute_show">00</span>
+            </div>
+            <div class="aui-sale-count-item">
+              <span id="second_show">00</span>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="aui-content-box">
+        <div class="prev">
+          <a href="javascript:void(0)">
+						<img src="$!cdnServer/front/module/seckill/images/prev.png" alt="">
+					</a>
+        </div>
+        <div class="aui-content-box-ovf">
+          <div class="aui-content-box-list">
+            <ul>
+             #foreach($ng in $nukeGoods)
+              <li>
+                <a href="#">
+                  <div class="aui-content-item-img">
+                    <img src="$!imageWebServer/$!ng.ng_img.path/$!ng.ng_img.name" alt="$!ng.ng_name">
+                  </div>
+                  <p class="aui-content-item-name">$!ng.ng_name</p>
+                  <div class="aui-content-price">
+                    <span class="aui-content-price-new">
+											<i>¥</i>
+											<span>$!ng.ng_price</span>
+                    </span>
+                    <span class="aui-content-price-origin">
+											<i>¥</i>
+											<span>$!ng.ng_goods.store_price</span>
+                    </span>
+                  </div>
+                </a>
+              </li>
+              #end
+            </ul>
+          </div>
+        </div>
+        <div class="next_2">
+          <a href="javascript:void(0)">
+						<img src="$!cdnServer/front/module/seckill/images/next.png" alt="">
+					</a>
+        </div>
+      </div>
+      <div class="aui-small-ad">
+        <div class="example2">
+          <ul>
+            <li>
+              <img src="https://img14.360buyimg.com/mobilecms/s180x260_jfs/t21046/95/2308648311/189195/ac6d05fc/5b51bbdbN323448fb.png!q90!cc_180x260" alt="2">
+            </li>
+            <li>
+              <img src="https://img13.360buyimg.com/mobilecms/s180x260_jfs/t22531/78/1082084742/84981/776dab78/5b51540eN3e885f00.jpg!q90!cc_180x260" alt="1">
+            </li>
+          </ul>
+          <ol>
+            <li></li>
+            <li></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script type="text/javascript" src="$!cdnServer/front/js/typography.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/header/js/header.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/cover/js/cover.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/seckill/js/seckill.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/fbt/js/fbt.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/entry/js/entry.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/entry/js/pt.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/globalToolbar/js/globalToolbar.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/Sliders/js/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/seckill/js/banner.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/seckill/js/ad.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/loadgoods/js/loadgoods.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/cover/js/laydate.dev.js"></script>
+  <script type="text/javascript" src="$!cdnServer/front/module/Transition/js/cityTemplate.js"></script>
+  
+<script type="text/javascript">
+
+  $(function() {
+    timer($!nukeTime);
+  });
+
+</script>  
+  

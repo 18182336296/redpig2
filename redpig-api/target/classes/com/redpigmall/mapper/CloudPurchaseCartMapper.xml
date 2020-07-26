@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.CloudPurchaseCartMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.CloudPurchaseCart">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="purchased_times" property="purchased_times" jdbcType="INTEGER"/>
+		<association property="cloudPurchaseLottery" column="cloudPurchaseLottery_id" select="com.redpigmall.dao.CloudPurchaseLotteryMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.CloudPurchaseCart">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="purchased_times" property="purchased_times" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,user_id,cloudPurchaseLottery_id,purchased_times
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="purchased_times != null">and purchased_times = #{purchased_times,jdbcType=INTEGER}</if>
+		<if test="cloudPurchaseLottery_id != null">and cloudPurchaseLottery_id = #{cloudPurchaseLottery_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		user_id= #{user_id},
+		<if test="cloudPurchaseLottery == null or cloudPurchaseLottery.id == null">cloudPurchaseLottery_id = null,</if>
+		<if test="cloudPurchaseLottery != null and cloudPurchaseLottery.id != null">cloudPurchaseLottery_id = #{cloudPurchaseLottery.id,jdbcType=BIGINT},</if>
+		purchased_times= #{purchased_times},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.CloudPurchaseCart" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_cloud_purchase_cart 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.CloudPurchaseCart" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from redpigmall_cloud_purchase_cart obj
+		
+		<if test="cloudPurchaseLottery_status_no !=null ">
+			JOIN redpigmall_cloud_purchase_lottery cpl on obj.cloudPurchaseLottery_id = cpl.id and cpl.status != #{id,jdbcType=BIGINT}
+		</if>
+		 
+		 
+		 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_cloud_purchase_cart obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getCloudPurchaseLotteryByCloudPurchaseLotteryId" resultType="com.redpigmall.domain.CloudPurchaseCart" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_cloud_purchase_cart
+		where
+			cloudPurchaseLottery_id = #{cloudPurchaseLottery_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.CloudPurchaseCart" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_cloud_purchase_cart obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.CloudPurchaseCart" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_cloud_purchase_cart(addTime,deleteStatus,user_id,purchased_times,cloudPurchaseLottery_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{user_id,jdbcType=BIGINT},#{purchased_times,jdbcType=INTEGER},#{cloudPurchaseLottery.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.CloudPurchaseCart">
+		update redpigmall_cloud_purchase_cart
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_cloud_purchase_cart where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_cloud_purchase_cart where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.CloudPurchaseCart" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_cloud_purchase_cart obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.CloudPurchaseCart" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_cloud_purchase_cart obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.CloudPurchaseCart" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_cloud_purchase_cart
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_cloud_purchase_cart where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

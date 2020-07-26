@@ -1,0 +1,122 @@
+<script>
+jQuery(document).ready(function(){
+	#if($!line_type)
+	jQuery("li[tem='$!line_type']").attr("class","this");
+	var tem=$!line_type;
+	if(tem==1){
+			str="<div class='android_floor_01 wh700'><ul><li style='width:100%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li></ul></div>";
+		}
+		if(tem==2){
+			str="<div class='android_floor_01 wh700'><ul><li style='width:50%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:50%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li></ul></div>";
+		}
+		if(tem==3){
+			str="<div class='android_floor_01 wh700'><ul><li style='width:33.3%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:33.3%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li><li style='width:33.3%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_3' name='line_info_3' /></li></ul></div>";
+		}
+		if(tem==4){
+			str="<div class='android_floor_01 wh700'><ul><li style='width:25%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:25%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li><li style='width:25%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_3' name='line_info_3' /></li><li style='width:25%;'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='100px' width='100%' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_4' name='line_info_4' /></li></ul></div>";
+		}
+		if(tem==6){
+			str="<div class='android_floor_01 wh700'><ul><li style='width:349px;height:324px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='317px' width='349px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:350px;height:158px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='158px'; width='350px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li><li style='height:158px; width:350px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='158px'; width='350px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_3' name='line_info_3' /></li></ul></div>";
+		}
+		if(tem==7){
+			str="<div class='android_floor_01 wh700'><ul><li style='width:227px;height:346px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='340px' width='227px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_1' name='line_info_1' /></li><li style='width:422px;height:129px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='129px'; width='422px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_2' name='line_info_2' /></li><li style='height:158px; width:422px'><ul><li style='width:210px;height:210px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg'  height='210px'; width='210px'/></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_3' name='line_info_3' /></li><li style='width:210px;height:210px'><a class='and_tem_bd' href='javascript:void(0)'><img src='$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg' height='210px'; width='210px' /></a><a class='and_tem_edit' href='javascript:void(0)'>编辑</a><input type='hidden' id='line_info_4' name='line_info_4' /></li></ul></li></ul></div>";
+		}
+		jQuery("#template_tr").show();
+		jQuery("#template_td").empty();
+		jQuery("#template_td").append(str);
+		
+		if(jQuery("#line_type").val()>5){
+			jQuery("#choose_type").find("li[use='single']").attr("class","");
+			jQuery("#choose_type").find("li[use='multi']").attr("class","this");
+			jQuery("#choose_template").find("li[use='single']").hide();
+			jQuery("#choose_template").find("li[use='multi']").show();
+		}
+		
+		if(jQuery("#line_type").val()<6){
+			
+		}
+		
+		#foreach($map in $line.get("line_info"))
+			jQuery("#template_td").find("img").each(function(index, element) {
+				var a=index+1;
+				if(a==$!velocityCount)
+                jQuery(element).attr("src","$!webPath/$map.get('img_url')");
+				if(jQuery("#line_type").val()<6){
+					jQuery(element).attr("height", "100%");
+					jQuery(element).parent().parent().attr("height", "100%");
+				}					
+				var str="$map.get('click_type'),$map.get('click_info'),$!imageWebServer/$map.get('img_url')";
+				jQuery("#line_info_$!velocityCount").val(str);
+            });
+			
+		#end
+	#end
+	#if($!status==0)
+	jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/no.jpg");
+	jQuery("#status").val("false");
+	#else
+	jQuery("#status_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	jQuery("#status").val("true");
+	#end
+});
+</script>
+
+<form action="$!webPath/appindex_line_save" method="post" id="theForm">
+  <input type="hidden" id="id" name="id" value="$!obj.id" />
+  <input type="hidden" id="edit_type" name="edit_type" value="$!edit_type" />
+  <input type="hidden" id="line_num" name="line_num" value="$!line_num" />
+  <input type="hidden" id="line_type" name="line_type" value="$!line_type" />
+  <input type="hidden" id="line_info" name="line_info" value="$!line_info" />
+  <input type="hidden" name="topics_id" id="topics_id" value="$!topics_id" />
+  <table id="setting_table" cellpadding="0" cellspacing="0">
+    <tbody>
+    
+    #if($!edit_type=="all"||$!edit_type=="floor")
+    <tr>
+      <td width="20%" align="right">楼层标题：</td>
+      <td><input class="ip200" type="text" name="title" id="title" value="$!obj.title"/></td>
+    </tr>
+    #end
+    <tr>
+      <td width="20%" align="right">#if($!edit_type=="all"||$!edit_type=="floor")楼层#else行#end序号：</td>
+      <td><input class="ip200" type="text" name="sequence" id="sequence" value="$!sequence"/></td>
+    </tr>
+    <tr>
+      <td width="20%" align="right">#if($!edit_type=="all"||$!edit_type=="floor")楼层#else行#end是否显示：</td>
+      <td><span class="webSwitch">
+        <input name="status" id="status" type="hidden" value=#if($!status)"$!status"#else"true"#end />
+        <img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg" width="61" height="23" style="cursor:pointer" id="status_button"/></span></td>
+    </tr>
+    #if($!edit_type=="all"||$!edit_type=="line")
+    <tr>
+      <td align="right">选择模板类型：</td>
+      <td><ul class="android_type" id="choose_type">
+          <li class="this"  use="single"><a href="javascript:void(0)">单行类</a><i></i></li>
+          <li use="multi"><a href="javascript:void(0)">跨行类</a><i></i></li>
+        </ul></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">选择模版：</td>
+      <td><ul class="android_type pd2" id="choose_template">
+          <li use="single" tem="1"><a href="javascript:void(0)"><img src="$!cdnServer/resources/style/system/manage/blue/images/android_tem_01.jpg" /></a><i></i></li>
+          <li use="single" tem="2"><a href="javascript:void(0)"><img src="$!cdnServer/resources/style/system/manage/blue/images/android_tem_02.jpg" /></a><i></i></li>
+          <li use="single" tem="3"><a href="javascript:void(0)"><img src="$!cdnServer/resources/style/system/manage/blue/images/android_tem_03.jpg" /></a><i></i></li>
+          <li use="single" tem="4"><a href="javascript:void(0)"><img src="$!cdnServer/resources/style/system/manage/blue/images/android_tem_04.jpg" /></a><i></i></li>
+          <li use="multi" tem="6" style="display:none"><a href="javascript:void(0)"><img src="$!cdnServer/resources/style/system/manage/blue/images/android_tem_06.jpg" /></a><i></i></li>
+          <li use="multi" tem="7" style="display:none"><a href="javascript:void(0)"><img src="$!cdnServer/resources/style/system/manage/blue/images/android_tem_07.jpg" /></a><i></i></li>
+        </ul></td>
+    </tr>
+    <tr id="template_tr" style="display:none">
+      <td align="right">编辑模板：</td>
+      <td id="template_td"></td>
+    </tr>
+    #end
+    <tr>
+      <td>&nbsp;</td>
+      <td><input class="ip_btn" type="button" value="提 交" onclick="submit_line()"/>
+        <input class="ip_btn" type="button" value="取 消" onclick="add_floor()"/></td>
+    </tr>
+      </tbody>
+    
+  </table>
+</form>

@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!cdnServer/resources/style/application/css/applicationIndex.css" type="text/css" rel="stylesheet" />
+<title>无标题文档</title>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery(".login a").click(function(){
+		var url = jQuery(this).attr("url");
+	window.open("$!webPath/application/seller_send_redirect?username=$!username&password=$!password&url="+url,"_blank");
+		});	  
+	});	
+	
+</script>
+</head>
+
+<body>
+  <div class="rightBox">
+    	<div class="entry">
+        	<div class="entry_title">快捷入口</div>
+            <ul class="login">
+            	<li><a href="javascript:void(0);" url="$!webPath/index">商城首页</a></li>
+                <li><a href="javascript:void(0);" url="$!webPath/seller/index">卖家中心</a></li>
+                <li><a href="javascript:void(0);" url="$!webPath/seller/order">订单管理</a></li>
+                <li><a href="javascript:void(0);" url="$!webPath/seller/items">宝贝管理</a></li>
+            </ul>
+        </div>
+        
+        <div class="service">
+         	<div class="service_title">平台客服</div>
+            <ul>
+            	#foreach ($telphone in $!service_telphones)
+            	<li><span>客服电话：</span>$telphone</li>
+                #end
+            </ul>
+        </div>
+        
+        <div class="notice">
+        	<div class="notice_title">助理公告</div>
+            <ul class="login">
+            #foreach($article in $!articles)
+            	<li><a href="javascript:void(0);"url="$!webPath/article_$!{article.id}" >$article.title</a></li>
+                #end
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

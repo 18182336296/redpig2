@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+function addorsubtract(obj,id){
+ var cls=jQuery(obj).attr("cls");
+ var level=jQuery(obj).attr("level");
+  if(cls=="jian"){
+  jQuery.ajax({type:'POST',
+		       url:'$!webPath/goods_class_data',
+		        data:{"pid":id,"currentPage":"$!currentPage"},
+				success:function(data){
+	                jQuery("#"+id).after(data);
+					jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/add.jpg");
+					jQuery(obj).attr("cls","add");
+					tipStyle();
+              }
+  });
+  }else{
+       if(level=="0_"+id){
+	    jQuery("tr[level=child_"+id+"]").remove();
+	   }else
+	   jQuery("tr[parent="+id+"]").remove();
+	   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/jian.jpg");
+	   jQuery(obj).attr("cls","jian");
+  }
+  //
+}
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/circleclass_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             var recommend ="false";
+				   if(data==1){
+					   recommend ="true";
+					   }
+	            jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+recommend+".png");    
+              }
+	    });
+}
+jQuery(document).ready(function(){
+ 
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">圈子类型</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/circleclass_list"  class="this"><b>管理</b></a></li>
+      <li><a href="$!webPath/circleclass_add" ><b>新增</b></a></li>
+    </ul>
+  </div>
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/circleclass_list" method="post">
+    <div class="fshoptb2">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0"  class="fshop_table2">
+        <tr>
+          <th width="4%"><span class="form_btna">&nbsp;</span>
+            </th>
+          <th width="10%"><span class="form_btna">排序</span></th>
+          <th width="40%"><span class="form_btna">名称</span></th>
+          <th width="15%"><span class="form_btna">推荐</span></th>
+          <th width="15%"><span class="form_btna">导航显示</span></th>
+          <th align="center"><b class="form_btna">操作</b></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <tr>
+          <td class="check_position"><label for="ids_$!obj.id">
+        	<input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" />
+            <span class="lbl"></span>
+        </label></td>
+          <td align="left"><span class="num">
+                <input type="text" name="$!obj.sequence" id="$!obj.sequence"  value="$!obj.sequence"  onblur="ajax_update('$!obj.id','sequence',this)" title="可编辑"/>
+                </span>
+           </td>
+          <td align="center">$!obj.className</td>
+          #set($recommend="false")
+          #if($!obj.recommend==1)
+          #set($recommend="true")
+          #end
+          <td align="center"><img onclick="ajax_update('$!obj.id','recommend',this)" src="$!cdnServer/resources/style/system/manage/blue/images/$!{recommend}.png" width="25" height="21" border="0" style="cursor:pointer;" title="推荐后在圈子列表显示"/></td>
+           #set($nav_index="false")
+          #if($!obj.nav_index==1)
+          #set($nav_index="true")
+          #end
+          <td align="center"><img onclick="ajax_update('$!obj.id','nav_index',this)" src="$!cdnServer/resources/style/system/manage/blue/images/$!{nav_index}.png" width="25" height="21" border="0" style="cursor:pointer;" title="设置后在圈子导航显示"/></td>
+          <td align="center" class="hui oprate_con"><a href="$!webPath/circleclass_edit?id=$!obj.id&currentPage=$!currentPage" class="blue">编辑</a> |<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/circleclass_del?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a></td>
+        </tr>
+        #end
+        #else
+<tr>
+	<td colspan="6">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+      </table>
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/circleclass_del');">删除</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye"> 
+       <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+            </div>
+        </div>#end
+    </div>
+  </FORM>
+</div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>生活购 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.mobile-events.min.js"></script>
+<script src="$!cdnServer/resources/js/TouchSlide.1.1.js"></script>
+<script type="application/javascript">
+jQuery(document).ready(function(e) {
+	#if($!recommend.size()>0)
+		var width = jQuery(window).width();
+		var size = parseInt("$!recommend.size()");
+		var li_width=width/2.5;
+		var ul_width=width*size/2.5+size*5;
+		jQuery("#group_list_ul").attr("style","width:"+ul_width+"px")
+		jQuery("#group_list_ul li").each(function(){
+			jQuery(this).attr("style","width:"+li_width+"px");
+		})
+		var height=jQuery(".group_hot").height()+5;
+		#end
+	  jQuery(".wap_pop_bg").click(function(){
+	  jQuery(".group_pop").hide();  
+	  jQuery(".wap_pop_bg").hide();
+  });
+});
+function areaChoose(){
+	jQuery(".wap_pop_bg").show();
+	jQuery(".group_pop").show();
+	}
+
+function searchgoods(e){ //传入 event 
+	var e = e || window.event; 
+	if(e.keyCode == 13){ 
+		var text=jQuery("#seach").val();
+		window.location="$!webPath/wap/grouplife/grouplifegoods_search?keyword="+text;
+	} 
+} 
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<!--城市选择-->
+<style>
+.wap_pop_bg{ width:100%; height:100%; top:0; left:0; float:left; background: rgba(0,0,0,.2); z-index:1; position:fixed;}
+.group_pop{  width:90%;margin-left:5%; position:fixed;float:left; background:#f5f5f5; border-radius:5px; z-index:2; top:10%;}
+.group_pop_top{ width:94%; float:left; margin:5% 3% 0% 3%;}
+.group_pop_top ul{ float:left;}
+.group_pop_top ul li{  float:left;background:#fff;text-align:center; margin:5px; }
+.group_pop_top ul li a{ display:block;padding:5px 18px; float:left; border:1px solid #e4e4e4;border-radius:5px; }
+.group_pop_top ul li a.this{ border-color:#f00; color:#f00}
+.group_pop_bottom{ width:100%; height:50px; line-height:50px; float:left; border-top:1px solid #e4e4e4; margin-top:5px; }
+.group_pop_bottom span{ float:left;}
+.group_pop_bottom b{ float:right;}
+.focus .hd ul li{ font-size:0px;}
+</style>
+
+    <div class="wap_pop_bg" style="display:none;"></div>
+	<div class="group_pop" style="display:none;">
+    	<div class="group_pop_top">
+        	<ul>
+            	#if($!ga)
+                #foreach($city_child in $!ga.childs)
+                <li><a href="$!webPath/wap/grouplife/grouplifegoods_search?ga_id=$!city_child.id">$!city_child.areaName</a></li>
+                #end
+                #end
+            </ul>
+            <div class="group_pop_bottom">
+            	<span>当前城市：#if($!ga)$!{ga.areaName}#else 全国#end</span>
+                <b><a href="$!webPath/wap/grouplife/groupAreaChose?gaid=$!{ga.id}">切换></a></b>
+            </div>
+        </div>
+        
+    </div>  
+<!--城市选择结束-->
+<div class="phone_main">
+    <div class="group_hd">
+    
+    #if($!ga)
+      <input type="hidden" id="areaId" name="areaId"  value="$!ga.id" />
+      <a href="javascript:void(0);" onClick="areaChoose();"><span class="city">$!ga.areaName</span><span class="arrow arrow_white"></span><span class="arrow arrow_red"></span></a>
+      #else
+      <a href="$!webPath/wap/grouplife/groupAreaChose"><span class="city">全国</span><span class="arrow arrow_white"></span><span class="arrow arrow_red"></span></a>
+      #end
+      
+    <input id="seach" type="text" placeholder="输入商品名称" onKeyDown="searchgoods()"/>
+    </div>
+    <div class="group_nav">
+    <!--建议上传图标为40X40(px)圆形图标-->
+    	<ul>
+        #if($!gcs.size()>0)
+        #foreach($gc in $!gcs)
+        <li><a href="$!webPath/wap/grouplife/grouplifegoods_list?gc_id=$!gc.id"><img src="$!imageWebServer/$!gc.gc_img.path/$!gc.gc_img.name"><p style="width: 100%;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">$!gc.gc_name</p></a></li>
+        #end
+        #end
+        </ul>
+    </div>
+	<script src="$!webPath/wap/advert_invoke?id=27"></script>
+    <div class="group_hot">
+    	<h1 class="group_title"><span></span>热门团购</h1>
+        <!--上传图片比例与电脑端一样即可-->
+    	#if($!recommend.size()>0)
+        <div style="overflow-x:scroll;">
+        <ul id="group_list_ul">
+          #foreach($goods in $!recommend)
+          	<li>
+             <a href="$!webPath/wap/grouplife/view?id=$!{goods.id}"><img src="$!imageWebServer/$!goods.group_acc.path/$!goods.group_acc.name"><p>¥<strong>$!goods.group_price</strong><s>¥$!goods.cost_price</s></p></a>
+            </li>
+          #end
+        </ul>
+        </div>
+        #else
+        
+        #end
+    </div>
+    
+    <div class="group_news">
+    	<h1 class="group_title"><span></span>最新团购</h1>
+        <div class="group_news_list">
+        	<!--上传图片比例与电脑端一样即可-->
+			#foreach($obj in $!objs)
+            	<div class="group_news_item">
+            	<a href="$!webPath/wap/grouplife/view?id=$!{obj.id}" ></a>
+            	<dl>
+                	<dt><img src="$!imageWebServer/$!obj.group_acc.path/$!obj.group_acc.name"+"._small."+"$!obj.group_acc.ext"></dt>
+                    <dd><p>$obj.gg_name</p><p class="big">¥$!obj.group_price</p><p class="gray"><s>¥$!obj.cost_price</s><span>$!obj.selled_count人购买</span></p></dd>
+                </dl>
+            </div>
+            #end
+            <script>
+function url(url){
+	var type = jQuery("#url").val();
+	url = url+"&&type="+type;
+	window.location.href=url;
+}
+</script>
+<div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+<div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>  
+</div>
+
+        </div>
+    </div>
+</div>
+$!httpInclude.include("/wap/layer")
+</body>
+</html>

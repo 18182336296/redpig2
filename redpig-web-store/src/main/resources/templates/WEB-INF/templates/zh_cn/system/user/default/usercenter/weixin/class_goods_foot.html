@@ -1,0 +1,50 @@
+<script>
+jQuery(document).ready(function(){
+		jQuery("img[id^=goods_img_]").each(function(){
+				jQuery(this).parent().parent().parent().siblings(".f_goods_btns").children("a").height(jQuery(this).parent().width()+20+"px");
+				jQuery(".f_goods_info").height(jQuery(this).parent().width()+19.084+"px");
+				jQuery(this).parent().parent().parent().siblings(".f_goods_btns").children("a").css("line-height",jQuery(this).parent().width()+20+"px");
+			});
+})
+jQuery(function(){
+    jQuery(".f_goods_wrap").on("swipeleft",function(){
+		jQuery(this).addClass('selected').find(".f_goods_info").animate({"left":"-28%"})
+    }).on("swiperight",function(){
+		jQuery(this).addClass('selected').find(".f_goods_info").animate({"left":"0%"})
+    })
+})
+</script>
+#foreach($obj in $objs)
+    <div class="footprint_items">
+    	<div class="top_title" id="top_title_$!obj.id">
+        	<span class="time">$!obj.fp_date</span>
+            <span class="amount">浏览过<span id="amount">$!{obj.fp_goods_count}</span>件商品</span>
+            <span class="clear" onclick="fp_remove('$!obj.fp_date','',this);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/f_clear.png"></span>
+        </div>
+        #foreach($fpv in $footPointTools.generic_fpv("$!obj.fp_goods_content"))
+        #set($store=$!footPointTools.goods_second_domain("$!fpv.fpv_goods_id","goods"))
+        #set($goods_domainPath="$!webPath/wap/items?id=$!{fpv.fpv_goods_id}")
+        #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+        #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items?id=$!{fpv.fpv_goods_id}")
+        #end
+       <!-- $!{fpv.fpv_goods_img_path}
+        style="left:-28%;"-->
+    	<div class="f_goods_wrap">
+        	<div class="f_goods_info">
+            	<a href="$!goods_domainPath">
+                    <div class="pic"><img src="$!{fpv.fpv_goods_img_path}" id="goods_img_$!obj.id"></div>
+                    <p class="name">$!{fpv.fpv_goods_name}</p>
+                    <div class="value_box">
+                        <span class="value"><em>￥</em>$!{fpv.fpv_goods_price}</span>
+                        <span class="sales_volume">销量：$!{fpv.fpv_goods_sale}件</span>
+                    </div>
+                </a>
+            </div>
+            <div class="f_goods_btns"><!--f_goods_btns中两个按钮的高度需要JS控制，需获取pic的高度后加16px，两个按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是172px-->
+            	<a class="similar_btn" href="$!webPath/wap/class_goods_$!{fpv.fpv_goods_class_id}" target="_blank" style=" height:118px; line-height:118px;">找相似</a>
+                <a class="del_btn" href="javascript:void(0);" onclick="only_fp_remove('$!obj.fp_date','$!fpv.fpv_goods_id',this);" style=" height:118px; line-height:118px;">删除</a>
+            </div>
+        </div>
+        #end
+    </div>
+    #end

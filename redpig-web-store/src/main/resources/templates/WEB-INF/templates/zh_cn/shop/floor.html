@@ -1,0 +1,352 @@
+<div id="floors" class="w1210 floor-list">
+
+#foreach($!floor in $floors)
+<div class="floor" floor="$!{velocityCount}" color="#e31939">
+		<div class="floor-layout">
+						<div class="floor-con">
+				<div class="floor-title">
+					<h2>
+						<span> $!{velocityCount}F </span>
+						<a href="javascript:void(0);" target="_blank">$!{floor.gf_name}</a>
+					</h2>
+                    <ul class="floor-tabs-nav">
+                    	#set($first=1)
+						#foreach($info in $floor.childs)
+							#if($!first==1)
+							<li  class="floor-tabs-selected"   >
+								<h3 style="border-color: rgb(227, 25, 57) rgb(227, 25, 57) rgb(255, 255, 255); color: rgb(227, 25, 57);">$!{info.gf_name}</h3>
+							</li>
+							#set($first=0)
+							
+							#else
+							<li  class=""   >
+								<h3 style="">$!{info.gf_name}</h3>
+							</li>
+							#end
+						#end
+						
+						
+						
+					</ul>
+				</div>
+                <script type="text/javascript">
+				
+				
+				</script>
+                <div class="floor-content">
+                	<div class="floor-left" style="border-top: 1px #e31939 solid;">
+                    	<div id="focus_5" class="floor-banner">
+                        	$!gf_tools.generic_adv("$!imageWebServer","$!floor.gf_left_adv")
+                        </div>
+                                  
+						<ul class="floor-words">
+							#foreach($gc in $gf_tools.generic_gf_gc("$!floor.gf_gc_list"))
+		          				#foreach($c_gc in $gc.childs)
+							<li>
+                            	<a href="$!webPath/store_goods_list_$!{c_gc.id}" title="$!c_gc.className">
+									$!c_gc.className							
+								</a>
+                            </li>
+	                            #end
+	          				#end
+                    </div>
+                    <div class="floor-right">
+                    	
+							
+							#foreach($info in $floor.childs)
+							
+							<div #if($!{velocityCount}>1) class="floor-tabs-panel floor-tabs-hide" #else class="floor-tabs-panel" #end style="border-top: 1px #e31939 solid;">
+								<ul>
+									#set($map2=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","2"))
+									<div class="goods" id='li_$!map2.get("goods_id")'>
+										<div class="wrap">
+											#if($!map2.get("img_url"))
+											<a target="_blank" href='$!map2.get("href_url")' title='$!map2.get("goods_name")'>
+												<img src='$!imageWebServer/$!map2.get("img_url")' alt='$!map2.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map2.get("goods_name")!=""&&$!map2.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map4.get("href_url")' title='$!map2.get("goods_name")'>$!map2.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map2.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+								    
+									#set($map3=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","3"))
+									<div class="goods" id='li_$!map3.get("goods_id")'>
+										<div class="wrap">
+											#if($!map3.get("img_url"))
+											<a target="_blank" href='$!map3.get("href_url")' title='$!map3.get("goods_name")'>
+												<img src='$!imageWebServer/$!map3.get("img_url")' alt='$!map3.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map3.get("goods_name")!=""&&$!map3.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map4.get("href_url")' title='$!map3.get("goods_name")'>$!map3.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map3.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+									
+									#set($map4=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","4"))
+									<div class="goods" id='li_$!map4.get("goods_id")'>
+										<div class="wrap">
+											#if($!map4.get("img_url"))
+											<a target="_blank" href='$!map4.get("href_url")' title='$!map4.get("goods_name")'>
+												<img src='$!imageWebServer/$!map4.get("img_url")' alt='$!map4.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map4.get("goods_name")!=""&&$!map4.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map4.get("href_url")' title='$!map4.get("goods_name")'>$!map4.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map4.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+									#set($map5=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","5"))
+									<div class="goods" id='li_$!map5.get("goods_id")'>
+										<div class="wrap">
+											#if($!map5.get("img_url"))
+											<a target="_blank" href='$!map5.get("href_url")' title='$!map5.get("goods_name")'>
+												<img src='$!imageWebServer/$!map5.get("img_url")' alt='$!map5.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map5.get("goods_name")!=""&&$!map5.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map5.get("href_url")' title='$!map5.get("goods_name")'>$!map5.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map5.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+									
+									
+									#set($map6=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","6"))
+									<div class="goods" id='li_$!map6.get("goods_id")'>
+										<div class="wrap">
+											#if($!map6.get("img_url"))
+											<a target="_blank" href='$!map6.get("href_url")' title='$!map6.get("goods_name")'>
+												<img src='$!imageWebServer/$!map6.get("img_url")' alt='$!map6.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map6.get("goods_name")!=""&&$!map6.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map6.get("href_url")' title='$!map6.get("goods_name")'>$!map6.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map6.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+									#set($map7=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","7"))
+									<div class="goods" id='li_$!map7.get("goods_id")'>
+										<div class="wrap">
+											#if($!map7.get("img_url"))
+											<a target="_blank" href='$!map7.get("href_url")' title='$!map7.get("goods_name")'>
+												<img src='$!imageWebServer/$!map7.get("img_url")' alt='$!map7.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map7.get("goods_name")!=""&&$!map7.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map7.get("href_url")' title='$!map7.get("goods_name")'>$!map7.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map7.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+
+									#set($map8=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","8"))
+									<div class="goods" id='li_$!map8.get("goods_id")'>
+										<div class="wrap">
+											#if($!map8.get("img_url"))
+											<a target="_blank" href='$!map8.get("href_url")' title='$!map8.get("goods_name")'>
+												<img src='$!imageWebServer/$!map8.get("img_url")' alt='$!map8.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map8.get("goods_name")!=""&&$!map8.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map8.get("href_url")' title='$!map8.get("goods_name")'>$!map8.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map8.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+									#set($map9=$!gf_tools.generic_style2_goods("$!info.gf_style2_goods","9"))
+									<div class="goods" id='li_$!map9.get("goods_id")'>
+										<div class="wrap">
+											#if($!map9.get("img_url"))
+											<a target="_blank" href='$!map9.get("href_url")' title='$!map9.get("goods_name")'>
+												<img src='$!imageWebServer/$!map9.get("img_url")' alt='$!map9.get("goods_name")' class="pic_img_279" height="140" width="140">
+											</a>
+											#end
+											#if($!map9.get("goods_name")!=""&&$!map9.get("store_price")!="")
+											<p class="title">
+												<a target="_blank" href='$!map9.get("href_url")' title='$!map9.get("goods_name")'>$!map9.get("goods_name")</a>
+											</p>
+											<p class="price">
+												<span class="j_CurPrice">
+													¥$!map9.get("store_price")
+												</span>
+											</p>
+											#end
+										</div>
+									</div>
+																	</ul>
+							</div>
+									
+									#end												
+							
+																					
+							
+							                    </div>
+                </div>
+                    #set($map=$!gf_tools.generic_goods_list("$!floor.gf_list_goods"))
+                    <div class="floor-brand">
+					<div class="tabs-brand">
+							<div class="brand">
+								<div class="brand-con">
+									<ul class="yyyy_5" style="position: absolute; width: 952px; height: 40px; top: 0px; left: 1px;">
+							          #if($!map.get("goods1"))
+							          #set($goods=$!map.get("goods1"))
+							          #if($!goods.goods_main_photo)                   
+							          #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+							          #else
+							          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+							          #end
+							          
+							          #set($goods_url="$!webPath/items_$!{goods.id}")
+							          
+							          #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+							          #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+							          #end
+										<li class="fore1">
+											<a href="$!goods_url" target="_blank" title="$!goods.goods_name">
+												<img src="$!img" alt="$!goods.goods_name" height="40" width="100">
+											</a>
+										</li>
+									  #end
+									
+							          #if($!map.get("goods2"))
+							          #set($goods=$!map.get("goods2"))
+							          #if($!goods.goods_main_photo)                   
+							          #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+							          #else
+							          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+							          #end
+							          
+							          #set($goods_url="$!webPath/items_$!{goods.id}")
+							          
+							          #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+							          #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+							          #end
+										<li class="">
+											<a href="$!goods_url" target="_blank" title="$!goods.goods_name">
+												<img src="$!img" alt="$!goods.goods_name" height="40" width="100">
+											</a>
+										</li>
+									  #end
+									
+							          #if($!map.get("goods3"))
+							          #set($goods=$!map.get("goods3"))
+							          #if($!goods.goods_main_photo)                   
+							          #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+							          #else
+							          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+							          #end
+							          
+							          #set($goods_url="$!webPath/items_$!{goods.id}")
+							          
+							          #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+							          #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+							          #end
+										<li class="">
+											<a href="$!goods_url" target="_blank" title="$!goods.goods_name">
+												<img src="$!img" alt="$!goods.goods_name" height="40" width="100">
+											</a>
+										</li>
+									  #end
+									
+							          #if($!map.get("goods4"))
+							          #set($goods=$!map.get("goods4"))
+							          #if($!goods.goods_main_photo)                   
+							          #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+							          #else
+							          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+							          #end
+							          
+							          #set($goods_url="$!webPath/items_$!{goods.id}")
+							          
+							          #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+							          #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+							          #end
+										<li class="">
+											<a href="$!goods_url" target="_blank" title="$!goods.goods_name">
+												<img src="$!img" alt="$!goods.goods_name" height="40" width="100">
+											</a>
+										</li>
+									  #end
+									
+							          #if($!map.get("goods5"))
+							          #set($goods=$!map.get("goods5"))
+							          #if($!goods.goods_main_photo)                   
+							          #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+							          #else
+							          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+							          #end
+							          
+							          #set($goods_url="$!webPath/items_$!{goods.id}")
+							          
+							          #if($!config.second_domain_open && $!goods.goods_type==1 && $!goods.goods_store.store_second_domain!="")
+							          #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+							          #end
+										<li class="">
+											<a href="$!goods_url" target="_blank" title="$!goods.goods_name">
+												<img src="$!img" alt="$!goods.goods_name" height="40" width="100">
+											</a>
+										</li>
+									  #end
+									</ul>
+									
+								</div>
+							</div>
+						<script type="text/javascript">
+						Move(".left_5",".right_5",".yyyy_5",".brand","10");
+						</script>
+					</div>
+				</div>
+                			</div>
+		</div>
+</div>
+#end
+	</div>

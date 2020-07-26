@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.GoodsLogMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.GoodsLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="img_id" property="img_id" jdbcType="BIGINT"/>
+		<result column="gc_id" property="gc_id" jdbcType="BIGINT"/>
+		<result column="goods_brand_id" property="goods_brand_id" jdbcType="BIGINT"/>
+		<result column="price" property="price" jdbcType="DECIMAL"/>
+		<result column="log_form" property="log_form" jdbcType="INTEGER"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="goods_click" property="goods_click" jdbcType="INTEGER"/>
+		<result column="goods_click_from" property="goods_click_from" jdbcType="VARCHAR"/>
+		<result column="goods_collect" property="goods_collect" jdbcType="INTEGER"/>
+		<result column="preferential" property="preferential" jdbcType="VARCHAR"/>
+		<result column="preferential_info" property="preferential_info" jdbcType="VARCHAR"/>
+		<result column="goods_salenum" property="goods_salenum" jdbcType="INTEGER"/>
+		<result column="goods_order_type" property="goods_order_type" jdbcType="VARCHAR"/>
+		<result column="goods_sale_info" property="goods_sale_info" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.GoodsLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="img_id" property="img_id" jdbcType="BIGINT"/>
+		<result column="gc_id" property="gc_id" jdbcType="BIGINT"/>
+		<result column="goods_brand_id" property="goods_brand_id" jdbcType="BIGINT"/>
+		<result column="price" property="price" jdbcType="DECIMAL"/>
+		<result column="log_form" property="log_form" jdbcType="INTEGER"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+		<result column="goods_click" property="goods_click" jdbcType="INTEGER"/>
+		<result column="goods_click_from" property="goods_click_from" jdbcType="VARCHAR"/>
+		<result column="goods_collect" property="goods_collect" jdbcType="INTEGER"/>
+		<result column="preferential" property="preferential" jdbcType="VARCHAR"/>
+		<result column="preferential_info" property="preferential_info" jdbcType="VARCHAR"/>
+		<result column="goods_salenum" property="goods_salenum" jdbcType="INTEGER"/>
+		<result column="goods_order_type" property="goods_order_type" jdbcType="VARCHAR"/>
+		<result column="goods_sale_info" property="goods_sale_info" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,goods_id,goods_name,img_id,gc_id,goods_brand_id,price,log_form,store_id,store_name,goods_click,goods_click_from,goods_collect,preferential,preferential_info,goods_salenum,goods_order_type,goods_sale_info
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="addTime_more_than_equal != null">and addTime  <![CDATA[ >= ]]> #{addTime_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="addTime_less_than_equal != null">and addTime  <![CDATA[ <= ]]> #{addTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+		<if test="goods_name != null">and goods_name = #{goods_name,jdbcType=VARCHAR}</if>
+		<if test="goods_name_like != null">and goods_name like CONCAT('%',#{goods_name_like},'%') </if>
+		<if test="img_id != null">and img_id = #{img_id,jdbcType=BIGINT}</if>
+		<if test="gc_id != null">and gc_id = #{gc_id,jdbcType=BIGINT}</if>
+		<if test="goods_brand_id != null">and goods_brand_id = #{goods_brand_id,jdbcType=BIGINT}</if>
+		<if test="price != null">and price = #{price,jdbcType=DECIMAL}</if>
+		<if test="log_form != null">and log_form = #{log_form,jdbcType=INTEGER}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="store_name != null">and store_name = #{store_name,jdbcType=VARCHAR}</if>
+		<if test="goods_click != null">and goods_click = #{goods_click,jdbcType=INTEGER}</if>
+		<if test="goods_click_from != null">and goods_click_from = #{goods_click_from,jdbcType=VARCHAR}</if>
+		<if test="goods_collect != null">and goods_collect = #{goods_collect,jdbcType=INTEGER}</if>
+		<if test="preferential != null">and preferential = #{preferential,jdbcType=VARCHAR}</if>
+		<if test="preferential_info != null">and preferential_info = #{preferential_info,jdbcType=VARCHAR}</if>
+		<if test="goods_salenum != null">and goods_salenum = #{goods_salenum,jdbcType=INTEGER}</if>
+		<if test="goods_order_type != null">and goods_order_type = #{goods_order_type,jdbcType=VARCHAR}</if>
+		<if test="goods_sale_info != null">and goods_sale_info = #{goods_sale_info,jdbcType=VARCHAR}</if>
+		<if test="gc_id_ids !=null and gc_id_ids.size() &gt;0">
+			and gc_id in 
+			<foreach collection="gc_id_ids" index="index" item="item" open="(" separator="," close=")">
+            	#{item}
+        	</foreach>
+		</if>
+		<if test="gc_ids !=null and gc_ids.size() &gt;0">
+			and gc_id in 
+			<foreach collection="gc_ids" index="index" item="item" open="(" separator="," close=")">
+            	#{item}
+        	</foreach>
+		</if>
+	</sql>
+	<sql id="ifStatement">
+		goods_id= #{goods_id},
+		goods_name= #{goods_name},
+		img_id= #{img_id},
+		gc_id= #{gc_id},
+		goods_brand_id= #{goods_brand_id},
+		price= #{price},
+		log_form= #{log_form},
+		store_id= #{store_id},
+		store_name= #{store_name},
+		goods_click= #{goods_click},
+		goods_click_from= #{goods_click_from},
+		goods_collect= #{goods_collect},
+		preferential= #{preferential},
+		preferential_info= #{preferential_info},
+		goods_salenum= #{goods_salenum},
+		goods_order_type= #{goods_order_type},
+		goods_sale_info= #{goods_sale_info},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.GoodsLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodslog 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.GoodsLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodslog obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<if test="group_by != null">
+			group by ${group_by}
+		</if>
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+					order by ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+    <resultMap id="groupBy" type="java.util.Map">
+        <result column="sum(goods_click)" property="goods_click" jdbcType="VARCHAR"/>
+        <result column="sum(goods_collect)" property="goods_collect" jdbcType="VARCHAR"/>
+        <result column="sum(goods_salenum)" property="goods_salenum" jdbcType="VARCHAR"/>
+        <result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<select id="queryByGroup" resultMap="groupBy" parameterType="map">
+		select 
+			obj.goods_name
+			<if test="goods_click !=null">
+				, sum(goods_click)
+			</if>
+			<if test="goods_collect !=null">
+				,sum(goods_collect)
+			</if>
+			<if test="goods_salenum !=null">
+				,sum(goods_salenum)
+			</if>
+		from redpigmall_goodslog obj 
+		where 1=1 
+		<include refid="whereStatement"/>
+		<if test="group_by != null">
+			group by ${group_by}
+		</if>
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+					order by sum(${orderBy}) ${orderType}
+			</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT count(*) FROM redpigmall_goodslog obj WHERE 1=1
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType !=null">
+					order by sum(${orderBy}) ${orderType}
+			</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.GoodsLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodslog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.GoodsLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_goodslog(addTime,deleteStatus,goods_id,goods_name,img_id,gc_id,goods_brand_id,price,log_form,store_id,store_name,goods_click,goods_click_from,goods_collect,preferential,preferential_info,goods_salenum,goods_order_type,goods_sale_info)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{goods_id,jdbcType=BIGINT},#{goods_name,jdbcType=VARCHAR},#{img_id,jdbcType=BIGINT},#{gc_id,jdbcType=BIGINT},#{goods_brand_id,jdbcType=BIGINT},#{price,jdbcType=DECIMAL},#{log_form,jdbcType=INTEGER},#{store_id,jdbcType=BIGINT},#{store_name,jdbcType=VARCHAR},#{goods_click,jdbcType=INTEGER},#{goods_click_from,jdbcType=VARCHAR},#{goods_collect,jdbcType=INTEGER},#{preferential,jdbcType=VARCHAR},#{preferential_info,jdbcType=VARCHAR},#{goods_salenum,jdbcType=INTEGER},#{goods_order_type,jdbcType=VARCHAR},#{goods_sale_info,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.GoodsLog">
+		update redpigmall_goodslog
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_goodslog where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_goodslog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.GoodsLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodslog obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.GoodsLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_goodslog obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="group_by != null">
+					group by ${group_by}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.GoodsLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_goodslog
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_goodslog where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

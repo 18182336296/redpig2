@@ -1,0 +1,122 @@
+<!--宽屏楼层-->
+#if($!obj.wide_template=="wide_adv_rectangle_four")
+<div class="wide_quick">
+<div class="wide_quick_c">
+  <ul>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","1"))
+    <li><a href="$!map.url"> #if($!{map.src})<img src="$!imageWebServer/$!{map.src}" />#end</a></li>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","2"))
+    <li><a href="$!map.url">#if($!{map.src})<img src="$!imageWebServer/$!{map.src}" />#end</a></li>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","3"))
+    <li><a href="$!map.url">#if($!{map.src})<img src="$!imageWebServer/$!{map.src}" />#end</a></li>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_rectangle_four}","$!obj.wide_template","4"))
+    <li><a href="$!map.url">#if($!{map.src})<img src="$!imageWebServer/$!{map.src}" />#end</a></li>
+  </ul>
+</div>
+</div>
+#end
+#if($!obj.wide_template=="wide_goods")
+<div class="wide_floor" mark="wide_goods">
+<div class="wide_floor_c">
+  <div class="wide_floor_c_top">$!obj.gf_name</div>
+  <div class="wide_floor_c_b">
+    <div class="wide_floor_c_right">
+      <ul>
+        #foreach($goods in $gf_tools.generic_goods("$!obj.wide_goods"))
+        #if($!goods)
+        #if($!goods.goods_main_photo)               #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_middle.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        #set($goods_url="$!webPath/items_$!{goods.id}")
+        #if($!config.second_domain_open)
+        #set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+        #end
+        <li> <span><a href="$!goods_url" target="_blank"><img src="$!img" /></a></span> <b><a href="$!goods_url" target="_blank">$!goods.goods_name</a></b> <strong>￥$!{goods.goods_price}</strong> </li>
+        #end 
+        #end
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+#end
+#if($!obj.wide_template=="wide_adv_five")
+<div class="wide_floor" mark="wide_adv_five">
+<div class="wide_floor_2">
+  <ul>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","1"))
+    <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</li>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","2"))
+    <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</li>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","3"))
+    <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</li>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","4"))
+    <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</li>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_five}","$!obj.wide_template","5"))
+    <li style="position:relative;">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</li>
+  </ul>
+</div>
+</div>
+#end
+#if($!obj.wide_template=="wide_adv_eight")
+<div class="wide_floor" mark="wide_adv_eight">
+<div class="wide_floor_4">
+  <div class="wide_floor_4_m"> #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","1"))
+    <div class="wide_floor_4_one_bottom">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","2"))
+    <div class="wide_floor_4_one_bottom">#if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","3"))
+    <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","4"))
+    <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","5"))
+    <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","6"))
+    <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","7"))
+    <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+    #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_eight}","$!obj.wide_template","8"))
+    <div class="wide_floor_4_one_bottom"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end</div>
+  </div>
+</div>
+</div>
+#end
+#if($!obj.wide_template=="wide_adv_brand")
+<div class="wide_brand" mark="wide_adv_brand">
+<div class="wide_brand_c">
+  <div class="wide_brand_c_t"><b style="width:98px; margin-left:36px">$!{obj.gf_name}</b><span>Brand For You</span><strong><a href="$!webPath/brand/index" target="_blank">全部品牌 ></a></strong></div>
+  <div class="wide_brand_c_m">
+    <div class="wide_brand_c_m_left"> #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_brand}","$!obj.wide_template","1"))
+      #if($!{map.src}!="") <a href="$!{map.url}" target="_blank"> <img src="$!imageWebServer/$!{map.src}" /> </a> #end </div>
+    <div class="wide_brand_c_m_right">
+      <ul>
+        #foreach($obj in $!gf_tools.generic_gf_wide_brand_template("$!{obj.wide_adv_brand}","$!obj.wide_template","2"))
+        <li><a href="$!webPath/brand_goods_$!{obj.id}" target="_blank"><img src="$!imageWebServer/$!obj.brandLogo.path/$!obj.brandLogo.name" /><i>$!obj.name</i></a></li>
+        #end
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+#end
+#if($!obj.wide_template=="wide_adv_square_four")
+<div class="wide_floor" mark="wide_adv_square_four">
+    <div class="wide_floor_3">
+      <div class="wide_floor_3_m"> 
+      #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","1"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+        </div>
+      #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","2"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+        </div>
+         #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","3"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+        </div>
+        #set($map =$!gf_tools.generic_gf_wide_template("$!{obj.wide_adv_square_four}","$!obj.wide_template","4"))
+        <div class="wide_floor_3_one"> #if($!{map.src}!="")<a href="$!map.url" target="_blank"><img src="$!imageWebServer/$!{map.src}" /></a>#end
+        </div>
+      </div>
+    </div>
+  </div>
+#end

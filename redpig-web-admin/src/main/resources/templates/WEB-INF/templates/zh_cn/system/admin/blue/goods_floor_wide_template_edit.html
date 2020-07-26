@@ -1,0 +1,499 @@
+<script>
+jQuery(document).ready(function(){
+	jQuery("#gc_id").load("$!webPath/goodsclass_loading_asyn");
+  jQuery(":radio").click(function(){
+     var val=jQuery(this).val();
+	 jQuery("li[id^=goods_adv_]").hide();
+	 jQuery("li[id^=user_adv_]").hide();
+	 jQuery("li[id^=system_adv_]").hide();
+	 if(val=="goods"){
+	  jQuery("li[id^=goods_adv_]").show();
+	 }
+	 if(val=="img"){
+	  jQuery("li[id^=user_adv_]").show();
+	 }
+	 if(val=="adv"){
+	  jQuery("li[id^=system_adv_]").show();
+	 }
+  });
+  
+  #if($!obj_map.type)
+  var val="$!obj_map.type";
+  jQuery("input[id='type'][value='"+val+"']").attr("checked","checked");
+   jQuery("li[id^=goods_adv_]").hide();
+	 jQuery("li[id^=user_adv_]").hide();
+	 jQuery("li[id^=system_adv_]").hide();
+	 if(val=="goods"){
+	  jQuery("li[id^=goods_adv_]").show();
+	 }
+	 if(val=="img"){
+	  jQuery("li[id^=user_adv_]").show();
+	 }
+	 if(val=="adv"){
+	  jQuery("li[id^=system_adv_]").show();
+	 }
+  #end
+  //
+  jQuery("#img").change(function(){
+     jQuery("#file_val").val(jQuery(this).val());
+  });
+  //
+   jQuery("#theForm").validate({		
+	 ignore: "",						   
+     rules:{
+	   img:{
+	    accept:"$!config.imageSuffix"
+	   }
+	 },
+	messages:{
+	  img:{accept:'图片格式不正确'}
+	}
+  });
+jQuery("#logoShow").hover(function(){
+		jQuery("#logoImg").show();							   
+	},function(){
+		jQuery("#logoImg").hide();	
+		});
+});
+function goods_floor_list_goods_load(){
+  var gc_id=jQuery("#gc_id").val();
+  var goods_name=jQuery("#goods_name").val();
+  var activity_name=jQuery("#activity_name").val();
+  jQuery.ajax({type:'POST',
+			   url:'$!webPath/goods_floor_list_goods_load?page=goods_floor_style2_goods_load',
+			   data:{"gc_id":gc_id,"goods_name":goods_name,"module_id":"$!module_id","activity_name":activity_name},
+			   success:function(data){
+					jQuery("#floor_goods_list").empty().append(data);																											               }
+			});
+}
+function goods_floor_brand(){
+  var name=jQuery("#name").val();
+ jQuery.ajax({type:'POST',url:"$!webPath/goods_floor_brand_load",data:{"name":name},
+			  success:function(data){
+					jQuery("#floor_goods_list").empty().append(data);																											               }																																		    });  
+}
+function goods_floor_brand_set(obj){
+  var brand_id=jQuery(obj).attr("brand_id");
+  var brand_img=jQuery(obj).attr("brand_img");
+  var brand_name=jQuery(obj).attr("brand_name");
+  var add=0;
+ jQuery(".floor_box_pls ul").each(function(){
+   if(jQuery(this).attr("brand_id")==brand_id){
+	  add=1;
+	  alert("已经存在该品牌！");
+	  return;
+	}
+ });
+ if(jQuery(".floor_box_pls ul").length>39){
+ 	  add=2;
+	  alert("最多选择40个品牌！");
+	  return;
+ }
+ if(add==0){
+  var s="<ul onDblClick='jQuery(this).remove();' brand_id='"+brand_id+"' class='fl_brands'><li class='fl_brands_img'><img src='"+brand_img+"' width='98' height='35' /></li><li class='fl_brands_name'>"+brand_name+"</li></ul>";
+  if(jQuery(".floor_box_pls ul").length>0){
+    jQuery(".floor_box_pls ul:last").after(s);
+  }else{
+	jQuery(".floor_box_pls").append(s);  
+  }
+ }
+}
+function ajaxPage(url,page,obj){
+	var activity_name=jQuery("#activity_name").val();
+ jQuery.ajax({type:'POST',url:url,data:{"currentPage":page,"page":"goods_floor_style2_goods_load","module_id":"$!module_id","activity_name":activity_name},
+			  success:function(data){
+					jQuery("#floor_goods_list").empty().append(data);																											               }																																		    });
+}
+function goods_list_set(obj){
+  var img=jQuery(obj).attr("img_uri");
+  var goods_id=jQuery(obj).attr("goods_id"); 
+  var goods_name=jQuery(obj).attr("goods_name");
+  var count=jQuery(".floor_box_pls ul").length;
+  var add=0; 
+  if(count>4){
+	  alert("最多只能添加5件商品！");
+	  add=1;
+  }
+  jQuery(".floor_box_pls ul").each(function(){
+     if(jQuery(this).attr("goods_id")==goods_id){
+	   alert("已经存在该商品");
+	   add=2;
+	 }
+  });
+  if(add==0){
+  var s="<ul ondblclick='jQuery(this).remove();' class='floor_pro' goods_id='"+goods_id+"'><li class='floor_pro_img'><img src='"+img+"' width='100' height='100' /></li><li class='floor_pro_name'>"+goods_name+"</li></ul>";
+  jQuery(".floor_box_pls").append(s);
+  }
+}
+function save_form(){
+ var ids="";
+ var brand_ids="";
+ jQuery(".floor_box_pls ul").each(function(){
+   ids=ids+","+jQuery(this).attr("goods_id"); 
+   brand_ids=brand_ids+","+jQuery(this).attr("brand_id"); 
+ });
+ jQuery("#ids").val(ids);
+  jQuery("#brand_ids").val(brand_ids);
+ jQuery("#theForm").submit();
+}
+</script>
+
+#if($!{wide_template}=="wide_adv_rectangle_four")
+<div class="box_floor" mark="$!{wide_template}">
+  <div class="floor_advertisment"> <em class="floor_warning">注释：可以选择上传广告图片或者使用商城广告</em>
+    <ul class="floor_adv">
+      <form action="$!webPath/goods_floor_wide_template_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+        <li> <b class="left">
+          <input name="gf_id" type="hidden" id="gf_id" value="$!gf_id">
+          <input name="wide_template" type="hidden" id="wide_template" value="$!wide_template" />
+          <input name="pos" type="hidden" id="pos" value="$!pos" />
+          选择类型：</b> <span class="floor_adv_sp"> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="img" checked="checked" />
+            图片上传</label>
+          </i> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="adv" />
+            商城广告</label>
+          </i> </span> </li>
+        <li id="user_adv_img"> <b class="left">广告图片上传：</b> <span class="floor_adv_sp">
+          <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+          <input name="button" type="button" class="floor_file_btn" value=""/>
+          <input  type="file"  size="33" class="flooor_file" id="img" name="img"/>
+          <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="20" height="20"  id="logoShow" style="cursor:help"/> </span> </span> <i class="floor_adv_node">&nbsp;&nbsp;建议上传400×200像素图片</i>
+          #if($!obj_map.src!="")
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj_map.src" width="200" height="80" /> </div>
+          #end
+        </li>
+        <li id="user_adv_url" style="display:;"> <b class="left">广告链接：</b> <span class="floor_adv_sp">
+          <input name="adv_url" type="text"class="floor_file_txt2" id="adv_url" value="$!obj_map.url" />
+          </span> <i class="floor_adv_node">格式为:http://www.xxx.com</i> </li>
+        <li id="system_adv_info" style="display:none;"> <b class="left">广告选择：</b> <span class="floor_adv_sp">
+          <select name="adp_id" id="adp_id">
+            
+            
+       #foreach($ap in $aps)
+       
+            
+            <option value="$!ap.id">$!{ap.ap_title}</option>
+            
+            
+       #end
+       
+          
+          </select>
+          </span> <i class="floor_adv_i">仅支持400×200图片广告位</i> </li>
+      </form>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="按钮" type="button" value="保存" onClick="save_form();" />
+  </div>
+</div>
+#end
+#if($!{wide_template}=="wide_adv_five")
+<div class="box_floor" mark="$!{wide_template}">
+  <div class="floor_advertisment"> <em class="floor_warning">注释：可以选择上传广告图片或者使用商城广告</em>
+    <ul class="floor_adv">
+      <form action="$!webPath/goods_floor_wide_template_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+        <li> <b class="left">
+          <input name="gf_id" type="hidden" id="gf_id" value="$!gf_id">
+          <input name="wide_template" type="hidden" id="wide_template" value="$!wide_template" />
+          <input name="pos" type="hidden" id="pos" value="$!pos" />
+          选择类型：</b> <span class="floor_adv_sp"> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="img" checked="checked" />
+            图片上传</label>
+          </i> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="adv" />
+            商城广告</label>
+          </i> </span> </li>
+        <li id="user_adv_img"> <b class="left">广告图片上传：</b> <span class="floor_adv_sp">
+          <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+          <input name="button" type="button" class="floor_file_btn" value=""/>
+          <input  type="file"  size="33" class="flooor_file" id="img" name="img"/>
+          <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="20" height="20"  id="logoShow" style="cursor:help"/> </span> </span> <i class="floor_adv_node">&nbsp;&nbsp;建议上传315×446像素图片</i> #if($!obj_map.src!="")
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj_map.src" width="200" height="80" /> </div>
+          #end </li>
+        <li id="user_adv_url" style="display:;"> <b class="left">广告链接：</b> <span class="floor_adv_sp">
+          <input name="adv_url" type="text"class="floor_file_txt2" id="adv_url" value="$!obj_map.url" />
+          </span> <i class="floor_adv_node">格式为:http://www.xxx.com</i> </li>
+        <li id="system_adv_info" style="display:none;"> <b class="left">广告选择：</b> <span class="floor_adv_sp">
+          <select name="adp_id" id="adp_id">
+            
+            
+       #foreach($ap in $aps)
+       
+            
+            <option value="$!ap.id">$!{ap.ap_title}</option>
+            
+            
+       #end
+       
+          
+          </select>
+          </span> <i class="floor_adv_i">仅支持400×200图片广告位</i> </li>
+      </form>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="按钮" type="button" value="保存" onClick="save_form();" />
+  </div>
+</div>
+#end
+
+#if($!{wide_template}=="wide_adv_square_four")
+<div class="box_floor" mark="$!{wide_template}">
+  <div class="floor_advertisment"> <em class="floor_warning">注释：可以选择上传广告图片或者使用商城广告</em>
+    <ul class="floor_adv">
+      <form action="$!webPath/goods_floor_wide_template_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+        <li> <b class="left">
+          <input name="gf_id" type="hidden" id="gf_id" value="$!gf_id">
+          <input name="wide_template" type="hidden" id="wide_template" value="$!wide_template" />
+          <input name="pos" type="hidden" id="pos" value="$!pos" />
+          选择类型：</b> <span class="floor_adv_sp"> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="img" checked="checked" />
+            图片上传</label>
+          </i> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="adv" />
+            商城广告</label>
+          </i> </span> </li>
+        <li id="user_adv_img"> <b class="left">广告图片上传：</b> <span class="floor_adv_sp">
+          <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+          <input name="button" type="button" class="floor_file_btn" value=""/>
+          <input  type="file"  size="33" class="flooor_file" id="img" name="img"/>
+          <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="20" height="20"  id="logoShow" style="cursor:help"/> </span> </span> <i class="floor_adv_node">&nbsp;&nbsp;建议上传315×446像素图片</i> #if($!obj_map.src!="")
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj_map.src" width="200" height="80" /> </div>
+          #end </li>
+        <li id="user_adv_url" style="display:;"> <b class="left">广告链接：</b> <span class="floor_adv_sp">
+          <input name="adv_url" type="text"class="floor_file_txt2" id="adv_url" value="$!obj_map.url" />
+          </span> <i class="floor_adv_node">格式为:http://www.xxx.com</i> </li>
+        <li id="system_adv_info" style="display:none;"> <b class="left">广告选择：</b> <span class="floor_adv_sp">
+          <select name="adp_id" id="adp_id">
+            
+            
+       #foreach($ap in $aps)
+       
+            
+            <option value="$!ap.id">$!{ap.ap_title}</option>
+            
+            
+       #end
+       
+          
+          </select>
+          </span> <i class="floor_adv_i">仅支持400×200图片广告位</i> </li>
+      </form>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="按钮" type="button" value="保存" onClick="save_form();" />
+  </div>
+</div>
+#end
+
+#if($!{wide_template}=="wide_adv_eight")
+<div class="box_floor" mark="$!{wide_template}">
+  <div class="floor_advertisment"> <em class="floor_warning">注释：可以选择上传广告图片或者使用商城广告</em>
+    <ul class="floor_adv">
+      <form action="$!webPath/goods_floor_wide_template_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+        <li> <b class="left">
+          <input name="gf_id" type="hidden" id="gf_id" value="$!gf_id">
+          <input name="wide_template" type="hidden" id="wide_template" value="$!wide_template" />
+          <input name="pos" type="hidden" id="pos" value="$!pos" />
+          选择类型：</b> <span class="floor_adv_sp"> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="img" checked="checked" />
+            图片上传</label>
+          </i> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="adv" />
+            商城广告</label>
+          </i> </span> </li>
+        <li id="user_adv_img"> <b class="left">广告图片上传：</b> <span class="floor_adv_sp">
+          <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+          <input name="button" type="button" class="floor_file_btn" value=""/>
+          <input  type="file"  size="33" class="flooor_file" id="img" name="img"/>
+          <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="20" height="20"  id="logoShow" style="cursor:help"/> </span> </span> <i class="floor_adv_node">&nbsp;&nbsp;建议上传395×90像素图片</i> #if($!obj_map.src!="")
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj_map.src" width="200" height="80" /> </div>
+          #end </li>
+        <li id="user_adv_url" style="display:;"> <b class="left">广告链接：</b> <span class="floor_adv_sp">
+          <input name="adv_url" type="text"class="floor_file_txt2" id="adv_url" value="$!obj_map.url" />
+          </span> <i class="floor_adv_node">格式为:http://www.xxx.com</i> </li>
+        <li id="system_adv_info" style="display:none;"> <b class="left">广告选择：</b> <span class="floor_adv_sp">
+          <select name="adp_id" id="adp_id">
+            
+            
+       #foreach($ap in $aps)
+       
+            
+            <option value="$!ap.id">$!{ap.ap_title}</option>
+            
+            
+       #end
+       
+          
+          </select>
+          </span> <i class="floor_adv_i">仅支持400×200图片广告位</i> </li>
+      </form>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="按钮" type="button" value="保存" onClick="save_form();" />
+  </div>
+</div>
+#end
+
+#if($!{wide_template}=="wide_goods")
+<div class="box_floor">
+  <div class="box_floor_six">
+    <div class="box_floor_class">
+    <form action="$!webPath/goods_floor_wide_template_save" method="post" id="theForm">
+      <input name="wide_template" type="hidden" id="wide_template" value="$!wide_template" />
+      <input name="gf_id" type="hidden" id="gf_id" value="$!obj.id">
+      <input type="hidden" name="ids" id="ids">
+      <b>楼层标题：</b> <span>
+      <input name="gf_name" type="text" id="gf_name" value="$!obj.gf_name" class="gf_name" />
+      </span>
+      </div>
+      <span class="floor_choose">已选推荐商品：</span>
+      <div class="box_floor_prodel"> <em class="floor_warning">注释：最多选择4件商品，双击删除已有商品信息，按下鼠标拖动商品次序</em>
+        <div class="floor_box_pls" id="floor_goods_info"> #foreach($goods in  $gf_tools.generic_goods("$!obj.wide_goods")) 
+          #if($!goods.goods_main_photo)                
+          #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+          #else
+          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+          <ul ondblclick="jQuery(this).remove();" goods_id="$!goods.id"  class="floor_pro">
+            <li class="floor_pro_img"><img src="$!img" width="139" height="139" /></li>
+            <li class="floor_pro_name">$!goods.goods_name</li>
+          </ul>
+          #end </div>
+      </div>
+    </form>
+    <form id="queryForm" name="queryForm" action="" method="post">
+      <span class="floor_choose">选择要展示的商品：</span>
+      <div class="floor_choose_box"><span class="floor_search_sp">
+        <input name="goods_name" type="text" id="goods_name" placeholder="商品名称关键字" class="gf_goods_name"/>
+        <select name="gc_id" id="gc_id" class="channal_goods_select">
+          <option value="">请选择商品分类...</option>
+        </select>
+        <select name="activity_name" id="activity_name" class="channal_goods_select">
+          <option value="">显示全部商品...</option>
+          <option value="group_buy">团购商品</option>
+          <option value="combin_status">组合销售商品</option>
+          <option value="enough_reduce">满就减商品</option>
+          <option value="order_enough_give_status">满就送商品</option>
+          <option value="order_enough_if_give">满就送赠品</option>
+          <option value="f_sale_type">F码商品</option>
+          <option value="advance_sale_type">预售</option>
+          <option value="activity_status">商城促销</option>
+        </select>
+        </span>
+        <input type="button"  class="floor_sear_btn" value="搜索" onclick="goods_floor_list_goods_load();" style="cursor:pointer;" />
+      </div>
+    </form>
+    <div id="floor_goods_list"> </div>
+  </div>
+  <!--图片开始-->
+  <div class="submit">
+    <input type="button" value="保存" onclick="save_form();" />
+  </div>
+</div>
+#end 
+
+#if($!{wide_template}=="wide_adv_brand")
+#if($!pos=="1")
+<div class="box_floor" mark="$!{wide_template}">
+  <div class="floor_advertisment"> <em class="floor_warning">注释：可以选择上传广告图片或者使用商城广告</em>
+    <ul class="floor_adv">
+      <form action="$!webPath/goods_floor_wide_template_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+        <li> <b class="left">
+          <input name="gf_id" type="hidden" id="gf_id" value="$!gf_id">
+          <input name="wide_template" type="hidden" id="wide_template" value="$!wide_template" />
+          <input name="pos" type="hidden" id="pos" value="$!pos" />
+          选择类型：</b> <span class="floor_adv_sp"> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="img" checked="checked" />
+            图片上传</label>
+          </i> <i>
+          <label>
+            <input name="type" type="radio" id="type" value="adv" />
+            商城广告</label>
+          </i> </span> </li>
+        <li id="user_adv_img"> <b class="left">广告图片上传：</b> <span class="floor_adv_sp">
+          <input name="file_val"  type="text" class="floor_file_txt" id="file_val" />
+          <input name="button" type="button" class="floor_file_btn" value=""/>
+          <input  type="file"  size="33" class="flooor_file" id="img" name="img"/>
+          <span class="preview"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="20" height="20"  id="logoShow" style="cursor:help"/> </span> </span> <i class="floor_adv_node">&nbsp;&nbsp;建议上传243×419像素图片</i> #if($!obj_map.src!="")
+          <div class="bigimgpre" id="logoImg" style="display:none;"><img src="$!imageWebServer/$!obj_map.src" width="200" height="80" /> </div>
+          #end </li>
+        <li id="user_adv_url" style="display:;"> <b class="left">广告链接：</b> <span class="floor_adv_sp">
+          <input name="adv_url" type="text"class="floor_file_txt2" id="adv_url" value="$!obj_map.url" />
+          </span> <i class="floor_adv_node">格式为:http://www.xxx.com</i> </li>
+        <li id="system_adv_info" style="display:none;"> <b class="left">广告选择：</b> <span class="floor_adv_sp">
+          <select name="adp_id" id="adp_id">
+            
+            
+       #foreach($ap in $aps)
+       
+            
+            <option value="$!ap.id">$!{ap.ap_title}</option>
+            
+            
+       #end
+       
+          
+          </select>
+          </span> <i class="floor_adv_i">仅支持400×200图片广告位</i> </li>
+      </form>
+    </ul>
+  </div>
+  <div class="submit">
+    <input name="按钮" type="button" value="保存" onClick="save_form();" />
+  </div>
+</div>
+#end
+#if($!pos=="2")
+<div class="box_floor">
+  <form action="$!webPath/goods_floor_wide_template_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+    <div class="box_fl_brand"> <span class="floor_choose">
+      <input name="gf_id" type="hidden" id="gf_id" value="$!gf_id">
+      <input name="wide_template" type="hidden" id="wide_template" value="$!wide_template" />
+      <input name="pos" type="hidden" id="pos" value="$!pos" />
+      <input type="hidden" name="ids" id="ids">
+      <input type="hidden" name="brand_ids" id="brand_ids">
+      已选推荐品牌：</span>
+      <div class="fl_brand_box"> <em class="floor_warning">注释：最多选择40个品牌，双击删除已选品牌，按下鼠标拖动品牌次序</em>
+        <div class="floor_box_pls" style="max-height:225px; overflow:auto; width:98%" id="floor_brand_info"> #foreach($brand in $!gf_tools.generic_gf_wide_brand_template("$!{obj.wide_adv_brand}","$!obj.wide_template","2"))
+          <ul onDblClick="jQuery(this).remove();" brand_id="$!brand.id" class="fl_brands">
+            <li class="fl_brands_img"><img src="$!imageWebServer/$!brand.brandLogo.path/$!brand.brandLogo.name" width="98" height="35" /></li>
+            <li class="fl_brands_name">$!brand.name</li>
+          </ul>
+          #end </div>
+      </div>
+      <span class="floor_choose">选择要展示的品牌：</span>
+      <div class="floor_choose_box"><span class="floor_search_sp"><b>品牌名称：</b>
+        <input name="name" type="text" id="name" />
+        <input name="" type="button"  class="floor_sear_btn" style="margin-top:0;" value="搜索" onClick="goods_floor_brand();" style="cursor:pointer;" />
+        </span>
+        <div id="floor_goods_list">
+          <ul class="fl_sear_brand">
+            #foreach($obj in $objs)
+            <li> <a href="javascript:void(0);" onclick="goods_floor_brand_set(this)" brand_id="$!obj.id" brand_img="$!imageWebServer/$!obj.brandLogo.path/$!obj.brandLogo.name" brand_name="$!obj.name" class="fl_searbrand_a"> <span  class="fl_sear_brandimg"> <img src="$!imageWebServer/$!obj.brandLogo.path/$!obj.brandLogo.name" width="98" height="35" /> </span> <span class="fl_sear_brandname">$!obj.name</span></a> </li>
+            #end
+          </ul>
+          <div class="floor_page"><span>$!gotoPageAjaxHTML</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="submit">
+      <input name="" type="button" value="提交" onClick="save_form();" />
+    </div>
+  </form>
+</div>
+#end
+#end

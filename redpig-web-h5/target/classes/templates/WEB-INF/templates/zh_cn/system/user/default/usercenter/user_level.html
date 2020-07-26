@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户等级 - $!{config.title}-$!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="usercenter">
+     $!httpInclude.include("/buyer/nav?op=user_level")
+    <div class="usercenter_right">
+      <div class="myorder">
+        <h4><strong>会员等级</strong></h4>
+      </div>
+      <!-------用户等级------->
+       #set($user_photo="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+       #if($!config.memberIcon)
+       #set($user_photo="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+       #end
+       #if($!user.photo)
+       #set($user_photo="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+       #end
+       #set($level_map=$integralViewTools.query_user_level("$!user.id"))
+       #set($level_list=$integralViewTools.query_all_level())
+       <script>
+           jQuery(document).ready(function(){
+			   var new_level=$!{level_map.level}-1;//当前用户等级级别-1
+			   var size=$!{level_list.size()};//会员等级级别
+			   var level_size=size-1;//会员等级级别-1
+			   var now_growth=$!{user.user_goods_fee};//当前成长值
+			   var level_up=$!{level_map.credit_up};//当前级别上限成长值
+			   var level_down=$!{level_map.credit_down};//当前级别下限成长值
+			   var level_growth=level_up-level_down;//当前级别的差值
+			   var level=new_level+2;//当前用户等级级别+1
+			   var up=jQuery("#level_"+level).html();//当前成长值差值
+			   var growth=up-now_growth;//当前成长值差值
+			   
+			   //根据不同级别，设置会员等级成长线
+			   var all_width=jQuery(".user_level_t_right_b").width();
+			   var w=all_width/size;///每个级别的宽度
+			   jQuery(".user_level_t_right_b ul li").each(function(index, element) {
+                   jQuery(this).css("width",w);
+				   jQuery(this).find("i").css("width",w-32);
+               });
+			   
+			   //设置当前会员等级样式
+			   jQuery(".user_level_t_img b").addClass("lv_"+new_level);
+			   jQuery(".user_level_t_right_b ul li").find("span[class='lv_"+new_level+"']").css("opacity","1");
+			   
+			   //设置会员成长表格
+			   var width=(size*100)+101;
+			   jQuery(".user_level_b_c_b").css("width",width);
+			   
+			   //隐藏最高会员等级的i
+			   jQuery(".user_level_t_right_b ul li").find("span[class='lv_"+level_size+"']").next().hide();
+			   
+			   //循环为满级加样式
+			   for(var i=0;i<new_level;i++){
+				  jQuery(".user_level_t_right_b ul li").find("span[class='lv_"+i+"']").next().children().css("width",w-32);
+				  jQuery(".user_level_t_right_b ul li").find("span[class='lv_"+i+"']").css("opacity","1");
+			   }
+			   
+			   //单独处理会员最高级与上级之前的成长线样式
+			   if(growth<0){
+				  jQuery(".user_level_t_right_b ul li").find("span[class='lv_"+new_level+"']").next().children().css("width",w-32);
+				  jQuery("#growth_1").hide();
+				  jQuery("#growth_2").show();
+			   }else{//未到成长值
+			      jQuery("#growth_2").hide();
+				  jQuery("#growth_1").show();
+				  jQuery("#growth_1 i").html("+"+growth);
+			      var percentage=growth/level_growth;
+				  var width=w-32;
+				  if(percentage<0.5){
+					  width=((w-32)/3)*2;
+				  }else if(percentage==0.5){
+					  width=(w-32)/2;
+				  }else if(percentage>0.5 && percentage<1){
+					  width=(w-32)/3;
+				  }else if(percentage>=1){
+					  width=0;
+                  }
+				  jQuery(".user_level_t_right_b ul li").find("span[class='lv_"+new_level+"']").next().children().css("width",width);
+			   }
+           });
+       </script>
+<div class="user_level">
+        		<div class="user_level_top">
+                	<div class="user_level_t_img">
+                    	<img src="$!user_photo" />
+                        <b class="" ></b>
+                    </div>
+                    <div class="user_level_t_right">
+                    	<div class="user_level_t_right_t">
+                        	<div class="user_level_t_right_t_l">Hi，$!{user.userName}</div>
+                            <div class="user_level_t_right_t_r">
+                            	<span><i>我的成长值：</i>$!{user.user_goods_fee}</span>
+                                <b id="growth_1"><i></i>成长值就能升级了哦！</b>
+                                <b style="display:none" id="growth_2">您已是最高级了哦！</b>
+                            </div>
+                        </div>
+                        <div class="user_level_t_right_b">
+                        	<ul>
+                               #if($!{level_list.size()}>=1)
+                            	<li>
+                                	<span class="lv_0" style="opacity:1;"></span>
+                                    <i><em style=" width:98px"></em></i>
+                                </li>
+                               #end
+                               #if($!{level_list.size()}>=2) 
+                                <li>
+                                	<span class="lv_1"></span>
+                                    <i><em></em></i>
+                                </li>
+                               #end
+                               #if($!{level_list.size()}>=3)
+                                <li>
+                                	<span class="lv_2"></span>
+                                    <i><em></em></i>
+                                </li>
+                               #end
+                               #if($!{level_list.size()}>=4)
+                                <li>
+                                	<span class="lv_3"></span>
+                                    <i><em></em></i>
+                                </li>
+                               #end
+                               #if($!{level_list.size()}>=5)
+                                 <li>
+                                	<span class="lv_4"></span>
+                                    <i><em></em></i>
+                                </li>
+                               #end
+                               #if($!{level_list.size()}>=6)
+                                <li>
+                                	<span class="lv_5"></span>
+                                </li>
+                               #end
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="user_level_bottom">
+                	<div class="user_level_b_t">会员成长介绍</div>
+                	<div class="user_level_b_c">
+                    	<div class="user_level_b_c_t">
+                            <span class="t">成长值即会员通过购物累计所获得的经验值，它代表您累计的网购经验值，成长值越高会员等级越高，高等级会员可以享受更多的会员服务哦！</span>
+                            <span class="b">
+                                <i style=" color:#f60">会员成长值</i>
+                                <em>≈</em>
+                                <i style=" color:#3b9e03">累计购物金额</i>
+                            </span>
+                            <span class="c"></span>
+                        </div>
+                        <div class="user_level_b_c_b">
+                        	<ul>
+                            	<li>
+                                	<b>会员等级</b>
+                                    #foreach($user_level in $!level_list)
+                                    <span><img src="$!imageWebServer/$!user_level.icon" /></span>
+                                    #end
+                                </li>
+                                <li>
+                                	<b>所需成长值</b>
+                                    #foreach($user_level in $!level_list)
+                                    <span id="level_$!{user_level.level}">$!{user_level.credit_down}</span>
+                                    #end
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+  $!httpInclude.include("/footer")
+</div>
+</body>
+</html>

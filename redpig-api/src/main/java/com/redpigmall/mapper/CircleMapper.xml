@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.CircleMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Circle">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="photoInfo" property="photoInfo" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="class_id" property="class_id" jdbcType="BIGINT"/>
+		<result column="class_name" property="class_name" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="attention_count" property="attention_count" jdbcType="INTEGER"/>
+		<result column="invitation_count" property="invitation_count" jdbcType="INTEGER"/>
+		<result column="refuseMsg" property="refuseMsg" jdbcType="VARCHAR"/>
+		<result column="recommend" property="recommend" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Circle">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="photoInfo" property="photoInfo" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="class_id" property="class_id" jdbcType="BIGINT"/>
+		<result column="class_name" property="class_name" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="attention_count" property="attention_count" jdbcType="INTEGER"/>
+		<result column="invitation_count" property="invitation_count" jdbcType="INTEGER"/>
+		<result column="refuseMsg" property="refuseMsg" jdbcType="VARCHAR"/>
+		<result column="recommend" property="recommend" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,title,photoInfo,status,class_id,class_name,user_id,userName,content,attention_count,invitation_count,refuseMsg,recommend
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		
+		<if test="ids !=null and ids.size() >0 ">
+			and id in
+			<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="title != null">and title = #{title,jdbcType=VARCHAR}</if>
+		
+		<if test="title_like != null">and title like CONCAT('%',#{title_like},'%')  </if>
+		
+		<if test="photoInfo != null">and photoInfo = #{photoInfo,jdbcType=VARCHAR}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="class_id != null">and class_id = #{class_id,jdbcType=BIGINT}</if>
+		<if test="class_name != null">and class_name = #{class_name,jdbcType=VARCHAR}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="userName != null">and userName = #{userName,jdbcType=VARCHAR}</if>
+		<if test="content != null">and content = #{content,jdbcType=VARCHAR}</if>
+		<if test="attention_count != null">and attention_count = #{attention_count,jdbcType=INTEGER}</if>
+		<if test="invitation_count != null">and invitation_count = #{invitation_count,jdbcType=INTEGER}</if>
+		<if test="refuseMsg != null">and refuseMsg = #{refuseMsg,jdbcType=VARCHAR}</if>
+		<if test="recommend != null">and recommend = #{recommend,jdbcType=INTEGER}</if>
+		<if test="title_like != null">and title like CONCAT('%',#{title_like},'%') </if>
+	</sql>
+	<sql id="ifStatement">
+		title= #{title},
+		photoInfo= #{photoInfo},
+		status= #{status},
+		class_id= #{class_id},
+		class_name= #{class_name},
+		user_id= #{user_id},
+		userName= #{userName},
+		content= #{content},
+		attention_count= #{attention_count},
+		invitation_count= #{invitation_count},
+		refuseMsg= #{refuseMsg},
+		recommend= #{recommend},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Circle" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_circle 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Circle" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_circle obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_circle obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Circle" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_circle obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Circle" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_circle(addTime,deleteStatus,title,photoInfo,status,class_id,class_name,user_id,userName,content,attention_count,invitation_count,refuseMsg,recommend)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{photoInfo,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{class_id,jdbcType=BIGINT},#{class_name,jdbcType=VARCHAR},#{user_id,jdbcType=BIGINT},#{userName,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{attention_count,jdbcType=INTEGER},#{invitation_count,jdbcType=INTEGER},#{refuseMsg,jdbcType=VARCHAR},#{recommend,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Circle">
+		update redpigmall_circle
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_circle where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_circle where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Circle" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_circle obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Circle" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_circle obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Circle" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_circle
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_circle where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

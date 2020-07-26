@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function addorsubtract(obj,id){
+ var cls=jQuery(obj).attr("cls");
+ var level=jQuery(obj).attr("level");
+  if(cls=="jian"){
+  jQuery.ajax({type:'POST',
+		       url:'$!webPath/nuke_class_data',
+		        data:{"pid":id,"currentPage":"$!currentPage"},
+				success:function(data){
+	                jQuery("#ncl_"+id).after(data);
+					jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/add.jpg");
+					jQuery(obj).attr("cls","add");
+					tipStyle();
+              }
+  });
+  }else{
+       if(level=="0_"+id){
+	    jQuery("tr[level=child_"+id+"]").remove();
+	   }else
+
+	   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/jian.jpg");
+	   jQuery(obj).attr("cls","jian");
+  }
+  //
+}
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/nuke_class_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }
+              }
+	    });
+}
+jQuery(document).ready(function(){
+
+});
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth">秒杀分类</h1>
+    <div class="nav_list">
+     <ul>
+     <li><a href="$!webPath/nuke_class_list?" class="this"><b>秒杀分类</b></a> </li>
+     <li><a href="$!webPath/nuke_class_add" ><b>新增秒杀分类</b></a></li>
+     #if($!edit)
+     <li><a href="javascript:void(0);" class="this"><b>编辑</b></a> </li>
+     #end
+     </ul>
+      </div>
+   <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li> 秒杀分类为多级分类，秒杀页面默认显示一级</li>
+    </ul>
+  </div>
+  <div class="fshoptb2">
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/nuke_class_list?type=goods" method="post">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table2">
+      <tr>
+        <th width="4%"><span class="form_btna">&nbsp;</span></th>
+        <th width="15%"><span class="form_btna">排序</span></th>
+        <th width="65%" align="left"><span class="form_btna">分类名称</span></th>
+        <th  align="center"><span class="form_btna">操作</span></th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr id="ncl_$!obj.id">
+	    <td class="check_position"><label for="ids_$!obj.id"><input name="ids" id="ids_$!obj.id" class="ace" type="checkbox" value="$!obj.id" /><span class="lbl" /></label></td>
+        <td colspan="2" align="center">
+            <ul class="addclass">
+              <li class="ac1">
+                <input name="addorsubtract_$!obj.id" id="addorsubtract_$!obj.id" type="hidden" value="true" />
+              <li class="ac2">
+                <span class="num">
+                <input type="text" name="$!obj.nk_sequence" id="$!obj.nk_sequence"  value="$!obj.nk_sequence"  onblur="ajax_update('$!obj.id','nk_sequence',this)" title="可编辑"/>
+                </span>
+               </li>
+              <li class="ac3"><span class="classies">
+                <input type="text" name="$!obj.id" id="$!obj.id" value="$!obj.nc_name" onblur="ajax_update('$!obj.id','nc_name',this)" title="可编辑"/>
+            </ul>
+        </td>
+        <td align="center" class="hui oprate_con"><a href="$!webPath/nuke_class_edit?id=$!obj.id&currentPage=$!currentPage" class="blue">编辑</a>|<a href="javascript:void(0);" onclick="if(confirm('删除分类会同时删除该分类的所有下级，是否继续?'))window.location.href='$!webPath/nuke_class_del?mulitId=$!obj.id&currentPage=$!currentPage&type=goods'" class="blue">删除</a></td>
+      </tr>
+      #end
+      #else
+<tr>
+	<td colspan="4">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>    #if($!objs.size()>0)
+    <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/nuke_class_del?type=goods')">删除</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye">
+
+<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input type="hidden" name="mulitId" id="mulitId" />
+      	$!gotoPageFormHTML
+    </div>
+            </div>
+        </div>
+
+
+ #end
+   </FORM>
+  </div>
+</div>
+</body>
+</html>

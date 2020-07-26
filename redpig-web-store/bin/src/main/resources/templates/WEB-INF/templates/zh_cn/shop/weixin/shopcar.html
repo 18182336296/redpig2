@@ -1,0 +1,975 @@
+<!doctype html>
+<html >
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>购物车页面</title>
+<link type="text/css" href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.mobile-1.4.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.touch-move.left.js"></script>
+<script>
+var zt = 0;
+jQuery(document).ready(function(){
+   touch_move(jQuery(".s_goods_info").width(),"s_goods_info_","goods_norms_s");
+   touch_move(jQuery(".s_goods_info").width(),"group_goods_tou_","");
+  spec_format();
+  jQuery(".goods_pic").each(function(){
+   jQuery(this).height(parseFloat(jQuery(this).width()));
+   jQuery(this).find("img").width(parseFloat(jQuery(this).width()));
+   jQuery(this).find("img").height(parseFloat(jQuery(this).width()));
+  });
+  jQuery(".s_goods_info").each(function(){
+   var gph = parseFloat(jQuery(this).find(".goods_pic").height());
+   jQuery(this).children().children(".norms_goods_del").height(gph+20);
+   jQuery(this).siblings(".goods_del").height(gph+20);
+   jQuery(this).children().children(".norms_goods_del").css("line-height",gph+20+"px");
+   jQuery(this).siblings(".goods_del").css("line-height",gph+20+"px");
+  });
+  jQuery(".group_goods_wrap").each(function(){
+   var gph = parseFloat(jQuery(this).find(".goods_pic").height());
+   jQuery(this).find(".goods_del").height(gph+20);
+   jQuery(this).find(".goods_del").css("line-height",gph+20+"px");
+  });
+//点击编辑删除移动
+jQuery(".redact").click(function(){
+	var id = jQuery(this).attr("le");
+	if(jQuery("#goods_norms_s_"+id).attr("class")=="goods_norms_s"){
+		jQuery("#s_goods_info_"+id).css("left","0%");
+		jQuery(this).text("完成");
+		jQuery("#goods_norms_s_"+id).show();
+		jQuery("#goods_norms_s_"+id).children("ul").show();
+		jQuery("#goods_norms_s_"+id).children(".norms_p").show();
+		jQuery("#goods_norms_s_"+id).addClass("touch_start");
+		jQuery(this).parent().parent().find(".goods_text").hide();
+		/*.css("width","45%")*/
+		jQuery(this).parent().parent().find(".goods_value").hide();
+		jQuery(this).parent().parent().find(".norms_goods_del").css("width","18%");
+		jQuery("#goods_del_a_"+id).attr("onclick","big_cart_remove("+id+")");
+	}else{
+		jQuery("#goods_del_a_"+id).attr("onclick","");
+		jQuery("#num_count_"+id).text(jQuery("#goods_count_"+id).val());
+		jQuery(this).text("编辑");
+		jQuery("#goods_norms_s_"+id).removeClass("touch_start");
+		jQuery("#goods_norms_s_"+id).hide();
+	/*	.animate({width:"71%"},500)*/
+		jQuery(this).parent().parent().find(".goods_text").show();
+		jQuery(this).parent().parent().find(".goods_value").show();
+		jQuery(this).parent().parent().find(".norms_goods_del").css("width","0%");
+/*		jQuery("span[id^=cart_sp2_]").each(function(){
+		jQuery(this).parent().parent().parent().siblings(".goods_text").find("span[id^=cart_sp1_]").html(jQuery(this).text());
+		});	*/
+		jQuery("span[id^=gift_amount_]").each(function(){
+				var gifd = jQuery(this).attr("gt_ct");
+				jQuery(this).text("x"+jQuery("#goods_count_"+gifd).val());
+		});
+	};
+});
+//选择结算商品
+jQuery(".select span").click(function(){
+	if(jQuery(this).attr("class")!="disabled"){
+		var gift_id=jQuery(this).attr("check_gift_id");
+	 if(jQuery(this).attr("class")=="pitch_on"){
+		jQuery(this).removeClass("pitch_on");
+		var gc_id=jQuery(".select span[class=pitch_on]:first").parent().attr("sel_id");
+	    var count=jQuery("#goods_count_"+gc_id).val();
+	    goods_count_adjust(gc_id,count,gift_id);
+	 }else{	
+	    jQuery(this).addClass("pitch_on");
+		var gc_id=jQuery(this).attr("sel_id");
+		var count=jQuery("#goods_count_"+gc_id).val();	
+		goods_count_adjust(gc_id,count,gift_id);
+	 }
+	 if(jQuery(".select span").length==jQuery(".select span[class=pitch_on]").length){
+			jQuery("#all_pitch_on").addClass("pitch_on"); 
+	 }else{
+		    jQuery("#all_pitch_on").removeClass("pitch_on");
+	 }	
+   }
+});
+//全选
+  jQuery("#all_pitch_on").click(function(){
+	var value = jQuery(this).val();
+	if(jQuery(this).attr("class")=="pitch_on"){
+	  jQuery(this).removeClass("pitch_on");
+	  jQuery(".select").children("span").removeClass("pitch_on");
+	  var gc_id=jQuery("span[class=pitch_on]:first").parent().attr("sel_id");
+	  var count=jQuery("#goods_count_"+gc_id).val();
+	  goods_count_adjust(gc_id,count,"mul");
+	}else{
+	  jQuery(this).addClass("pitch_on");
+      jQuery(".select").children("span[class!=disabled]").addClass("pitch_on");
+	  jQuery(".shopping_table tr").removeClass("this");
+	  jQuery("#total_price").html("¥0.00");
+	  jQuery("#enough_reduce_money").hide();
+	  jQuery("a[id^=select_gift_]").hide();
+	  jQuery("div[id^=gift_inner_]").hide();
+	  jQuery("div[id^=gift_list_]").remove();
+	  jQuery("#total_price").addClass("total_pri");
+	  #if($!er_goods)
+          #foreach($param in ${er_goods.keySet()})
+		  jQuery("#erString$!param").html("$!erString.get($param)");
+		  #end
+	  #end
+	  goods_count_adjust(gc_id,count,"");
+	}
+  });
+//选择赠送商品
+jQuery(".select_btn").click(function(){
+	if(jQuery(this).children("span").attr("class")!="disabled"){
+	 if(jQuery(this).children("span").attr("class")=="pitch_on"){
+		jQuery(this).children("span").removeClass("pitch_on");
+	 }else{
+		jQuery(this).parent().siblings("ul").children(".select_btn").children("span").removeClass("pitch_on");	
+	    jQuery(this).children("span").addClass("pitch_on");
+	 }
+	}
+});  
+//计算数值-
+ jQuery("li[id^=co_down_]").click(function(){
+	var gc_id=jQuery(this).attr("gc_id");
+	var count=jQuery("#goods_count_"+gc_id).val();
+	var f_sale_type=parseInt(jQuery(this).attr("f_sale_type"));
+	var gift_id=jQuery(this).attr("check_gift_id");	
+	if(f_sale_type==0){
+	  if(count>1){
+	    count--;
+	    jQuery("#goods_count_"+gc_id).val(count);
+        goods_count_adjust(gc_id,count,gift_id);
+	  }
+	}else{
+	  alert("F码商品一次只能购买一件!");
+	}
+  });
+  //计算数值+
+  jQuery("li[id^=co_up_]").click(function(){
+	var gc_id=jQuery(this).attr("gc_id");
+	var count=jQuery("#goods_count_"+gc_id).val();
+	var f_sale_type=parseInt(jQuery(this).attr("f_sale_type"));
+	var gift_id=jQuery(this).attr("check_gift_id");	
+	if(f_sale_type==0){
+	  if(count>0){
+	    count++;
+		jQuery("#goods_count_"+gc_id).val(count);
+	    goods_count_adjust(gc_id,count,gift_id);
+	  }	
+	 }else{
+	  alert("F码商品一次只能购买一件!");
+	}
+  });
+  //计算数值input
+  jQuery("input[id^=goods_count_]").keyup(function(){
+	var gc_id=jQuery(this).attr("gc_id");	
+	var count=jQuery("#goods_count_"+gc_id).val().replace(/\D/g,'');
+	var f_sale_type=parseInt(jQuery(this).attr("f_sale_type"));
+	var gift_id=jQuery(this).attr("check_gift_id");	
+	if(count==""){
+       count=1;
+	}	
+	if(f_sale_type==0){
+	  if(count>0){
+	    goods_count_adjust(gc_id,count,gift_id);
+	  }
+	  if(count==0){
+		jQuery("#goods_count_"+gc_id).val("1");
+		goods_count_adjust(gc_id,1,gift_id);
+	  }
+	}else{	 	
+	 alert("F码商品一次只能购买一件!");
+	 jQuery("#goods_count_"+gc_id).val("1");
+	}
+  });
+ //弹出分类选择框
+  jQuery("div[id^=class_norms_arrow_]").click(function(){
+	  
+	  var cart_id = jQuery(this).attr("cart_id");
+	  jQuery.post("$!webPath/wap/goods_spec_load",{"id":cart_id},function(data){
+	  		jQuery("#class_again_select_model").empty()
+			if(data!=""){
+				jQuery("#class_again_select_model").append(data);
+				jQuery("#class_again_select_model").addClass("touch_again");
+	  			jQuery("#shopcar_back_mask").show();
+	  			nst();
+				style_add();
+			}
+	  });
+	  
+  });
+  //弹出优惠券领取
+  jQuery("dl[id^=get_coupon_list_]").click(function(){
+	  
+      var store_id = jQuery(this).attr("storeid");
+	  var goods_id = jQuery(this).attr("goodsid");
+	  jQuery.post("$!webPath/wap/cart_coupon_load",{"id":store_id,"goods_id":goods_id},function(data){
+	  		jQuery("#get_shopin_coupon").empty();
+			if(data!=""){
+				jQuery("#get_shopin_coupon").addClass("shopin_coupon_show");
+	 			jQuery("#shopcar_back_mask").show();
+				jQuery("#get_shopin_coupon").append(data);
+				style_add();
+				nst();
+			}
+	  });
+  });
+//计算价格库存等
+function goods_count_adjust(gc_id,count,gift_id){
+	  /*alert(gc_id+":"+count+":"+gift_id)*/
+	  var gcs="";
+	  jQuery(".select span[class=pitch_on]").each(function(){
+		   var id=jQuery(this).parent().attr("sel_id");
+		   if(id!=""){
+		   gcs=id+","+gcs;
+		   }
+	  });
+	  if(gcs==""){
+	     gcs="-1";//为了和顶部的购物车计算总价区分开，如果gcs为空则会计算购物车所有商品总价，为-1则不会计算任何物品
+	  }
+   	  jQuery.post("$!webPath/wap/goods_count_adjust",{"gc_id":gc_id,"count":count,"gcs":gcs,"gift_id":gift_id},function(data){
+		 if(data.code=="100"){
+			 if(jQuery("#goods_count_"+gc_id).val()!=count){																										
+	       		jQuery("#goods_count_"+gc_id).val(count);
+			 }
+		   jQuery("#group_main_num_count_"+gc_id).text(count);
+		   jQuery("#gr_amount_"+gc_id).html("X"+count);
+		   jQuery("#group_goods_"+gc_id).siblings(".group_goods_wrap").find("i[id^=group_sub_num_count_]").text(count);
+		   jQuery("#goods_count_"+gc_id).attr("goods_count",count)
+		   jQuery("#num_count_"+gc_id).text(jQuery("#goods_count_"+gc_id).attr("goods_count"));
+		   /*jQuery("#gc_price"+gc_id).html("¥"+data.gc_price);*/
+		   jQuery("#total_price").html("¥"+data.total_price);
+		   if(data.enough_reduce_price>0)
+		   	jQuery("#enough_reduce_money").show();
+		   else
+		    jQuery("#enough_reduce_money").hide();
+		   if(data.bg_ids!=undefined){
+		    jQuery.each(data.bg_ids,function(n,value){
+			jQuery("#select_gift_"+value).show();
+			if(!jQuery("#gift_inner_"+value).is(":hidden")){
+				jQuery("#gift_inner_"+value).show();
+				}
+			 });
+			jQuery("div[id^=gift_list_]").each(function(){
+				if(data.bg_ids.indexOf(jQuery(this).attr("mark"))==-1){
+					jQuery(this).remove();					
+					}											
+				});
+			}
+			if(data.bg_ids!=undefined&&gift_id==undefined){
+				jQuery("div[id^=gift_list_]").remove();
+				}
+		   #foreach($obj in ${er_goods.keySet()})
+		   if(data.erString$!obj){
+		   var erstr=data.erString$!obj;
+		  
+		   jQuery("#erString$!obj").html(""+data.erString$!obj);		   
+		   }else{
+		   jQuery("#erString$!obj").html("$!erString.get($!obj)");	
+		   }
+		   #end
+		 }
+		 if(data.code=="200"){
+		   alert("库存不足，请重新选择数量");
+		   jQuery("#goods_count_"+gc_id).val(jQuery("#goods_count_"+gc_id).attr("goods_count"));
+		   jQuery("#num_count_"+gc_id).text(jQuery("#goods_count_"+gc_id).attr("goods_count"));
+		 }
+		 if(data.code=="300"){
+			alert("库存不足，请重新选择数量");
+		   jQuery("#goods_count_"+gc_id).val(jQuery("#goods_count_"+gc_id).attr("goods_count"));
+		   jQuery("#num_count_"+gc_id).text(jQuery("#goods_count_"+gc_id).attr("goods_count"));
+		 }
+		 jQuery("#confirm_cart").text("结算("+jQuery(".select span[class=pitch_on]").length+")");
+		 jQuery("span[id^=gift_amount_]").each(function(){
+				var gifd = jQuery(this).attr("gt_ct");
+				jQuery(this).text("x"+jQuery("#goods_count_"+gifd).val());
+		})
+	   },"json");
+  }
+  });
+ //删除 
+function big_cart_remove(ids){
+			var type=arguments[1];
+      			var method = function(){
+					   jQuery.post("$!current_webPath/remove_goods_cart",{"ids":ids},function(data){
+							if(type=="one_combin"){
+								window.location.reload();
+							}else{
+								  if(data.code=="100"){
+									jQuery.each(data.ids, function(index,remove_id){
+										if(remove_id.indexOf("combin")<0){
+											jQuery("table.shopping_table tr[id="+remove_id+"]").remove();
+											}else{
+											jQuery("table.shopping_table tr[data_bind="+remove_id+"]").remove();	
+												}						   
+									});
+									jQuery("li[id^=tr_]").each(function(){
+				 					var mark = jQuery(this).attr("mark");
+									if(jQuery("tr[mark=if_size_"+mark+"]").size()==0){
+									jQuery(this).remove();					
+														     }											
+														});
+									 if(data.count==0){
+										jQuery("form[name='cart_form']").remove();
+										 
+									 }	
+									  window.location.reload();}
+									 if(data.code=="200"){	
+									 alert("系统繁忙，请稍后重试！");
+									 }
+								}																		  
+						 },"json");
+					};
+			if(type=="one_combin"){
+				 if(confirm("删除后其他套装商品将不享受优惠！")){
+					  method();
+					 }
+				
+			}
+			if(type=="all_combin"){
+				if(confirm("确定删除整个组合套装吗！")){
+					  method();
+					 }
+			}
+			 if(type=="" || type==undefined){
+				 if(confirm("确定删除已选中的商品！")){
+					  method();
+					 }
+			}
+
+       } 
+//隐藏优惠券	   
+function cancle_coupon(){
+	  jQuery("#get_shopin_coupon").removeClass("shopin_coupon_show");
+	  jQuery("#shopcar_back_mask").hide();
+	  style_remove();
+	  st();
+  }
+//隐藏分类弹出框
+function cancle_change(){
+	  jQuery("#class_again_select_model").removeClass("touch_again");
+	  jQuery("#shopcar_back_mask").hide();
+	  style_remove();
+	  st();
+  }
+ //分类确定 
+function confirm_change_spec(obj){
+	var id = jQuery(obj).attr("cart_id");
+	var gsp="";
+	jQuery(".again_standard_box").find("div[id=pro_choose_li_standard_"+id+"]").each(function(){
+			 jQuery(jQuery(this).find("li[class=this]")).each(function(){								 
+				 gsp=jQuery(this).children().attr("gsp")+","+gsp; 
+			 });
+		});
+		
+	jQuery.post("$!webPath/wap/goods_cart1_spec_save",{
+			"id":id,
+			"gsp":gsp
+			},function(data){
+				if(data.code==100){
+					 jQuery("#cart_sp1_"+id).html(data.spec_info);
+					 jQuery("#cart_sp2_"+id).html(data.spec_info);
+					 spec_format();
+					 jQuery("#now_price_"+id).html("¥"+data.price);
+					 jQuery("#class_again_select_model").removeClass("touch_again");
+					 jQuery("#shopcar_back_mask").hide();
+					  style_remove();
+				     st();	 
+					}else if(data.code==200){
+					 window.location.href="$!webPath/wap/goods_cart1";
+					}
+				},"json");
+	}  	    
+ //满就送   
+function gift_tier_show(arg){
+		 jQuery(".present_pic").each(function(){
+    	 var wi = jQuery(this).children("img").width();
+         jQuery(this).children("img").height(parseFloat(wi));
+         jQuery(this).children("img").width(parseFloat(wi));
+         });
+		nst();
+		jQuery("#gift_present_goods_"+arg).addClass("present_goods_show");
+		jQuery("#shopcar_back_mask").show();
+		style_add();
+	  }
+function gift_tier_hide(arg){
+		jQuery("#gift_present_goods_"+arg).removeClass("present_goods_show");
+		jQuery("#shopcar_back_mask").hide();
+		style_remove();
+		st();
+		if(jQuery("#gift_present_goods_"+arg).find("ul li span[class=pitch_on]").length>0){
+			jQuery("#select_gift_"+arg).text(jQuery("#gift_present_goods_"+arg).find("ul li span[class=pitch_on]").attr("goods_name"));
+			jQuery("#select_gift_"+arg).attr("select","select");
+			jQuery("#select_gift_"+arg).attr("gogi",jQuery("#gift_present_goods_"+arg).find("ul li span[class=pitch_on]").attr("value"));
+			jQuery("span[id^=gift_amount_]").each(function(){
+				var gifd = jQuery(this).attr("gt_ct");
+				jQuery(this).text("x"+jQuery("#goods_count_"+gifd).val());
+			})
+			jQuery("#gift_amount_"+arg).show();	 
+	
+		}else{
+			jQuery("#select_gift_"+arg).text("点击选择赠送商品");
+			jQuery("#select_gift_"+arg).attr("select","");
+			jQuery("#select_gift_"+arg).attr("gogi","");
+			jQuery("#gift_amount_"+arg).hide();	 
+		}
+	  }	 
+ function gift_tier_close(arg){
+		style_remove();
+		st();
+		jQuery("#gift_present_goods_"+arg).removeClass("present_goods_show");
+		jQuery("#shopcar_back_mask").hide();
+ }	   
+//结算	  	                
+function confirm_cart(){
+	  var carts_size = jQuery(".select span[class=pitch_on]").length;
+	  var gift_size = jQuery("dd span[select=select]").length;
+	 if(carts_size>0){
+		   var gcs="";
+		  jQuery(".select span[class=pitch_on]").each(function(){
+		   var id=jQuery(this).parent().attr("sel_id");
+		   if(id!=""){
+		   gcs=id+","+gcs;
+		   }
+	       });
+		  if(gift_size>0){
+			   var gids="";
+			  jQuery("dd span[select=select]").each(function(){
+			   var gid=jQuery(this).attr("gogi");
+			   if(gid!=""){
+			   			gids=gid+","+gids;
+			        }
+		 		 });
+			  jQuery("#giftids").val(gids);
+			  }
+		  jQuery("#gcs").val(gcs);
+		  jQuery("#cart_form").submit();		 
+			 }else{
+				 alert("请选择一件商品");
+			 }	 
+  }
+function spec_format(){
+	 jQuery("span[id^=cart_sp1_]").find("br").hide();
+	 jQuery("span[id^=cart_sp2_]").find("br").hide();
+	 jQuery("span[id^=group_spec_]").find("br").hide();
+}   
+function style_add(){
+	 jQuery("html").attr("style","overflow:hidden;height:100%;");
+	 jQuery("body").attr("style","overflow:hidden;height:100%;");
+} 
+function style_remove(){
+	 jQuery("html").attr("style","");
+	 jQuery("body").attr("style","");
+} 
+function st(){ 
+	  var int=self.setInterval(function(){
+       jQuery("body").scrollTop(zt);
+	   clearInterval(int);
+     },500);
+}
+function nst(){ 
+	 zt = jQuery("body").scrollTop();
+}
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<form  method="post"  name="cart_form" target="_self" id="cart_form" action="$!webPath/wap/goods_cart2">
+<input type="hidden" name="giftids" id="giftids" value="" />
+<input type="hidden" name="gcs" id="gcs" />
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png"  width="25" height="25" /></a>购物车<a class="menu home" href="$!webPath/wap/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div style="height:15px;"></div>
+<div class="shopcar_wap" data-role="page" id="pageone">
+    #foreach($obj in $cart)
+        #if($!obj.goods.goods_main_photo)                              #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")#else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+            #if($!{obj.goods.goods_store.store_status}!=15 || $!{obj.goods.goods_status}!=0 || $!obj.remain_count == 0)
+            #set($available="no")
+            #else
+            #set($available="yes")
+            #end
+    <div class="shopcar_item" data-role="shopcar_item" dr="$!obj.id">
+    	<div class="item_box">
+        	<h3 class="item_store_name">#if($!obj.goods.goods_store)$!obj.goods.goods_store.store_name #else 商城自营 #end</h3>
+            #if($!obj.goods.goods_store)<a class="shopin_arow" href="$!webPath/wap/store?id=$!obj.goods.goods_store.id" data-ajax="false"></a>
+            #end
+            #if($!available=='yes') <a class="redact" href="javascript:void(0);" le = "$!obj.id">编辑</a>#end
+        </div>
+        #if($!available=='yes')
+		#if($!weixinCartTools.coupon_count("$!obj.goods.id"))
+        <div class="get_coupon">
+        	<dl id="get_coupon_list_$!obj.id" #if($!obj.goods.goods_store) storeid="$!obj.goods.goods_store.id" #else goodsid="$!obj.goods.id"  #end>
+            	<dt>领券</dt>
+                <dd>
+                	<span>有可用优惠券，点击进入领取</span>
+                </dd>
+            </dl>
+        </div>
+        #end
+        #if($!{obj.goods.group_buy}==2)
+        <div class="get_coupon">
+        	<dl>
+            	<dt>团购</dt>
+                <dd>
+                	<span>团购优惠商品</span>
+                </dd>
+            </dl>
+        </div>
+        #end
+        #end
+        <div class="s_goods_info_wap">
+        <!--进行手指左滑滑动时s_goods_info添加touch_slide-->
+        	<div class="s_goods_info" data-role="s_goods_info" dr="$!obj.id" id="s_goods_info_$!obj.id" style="z-index:1;" touch_id="$!obj.id">
+            <!--正常状态下select下的span不用加任何class，当选择时添加pitch_on，当商品过期或失效时添加disabled-->
+                <div class="select" sel_id="$!obj.id" ><span #if($!available=='no') class="disabled" #end ></span></div>
+                <div class="goods_content" touch_id="$!obj.id">
+						<div class="goods_pic"><a touch_id="$!obj.id" data-ajax="false" href="$!webPath/wap/items?id=$!obj.goods.id"><img src="$!{img}"/></a></div>
+                        <div  class="goods_text" touch_id="$!obj.id">
+                            <a data-ajax="false" touch_id="$!obj.id">
+                                <div class="goods_name" touch_id="$!obj.id">$!obj.goods.goods_name</div>
+                                <div  class="goods_color" touch_id="$!obj.id">
+                                	#if($!available=='yes')<span touch_id="$!obj.id" id="cart_sp1_$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>#else <span>商品已失效</span>#end
+                                    <!--<span>尺码：M</span>-->
+                                </div>
+                            </a>
+                        </div>
+                        <div class="goods_value" touch_id="$!obj.id">
+                            <span class="now_value" touch_id="$!obj.id" id="now_price_$!obj.id"><b>¥</b>$!obj.price</span>
+                            <span class="primary_value" touch_id="$!obj.id">¥$!obj.goods.goods_price</span>
+                            <span class="number" touch_id="$!obj.id"><em touch_id="$!obj.id">X</em><i touch_id="$!obj.id" id="num_count_$!obj.id">$!obj.count</i></span>
+                        </div>
+                         <!--点击编辑按钮后添加touch_start-->
+                        <div class="goods_norms_s" id="goods_norms_s_$obj.id">
+                                <ul style="display:none;">
+                                    <li class="reduce" id="co_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type"><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_14.png"></a></li>
+                                    <li class="input_text"><input  name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.f_sale_type" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" /></li>
+                                    <li class="add" id="co_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type"><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_15.png"></a></li>
+                                </ul>
+                                <div class="norms_p" style="display:none;">
+                                	<div class="norms_p_text">
+                                         <span id="cart_sp2_$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>
+                                    </div>
+                                    #if($!available=='yes' && $!obj.spec_info!="")
+                                    <div class="norms_arrow" id="class_norms_arrow_$!obj.id" cart_id="$!obj.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_norms_arrow.png"></div>
+                                    #end
+                                </div>
+                             
+                             	
+                        </div><div class="norms_goods_del" style="height:156px; line-height:156px;" ><a href="javascript:void(0);" onClick="big_cart_remove('$!obj.id');">删除</a></div>
+                </div>
+                
+            </div>
+            <!--goods_del的高度需要JS控制，需获取s_goods_pic的高度后加20px，删除按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是156px-->
+            <div class="goods_del" style="height:156px; line-height:156px;"><a id="goods_del_a_$!obj.id" href="javascript:void(0);" onClick="">删除</a></div>
+        </div>
+    </div> 
+    #end
+    <!--满就减-->
+     #if($!er_goods)
+        #foreach($param in ${er_goods.keySet()})
+            <!--<li id="tr_$!param" mark="$!param">
+            	<div class="car_act">
+                	<div class="li_hd"><span class="red_bg">满减</span><span class="gray" style="width:75%" id="erString$!param">$!erString.get($param)</span></div></div>-->
+        #foreach($obj in ${er_goods.get($param)})
+        #if($!obj.goods.goods_main_photo)                       #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end        
+        #set($goods_url="$!webPath/wap/items?id=$!obj.goods.id")
+         #if($!{obj.goods.goods_store.store_status}!=15 || $!{obj.goods.goods_status}!=0 || $!obj.remain_count == 0)
+            #set($available="no")
+            #else
+            #set($available="yes")
+            #end
+    <div class="shopcar_item" data-role="shopcar_item" dr="$!obj.id">
+    	<div class="item_box">
+        	<h3 class="item_store_name">#if($!obj.goods.goods_store)$!obj.goods.goods_store.store_name #else 商城自营 #end</h3>
+            #if($!obj.goods.goods_store)<a class="shopin_arow" href="$!webPath/wap/store?id=$!obj.goods.goods_store.id" data-ajax="false"></a>
+            #end
+            #if($!available=='yes') <a class="redact" href="javascript:void(0);" le = "$!obj.id">编辑</a>#end
+        </div>
+        #if($!available=='yes')
+        <div class="full_cut">
+        	<dl>
+            	<dt>满减</dt>
+                <dd>
+                	<span id="erString$!param">$!erString.get($param)</span>
+                </dd>
+            </dl>
+        </div>
+        #if($!weixinCartTools.coupon_count("$!obj.goods.id"))
+        <div class="get_coupon">
+        	  	<dl id="get_coupon_list_$!obj.id" #if($!obj.goods.goods_store) storeid="$!obj.goods.goods_store.id" #else goodsid="$!obj.goods.id"  #end>
+            	<dt>领券</dt>
+                <dd>
+                	<span>有可用优惠券，点击进入领取</span>
+                </dd>
+            </dl>
+        </div>
+        #end
+        #if($!{obj.goods.group_buy}==2)
+        <div class="get_coupon">
+        	<dl>
+            	<dt>团购</dt>
+                <dd>
+                	<span>团购优惠商品</span>
+                </dd>
+            </dl>
+        </div>
+        #end
+        #end
+        <div class="s_goods_info_wap">
+        <!--进行手指左滑滑动时s_goods_info添加touch_slide-->
+        	<div class="s_goods_info" data-role="s_goods_info" dr="$!obj.id" id="s_goods_info_$!obj.id" touch_id="$!obj.id">
+            <!--正常状态下select下的span不用加任何class，当选择时添加pitch_on，当商品过期或失效时添加disabled-->
+                <div class="select" touch_id="$!obj.id" sel_id="$!obj.id"><span touch_id="$!obj.id" #if($!available=='no') class="disabled" #end></span></div>
+                <div class="goods_content" touch_id="$!obj.id">
+						<div class="goods_pic"><a data-ajax="false" href="$!webPath/wap/items?id=$!obj.goods.id"><img src="$!{img}"/></a></div>
+                        <div  class="goods_text" touch_id="$!obj.id">
+                            <a data-ajax="false" touch_id="$!obj.id">
+                                <div class="goods_name" touch_id="$!obj.id">$!obj.goods.goods_name</div>
+                                <div  class="goods_color" touch_id="$!obj.id">
+                                	#if($!available=='yes')<span touch_id="$!obj.id" id="cart_sp1_$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>#else<span touch_id="$!obj.id">商品已失效</span>#end
+                                </div>
+                            </a>
+                        </div>
+                        <div touch_id="$!obj.id" class="goods_value" >
+                            <span touch_id="$!obj.id" class="now_value" id="now_price_$!obj.id"><b touch_id="$!obj.id">¥</b>$!obj.price</span>
+                            <span touch_id="$!obj.id" class="primary_value">¥$!obj.goods.goods_price</span>
+                            <span touch_id="$!obj.id" class="number"><em touch_id="$!obj.id">X</em><i touch_id="$!obj.id" id="num_count_$!obj.id">$!obj.count</i></span>
+                        </div>
+                         <!--点击编辑按钮后添加touch_start-->
+                        <div class="goods_norms_s" id="goods_norms_s_$obj.id">
+                                <ul style="display:none;">
+                                    <li class="reduce" id="co_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type"><a data-ajax="false" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_14.png"></a></li>
+                                    <li class="input_text"><input  name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.f_sale_type" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" /></li>
+                                    <li class="add"  id="co_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type"><a data-ajax="false" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_15.png"></a></li>
+                                </ul>
+                                <div class="norms_p" style="display:none;">
+                                	<div class="norms_p_text">
+										<span id="cart_sp2_$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>
+                                    </div>
+                                    #if($!available=='yes' && $!obj.spec_info!="")
+                                    <div class="norms_arrow" id="class_norms_arrow_$!obj.id" cart_id="$!obj.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_norms_arrow.png"></div>
+                                    #end
+                                </div>
+                             
+                             	
+                        </div><div class="norms_goods_del" style="height:156px; line-height:156px;" ><a href="javascript:void(0);" onClick="big_cart_remove('$!obj.id');" data-ajax="false">删除</a></div>
+                </div>
+                
+            </div>
+            <!--goods_del的高度需要JS控制，需获取s_goods_pic的高度后加20px，删除按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是156px-->
+            <div class="goods_del" style="height:156px; line-height:156px;"><a data-ajax="false" id="goods_del_a_$!obj.id" href="javascript:void(0);" onClick="">删除</a></div>
+        </div>
+    </div>
+    #end        
+        #end
+        #end
+    <!--满就赠活动-->
+        #if($!ac_goods)
+        #foreach($param in ${ac_goods.keySet()})
+        #set($buyGift = $!goodsViewTools.query_buyGift("$!{param}"))
+        #foreach($obj in ${ac_goods.get($param)})
+        #if($!obj.goods.goods_main_photo)               
+     #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        #set($goods_url="$!webPath/wap/items?id=$!obj.goods.id")
+         #if($!{obj.goods.goods_store.store_status}!=15 || $!{obj.goods.goods_status}!=0 || $!obj.remain_count == 0)
+            #set($available="no")
+            #else
+            #set($available="yes")
+            #end
+         <div class="shopcar_item" data-role="shopcar_item" dr="$!obj.id" id="zzzzz">
+    	<div class="item_box">
+        	<h3 class="item_store_name">#if($!obj.goods.goods_store)$!obj.goods.goods_store.store_name #else 商城自营 #end</h3>
+            #if($!obj.goods.goods_store)<a class="shopin_arow" href="$!webPath/wap/store?id=$!obj.goods.goods_store.id" data-ajax="false"></a>
+            #end
+            #if($!available=='yes')<a data-ajax="false" class="redact" href="javascript:void(0);" le = "$!obj.id">编辑</a>#end
+        </div>
+        #if($!available=='yes')
+        <div class="full_give">
+        	<dl>
+            	<dt>满送</dt>
+                <dd>
+                	<span onClick="gift_tier_show('$!{buyGift.id}');" id="select_gift_$!buyGift.id" select="" class="text">点击选择赠送商品</span>
+                    <span class="amount" id="gift_amount_$!{buyGift.id}" gt_ct="$!{obj.id}" style="display:none">X1</span>
+                </dd>
+            </dl>
+        </div>
+        #if($!weixinCartTools.coupon_count("$!obj.goods.id"))
+        <div class="get_coupon">
+        	  	<dl id="get_coupon_list_$!obj.id" #if($!obj.goods.goods_store) storeid="$!obj.goods.goods_store.id" #else goodsid="$!obj.goods.id"  #end>
+            	<dt>领券</dt>
+                <dd>
+                	<span>有可用优惠券，点击进入领取</span>
+                </dd>
+            </dl>
+        </div>
+        #end
+        #end
+        <div class="s_goods_info_wap">
+        <!--进行手指左滑滑动时s_goods_info添加touch_slide-->
+        	<div class="s_goods_info" data-role="s_goods_info" dr="$!obj.id" id="s_goods_info_$!obj.id" touch_id="$!obj.id">
+            <!--正常状态下select下的span不用加任何class，当选择时添加pitch_on，当商品过期或失效时添加disabled-->
+                <div class="select" touch_id="$!obj.id" sel_id="$!obj.id"><span touch_id="$!obj.id" #if($!available=='no') class="disabled" #end check_gift_id="$!buyGift.id"></span></div>
+                <div class="goods_content" touch_id="$!obj.id">
+						<div class="goods_pic"><a data-ajax="false" href="$!goods_url"><img src="$!{img}"/></a></div>
+                        <div  class="goods_text" touch_id="$!obj.id">
+                            <a data-ajax="false" touch_id="$!obj.id">
+                                <div class="goods_name" touch_id="$!obj.id">$!obj.goods.goods_name</div>
+                                <div  class="goods_color" touch_id="$!obj.id">
+                                	#if($!available=='yes')<span touch_id="$!obj.id" id="cart_sp1_$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>#else<span touch_id="$!obj.id">商品已失效</span>#end
+                                    <!--<span>尺码：M</span>-->
+                                </div>
+                            </a>
+                        </div>
+                        <div class="goods_value" touch_id="$!obj.id">
+                            <span class="now_value" touch_id="$!obj.id" id="now_price_$!obj.id"><b touch_id="$!obj.id">¥</b>$!obj.price</span>
+                            <span class="primary_value" touch_id="$!obj.id">¥$!obj.goods.goods_price</span>
+                            <span class="number" touch_id="$!obj.id"><em touch_id="$!obj.id">X</em><i touch_id="$!obj.id" id="num_count_$!obj.id">$!obj.count</i></span>
+                        </div>
+                         <!--点击编辑按钮后添加touch_start-->
+                        <div class="goods_norms_s" id="goods_norms_s_$obj.id">
+                                <ul style="display:none;">
+                                    <li class="reduce" id="co_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type" check_gift_id="$!buyGift.id"><a data-ajax="false" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_14.png"></a></li>
+                                    <li class="input_text"><input  name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.f_sale_type" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count"  check_gift_id="$!buyGift.id"/></li>
+                                    <li class="add" id="co_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type" check_gift_id="$!buyGift.id"><a data-ajax="false" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_15.png"></a></li>
+                                </ul>
+                                <div class="norms_p" style="display:none;">
+                                	<div class="norms_p_text">
+                                       <span id="cart_sp2_$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>
+                                    </div>
+                                    #if($!available=='yes' && $!obj.spec_info!="")
+                                    <div class="norms_arrow" id="class_norms_arrow_$!obj.id" cart_id="$!obj.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_norms_arrow.png"></div>
+                                    #end
+                                </div>
+                        </div><div class="norms_goods_del" style="height:156px; line-height:156px;" ><a data-ajax="false" href="javascript:void(0);" onClick="big_cart_remove('$!obj.id');">删除</a></div>
+                </div>
+            </div>
+            <!--goods_del的高度需要JS控制，需获取s_goods_pic的高度后加20px，删除按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是156px-->
+            <div class="goods_del" style="height:156px; line-height:156px;"><a id="goods_del_a_$!obj.id" href="javascript:void(0);" onClick="" data-ajax="false">删除</a></div>
+        </div>
+    </div>
+        #end
+        #end
+        #end
+        <!--组合活动--> 
+        #if($!combin_carts)
+        #foreach($obj in $combin_carts)
+        #if($!obj.combin_main==1)
+        #set($suit_map=$!goodsViewTools.getSuitInfo("$!obj.id"))
+        #end
+        #if($!obj.goods.goods_main_photo)               
+#set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        #set($goods_url="$!webPath/wap/items?id=$!obj.goods.id")
+        #set($ogcs=$!weixinCartTools.getothergc("$!obj.id"))
+         #set($ret="0")
+         #foreach($ogc in $!ogcs)
+         #if($!{ogc.goods.goods_store.store_status}!=15 || $!{ogc.goods.goods_status}!=0)
+         #set($ret="1")
+         #end
+         #end 
+           #if($!{obj.goods.goods_store.store_status}!=15 || $!{obj.goods.goods_status}!=0 || $!obj.remain_count == 0||$!ret=="1")
+           #set($available="no")
+           #else
+           #set($available="yes")
+           #end
+           #if($!{obj.goods.goods_store.store_status}!=15 || $!{obj.goods.goods_status}!=0 || $!obj.remain_count == 0)
+           #set($gd_available="no")
+           #else
+           #set($gd_available="yes")
+           #end
+        <div class="shopcar_item" data-role="shopcar_item" dr="$!obj.id">
+    	<div class="item_box">
+        	<h3 class="item_store_name">#if($!obj.goods.goods_store)$!obj.goods.goods_store.store_name #else 商城自营 #end</h3>
+            #if($!obj.goods.goods_store)<a data-ajax="false" class="shopin_arow" href="$!webPath/wap/store?id=$!obj.goods.goods_store.id" data-ajax="false"></a>
+            #end
+            #if($!available=='yes')<a data-ajax="false" class="redact" href="javascript:void(0);" le = "$!obj.id">编辑</a>#end
+        </div>
+        #if($!available=='yes')
+        #if($!weixinCartTools.coupon_count("$!obj.goods.id"))
+        <div class="get_coupon">
+        	  	<dl id="get_coupon_list_$!obj.id" #if($!obj.goods.goods_store) storeid="$!obj.goods.goods_store.id" #else goodsid="$!obj.goods.id"  #end>
+            	<dt>领券</dt>
+                <dd>
+                	<span>有可用优惠券，点击进入领取</span>
+                </dd>
+            </dl>
+        </div>
+        #end
+        #end
+        <div class="get_coupon">
+        	<dl>
+            	<dt>套装</dt>
+                <dd>
+                #if($!available=='yes')<span id="now_price_$!obj.id" style="color:#f94d4d;"><b>套装价  ¥</b>$!{suit_map.get('plan_goods_price')}</span>
+                <span class="amount" id="gr_amount_$!obj.id">X$!obj.count</span>
+                #else<span> 套装中有商品已失效，已不再享受套装优惠</span> #end    
+                </dd>
+            </dl>
+        </div>
+        
+        <div class="s_goods_info_wap" id="group_goods_$!obj.id">
+        <!--进行手指左滑滑动时s_goods_info添加touch_slide-->
+        	<div class="s_goods_info" data-role="s_goods_info" dr="$!obj.id" id="s_goods_info_$!obj.id" touch_id="$!obj.id">
+            <!--正常状态下select下的span不用加任何class，当选择时添加pitch_on，当商品过期或失效时添加disabled-->
+                <div class="select" touch_id="$!obj.id" sel_id="$!obj.id"><span #if($!available=='no') class="disabled" #end></span></div>
+                <div class="goods_content" touch_id="$!obj.id">
+						<div class="goods_pic"><a data-ajax="false" href="$!webPath/wap/items?id=$!obj.goods.id"><img src="$!{img}"/></a></div>
+                        <div  class="goods_text" touch_id="$!obj.id">
+                            <a  data-ajax="false" touch_id="$!obj.id">
+                                <div class="goods_name" touch_id="$!obj.id">$!obj.goods.goods_name</div>
+                                <div  class="goods_color" touch_id="$!obj.id">
+                                	#if($!gd_available=='yes')<span id="cart_sp1_$!obj.id" touch_id="$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>#else<span touch_id="$!obj.id">商品已失效</span>#end
+                                </div>
+                            </a>
+                        </div>
+                        <div touch_id="$!obj.id" class="goods_value" touch_id="$!obj.id">
+                            <span class="now_value" touch_id="$!obj.id" id="now_price_$!obj.id"><b touch_id="$!obj.id">¥</b>$!obj.goods.store_price</span>
+                            <!--<span class="primary_value">¥$!obj.goods.goods_price</span>-->
+                            <span class="number" touch_id="$!obj.id"><em touch_id="$!obj.id">X</em><i touch_id="$!obj.id" id="group_main_num_count_$!obj.id">$!obj.count</i></span>
+                        </div>
+                        <!--点击编辑按钮后添加touch_start-->
+                        <div class="goods_norms_s" id="goods_norms_s_$obj.id">
+                                <ul style="display:none;">
+                                    <li class="reduce" id="co_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type"><a data-ajax="false" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_14.png"></a></li>
+                                    <li class="input_text"><input  name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.f_sale_type" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" /></li>
+                                    <li class="add" id="co_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.f_sale_type"><a href="javascript:void(0);" data-ajax="false"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_detail_15.png"></a></li>
+                                </ul>
+                                <div class="norms_p" style="display:none;">
+                                	<div class="norms_p_text">
+                                         <span id="cart_sp2_$!obj.id">#if($!obj.spec_info!="")$!{obj.spec_info}#else#end</span>
+                                    </div>
+                                    #if($!available=='yes' && $!obj.spec_info!="")
+                                    <div class="norms_arrow" id="class_norms_arrow_$!obj.id" cart_id="$!obj.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_norms_arrow.png"></div>
+                                    #end
+                                </div>  	
+                        </div><div class="norms_goods_del" style="height:156px; line-height:156px;" ><a href="javascript:void(0);" onClick="big_cart_remove('$!obj.id');" data-ajax="false">删除</a></div>
+                </div>
+            </div>
+            <!--goods_del的高度需要JS控制，需获取s_goods_pic的高度后加20px，删除按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是156px-->
+            <div class="goods_del" style="height:156px; line-height:156px;"><a data-ajax="false" id="goods_del_a_$!obj.id" href="javascript:void(0);" onClick="">删除</a></div>
+        </div>
+        #foreach($ogc in $!ogcs)
+        #if($!ogc.goods.goods_main_photo)               
+#set($img="$!imageWebServer/$!{ogc.goods.goods_main_photo.path}/$!{ogc.goods.goods_main_photo.name}_small.$!{ogc.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        #if($!{ogc.goods.goods_store.store_status}!=15 || $!{ogc.goods.goods_status}!=0)
+        #set($og_available="no")
+        #else
+        #set($og_available="yes")
+        #end 
+        <div class="group_goods_wrap" id="group_goods_de_$!ogc.id">
+        <!--进行手指左滑滑动时s_goods_info添加touch_slide-->
+        	<div class="group_goods_info"  data-role="group_goods_info" gd="$!ogc.id" touch_id="$!ogc.id" id="group_goods_tou_$!ogc.id">
+                <div class="select" touch_id="$!ogc.id"></div>
+                <div class="goods_content" touch_id="$!ogc.id">
+						<div class="goods_pic" ><a touch_id="$!ogc.id" data-ajax="false" href="$!webPath/wap/items?id=$!ogc.goods.id"><img src="$!img" touch_id="$!ogc.id"></a></div>
+                        <div  class="group_goods_text" touch_id="$!ogc.id">
+                            <a touch_id="$!ogc.id"  data-ajax="false">
+                                <div touch_id="$!ogc.id" class="goods_name">$!ogc.goods.goods_name</div>
+                                <div touch_id="$!ogc.id" class="goods_color">	
+                                	#if($!og_available=='yes')<span touch_id="$!ogc.id" id="group_spec_$!ogc.id">#if($!ogc.spec_info!="")$!{ogc.spec_info}#else#end</span>#else<span touch_id="$!ogc.id">商品已失效</span>#end
+                                </div>
+                            </a>
+                        </div>
+                        <div class="goods_value" touch_id="$!ogc.id">
+                            <span class="now_value" touch_id="$!ogc.id" id="now_price_$!ogc.id"><b touch_id="$!ogc.id">¥</b>$!ogc.goods.store_price</span>
+                            <span touch_id="$!ogc.id" class="number"><em touch_id="$!ogc.id">X</em><i touch_id="$!ogc.id" id="group_sub_num_count_$!ogc.id">$!obj.count</i></span>
+                        </div>
+                </div>
+            </div>
+<!--            goods_del的高度需要JS控制，需获取s_goods_pic的高度后加20px，删除按钮的高度与其相同，例如宽度640px的状态下，删除按钮的高度是156px
+-->            <div class="goods_del" style="height:156px; line-height:156px;"><a id="goods_del_a_$!ogc.id" href="javascript:void(0);" onClick="" data-ajax="false">删除</a></div>
+        </div>
+        #end
+    </div>
+  #end
+  #end      
+        
+        
+</div>        
+<!--结算导航-->
+    <div class="settle_box_h"></div>
+    <div class="settle_box">
+    	<dl class="all_check">
+        	<dt><span id="all_pitch_on"></span></dt>
+            <dd>全选</dd>
+        </dl>
+        <dl class="total_amount">
+        	<dt>合计：<span id="total_price">¥0.00</span></dt>
+            <dd>不含运费</dd>
+        </dl>
+        <a class="settle_btn" href="javascript:void(0);" onClick="confirm_cart();" id="confirm_cart" data-ajax="false">结算(0)</a>
+    </div>
+     <!--领取店铺优惠卷弹出框,点击领取优惠卷时弹出，同时shopcar_back_mask显示-->
+    <div class="shopin_coupon " id="get_shopin_coupon"><!--弹出时加shopin_coupon_show-->
+  	<!--data-->
+    </div>
+    <!--选择赠送商品弹出框,点击选择赠送商品时时弹出，同时shopcar_back_mask显示-->
+    #if($!ac_goods)
+        #foreach($param in ${ac_goods.keySet()})
+        #set($buyGift = $!goodsViewTools.query_buyGift("$!{param}"))
+    <div class="present_goods" id="gift_present_goods_$!buyGift.id" ><!--弹出加present_goods_show-->
+    	<h3>赠送商品</h3> 
+        <div class="present_goods_items">
+        	 #foreach($map in $!CommUtil.Json2List("$!buyGift.gift_info"))
+                      #set($storegoods_count = $!{map.get('storegoods_count')})	
+                      #set($goods_id = "$!{map.get('goods_id')}")	
+                      #set($enough=1)
+                      #if($!storegoods_count==0)
+                      #if($!{map.get('goods_count')}<=0)
+                      #set($enough=0)
+                      #end
+                      #end
+                      #if($!storegoods_count==1)
+                      #set($g = $!goodsViewTools.query_Goods("$!{goods_id}"))
+                      #if($!g)
+                      #if($!g.goods_inventory<=0)
+                      #set($enough=0)
+                      #end
+                      #else
+                      #set($enough=0)
+                      #end
+                      #end
+                      #if($!enough==1)  
+                      #set($goods_name = "$!{map.get('goods_name')}")
+                      #set($goods_price = "$!{map.get('goods_price')}")
+                      #set($goods_mainphoto_path = "$!{map.get('goods_main_photo')}")
+                      #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+                      #set($goods_domainPath = "$!{map.get('goods_domainPath')}")
+                    <ul>
+                		<li class="select_btn"><span goods_name="$!goods_name" value="$!goods_id"></span></li>
+                		<li class="present_pic"><img src="$!img"></li>
+                		<li class="present_text">
+                    			<dl>
+                        			<dt>$!goods_name</dt>
+                        			<dd><span>原价：¥$!goods_price元</span><span> 现价:0元</span></dd>
+                    			</dl>
+                		</li>
+            		</ul>  
+                    #end
+                      #end
+                      <div style="width:100%; height:35px;"></div>
+           </div>
+        <div class="close_btn" onClick="gift_tier_close($!buyGift.id);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/s_coupon_btn.png"></div>
+       <div class="gift_goods_get" onClick="gift_tier_hide($!buyGift.id);"><a data-ajax="false" href="javascript:void(0);">确定</a></div> 
+    </div>
+    #end
+    #end
+    <!--再次选择规格弹出框,点击规格	时弹出，添加touch_again,同时shopcar_back_mask显示-->
+    <div class="again_select_model" id="class_again_select_model" >
+    <!--data-->
+    </div>
+    <!--遮罩背景-->
+     <div class="shopcar_back_mask" id="shopcar_back_mask"  style="display:none;"></div>
+   </form>  
+</body>
+</html>

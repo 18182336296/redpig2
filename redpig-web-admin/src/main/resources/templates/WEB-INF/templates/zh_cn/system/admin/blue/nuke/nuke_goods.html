@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/js/jquery-easyui-1.6.2/themes/icon.css">
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="$!cdnServer/resources/js/jquery-easyui-1.6.2/locale/easyui-lang-zh_CN.js"></script>
+<script>
+//
+jQuery(document).ready(function(){
+    #if($!brand_id)
+    jQuery("#brand_id").val("$!brand_id");
+    #end
+    jQuery("#ng_status").val("$!ng_status");
+    jQuery("#nuke_id").val("$!nuke_id");
+    jQuery("#beginTime").val("$!beginTime");
+    jQuery("#endTime").val("$!endTime");
+
+});
+
+//校验时间
+$.extend($.fn.validatebox.defaults.rules, {
+    testDate: {
+        validator: function (value, param) {
+            var d1 = $(''+param[0]+'').datebox('getValue')
+            return value >= d1;
+        },
+        message: '结束时间必须大于或等于开始时间'
+    }
+})
+
+function query_form(){
+	jQuery("#ListForm").submit();
+}
+
+function clearData() {
+    jQuery("#ng_name").val("");
+    jQuery("#nuke_id").val("");
+    jQuery("#ng_status").val("");
+    jQuery('#beginTime').textbox('setValue','');
+    jQuery('#endTime').textbox('setValue','');
+}
+</script>
+</head>
+<body scroll="yes">
+<div class="cont">
+  <h3 class="seth">秒杀管理</h3>
+  <div class="nav_list">
+  		<ul>
+        	<li><a href="$!webPath/nuke_goods" class="this"><b>秒杀商品列表</b></a></li>
+            
+            <li><a href="$!webPath/nuke_goods_add"><b>新增秒杀商品</b></a></li>
+        </ul>
+  </div>
+    <div class="operation">
+        <h3>友情提示</h3>
+        <ul>
+            <li>一个秒杀活动允许添加多个商品，暂不能选有多种规格的商品</li>
+            <li>添加完秒杀商品到时后立即生效，请谨慎操作</li>
+        </ul>
+    </div>
+ <form name="ListForm" id="ListForm" action="" method="post">
+    <div class="search">
+        <span>秒杀活动</span>
+        <span class="size100">
+        <select name="nuke_id" id="nuke_id">
+            #if($!nukes.size()>0)
+                <option value="">所有活动</option>
+                #foreach($nuke in $nukes)
+                #set($time="$!CommUtil.formatTime('yyyy年MM月dd日 HH:mm:ss',$!{nuke.beginTime}) - $!CommUtil.formatTime('yyyy年MM月dd日 HH:mm:ss',$!{nuke.endTime})")
+                <option value="$!nuke.id">$!nuke.nuke_name [$!time]</option>
+                #end
+            #else
+                <option value=" ">暂无秒杀申请</option>
+            #end
+        </select>
+      </span>
+        <span>秒杀名称</span>
+      <span class="size100">
+        <input name="ng_name" type="text" id="ng_name" value="$!ng_name" />
+      </span>
+      <span>秒杀状态</span>
+      <span class="size100">
+        <select name="ng_status" id="ng_status">
+            <option value="">全部</option>
+            <option value="1">未开始</option>
+            <option value="2">进行中</option>
+            <option value="-2">已结束</option>
+        </select>
+      </span>
+        <span>创建时间</span>
+        <span class="size200">
+        <input id="beginTime" name="beginTime" value="$!{beginTime}" class="easyui-datetimebox" data-options="editable:false" labelPosition="top" style="width:100%;">
+        </span>
+        <span>-</span>
+        <span class="size200">
+		<input id="endTime" name="endTime" value="$!{endTime}" class="easyui-datetimebox" data-options="editable:false" data-options="validType:'testDate[\'#beginTime\']',editable:false" labelPosition="top" style="width:100%;">
+		</span>
+        <span>
+        <input type="button"  value="搜索" style="cursor:pointer;" onclick="query_form()" class="search_btn"/>
+        </span>
+      </span>
+      <span>
+        <input type="button"  value="清除" style="cursor:pointer;" onclick="clearData()" class="search_btn"/>
+      </span>
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="10%"><span class="form_btna">秒杀名称</span></th>
+          <th width="20%"><span class="form_btna">有效期</span></th>
+          <th width="8%"><span class="form_btna">总数量</span></th>
+          <th width="8%"><span class="form_btna">剩余数量</span></th>
+          <th width="6%"><span class="form_btna">秒杀价</span></th>
+          <th width="6%"><span class="form_btna">付款订单数</span></th>
+          <th width="6%"><span class="form_btna">付款人数</span></th>
+          <th width="8%"><span class="form_btna">创建时间</span></th>
+          <th width="10%"><span class="form_btna">状态</span></th>
+          <th align="center"><span class="form_btnb">操作</span></th>
+        </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+        <tr>
+          <td align="center"><a href="$!config.indexUrl/items_$!{obj.ng_goods.id}" target="_blank">$!obj.ng_name</a></td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.nuke.beginTime)至$!CommUtil.formatLongDate($!obj.nuke.endTime)</td>
+          <td align="center">$!obj.ng_count</td>
+          #set($left_count=$!{obj.ng_count} - $!{obj.ng_nuke_count})
+          <td align="center">$!left_count</td>
+          <td align="center">¥$!obj.ng_price</td>
+          #if($!obj.ng_status==0)
+          <td align="center">-- </td>
+          <td align="center">--</td>
+          #else
+            <!--通过goodsid、秒杀活动nuke_id查询订单数和用户数-->
+            #set($orderCount=$!orderFormTools.queryNukeOrderCountByCondition("$!obj.ng_goods.id","$!obj.nuke.id"))
+            #set($userCount=$!orderFormTools.queryUserCountByCondition("$!obj.ng_goods.id","$!obj.nuke.id"))
+          <td align="center">$orderCount</td>
+          <td align="center">$orderCount</td>
+          #end
+          <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+          #set($status="正常进行中")
+          #if($!obj.ng_status==0)
+          #set($status="未审核")
+          #end
+          #if($!obj.ng_status==1)
+          #set($status="未开始")
+          #end
+          #if($!obj.ng_status==2)
+          #set($status="进行中")
+          #end
+          #if($!obj.ng_status==-2)
+          #set($status="已结束")
+          #end
+          <td align="center">$!status</td>
+          <td class="hui oprate_con" align="center">
+            <a href="$!webPath/nuke_goods_edit?id=$!obj.id">编辑</a>
+            <a  href="javascript:if(confirm('删除后不可恢复?'))window.location.href='$!webPath/nuke_goods_del?mulitId=$!obj.id&currentPage=$!currentPage'">删除</a>
+          </td>
+        </tr>
+     #end
+           #else
+<tr>
+	<td colspan="11">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+    </div>
+    #if($!objs.size()>0)
+    <div class="operate_bar">
+        <div class="fenye">
+            <span id="queryCondition" style="display:none">
+            </span>
+            <!--<input name="mulitId" type="hidden" id="mulitId" />-->
+        	<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+       		$!gotoPageFormHTML      
+        </div>          
+ 	</div>
+    #end
+  </form>
+</div>
+</body>
+</html>

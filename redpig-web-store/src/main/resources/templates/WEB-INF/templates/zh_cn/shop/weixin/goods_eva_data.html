@@ -1,0 +1,42 @@
+  <script>
+  jQuery("#totalPage").val("$!totalPage");
+  </script>
+#foreach($obj in $eva_objs)
+   <div class="evaluate_content" >
+        	<p class="evaluate_text">$!{obj.evaluate_info}</p>
+            <ul class="evaluate_pic">
+            	#set($imgs=$!evaluateViewTools.queryEvaImgSrc($!obj.evaluate_photos))
+                #if($imgs.size()>0)
+                #foreach($!img in $imgs)
+            	<li><img src="$!imageWebServer/$!img.path/$!img.name"></li>
+                #end
+                #end
+            </ul>
+            <dl  class="evaluate_date">
+            	<dt>#if($!obj.userName)$!{obj.userName} #else $!{obj.evaluate_user.userName} #end</dt>
+                <dd>$!CommUtil.formatShortDate($!obj.addTime)</dd>
+            </dl>
+            <!--若有追加评价则该div显示，否则隐藏-->
+	            #if($!obj.addeva_status==1)
+	             #set($soon=$!orderFormTools.how_soon($!obj.addeva_time))
+                 <div class="append">
+	            	<b class="arrow"></b>
+	            	<p><span>#if($!soon==999)很久之后#else$!soon天后#end追加评论：</span>$!obj.addeva_info</p>
+	                #set($imgs=$!evaluateViewTools.queryEvaImgSrc($!obj.addeva_photos))
+	                #if($imgs.size()>0)
+	                <ul class="evaluate_pic">
+	                #foreach($!img in $imgs)
+	                    <li><img src="$!imageWebServer/$!img.path/$!img.name"></li>
+	                 #end
+	            	</ul>
+	            	#end
+	            </div>
+	            #end
+            #if($!obj.reply_status==1)
+            <div class="merchant_reply">
+            	<p><span>【店主回复】</span>$!obj.reply</p>
+            </div>
+            #end
+	            
+   	</div>
+#end

@@ -1,0 +1,44 @@
+   <script>
+  
+   jQuery(document).ready(function(){
+	   
+		var width = jQuery(window).width();
+		var li_width=width/3;
+		var ul_width=width*2;
+		jQuery("#detail_lik_id").attr("style","width:"+ul_width+"px")
+		jQuery("#detail_lik_id li").each(function(){
+			jQuery(this).attr("style","width:"+li_width+"px");
+		})
+/*		var height=jQuery("#over_c").height();
+		jQuery(".over_c_main").attr("style","height:"+height+"px");
+		height=height+10;
+		jQuery("#over_c").attr("style","height:"+height+"px");*/
+	});
+</script>
+ <!--猜你喜欢-->
+    <div class="g_detail_like">
+    	<h3 class="like_title">猜你喜欢</h3>
+        <!--获取over_c的高度后减去20px即为over_c_main的高度-->
+        <div class="over_c_main">
+        <div class="over_c" id="over_c" >
+    	<ul id="detail_lik_id">
+    	 #foreach($goods in $your_like_goods)
+    	  #if($!goods.goods_main_photo)
+          #set($img="$!imageWebServer/$!goods.goods_main_photo.path/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+          #else
+          #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          #end
+          
+          #set($goods_url="$!webPath/wap/items?id=$!{goods.id}")
+        	<li><!--获取屏幕宽度的三分之一即为li的宽度-->
+            	<a href="$!goods_url">
+                	<div class="favorite_pic"><img src="$!img"></div>
+                    <div class="favorite_name">$!goods.goods_name</div>
+                    <div  class="favorite_value">￥$!{goods.goods_current_price}</div>
+                </a>
+            </li>
+            #end
+        </ul>
+        </div>
+        </div>
+    </div>

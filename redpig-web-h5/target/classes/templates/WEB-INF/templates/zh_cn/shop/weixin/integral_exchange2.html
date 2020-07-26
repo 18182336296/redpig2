@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分商城确认订单</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes" />
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.wap.common.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+    jQuery(function(){
+		var addr_id = "$!addrs_default_val.id"
+		if(addr_id==""){
+			jQuery(" a[id^=onclick_]:first").click();
+		}else{
+			jQuery("#onclick_"+addr_id).click();
+		}
+		});
+	function change_addr(id){
+		jQuery(".fl").find("img").each(function(index, element) {
+            jQuery("img[id^=img_]").attr("src","$!cdnServer/resources/style/system/front/default/images/weixin/tick_no.png");
+        });
+		jQuery("#img_"+id).attr("src","$!cdnServer/resources/style/system/front/default/images/weixin/tick.png");
+		jQuery("#addr_id").val(id);
+		}
+	function integral_saveForm(){
+		var addr_id = jQuery("#addr_id").val();
+		jQuery.ajax({type:'POST',url:"$!webPath/integral/addressCheck" ,data:{"addr_id":addr_id},success:function(data){
+				var dataObj=eval("("+data+")");
+				if(dataObj.code){
+					Wap_alert("送货地址不对!");
+				}else{
+					jQuery("#integral_theForm").submit();
+				}
+			}
+		},"json");
+		
+	}		
+    </script>
+    <script>
+function saveForm(){
+	jQuery("#theForm").submit();
+}	
+function address_box_show(aid){
+	jQuery(".address_content").animate({left:"0%"});	
+	jQuery(".address_name").animate({left:"0%"});
+	jQuery.ajax({
+		type:'POST',
+        url:'$!webPath/buyer/address_add_ajax',
+		data:{"aid":aid},	
+		success:function(data){
+			 var dataObj=eval("("+data+")");	
+			   jQuery(".address_list_ul this").html("");
+			    var html="";
+			jQuery(dataObj.data).each(function(index){
+				html=html + "<li><a href='javascript:void(0)' onClick='query_address_data("+dataObj.data[index].addr_id+")'>" + dataObj.data[index].addr_name + "</li>"
+			});
+			jQuery(".address_items_box ul").html(html);
+		} 
+	},"json");	
+	}
+<!--所在区域-->
+function query_address_data(aid){
+jQuery.ajax({
+			type:'POST',
+            url:'$!webPath/buyer/address_add_ajax',
+			data:{"aid":aid},	
+			success:function(data){
+		    var dataObj=eval("("+data+")");	
+		    if(dataObj.level){
+		    	jQuery(".address_content").animate({left:"0%"});	
+				jQuery(".address_name").animate({left:"0%"});	
+		    jQuery(".address_list_ul this").html("");
+		    var html="";
+		 	jQuery(dataObj.data).each(function(index){
+				html=html + "<li><a href='javascript:void(0)' onClick='query_address_data("+dataObj.data[index].addr_id+")'>" + dataObj.data[index].addr_name + "</li>"
+			});
+			jQuery(".address_items_box ul").html(html);	    
+			}else{
+				jQuery(".area a input").val(dataObj.info);
+				jQuery("#area_id").val(dataObj.aid);
+				jQuery(".address_content").animate({left:"100%"});	
+				jQuery(".address_name").animate({left:"100%"});
+				var html="";
+			 	jQuery(dataObj.data).each(function(index){
+					html=html+"<li><input><a href='javascript:void(0)' onClick='query_address_data("+dataObj.data[index].addr_id+")'>" +dataObj.data[index].addr_name+"</a></li>"
+				});
+				jQuery(".hoster ul").html(html);	
+			}
+} 
+},"json");
+}
+function add_ad(id){	
+jQuery.ajax({type:'POST',url:"$!webPath/buyer/address_edit" ,data:{"id":id,"integarl_url":"1"},success:function(data){
+	jQuery(".add_address_wrap").html(data);
+	jQuery(".add_address_wrap").addClass("add_address_wrap_show");
+	}
+},"json");
+}
+function back(){	
+				jQuery(".address_content").animate({left:"-100%"});	
+				jQuery(".address_name").animate({left:"-100%"});
+	}
+	
+function backmain(obj){	
+jQuery(obj).parent().parent().removeClass("add_address_wrap_show");
+}
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>已选择兑换的礼品</div>
+
+	<div class="integral_order">
+    	<ul>
+        #foreach($obj in $igcs)
+        	<li>
+            #if($!obj.goods.ig_goods_img)
+            #set($img="$!imageWebServer/$!{obj.goods.ig_goods_img.path}/$!{obj.goods.ig_goods_img.name}_small.$!{obj.goods.ig_goods_img.ext}")
+          	#else
+            #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+          	#end
+                <span class="img"><img src="$!img" width="65" height="65" /></span>
+                <div class="infro" style="width:75%;"><p>$!{obj.goods.ig_goods_name}</p>
+                    <p class="num">
+                    	<span class="red integral">$!{obj.goods.ig_goods_integral}分</span>
+                     	<span class="amount">X$!{obj.count}</span>
+                    </p>
+                </div>
+            </li>
+        #end    
+        </ul>
+    </div>
+    <!--积分商城-确认收货地址-->
+    
+    <form action="$!webPath/integral/exchange3" name="integral_theForm" method="post" id="integral_theForm">
+    <input name="addr_id" id="addr_id" type="hidden" value="$!addrs_default_val.id" />
+    <input  name="integral_order_session" type="hidden" value="$!integral_order_session"/>
+    #foreach($addr in $addrs)
+    <div class="phone_address">
+    	<ul>
+        	<li class="tel">$!addr.trueName<span> 联系电话： $!{addr.mobile} $!{addr.telephone} </span></li>
+            <li class="site bd">$!addr.area.parent.parent.areaName $!addr.area.parent.areaName $!addr.area.areaName $!addr.area_info</li>
+            <li class="check">
+            <span class="fl">
+                <i>
+                	<a href="javascript:void(0);" onclick="change_addr('$!addr.id')" id="onclick_$!{addr.id}" style="margin-left:0;">
+                	<img src="$!cdnServer/resources/style/system/front/default/images/weixin/tick_no.png" width="20" height="20" id="img_$!{addr.id}" />
+                    </a>
+                </i>
+                <a href="javascript:void(0);" onclick="change_addr('$!addr.id')" id="onclick_$!{addr.id}">到这里去</a>
+            </span>
+            </li>
+        </ul>
+    </div>
+    #end
+    <div class="integral_add_address" >
+    	<a class="editor" href="javascript:void(0);"onClick="add_ad($!{addr.id})">添加新收货地址</a>
+   	</div>
+       
+<div class="add_address_wrap" style="z-index:10;">
+			<!--点击新增或者编辑按钮在此div上加add_address_wrap_show-->
+			
+		</div>
+					    <div class="address_menu">
+			<!--点击所在区域时，请JS控制address_content和address_name的css属性left变为left:0;-->
+			<div class="address_content">
+				<div class="address_name">
+					<span class="back_arow" onclick="back()"></span><span
+						class="title_name">选择收货地址</span>
+				</div>
+				<div class="address_title_h"></div>
+				<div class="address_items_box">
+					<!--显示哪一级加this-->
+					<ul class="address_list_ul this">
+						#foreach($area in $!areas)
+						<li><a href="javascript:void(0)"
+							onClick="query_address_data($!area.id)">$!area.areaName</a></li> #end
+					</ul>
+				</div>
+			</div>
+		</div>
+
+  
+    <div class="phone_login" style="margin-top:5px;">
+    	<ul>
+            <li class="text"><textarea placeholder="我要留言" id="igo_msg" name="igo_msg"></textarea></li>
+            <li class="score">所需总积分:<b class="red">$!total_integral分</b>,运费：<b class="red">$!trans_fee元</b></li>            
+        </ul>
+    </div>
+    <input id="select_url" name="select_url" hidden="hidden" value="1" />
+    </form>
+    <div class="red_submit"><a href="javascript:void(0);" onclick="integral_saveForm();">确认兑换</a></div>
+</body>
+</html>

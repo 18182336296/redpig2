@@ -1,0 +1,92 @@
+﻿<script>
+jQuery(document).ready(function(){
+	jQuery(window).scroll(function(){
+	var top = jQuery(document).scrollTop();
+	if(top==0){
+		  jQuery("#back_box").hide();
+		  jQuery(".back_box_x").hide();
+		}else{
+		  jQuery("#back_box").show();	
+	      jQuery(".back_box_x").show();
+		}
+	});	
+	jQuery("#toTop").click(function(){
+       jQuery('body,html').animate({scrollTop:0},1000);
+       return false;
+    });
+});
+</script>
+  <div class="shopping"> 
+  <div class="shopping_center">
+  #foreach($ac in $acs)
+    <div class="shopone">   
+       <h3>$!ac.className</h3>
+      <ul>
+        #foreach($article in $ac.articles)
+        #if($!article.url!="")
+        #set($url="$!article.url")
+        #else
+        #set($url="$!webPath/article_$!{article.id}")
+        #end
+        #if($!article.display)
+        <li><a  href="$!url" target="_blank">$!CommUtil.substring("$!article.title",12)</a></li>
+        #end
+        #end
+      </ul>
+    </div>
+    #end
+     </div> 
+       </div> 
+    #if($!config.app_download==1&&$!config.weixin_store==1&&$!config.weixin_qr_img)     
+<div class="barcode">
+	<div class="barcode_center"> 
+      #if($!config.app_download==1)
+    	<!--手机APP -->
+    	<div class="barcode_center_list">
+        	<div class="barcode_center_list_left"><img src="$!imageWebServer/$!{config.uploadFilePath}/app/app_dowload.png" /></div>
+            <div class="barcode_center_list_right">
+            	<h3>手机APP</h3>
+                <b>轻松购物，尽在掌上！</b>
+                <span class="app_button">
+                    <a href="$!config.ios_download" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/app-store.png" /></a>
+                    <a href="$!config.android_download" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/android.png" /></a>
+                </span>
+            </div>
+        </div>
+      #end  
+          #if($!config.weixin_store==1&&$!config.weixin_qr_img)
+        <!--官方微信 -->
+        <div class="barcode_center_list">
+        	<div class="barcode_center_list_left"><img src="$!imageWebServer/$!config.weixin_qr_img.path/$!config.weixin_qr_img.name" /></div>
+            <div class="barcode_center_list_right">
+            	<h3>微信商城</h3>
+              <i>扫描二维码关注微信商城有更多优惠等你拿哦~</i>
+            </div>
+        </div>
+        #end
+    </div>
+</div>
+	#end
+
+  <div class="footer">
+    <ul>
+      #set($navs=$!navTools.queryNav(1,-1))
+      #if($!navs.size()>0)
+      <li> 
+      #foreach($nav in $navs)
+        #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+        #set($url="$!nav.url")
+        #else
+        #set($url="$!webPath/$!{nav.url}")
+        #end 
+        <a href="$!url" #if($!nav.new_win==1)target="_blank"#end>$!{nav.title}</a>
+        #if($!{velocityCount}<$navs.size())|#end
+      #end 
+    </li>
+    
+      #end
+      <li class="hui2">$!{config.copyRight}</li>
+      <li class="hui2">$!{config.poweredby}</li>
+      <li>$!config.codeStat</li>
+    </ul>
+  </div>

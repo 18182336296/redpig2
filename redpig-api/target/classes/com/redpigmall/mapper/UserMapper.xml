@@ -1,0 +1,1215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.UserMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.User">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="application_seller_login_token" property="application_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="pay_password" property="pay_password" jdbcType="VARCHAR"/>
+		<result column="buy_goods_limit_info" property="buy_goods_limit_info" jdbcType="VARCHAR"/>
+		<result column="day_msg_count" property="day_msg_count" jdbcType="BIGINT"/>
+		<result column="validateCode" property="validateCode" jdbcType="VARCHAR"/>
+		<result column="weixin_unionID" property="weixin_unionID" jdbcType="VARCHAR"/>
+		<result column="integral_signDate" property="integral_signDate" jdbcType="TIMESTAMP"/>
+		<result column="seller_application_loginTime" property="seller_application_loginTime" jdbcType="TIMESTAMP"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<result column="nickName" property="nickName" jdbcType="VARCHAR"/>
+		<result column="trueName" property="trueName" jdbcType="VARCHAR"/>
+		<result column="password" property="password" jdbcType="VARCHAR"/>
+		<result column="userRole" property="userRole" jdbcType="VARCHAR"/>
+		<result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+		<result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+		<result column="QQ" property="QQ" jdbcType="VARCHAR"/>
+		<result column="WW" property="WW" jdbcType="VARCHAR"/>
+		<result column="month_income" property="month_income" jdbcType="INTEGER"/>
+		<result column="years" property="years" jdbcType="INTEGER"/>
+		<result column="MSN" property="MSN" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="sex" property="sex" jdbcType="INTEGER"/>
+		<result column="email" property="email" jdbcType="VARCHAR"/>
+		<result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+		<result column="card" property="card" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="lastLoginDate" property="lastLoginDate" jdbcType="TIMESTAMP"/>
+		<result column="loginDate" property="loginDate" jdbcType="TIMESTAMP"/>
+		<result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR"/>
+		<result column="loginIp" property="loginIp" jdbcType="VARCHAR"/>
+		<result column="loginCount" property="loginCount" jdbcType="INTEGER"/>
+		<result column="report" property="report" jdbcType="INTEGER"/>
+		<result column="availableBalance" property="availableBalance" jdbcType="DECIMAL"/>
+		<result column="freezeBlance" property="freezeBlance" jdbcType="DECIMAL"/>
+		<result column="integral" property="integral" jdbcType="INTEGER"/>
+		<result column="gold" property="gold" jdbcType="INTEGER"/>
+		<result column="qq_openid" property="qq_openid" jdbcType="VARCHAR"/>
+		<result column="sina_openid" property="sina_openid" jdbcType="VARCHAR"/>
+		<result column="user_type" property="user_type" jdbcType="INTEGER"/>
+		<result column="contact_user" property="contact_user" jdbcType="VARCHAR"/>
+		<result column="department" property="department" jdbcType="VARCHAR"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="company_address" property="company_address" jdbcType="VARCHAR"/>
+		<result column="company_purpose" property="company_purpose" jdbcType="VARCHAR"/>
+		<result column="company_url" property="company_url" jdbcType="VARCHAR"/>
+		<result column="company_person_num" property="company_person_num" jdbcType="VARCHAR"/>
+		<result column="company_trade" property="company_trade" jdbcType="VARCHAR"/>
+		<result column="company_nature" property="company_nature" jdbcType="VARCHAR"/>
+		<result column="store_apply_step" property="store_apply_step" jdbcType="INTEGER"/>
+		<result column="user_goods_fee" property="user_goods_fee" jdbcType="DECIMAL"/>
+		<result column="staple_gc" property="staple_gc" jdbcType="VARCHAR"/>
+		<result column="app_login_token" property="app_login_token" jdbcType="VARCHAR"/>
+		<result column="app_seller_login_token" property="app_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="user_form" property="user_form" jdbcType="VARCHAR"/>
+		<result column="mobile_pay_password" property="mobile_pay_password" jdbcType="VARCHAR"/>
+		<result column="invoice" property="invoice" jdbcType="VARCHAR"/>
+		<result column="invoiceType" property="invoiceType" jdbcType="INTEGER"/>
+		<result column="delivery_id" property="delivery_id" jdbcType="BIGINT"/>
+		<result column="whether_attention" property="whether_attention" jdbcType="INTEGER"/>
+		<result column="circle_create_info" property="circle_create_info" jdbcType="VARCHAR"/>
+		<result column="circle_attention_info" property="circle_attention_info" jdbcType="VARCHAR"/>
+		<result column="openId" property="openId" jdbcType="VARCHAR"/>
+		<result column="userMark" property="userMark" jdbcType="VARCHAR"/>
+		<result column="user_version" property="user_version" jdbcType="INTEGER"/>
+		<result column="user_tags" property="user_tags" jdbcType="VARCHAR"/>
+		<result column="direct_selling_qr_path" property="direct_selling_qr_path" jdbcType="VARCHAR"/>
+		
+		<association property="photo" column="photo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="area" column="area_id" select="com.redpigmall.dao.AreaMapper.selectByPrimaryKey"/>
+		<association property="config" column="id" select="com.redpigmall.dao.UserConfigMapper.getUserByUserId" />
+		<association property="store" column="store_id" select="com.redpigmall.dao.StoreMapper.selectByPrimaryKey"/>
+		<association property="parent" column="parent_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="directSellingParent" column="directSellingParent_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="admin_sp" column="id" select="com.redpigmall.dao.StorePointMapper.getUserByUserId"/>
+		<association property="ftp"  column="ftp_id" select="com.redpigmall.dao.FTPServerMapper.selectByPrimaryKey"/>
+		<collection property="roles" column="id" select="com.redpigmall.dao.RoleMapper.getRolesByUserId"/>
+		<collection property="menus" column="id" select="com.redpigmall.dao.MenuMapper.getMenusByUserId"/>
+		<collection property="files" column="id"  select="com.redpigmall.dao.AccessoryMapper.getAccessoryByUserId"/>
+		<collection property="goodscarts" column="id" select="com.redpigmall.dao.GoodsCartMapper.getUserByUserId"/>
+		<collection property="childs" column="id" select="com.redpigmall.dao.UserMapper.getParentByUserId"/>
+		<collection property="directSellingChilds" column="id" select="com.redpigmall.dao.UserMapper.getDirectSellingChildsByUserId"/>
+		<collection property="posits" column="id" select="com.redpigmall.dao.PredepositMapper.getPdUserByUserId"/>
+		<collection property="user_predepositlogs" column="id" select="com.redpigmall.dao.PredepositLogMapper.getPdLogUserByUserId"/>
+		<collection property="admin_predepositlogs" column="id" select="com.redpigmall.dao.PredepositLogMapper.getPdLogAdminByUserId"/>
+		<collection property="addrs" column="id" select="com.redpigmall.dao.AddressMapper.getUserByUserId"/>
+		<collection property="albums" column="id" select="com.redpigmall.dao.AlbumMapper.getUserByUserId"/>
+		<collection property="from_msgs" column="id" select="com.redpigmall.dao.MessageMapper.getFromUserByUserId"/>
+		<collection property="to_msgs" column="id" select="com.redpigmall.dao.MessageMapper.getToUserByUserId"/>
+		<collection property="gold_record" column="id" select="com.redpigmall.dao.GoldRecordMapper.getGoldUserByUserId"/>
+		<collection property="gold_record_admin" column="id" select="com.redpigmall.dao.GoldRecordMapper.getGoldAdminByUserId"/>
+		<collection property="integral_logs" column="id" select="com.redpigmall.dao.IntegralLogMapper.getIntegralUserByUserId"/>
+		<collection property="integral_admin_logs" column="id" select="com.redpigmall.dao.IntegralLogMapper.getOperateUserByUserId"/>
+		<collection property="user_evaluate" column="id" select="com.redpigmall.dao.EvaluateMapper.getEvaluateUserByUserId"/>
+		<collection property="rls" column="id" select="com.redpigmall.dao.RefundLogMapper.getRefundUserByUserId"/>
+		<collection property="integralorders" column="id" select="com.redpigmall.dao.IntegralGoodsOrderMapper.getIgoUserByUserId"/>
+		<collection property="grouplifegoods" column="id" select="com.redpigmall.dao.GroupLifeGoodsMapper.getUserByUserId"/>
+		<collection property="couponinfos" column="id" select="com.redpigmall.dao.CouponInfoMapper.getUserByUserId"/>
+		<collection property="paylogs" column="id" select="com.redpigmall.dao.PayoffLogMapper.getSellerByUserId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.User">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="application_seller_login_token" property="application_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="pay_password" property="pay_password" jdbcType="VARCHAR"/>
+		<result column="buy_goods_limit_info" property="buy_goods_limit_info" jdbcType="VARCHAR"/>
+		<result column="day_msg_count" property="day_msg_count" jdbcType="BIGINT"/>
+		<result column="validateCode" property="validateCode" jdbcType="VARCHAR"/>
+		<result column="weixin_unionID" property="weixin_unionID" jdbcType="VARCHAR"/>
+		<result column="integral_signDate" property="integral_signDate" jdbcType="TIMESTAMP"/>
+		<result column="seller_application_loginTime" property="seller_application_loginTime" jdbcType="TIMESTAMP"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<result column="nickName" property="nickName" jdbcType="VARCHAR"/>
+		<result column="trueName" property="trueName" jdbcType="VARCHAR"/>
+		<result column="password" property="password" jdbcType="VARCHAR"/>
+		<result column="userRole" property="userRole" jdbcType="VARCHAR"/>
+		<result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+		<result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+		<result column="QQ" property="QQ" jdbcType="VARCHAR"/>
+		<result column="WW" property="WW" jdbcType="VARCHAR"/>
+		<result column="month_income" property="month_income" jdbcType="INTEGER"/>
+		<result column="years" property="years" jdbcType="INTEGER"/>
+		<result column="MSN" property="MSN" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="sex" property="sex" jdbcType="INTEGER"/>
+		<result column="email" property="email" jdbcType="VARCHAR"/>
+		<result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+		<result column="card" property="card" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="lastLoginDate" property="lastLoginDate" jdbcType="TIMESTAMP"/>
+		<result column="loginDate" property="loginDate" jdbcType="TIMESTAMP"/>
+		<result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR"/>
+		<result column="loginIp" property="loginIp" jdbcType="VARCHAR"/>
+		<result column="loginCount" property="loginCount" jdbcType="INTEGER"/>
+		<result column="report" property="report" jdbcType="INTEGER"/>
+		<result column="availableBalance" property="availableBalance" jdbcType="DECIMAL"/>
+		<result column="freezeBlance" property="freezeBlance" jdbcType="DECIMAL"/>
+		<result column="integral" property="integral" jdbcType="INTEGER"/>
+		<result column="gold" property="gold" jdbcType="INTEGER"/>
+		<result column="qq_openid" property="qq_openid" jdbcType="VARCHAR"/>
+		<result column="sina_openid" property="sina_openid" jdbcType="VARCHAR"/>
+		<result column="user_type" property="user_type" jdbcType="INTEGER"/>
+		<result column="contact_user" property="contact_user" jdbcType="VARCHAR"/>
+		<result column="department" property="department" jdbcType="VARCHAR"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="company_address" property="company_address" jdbcType="VARCHAR"/>
+		<result column="company_purpose" property="company_purpose" jdbcType="VARCHAR"/>
+		<result column="company_url" property="company_url" jdbcType="VARCHAR"/>
+		<result column="company_person_num" property="company_person_num" jdbcType="VARCHAR"/>
+		<result column="company_trade" property="company_trade" jdbcType="VARCHAR"/>
+		<result column="company_nature" property="company_nature" jdbcType="VARCHAR"/>
+		<result column="store_apply_step" property="store_apply_step" jdbcType="INTEGER"/>
+		<result column="user_goods_fee" property="user_goods_fee" jdbcType="DECIMAL"/>
+		<result column="staple_gc" property="staple_gc" jdbcType="VARCHAR"/>
+		<result column="app_login_token" property="app_login_token" jdbcType="VARCHAR"/>
+		<result column="app_seller_login_token" property="app_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="user_form" property="user_form" jdbcType="VARCHAR"/>
+		<result column="mobile_pay_password" property="mobile_pay_password" jdbcType="VARCHAR"/>
+		<result column="invoice" property="invoice" jdbcType="VARCHAR"/>
+		<result column="invoiceType" property="invoiceType" jdbcType="INTEGER"/>
+		<result column="delivery_id" property="delivery_id" jdbcType="BIGINT"/>
+		<result column="whether_attention" property="whether_attention" jdbcType="INTEGER"/>
+		<result column="circle_create_info" property="circle_create_info" jdbcType="VARCHAR"/>
+		<result column="circle_attention_info" property="circle_attention_info" jdbcType="VARCHAR"/>
+		<result column="openId" property="openId" jdbcType="VARCHAR"/>
+		<result column="userMark" property="userMark" jdbcType="VARCHAR"/>
+		<result column="user_version" property="user_version" jdbcType="INTEGER"/>
+		<result column="user_tags" property="user_tags" jdbcType="VARCHAR"/>
+		<result column="direct_selling_qr_path" property="direct_selling_qr_path" jdbcType="VARCHAR"/>
+		
+	</resultMap>
+	<resultMap id="BaseResultMap3" type="com.redpigmall.domain.User">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="application_seller_login_token" property="application_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="pay_password" property="pay_password" jdbcType="VARCHAR"/>
+		<result column="buy_goods_limit_info" property="buy_goods_limit_info" jdbcType="VARCHAR"/>
+		<result column="day_msg_count" property="day_msg_count" jdbcType="BIGINT"/>
+		<result column="validateCode" property="validateCode" jdbcType="VARCHAR"/>
+		<result column="weixin_unionID" property="weixin_unionID" jdbcType="VARCHAR"/>
+		<result column="integral_signDate" property="integral_signDate" jdbcType="TIMESTAMP"/>
+		<result column="seller_application_loginTime" property="seller_application_loginTime" jdbcType="TIMESTAMP"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<result column="nickName" property="nickName" jdbcType="VARCHAR"/>
+		<result column="trueName" property="trueName" jdbcType="VARCHAR"/>
+		<result column="password" property="password" jdbcType="VARCHAR"/>
+		<result column="userRole" property="userRole" jdbcType="VARCHAR"/>
+		<result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+		<result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+		<result column="QQ" property="QQ" jdbcType="VARCHAR"/>
+		<result column="WW" property="WW" jdbcType="VARCHAR"/>
+		<result column="month_income" property="month_income" jdbcType="INTEGER"/>
+		<result column="years" property="years" jdbcType="INTEGER"/>
+		<result column="MSN" property="MSN" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="sex" property="sex" jdbcType="INTEGER"/>
+		<result column="email" property="email" jdbcType="VARCHAR"/>
+		<result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+		<result column="card" property="card" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="lastLoginDate" property="lastLoginDate" jdbcType="TIMESTAMP"/>
+		<result column="loginDate" property="loginDate" jdbcType="TIMESTAMP"/>
+		<result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR"/>
+		<result column="loginIp" property="loginIp" jdbcType="VARCHAR"/>
+		<result column="loginCount" property="loginCount" jdbcType="INTEGER"/>
+		<result column="report" property="report" jdbcType="INTEGER"/>
+		<result column="availableBalance" property="availableBalance" jdbcType="DECIMAL"/>
+		<result column="freezeBlance" property="freezeBlance" jdbcType="DECIMAL"/>
+		<result column="integral" property="integral" jdbcType="INTEGER"/>
+		<result column="gold" property="gold" jdbcType="INTEGER"/>
+		<result column="qq_openid" property="qq_openid" jdbcType="VARCHAR"/>
+		<result column="sina_openid" property="sina_openid" jdbcType="VARCHAR"/>
+		<result column="user_type" property="user_type" jdbcType="INTEGER"/>
+		<result column="contact_user" property="contact_user" jdbcType="VARCHAR"/>
+		<result column="department" property="department" jdbcType="VARCHAR"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="company_address" property="company_address" jdbcType="VARCHAR"/>
+		<result column="company_purpose" property="company_purpose" jdbcType="VARCHAR"/>
+		<result column="company_url" property="company_url" jdbcType="VARCHAR"/>
+		<result column="company_person_num" property="company_person_num" jdbcType="VARCHAR"/>
+		<result column="company_trade" property="company_trade" jdbcType="VARCHAR"/>
+		<result column="company_nature" property="company_nature" jdbcType="VARCHAR"/>
+		<result column="store_apply_step" property="store_apply_step" jdbcType="INTEGER"/>
+		<result column="user_goods_fee" property="user_goods_fee" jdbcType="DECIMAL"/>
+		<result column="staple_gc" property="staple_gc" jdbcType="VARCHAR"/>
+		<result column="app_login_token" property="app_login_token" jdbcType="VARCHAR"/>
+		<result column="app_seller_login_token" property="app_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="user_form" property="user_form" jdbcType="VARCHAR"/>
+		<result column="mobile_pay_password" property="mobile_pay_password" jdbcType="VARCHAR"/>
+		<result column="invoice" property="invoice" jdbcType="VARCHAR"/>
+		<result column="invoiceType" property="invoiceType" jdbcType="INTEGER"/>
+		<result column="delivery_id" property="delivery_id" jdbcType="BIGINT"/>
+		<result column="whether_attention" property="whether_attention" jdbcType="INTEGER"/>
+		<result column="circle_create_info" property="circle_create_info" jdbcType="VARCHAR"/>
+		<result column="circle_attention_info" property="circle_attention_info" jdbcType="VARCHAR"/>
+		<result column="openId" property="openId" jdbcType="VARCHAR"/>
+		<result column="userMark" property="userMark" jdbcType="VARCHAR"/>
+		<result column="user_version" property="user_version" jdbcType="INTEGER"/>
+		<result column="user_tags" property="user_tags" jdbcType="VARCHAR"/>
+		<result column="direct_selling_qr_path" property="direct_selling_qr_path" jdbcType="VARCHAR"/>
+		
+		<association property="photo" column="photo_id" fetchType="lazy" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="area" column="area_id" fetchType="lazy" select="com.redpigmall.dao.AreaMapper.selectByPrimaryKey"/>
+		<association property="config" column="id" fetchType="lazy" select="com.redpigmall.dao.UserConfigMapper.getUserByUserId"/>
+		<association property="store" column="store_id" fetchType="lazy" select="com.redpigmall.dao.StoreMapper.selectByPrimaryKey"/>
+		<association property="parent" column="parent_id" fetchType="lazy" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="directSellingParent" column="directSellingParent_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="admin_sp" column="id" fetchType="lazy" select="com.redpigmall.dao.StorePointMapper.getUserByUserId"/>
+		<association property="ftp" column="ftp_id" fetchType="lazy" select="com.redpigmall.dao.FTPServerMapper.selectByPrimaryKey"/>
+		<collection property="roles" column="id" fetchType="lazy" select="com.redpigmall.dao.RoleMapper.getRolesByUserId"/>
+		<collection property="files" column="id" fetchType="lazy" select="com.redpigmall.dao.AccessoryMapper.getUserByUserId"/>
+		<collection property="goodscarts" column="id" fetchType="lazy" select="com.redpigmall.dao.GoodsCartMapper.getUserByUserId"/>
+		<collection property="childs" column="id" fetchType="lazy" select="com.redpigmall.dao.UserMapper.getParentByUserId"/>
+		<collection property="directSellingChilds" column="id" select="com.redpigmall.dao.UserMapper.getDirectSellingChildsByUserId"/>
+		<collection property="posits" column="id" fetchType="lazy" select="com.redpigmall.dao.PredepositMapper.getPdUserByUserId"/>
+		<collection property="user_predepositlogs" fetchType="lazy" column="id" select="com.redpigmall.dao.PredepositLogMapper.getPdLogUserByUserId"/>
+		<collection property="admin_predepositlogs" fetchType="lazy" column="id" select="com.redpigmall.dao.PredepositLogMapper.getPdLogAdminByUserId"/>
+		<collection property="addrs" column="id" fetchType="lazy" select="com.redpigmall.dao.AddressMapper.getUserByUserId"/>
+		<collection property="albums" column="id" fetchType="lazy" select="com.redpigmall.dao.AlbumMapper.getUserByUserId"/>
+		<collection property="from_msgs" column="id" fetchType="lazy" select="com.redpigmall.dao.MessageMapper.getFromUserByUserId"/>
+		<collection property="to_msgs" column="id" fetchType="lazy" select="com.redpigmall.dao.MessageMapper.getToUserByUserId"/>
+		<collection property="gold_record" column="id" fetchType="lazy" select="com.redpigmall.dao.GoldRecordMapper.getGoldUserByUserId"/>
+		<collection property="gold_record_admin" column="id" fetchType="lazy" select="com.redpigmall.dao.GoldRecordMapper.getGoldAdminByUserId"/>
+		<collection property="integral_logs" column="id" fetchType="lazy" select="com.redpigmall.dao.IntegralLogMapper.getIntegralUserByUserId"/>
+		<collection property="integral_admin_logs" column="id" fetchType="lazy" select="com.redpigmall.dao.IntegralLogMapper.getOperateUserByUserId"/>
+		<collection property="user_evaluate" column="id" fetchType="lazy" select="com.redpigmall.dao.EvaluateMapper.getEvaluateUserByUserId"/>
+		<collection property="rls" column="id" fetchType="lazy" select="com.redpigmall.dao.RefundLogMapper.getRefundUserByUserId"/>
+		<collection property="integralorders" column="id" fetchType="lazy" select="com.redpigmall.dao.IntegralGoodsOrderMapper.getIgoUserByUserId"/>
+		<collection property="grouplifegoods" column="id" fetchType="lazy" select="com.redpigmall.dao.GroupLifeGoodsMapper.getUserByUserId"/>
+		<collection property="couponinfos" column="id" fetchType="lazy" select="com.redpigmall.dao.CouponInfoMapper.getUserByUserId"/>
+		<collection property="paylogs" column="id" fetchType="lazy" select="com.redpigmall.dao.PayoffLogMapper.getSellerByUserId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap4" type="com.redpigmall.domain.User">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="application_seller_login_token" property="application_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="pay_password" property="pay_password" jdbcType="VARCHAR"/>
+		<result column="buy_goods_limit_info" property="buy_goods_limit_info" jdbcType="VARCHAR"/>
+		<result column="day_msg_count" property="day_msg_count" jdbcType="BIGINT"/>
+		<result column="validateCode" property="validateCode" jdbcType="VARCHAR"/>
+		<result column="weixin_unionID" property="weixin_unionID" jdbcType="VARCHAR"/>
+		<result column="integral_signDate" property="integral_signDate" jdbcType="TIMESTAMP"/>
+		<result column="seller_application_loginTime" property="seller_application_loginTime" jdbcType="TIMESTAMP"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<result column="nickName" property="nickName" jdbcType="VARCHAR"/>
+		<result column="trueName" property="trueName" jdbcType="VARCHAR"/>
+		<result column="password" property="password" jdbcType="VARCHAR"/>
+		<result column="userRole" property="userRole" jdbcType="VARCHAR"/>
+		<result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+		<result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+		<result column="QQ" property="QQ" jdbcType="VARCHAR"/>
+		<result column="WW" property="WW" jdbcType="VARCHAR"/>
+		<result column="month_income" property="month_income" jdbcType="INTEGER"/>
+		<result column="years" property="years" jdbcType="INTEGER"/>
+		<result column="MSN" property="MSN" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="sex" property="sex" jdbcType="INTEGER"/>
+		<result column="email" property="email" jdbcType="VARCHAR"/>
+		<result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+		<result column="card" property="card" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="lastLoginDate" property="lastLoginDate" jdbcType="TIMESTAMP"/>
+		<result column="loginDate" property="loginDate" jdbcType="TIMESTAMP"/>
+		<result column="lastLoginIp" property="lastLoginIp" jdbcType="VARCHAR"/>
+		<result column="loginIp" property="loginIp" jdbcType="VARCHAR"/>
+		<result column="loginCount" property="loginCount" jdbcType="INTEGER"/>
+		<result column="report" property="report" jdbcType="INTEGER"/>
+		<result column="availableBalance" property="availableBalance" jdbcType="DECIMAL"/>
+		<result column="freezeBlance" property="freezeBlance" jdbcType="DECIMAL"/>
+		<result column="integral" property="integral" jdbcType="INTEGER"/>
+		<result column="gold" property="gold" jdbcType="INTEGER"/>
+		<result column="qq_openid" property="qq_openid" jdbcType="VARCHAR"/>
+		<result column="sina_openid" property="sina_openid" jdbcType="VARCHAR"/>
+		<result column="user_type" property="user_type" jdbcType="INTEGER"/>
+		<result column="contact_user" property="contact_user" jdbcType="VARCHAR"/>
+		<result column="department" property="department" jdbcType="VARCHAR"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="company_address" property="company_address" jdbcType="VARCHAR"/>
+		<result column="company_purpose" property="company_purpose" jdbcType="VARCHAR"/>
+		<result column="company_url" property="company_url" jdbcType="VARCHAR"/>
+		<result column="company_person_num" property="company_person_num" jdbcType="VARCHAR"/>
+		<result column="company_trade" property="company_trade" jdbcType="VARCHAR"/>
+		<result column="company_nature" property="company_nature" jdbcType="VARCHAR"/>
+		<result column="store_apply_step" property="store_apply_step" jdbcType="INTEGER"/>
+		<result column="user_goods_fee" property="user_goods_fee" jdbcType="DECIMAL"/>
+		<result column="staple_gc" property="staple_gc" jdbcType="VARCHAR"/>
+		<result column="app_login_token" property="app_login_token" jdbcType="VARCHAR"/>
+		<result column="app_seller_login_token" property="app_seller_login_token" jdbcType="VARCHAR"/>
+		<result column="user_form" property="user_form" jdbcType="VARCHAR"/>
+		<result column="mobile_pay_password" property="mobile_pay_password" jdbcType="VARCHAR"/>
+		<result column="invoice" property="invoice" jdbcType="VARCHAR"/>
+		<result column="invoiceType" property="invoiceType" jdbcType="INTEGER"/>
+		<result column="delivery_id" property="delivery_id" jdbcType="BIGINT"/>
+		<result column="whether_attention" property="whether_attention" jdbcType="INTEGER"/>
+		<result column="circle_create_info" property="circle_create_info" jdbcType="VARCHAR"/>
+		<result column="circle_attention_info" property="circle_attention_info" jdbcType="VARCHAR"/>
+		<result column="openId" property="openId" jdbcType="VARCHAR"/>
+		<result column="userMark" property="userMark" jdbcType="VARCHAR"/>
+		<result column="user_version" property="user_version" jdbcType="INTEGER"/>
+		<result column="user_tags" property="user_tags" jdbcType="VARCHAR"/>
+		<result column="direct_selling_qr_path" property="direct_selling_qr_path" jdbcType="VARCHAR"/>
+		
+		<association property="photo" column="photo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="area" column="area_id" select="com.redpigmall.dao.AreaMapper.selectByPrimaryKey"/>
+		<association property="config" column="id" select="com.redpigmall.dao.UserConfigMapper.getUserByUserId" />
+		<association property="store" column="store_id" select="com.redpigmall.dao.StoreMapper.selectByPrimaryKey"  fetchType="eager"/>
+		<association property="parent" column="parent_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="directSellingParent" column="directSellingParent_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="admin_sp" column="id" select="com.redpigmall.dao.StorePointMapper.getUserByUserId"/>
+		<association property="ftp" column="ftp_id" select="com.redpigmall.dao.FTPServerMapper.selectByPrimaryKey"/>
+		<collection property="roles" column="id" select="com.redpigmall.dao.RoleMapper.getRolesByUserId"/>
+		<collection property="menus" column="id" select="com.redpigmall.dao.MenuMapper.getMenusByUserId"/>
+		<collection property="files" column="id" select="com.redpigmall.dao.AccessoryMapper.getAccessoryByUserId"/>
+		<collection property="goodscarts" column="id" select="com.redpigmall.dao.GoodsCartMapper.getUserByUserId"/>
+		<collection property="childs" column="id" select="com.redpigmall.dao.UserMapper.getParentByUserId"/>
+		<collection property="directSellingChilds" column="id" select="com.redpigmall.dao.UserMapper.getDirectSellingChildsByUserId"/>
+		<collection property="posits" column="id" select="com.redpigmall.dao.PredepositMapper.getPdUserByUserId"/>
+		<collection property="user_predepositlogs" column="id" select="com.redpigmall.dao.PredepositLogMapper.getPdLogUserByUserId"/>
+		<collection property="admin_predepositlogs" column="id" select="com.redpigmall.dao.PredepositLogMapper.getPdLogAdminByUserId"/>
+		<collection property="addrs" column="id" select="com.redpigmall.dao.AddressMapper.getUserByUserId"/>
+		<collection property="albums" column="id" select="com.redpigmall.dao.AlbumMapper.getUserByUserId"/>
+		<collection property="from_msgs" column="id" select="com.redpigmall.dao.MessageMapper.getFromUserByUserId"/>
+		<collection property="to_msgs" column="id" select="com.redpigmall.dao.MessageMapper.getToUserByUserId"/>
+		<collection property="gold_record" column="id" select="com.redpigmall.dao.GoldRecordMapper.getGoldUserByUserId"/>
+		<collection property="gold_record_admin" column="id" select="com.redpigmall.dao.GoldRecordMapper.getGoldAdminByUserId"/>
+		<collection property="integral_logs" column="id" select="com.redpigmall.dao.IntegralLogMapper.getIntegralUserByUserId"/>
+		<collection property="integral_admin_logs" column="id" select="com.redpigmall.dao.IntegralLogMapper.getOperateUserByUserId"/>
+		<collection property="user_evaluate" column="id" select="com.redpigmall.dao.EvaluateMapper.getEvaluateUserByUserId"/>
+		<collection property="rls" column="id" select="com.redpigmall.dao.RefundLogMapper.getRefundUserByUserId"/>
+		<collection property="integralorders" column="id" select="com.redpigmall.dao.IntegralGoodsOrderMapper.getIgoUserByUserId"/>
+		<collection property="grouplifegoods" column="id" select="com.redpigmall.dao.GroupLifeGoodsMapper.getUserByUserId"/>
+		<collection property="couponinfos" column="id" select="com.redpigmall.dao.CouponInfoMapper.getUserByUserId"/>
+		<collection property="paylogs" column="id" select="com.redpigmall.dao.PayoffLogMapper.getSellerByUserId"/>
+	</resultMap>
+	
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,application_seller_login_token,pay_password,buy_goods_limit_info,day_msg_count,validateCode,weixin_unionID,integral_signDate,seller_application_loginTime,userName,nickName,trueName,password,userRole,birthday,telephone,QQ,WW,month_income,years,MSN,address,sex,email,mobile,card,photo_id,area_id,status,lastLoginDate,loginDate,lastLoginIp,loginIp,loginCount,report,availableBalance,freezeBlance,integral,gold,store_id,parent_id,directSellingParent_id,qq_openid,sina_openid,user_type,contact_user,department,company_name,company_address,company_purpose,company_url,company_person_num,company_trade,company_nature,store_apply_step,user_goods_fee,staple_gc,app_login_token,app_seller_login_token,user_form,mobile_pay_password,invoice,invoiceType,delivery_id,whether_attention,circle_create_info,circle_attention_info,openId,userMark,ftp_id,user_version,user_tags,direct_selling_qr_path
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="id_no != null">and id != #{id_no,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="application_seller_login_token != null">and application_seller_login_token = #{application_seller_login_token,jdbcType=VARCHAR}</if>
+		<if test="pay_password != null">and pay_password = #{pay_password,jdbcType=VARCHAR}</if>
+		<if test="buy_goods_limit_info != null">and buy_goods_limit_info = #{buy_goods_limit_info,jdbcType=VARCHAR}</if>
+		<if test="day_msg_count != null">and day_msg_count = #{day_msg_count,jdbcType=BIGINT}</if>
+		
+		<if test="day_msg_count_no != null">and day_msg_count != #{day_msg_count_no,jdbcType=BIGINT}</if>
+		
+		<if test="validateCode != null">and validateCode = #{validateCode,jdbcType=VARCHAR}</if>
+		<if test="weixin_unionID != null">and weixin_unionID = #{weixin_unionID,jdbcType=VARCHAR}</if>
+		<if test="integral_signDate != null">and integral_signDate = #{integral_signDate,jdbcType=TIMESTAMP}</if>
+		<if test="seller_application_loginTime != null">and seller_application_loginTime = #{seller_application_loginTime,jdbcType=TIMESTAMP}</if>
+		<if test="userName != null">and userName = #{userName,jdbcType=VARCHAR}</if>
+		
+		<if test="userName_no != null">and userName != #{userName_no,jdbcType=VARCHAR}</if>
+		
+		<if test="redPigUserName != null">and userName like CONCAT('%',#{redPigUserName},'%')  </if>
+		<if test="nickName != null">and nickName = #{nickName,jdbcType=VARCHAR}</if>
+		<if test="trueName != null">and trueName = #{trueName,jdbcType=VARCHAR}</if>
+		<if test="password != null">and password = #{password,jdbcType=VARCHAR}</if>
+		
+		<if test="userName_email_mobile != null">
+			and (userName = #{userName_email_mobile,jdbcType=VARCHAR} 
+			or password = #{userName_email_mobile,jdbcType=VARCHAR} 
+			or mobile = #{userName_email_mobile,jdbcType=VARCHAR} 
+			)
+		</if>
+		
+		<if test="userName_email_mobile2 != null">
+			and (userName = #{userName_email_mobile2,jdbcType=VARCHAR} 
+			or email = #{userName_email_mobile2,jdbcType=VARCHAR} 
+			or mobile = #{userName_email_mobile2,jdbcType=VARCHAR} 
+			)
+		</if>
+		
+		<if test="userRole != null">and userRole = #{userRole,jdbcType=VARCHAR}</if>
+		
+		<if test="redPigUserRole1 !=null and redPigUserRole2 !=null ">
+			and (obj.userRole=#{redPigUserRole1} or obj.userRole=#{redPigUserRole2})
+		</if>
+		
+		<if test="ruserRole1 !=null and ruserRole2 !=null and ruserRole3 !=null ">
+			and (obj.userRole=#{ruserRole1} or obj.userRole=#{ruserRole2} or obj.userRole=#{ruserRole3})
+		</if>
+		
+		<if test="birthday != null">and birthday = #{birthday,jdbcType=TIMESTAMP}</if>
+		<if test="telephone != null">and telephone = #{telephone,jdbcType=VARCHAR}</if>
+		<if test="QQ != null">and QQ = #{QQ,jdbcType=VARCHAR}</if>
+		<if test="WW != null">and WW = #{WW,jdbcType=VARCHAR}</if>
+		<if test="month_income != null">and month_income = #{month_income,jdbcType=INTEGER}</if>
+		<if test="years != null">and years = #{years,jdbcType=INTEGER}</if>
+		<if test="MSN != null">and MSN = #{MSN,jdbcType=VARCHAR}</if>
+		<if test="address != null">and address = #{address,jdbcType=VARCHAR}</if>
+		<if test="sex != null">and sex = #{sex,jdbcType=INTEGER}</if>
+		<if test="email != null">and email = #{email,jdbcType=VARCHAR}</if>
+		<if test="mobile != null">and mobile = #{mobile,jdbcType=VARCHAR}</if>
+		<if test="card != null">and card = #{card,jdbcType=VARCHAR}</if>
+		<if test="status != null">and status = #{status,jdbcType=INTEGER}</if>
+		<if test="status_no != null">and status != #{status_no,jdbcType=INTEGER}</if>
+		<if test="lastLoginDate != null">and lastLoginDate = #{lastLoginDate,jdbcType=TIMESTAMP}</if>
+		<if test="lastLoginDate_more_than_equal != null">and lastLoginDate <![CDATA[ >= ]]> #{lastLoginDate_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="lastLoginDate_less_than_equal != null">and lastLoginDate <![CDATA[ <= ]]> #{lastLoginDate_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="loginDate != null">and loginDate = #{loginDate,jdbcType=TIMESTAMP}</if>
+		<if test="loginDate_more_than_equal != null">and loginDate <![CDATA[ >= ]]> #{loginDate_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="loginDate_less_than_equal != null">and loginDate <![CDATA[ <= ]]> #{loginDate_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="lastLoginIp != null">and lastLoginIp = #{lastLoginIp,jdbcType=VARCHAR}</if>
+		<if test="loginIp != null">and loginIp = #{loginIp,jdbcType=VARCHAR}</if>
+		<if test="loginCount != null">and loginCount = #{loginCount,jdbcType=INTEGER}</if>
+		<if test="report != null">and report = #{report,jdbcType=INTEGER}</if>
+		<if test="availableBalance != null">and availableBalance = #{availableBalance,jdbcType=DECIMAL}</if>
+		<if test="freezeBlance != null">and freezeBlance = #{freezeBlance,jdbcType=DECIMAL}</if>
+		<if test="integral != null">and integral = #{integral,jdbcType=INTEGER}</if>
+		<if test="gold != null">and gold = #{gold,jdbcType=INTEGER}</if>
+		<if test="qq_openid != null">and qq_openid = #{qq_openid,jdbcType=VARCHAR}</if>
+		<if test="sina_openid != null">and sina_openid = #{sina_openid,jdbcType=VARCHAR}</if>
+		<if test="user_type != null">and user_type = #{user_type,jdbcType=INTEGER}</if>
+		<if test="contact_user != null">and contact_user = #{contact_user,jdbcType=VARCHAR}</if>
+		<if test="department != null">and department = #{department,jdbcType=VARCHAR}</if>
+		<if test="company_name != null">and company_name = #{company_name,jdbcType=VARCHAR}</if>
+		<if test="company_address != null">and company_address = #{company_address,jdbcType=VARCHAR}</if>
+		<if test="company_purpose != null">and company_purpose = #{company_purpose,jdbcType=VARCHAR}</if>
+		<if test="company_url != null">and company_url = #{company_url,jdbcType=VARCHAR}</if>
+		<if test="company_person_num != null">and company_person_num = #{company_person_num,jdbcType=VARCHAR}</if>
+		<if test="company_trade != null">and company_trade = #{company_trade,jdbcType=VARCHAR}</if>
+		<if test="company_nature != null">and company_nature = #{company_nature,jdbcType=VARCHAR}</if>
+		<if test="store_apply_step != null">and store_apply_step = #{store_apply_step,jdbcType=INTEGER}</if>
+		<if test="user_goods_fee != null">and user_goods_fee = #{user_goods_fee,jdbcType=DECIMAL}</if>
+		<if test="staple_gc != null">and staple_gc = #{staple_gc,jdbcType=VARCHAR}</if>
+		<if test="app_login_token != null">and app_login_token = #{app_login_token,jdbcType=VARCHAR}</if>
+		<if test="app_seller_login_token != null">and app_seller_login_token = #{app_seller_login_token,jdbcType=VARCHAR}</if>
+		<if test="user_form != null">and user_form = #{user_form,jdbcType=VARCHAR}</if>
+		<if test="mobile_pay_password != null">and mobile_pay_password = #{mobile_pay_password,jdbcType=VARCHAR}</if>
+		<if test="invoice != null">and invoice = #{invoice,jdbcType=VARCHAR}</if>
+		<if test="invoiceType != null">and invoiceType = #{invoiceType,jdbcType=INTEGER}</if>
+		<if test="delivery_id != null">and delivery_id = #{delivery_id,jdbcType=BIGINT}</if>
+		<if test="whether_attention != null">and whether_attention = #{whether_attention,jdbcType=INTEGER}</if>
+		<if test="circle_create_info != null">and circle_create_info = #{circle_create_info,jdbcType=VARCHAR}</if>
+		<if test="circle_attention_info != null">and circle_attention_info = #{circle_attention_info,jdbcType=VARCHAR}</if>
+		<if test="openId != null">and openId = #{openId,jdbcType=VARCHAR}</if>
+		<if test="userMark != null">and userMark = #{userMark,jdbcType=VARCHAR}</if>
+		<if test="user_version != null">and user_version = #{user_version,jdbcType=INTEGER}</if>
+		<if test="user_tags != null">and user_tags = #{user_tags,jdbcType=VARCHAR}</if>
+		<if test="direct_selling_qr_path != null">and direct_selling_qr_path = #{direct_selling_qr_path,jdbcType=VARCHAR}</if>
+		
+		<if test="redpig_no_userRole !=null">and userRole!=#{redpig_no_userRole,jdbcType=VARCHAR}</if>
+		<if test="redpig_like_userName!=null">and userName like CONCAT('%',#{redpig_like_userName},'%')</if>
+		<if test="parent !=null and parent==-1">and parent_id is null</if>
+		<if test="directSellingParent !=null and directSellingParent==-1">and directSellingParent_id is null</if>
+		
+		<if test="redpig_cash_user_id!=null">and cash_user_id=#{redpig_cash_user_id,jdbcType=BIGINT}</if>
+		<if test="redpig_igo_user_id!=null">and igo_user_id=#{redpig_igo_user_id,jdbcType=BIGINT}</if>
+		<if test="redpig_integral_user_id!=null">and integral_user_id=#{redpig_integral_user_id,jdbcType=BIGINT}</if>
+		<if test="redpig_gl_user_id!=null">and gl_user_id=#{redpig_gl_user_id,jdbcType=BIGINT}</if>
+		<if test="redpig_userRole!=null">and userRole!=#{redpig_userRole,jdbcType=VARCHAR}</if>
+		<if test="redpig_store_id==-1">and store_id is null</if>
+		<if test="store_id ==-1">and store_id is not null</if>
+		<if test="photo_id != null">and photo_id = #{photo_id,jdbcType=BIGINT}</if>
+		<if test="area_id != null">and area_id = #{area_id,jdbcType=BIGINT}</if>
+		<if test="ftp_id != null">and ftp_id = #{ftp_id,jdbcType=BIGINT}</if>
+		<if test="id_not_in_chatting_user == -1">
+			and obj.id not in ( select chatting_user_id from redpigmall_chatting_user )
+		</if>
+		<if test="parent_id != null">and parent_id=#{parent_id,jdbcType=BIGINT}</if>
+		<if test="directSellingParent_id != null">and directSellingParent_id=#{directSellingParent_id,jdbcType=BIGINT}</if>
+		
+		
+	</sql>
+	<sql id="ifStatement">
+		deleteStatus=#{deleteStatus},
+		application_seller_login_token= #{application_seller_login_token},
+		pay_password= #{pay_password},
+		buy_goods_limit_info= #{buy_goods_limit_info},
+		day_msg_count= #{day_msg_count},
+		validateCode= #{validateCode},
+		weixin_unionID= #{weixin_unionID},
+		integral_signDate= #{integral_signDate},
+		seller_application_loginTime= #{seller_application_loginTime},
+		userName= #{userName},
+		nickName= #{nickName},
+		trueName= #{trueName},
+		password= #{password},
+		userRole= #{userRole},
+		birthday= #{birthday},
+		telephone= #{telephone},
+		QQ= #{QQ},
+		WW= #{WW},
+		month_income= #{month_income},
+		years= #{years},
+		MSN= #{MSN},
+		address= #{address},
+		sex= #{sex},
+		email= #{email},
+		mobile= #{mobile},
+		card= #{card},
+		<if test="photo != null and photo.id != null">photo_id = #{photo.id,jdbcType=BIGINT},</if>
+		<if test="photo == null or photo.id == null">photo_id = null,</if>
+		<if test="area != null and area.id != null">area_id = #{area.id,jdbcType=BIGINT},</if>
+		<if test="area == null or area.id == null">area_id = null,</if>
+		status= #{status},
+		lastLoginDate= #{lastLoginDate},
+		loginDate= #{loginDate},
+		lastLoginIp= #{lastLoginIp},
+		loginIp= #{loginIp},
+		loginCount= #{loginCount},
+		report= #{report},
+		availableBalance= #{availableBalance},
+		freezeBlance= #{freezeBlance},
+		integral= #{integral},
+		gold= #{gold},
+		<if test="store != null and store.id != null">store_id = #{store.id,jdbcType=BIGINT},</if>
+		<if test="store == null or store.id == null">store_id = null,</if>
+		<if test="parent == null or parent.id == null">parent_id = null,</if>
+		<if test="parent != null and parent.id != null">parent_id = #{parent.id,jdbcType=BIGINT},</if>
+		
+		<if test="directSellingParent == null or directSellingParent.id == null">directSellingParent_id = null,</if>
+		<if test="directSellingParent != null and directSellingParent.id != null">directSellingParent_id = #{directSellingParent.id,jdbcType=BIGINT},</if>
+		
+		qq_openid= #{qq_openid},
+		sina_openid= #{sina_openid},
+		user_type= #{user_type},
+		contact_user= #{contact_user},
+		department= #{department},
+		company_name= #{company_name},
+		company_address= #{company_address},
+		company_purpose= #{company_purpose},
+		company_url= #{company_url},
+		company_person_num= #{company_person_num},
+		company_trade= #{company_trade},
+		company_nature= #{company_nature},
+		store_apply_step= #{store_apply_step},
+		user_goods_fee= #{user_goods_fee},
+		staple_gc= #{staple_gc},
+		app_login_token= #{app_login_token},
+		app_seller_login_token= #{app_seller_login_token},
+		user_form= #{user_form},
+		mobile_pay_password= #{mobile_pay_password},
+		invoice= #{invoice},
+		invoiceType= #{invoiceType},
+		delivery_id= #{delivery_id},
+		whether_attention= #{whether_attention},
+		circle_create_info= #{circle_create_info},
+		circle_attention_info= #{circle_attention_info},
+		openId= #{openId},
+		userMark= #{userMark},
+		<if test="ftp == null or ftp.id == null">ftp_id = null,</if>
+		<if test="ftp != null and ftp.id != null">ftp_id = #{ftp.id,jdbcType=BIGINT},</if>
+		user_version= #{user_version},
+		user_tags= #{user_tags},
+		direct_selling_qr_path= #{direct_selling_qr_path},
+		
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectByPrimaryKeyEagerStore" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap4" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="map">
+		select obj.* from redpigmall_user obj
+		<if test="redpig_grade_ids!=null and redpig_grade_ids.size() &gt;0">
+			join redpigmall_store store on store.id = obj.store_id
+			join redpigmall_storegrade sg on (sg.id = store.grade_id
+			and sg.id in 
+			<foreach collection="grade_ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+	        )
+		</if> 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="order != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="verityUserNamePasswordStatus" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="map">
+		select obj.* from redpigmall_user obj
+		where 1=1 
+		<if test="password !=null and userName !=null and status !=null">
+			and ( password = #{password} 	and userName = #{userName} and status = #{status} )
+			or  ( password = #{password} 	and mobile = #{userName} and status = #{status})
+			or  ( password = #{password} 	and email = #{userName} and status = #{status})
+		</if>
+		
+	</select>
+	
+	<select id="verityUserNamePassword" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="map">
+		select obj.* from redpigmall_user obj
+		where 1=1 
+		<if test="password !=null and userName !=null">
+			and ( password = #{password} 	and userName = #{userName} )
+			or ( password = #{password} 	and mobile = #{userName} ) 
+			or ( password = #{password} 	and email = #{userName} ) 
+			
+		</if>
+	</select>
+	
+	<select id="verityUserNamePasswordAndRole" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="map">
+		select obj.* from redpigmall_user obj
+		where 1=1 
+		<if test="password !=null and userName !=null and userRole!=null">
+			and ( password = #{password} 	and userName = #{userName} and userRole=#{userRole} )
+			or ( password = #{password} 	and mobile = #{userName} and userRole=#{userRole} ) 
+			or ( password = #{password} 	and email = #{userName} and userRole=#{userRole} )
+		</if>
+	</select>
+	
+	<select id="verityUserNamePasswordEmail" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="map">
+		select obj.* from redpigmall_user obj
+		where 1=1 
+		<if test="password !=null and userName !=null">
+			and (password = #{password} 	and userName = #{userName} )
+			or ( password = #{password} 	and mobile = #{userName} ) 
+			or ( password = #{password} 	and email = #{userName}) 
+			
+		</if>
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from redpigmall_user obj 
+		<if test="redpig_grade_ids!=null and redpig_grade_ids.size() &gt; 0">
+			join redpigmall_store store on store.id = obj.store_id
+			join redpigmall_storegrade sg on (sg.id = store.grade_id
+			and sg.id in 
+			<foreach collection="grade_ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+	        )
+		</if> 
+		<if test="admin_sp_id == -2">
+			join redpigmall_store_point sp on sp.user_id = obj.id and sp.id is not null
+		</if>
+		<where>
+		1=1
+
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="order != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_user obj 
+		<if test="redpig_grade_ids!=null and redpig_grade_ids.size() &gt; 0">
+			join redpigmall_store store on store.id = obj.store_id
+			join redpigmall_storegrade sg on 
+			(sg.id = store.grade_id and sg.id in 
+			<foreach collection="grade_ids" index="index" item="item" open="(" separator="," close=")"> 
+		            #{item}
+		    </foreach>
+	        )
+		</if> 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.User" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_user(
+			addTime,
+			deleteStatus,
+			application_seller_login_token,
+			pay_password,
+			buy_goods_limit_info,
+			day_msg_count,
+			validateCode,
+			weixin_unionID,
+			integral_signDate,
+			seller_application_loginTime,
+			userName,nickName,
+			trueName,
+			password,
+			userRole,
+			birthday,
+			telephone,
+			QQ,
+			WW,
+			month_income,
+			years,
+			MSN,
+			address,
+			sex,
+			email,
+			mobile,
+			card,
+			photo_id,
+			area_id,
+			status,
+			lastLoginDate,
+			loginDate,
+			lastLoginIp,
+			loginIp,
+			loginCount,
+			report,
+			availableBalance,
+			freezeBlance,
+			integral,
+			gold,
+			store_id,
+			parent_id,
+			directSellingParent_id,
+			qq_openid,
+			sina_openid,
+			user_type,
+			contact_user,
+			department,
+			company_name,
+			company_address,
+			company_purpose,
+			company_url,
+			company_person_num,
+			company_trade,
+			company_nature,
+			store_apply_step,
+			user_goods_fee,
+			staple_gc,
+			app_login_token,
+			app_seller_login_token,
+			user_form,
+			mobile_pay_password,
+			invoice,
+			invoiceType,
+			delivery_id,
+			whether_attention,
+			circle_create_info,
+			circle_attention_info,
+			openId,userMark,
+			ftp_id,
+			user_version,
+			user_tags,
+			direct_selling_qr_path
+		)
+		values(
+			#{addTime},
+			#{deleteStatus},
+			#{application_seller_login_token},
+			#{pay_password},
+			#{buy_goods_limit_info},
+			#{day_msg_count},
+			#{validateCode},
+			#{weixin_unionID},
+			#{integral_signDate},
+			#{seller_application_loginTime},
+			#{userName},
+			#{nickName},
+			#{trueName},
+			#{password},
+			#{userRole},
+			#{birthday},
+			#{telephone},
+			#{QQ},
+			#{WW},
+			#{month_income},
+			#{years},
+			#{MSN},
+			#{address},
+			#{sex},
+			#{email},
+			#{mobile},
+			#{card},
+			#{photo.id},
+			#{area.id},
+			#{status},
+			#{lastLoginDate},
+			#{loginDate},
+			#{lastLoginIp},
+			#{loginIp},
+			#{loginCount},
+			#{report},
+			#{availableBalance},
+			#{freezeBlance},
+			#{integral},
+			#{gold},
+			#{store.id},
+			#{parent.id},
+			#{directSellingParent.id},
+			#{qq_openid},
+			#{sina_openid},
+			#{user_type},
+			#{contact_user},
+			#{department},
+			#{company_name},
+			#{company_address},
+			#{company_purpose},
+			#{company_url},
+			#{company_person_num},
+			#{company_trade},
+			#{company_nature},
+			#{store_apply_step},
+			#{user_goods_fee},
+			#{staple_gc},
+			#{app_login_token},
+			#{app_seller_login_token},
+			#{user_form},
+			#{mobile_pay_password},
+			#{invoice},
+			#{invoiceType},
+			#{delivery_id},
+			#{whether_attention},
+			#{circle_create_info},
+			#{circle_attention_info},
+			#{openId},#{userMark},
+			#{ftp.id},
+			#{user_version},
+			#{user_tags},
+			#{direct_selling_qr_path}
+			
+		)
+	</insert>
+	
+	<insert id="save" parameterType="com.redpigmall.domain.User" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_user(
+			addTime,
+			deleteStatus,
+			application_seller_login_token,
+			pay_password,
+			buy_goods_limit_info,
+			day_msg_count,
+			validateCode,
+			weixin_unionID,
+			integral_signDate,
+			seller_application_loginTime,
+			userName,nickName,
+			trueName,
+			password,
+			userRole,
+			birthday,
+			telephone,
+			QQ,
+			WW,
+			month_income,
+			years,
+			MSN,
+			address,
+			sex,
+			email,
+			mobile,
+			card,
+			photo_id,
+			area_id,
+			status,
+			lastLoginDate,
+			loginDate,
+			lastLoginIp,
+			loginIp,
+			loginCount,
+			report,
+			availableBalance,
+			freezeBlance,
+			integral,
+			gold,
+			store_id,
+			parent_id,
+			directSellingParent_id,
+			qq_openid,
+			sina_openid,
+			user_type,
+			contact_user,
+			department,
+			company_name,
+			company_address,
+			company_purpose,
+			company_url,
+			company_person_num,
+			company_trade,
+			company_nature,
+			store_apply_step,
+			user_goods_fee,
+			staple_gc,
+			app_login_token,
+			app_seller_login_token,
+			user_form,
+			mobile_pay_password,
+			invoice,
+			invoiceType,
+			delivery_id,
+			whether_attention,
+			circle_create_info,
+			circle_attention_info,
+			openId,userMark,
+			ftp_id,
+			user_version,
+			user_tags,
+			direct_selling_qr_path
+		)
+		values(
+			#{addTime},
+			#{deleteStatus},
+			#{application_seller_login_token},
+			#{pay_password},
+			#{buy_goods_limit_info},
+			#{day_msg_count},
+			#{validateCode},
+			#{weixin_unionID},
+			#{integral_signDate},
+			#{seller_application_loginTime},
+			#{userName},
+			#{nickName},
+			#{trueName},
+			#{password},
+			#{userRole},
+			#{birthday},
+			#{telephone},
+			#{QQ},
+			#{WW},
+			#{month_income},
+			#{years},
+			#{MSN},
+			#{address},
+			#{sex},
+			#{email},
+			#{mobile},
+			#{card},
+			#{photo.id},
+			#{area.id},
+			#{status},
+			#{lastLoginDate},
+			#{loginDate},
+			#{lastLoginIp},
+			#{loginIp},
+			#{loginCount},
+			#{report},
+			#{availableBalance},
+			#{freezeBlance},
+			#{integral},
+			#{gold},
+			#{store.id},
+			#{parent.id},
+			#{directSellingParent.id},
+			#{qq_openid},
+			#{sina_openid},
+			#{user_type},
+			#{contact_user},
+			#{department},
+			#{company_name},
+			#{company_address},
+			#{company_purpose},
+			#{company_url},
+			#{company_person_num},
+			#{company_trade},
+			#{company_nature},
+			#{store_apply_step},
+			#{user_goods_fee},
+			#{staple_gc},
+			#{app_login_token},
+			#{app_seller_login_token},
+			#{user_form},
+			#{mobile_pay_password},
+			#{invoice},
+			#{invoiceType},
+			#{delivery_id},
+			#{whether_attention},
+			#{circle_create_info},
+			#{circle_attention_info},
+			#{openId},#{userMark},
+			#{ftp.id},
+			#{user_version},
+			#{user_tags},
+			#{direct_selling_qr_path}
+			
+		)
+	</insert>
+	
+	<insert id="saveUserRole" parameterType="java.util.List">
+		INSERT IGNORE INTO redpigmall_user_role(user_id,role_id) VALUES
+		<foreach collection="list" index="index" item="item" separator=","> 
+            (#{item.user_id},#{item.role_id}) 
+        </foreach>
+	</insert>
+	<update id="update" parameterType="com.redpigmall.domain.User">
+		UPDATE redpigmall_user 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteUserRoleById" parameterType="java.util.List">
+		DELETE FROM redpigmall_user_role where
+		<foreach collection="list" index="index" item="item" separator="or"> 
+            (user_id=#{item.user_id} and role_id= #{item.role_id}) 
+        </foreach>
+	</delete>
+	<select id="getPhotoByAccessoryId" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			photo_id= #{photo_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAreaByAreaId" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			area_id= #{area_id,jdbcType=BIGINT}
+	</select>
+	<select id="getStoreByStoreId" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			store_id= #{store_id,jdbcType=BIGINT}
+	</select>
+	<select id="getUserByStoreId" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			store_id= #{store_id,jdbcType=BIGINT}
+	</select>
+	<select id="getParentByUserId" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			parent_id = #{parent_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getDirectSellingChildsByUserId" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			directSellingParent_id = #{directSellingParent_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageListByParentIsNull" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			 parent_id is null
+	</select>
+	<select id="getFtpByFTPServerId" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where
+			ftp_id = #{ftp_id,jdbcType=BIGINT}
+	</select>
+	<update id="updateById" parameterType="com.redpigmall.domain.User">
+		update redpigmall_user
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_user where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_user where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user obj 
+		<where>
+			1=1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="order != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from 
+			redpigmall_user obj
+		<if test="redpig_grade_ids!=null and redpig_grade_ids.size() &gt;0">
+			join redpigmall_store store on store.id = obj.store_id
+			join redpigmall_storegrade sg on (sg.id = store.grade_id
+			and sg.id in 
+			<foreach collection="grade_ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+	        )
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="order != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.User" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user
+		where 1 = 1
+		<include refid="whereStatement"/>
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]> #{operation_value}
+		</if>
+	</select>
+	
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_user where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteUserMenu" parameterType="java.util.List">
+		DELETE FROM redpigmall_user_menu WHERE user_id = #{userId,jdbcType=BIGINT}
+	</delete>
+	
+	<insert id="saveUserMenu" parameterType="java.util.Map">
+		INSERT IGNORE INTO redpigmall_user_menu(user_id,menu_id) VALUES
+		<foreach collection="menus" index="index" item="item" separator=","> 
+            (#{userId},#{item.id}) 
+        </foreach>
+	</insert>
+	
+</mapper>

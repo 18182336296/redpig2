@@ -1,0 +1,33 @@
+ <div class="right_nav_r_r_top">
+      <h3><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/backe.png" /></a></h3>
+      <span>个人中心</span> </div>
+    <!--个人中心 -->
+
+     #set($user_photo="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+               #if($!user.photo)
+               #set($user_photo="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+              #end
+      <div class="right_nav_r_r_center_img"><a href="$!webPath/buyer/index" target="_blank"><img src="$user_photo" /></a></div>
+      	<div class="right_nav_r_r_center_m">
+
+      <div class="user_deposit1">
+        <div class="user_deposit_word">账户余额</div>
+        <div class="user_deposit_number">#if($!{user.availableBalance})¥$!{user.availableBalance} #else ¥0 #end </div>
+        <div class="user_deposit_button"><a href="$!webPath/buyer/predeposit" target="_blank">充值</a></div>
+      </div>
+      <div class="user_deposit1">
+        <div class="user_deposit_word">可用积分</div>
+        <div class="user_deposit_number">#if($!{user.integral})$!{user.integral}分 #else 0分 #end</div>
+        <div class="user_deposit_button"><a href="$!webPath/integral/index" target="_blank">积分兑换</a></div>
+      </div>
+      <div class="user_deposit1">
+        <div class="user_deposit_word">优惠券</div>
+        <div class="user_deposit_number">$!couponInfos.size() </div>
+        <div class="user_deposit_button"><a href="$!webPath/buyer/coupon" target="_blank">查看优惠券</a></div>
+      </div>
+      <div class="user_deposit1">
+        <div class="user_deposit_word">站内信</div>
+        <div class="user_deposit_number">$!msg_size </div>
+        <div class="user_deposit_button"><a href="$!webPath/buyer/message" target="_blank">查看站内信</a></div>
+      </div>
+</div>

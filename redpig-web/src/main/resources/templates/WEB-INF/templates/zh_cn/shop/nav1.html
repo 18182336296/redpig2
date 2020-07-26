@@ -1,0 +1,124 @@
+<script>
+jQuery(document).ready(function(){
+  jQuery("#navul li a").each(function(){
+    var original_url=jQuery(this).attr("href");
+	if("$!{op}"!=""){
+		if(original_url.indexOf("$!{op}")>=0){
+	  	 jQuery(this).parent().addClass("this");	
+		}
+	}
+  });
+  jQuery(".left_menu_dl").mouseover(function(){
+	    var child_count = jQuery(this).attr("child_count");
+		var sc_id=jQuery(this).attr("id");
+		var sc_color=jQuery(this).attr("sc_color");		
+	    var eq =jQuery(this).index();
+		if(jQuery(".left_menu_dd[id=child_"+sc_id+"]").html()==null){
+	   	  jQuery.ajax({type:'POST',url:'$!webPath/nav_data',data:{"sc_id":sc_id},success:function(data){
+		    if(jQuery(".left_menu_dd[id=child_"+sc_id+"]").html()==null){																						
+      	      jQuery(".left_menu_dt[id=dts_"+sc_id+"]").after(data);
+		    }
+	        if(child_count>0){
+		     jQuery("#dts_"+sc_id).addClass("left_menu_this").removeClass("left_menu_dt");
+		     jQuery("#child_"+sc_id).show();			
+		    }
+	    	jQuery("#left_menu_con_"+sc_id).attr("style","border:1px solid "+sc_color+"; border-left:1px solid "+sc_color+";").find(".menu_con_right_top").css("background-color",sc_color);
+	        var z = -35;
+        	var x = eq*z;
+	        jQuery("#left_menu_con_"+sc_id).css('margin-top',x+'px');
+		    jQuery(".left_menu_dd[id=child_"+sc_id+"]").show();
+	      }});
+		}else{
+		   if(child_count>0){
+		      jQuery("#dts_"+sc_id).addClass("left_menu_this").removeClass("left_menu_dt");
+		      jQuery("#child_"+sc_id).show();			
+		    }
+		    jQuery("#left_menu_con_"+sc_id).attr("style","border:1px solid "+sc_color+"; border-left:1px solid "+sc_color+";").find(".menu_con_right_top").css("background-color",sc_color);
+	        var z = -35;
+    	    var x = eq*z;
+	        jQuery("#left_menu_con_"+sc_id).css('margin-top',x+'px');
+		    jQuery(".left_menu_dd[id=child_"+sc_id+"]").show();
+		}
+		
+  }).mouseleave(function(e){
+	  jQuery("dt[id^=dts_]").removeAttr("style");
+	  jQuery("div[id^=left_menu_con_]").removeAttr("style"); 
+	  var child_count = jQuery(this).attr("child_count");
+　　 　jQuery("dt[id^=dts_]").removeClass("left_menu_this").addClass("left_menu_dt");	  
+	  jQuery(".left_menu_dd[id^=child_]").hide();
+  });
+  jQuery(".nav_left").mouseover(function(){
+	  jQuery("#other_menu").show();
+	  
+   });
+  jQuery(".nav_left").mouseleave(function(){
+	  jQuery("#other_menu").hide();
+   });	 
+});
+
+</script>
+<style type="text/css">
+.left_menu_con_center_left dd a { font-weight:normal; font-size:12px;}
+</style>
+
+<div class="nav">
+  <div class="nav_center">
+    <div class="nav_left">
+     <h2><a href="$!webPath/goods_class"><span>全部分类<em><img src="$!cdnServer/resources/style/system/front/default/images/nav_left.png"/></em></span></a>
+    <div class="other_menu" style="display:none" id="other_menu">
+        <div class="left_menu" id="left_menu"> 
+        #foreach($sc in $!sc_list)
+          #if($!sc.display==true)
+          #set($icon_img="$!cdnServer/resources/style/common/images/icon/default_icon.png") 
+          <dl class="left_menu_dl" child_count="$!sc.childs.size()" id="$!sc.id" style="position:relative;" #if($!{sc.sc_color}) sc_color="$!{sc.sc_color}" #else sc_color="#E60012" #end >
+            #if($!sc.icon_type==0)
+            #if($!sc.icon_sys!="")
+            #set($icon_img="$!cdnServer/resources/style/common/images/icon/icon_$!{sc.icon_sys}.png")
+            #end
+            #else
+            #if($!sc.photo_id)
+            #set($icon_img="$!imageWebServer/$!showClassTools.getaccessory($!sc.photo_id).path/$!showClassTools.getaccessory($!sc.photo_id).name")
+            #end
+            #end
+            <dt class="left_menu_dt" id="dts_$!sc.id"><i class="left_menu_i"><img src="$!icon_img" width="16" height="16" /></i><strong class="left_menu_str">
+            #if($!sc.recommend==false)  
+              #set($s_ccs=$!showClassTools.getSecondSclist($!sc.id,"3"))
+              #if($!s_ccs.size()>0)
+              #foreach($sgc in $!s_ccs)
+               <a  #if($!sgc.show_type=="0")
+               #if($!sgc.url=="") 
+               href="$!webPath/store_goods_list?sc_id=$!{sgc.id}"
+               #else
+               href ="$!sgc.url"
+               #end 
+               #end
+              #if($!sgc.show_type=="1") href ="$!webPath/channel/index_$!{sgc.channel_id}" #end target="_blank" > $!sgc.showName</a> #if($!s_ccs.size()!=$!{velocityCount})、#end
+              #end
+              #else <a #if($!sc.show_type=="0") #if($!sc.url=="") href="$!webPath/store_goods_list?sc_id=$!{sc.id}" #else href ="$!sc.url" #end #end
+            #if($!sc.show_type=="1") href ="$!webPath/channel/index_$!{sc.channel_id}" #end target="_blank">$!sc.showName</a> 
+              	
+            #end
+            #else
+              <a #if($!sc.show_type=="0") #if($!sc.url=="") href="$!webPath/store_goods_list?sc_id=$!{sc.id}" #else href ="$!sc.url" #end #end
+            #if($!sc.show_type=="1") href ="$!webPath/channel/index_$!{sc.channel_id}" #end target="_blank">$!sc.showName</a> 	
+            #end
+             </strong> </dt>
+
+          </dl>
+          #end
+          #end </div>
+      </div></h2>
+    </div>
+    <ul id="navul">
+      #set($navs=$!navTools.queryNav(0,-1))
+      #foreach($nav in $navs)
+      #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+      #set($url="$!nav.url")
+      #else
+      #set($url="$!webPath/$!{nav.url}")
+      #end
+      <li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+      #end
+    </ul>
+  </div>
+</div>

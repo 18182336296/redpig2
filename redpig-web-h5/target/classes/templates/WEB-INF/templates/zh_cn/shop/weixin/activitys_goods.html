@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>活动商品列表 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var ret = 1;
+   var begin_count =12;
+   if("$!activitygoods.size()" >=12){
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/activitys_goods_ajax',
+				  data:{"begin_count":begin_count,
+		  				"act_id":"$!{act_id}"},
+				beforeSend:function(){
+				  begin_count = begin_count +6;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				  ret = 0;
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+	             if(data){ 
+				 ret=1;
+				  jQuery(".group_list").find("a").last().after(data);
+			 	 }else{
+				 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+	 }
+	});
+	}		
+});<!--end-->
+</script>
+</head>
+
+<body class="index_bg" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>活动商品列表<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="main">
+  <div class="mt50"></div>
+  <div class="group_list">
+  #if($!activitygoods.size()> 0)
+  #foreach($obj in $activitygoods)
+  	<a href="$!webPath/items?id=$!{obj.ag_goods.id}">
+    <dl>
+      <dt><img width="90" height="90" src="$!imageWebServer/$!obj.ag_goods.goods_main_photo.path/$!{obj.ag_goods.goods_main_photo.name}_small.$!{obj.ag_goods.goods_main_photo.ext}"></dt>
+      <dd>
+        <h3><b style="overflow:hidden;">$!obj.ag_goods.goods_name</b></h3>
+        <span><strong>¥$!obj.ag_goods.store_price</strong></span> <em>$!obj.ag_goods.evaluate_count人评价，$!{obj.ag_goods.goods_salenum}人已购买</em> </dd>
+    </dl>
+    </a>
+    #end
+    #else
+     <div class="error_page1">
+            <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+            <p>暂无活动商品！</p>
+        </div>
+   #end
+  </div> 
+  <div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+  <div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>
+</div>
+$!httpInclude.include("/layer")
+</body>
+</html>

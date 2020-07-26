@@ -1,0 +1,121 @@
+#if($layer_nav_map.get("navigator_bar")=="true")
+
+#set($wapindexhtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_index_1.png")
+#if($!layer_nav_map.get('nav_1a'))
+#set($wapindexhtm="$!imageWebServer/$!layer_nav_map.get('nav_1a')")
+#end
+#if($!op=="index")
+#set($wapindexhtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_index.png")
+#if($!layer_nav_map.get('nav_1b'))
+#set($wapindexhtm="$!imageWebServer/$!layer_nav_map.get('nav_1b')")
+#end
+#end
+
+#set($wapsearchhtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_search_1.png")
+#if($!layer_nav_map.get('nav_2a'))
+#set($wapsearchhtm="$!imageWebServer/$!layer_nav_map.get('nav_2a')")
+#end
+#if($!op=="search")
+#set($wapsearchhtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_search.png")
+#if($!layer_nav_map.get('nav_2b'))
+#set($wapsearchhtm="$!imageWebServer/$!layer_nav_map.get('nav_2b')")
+#end
+#end
+
+#set($wapbuyerorderlisthtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_order_1.png")
+#if($!layer_nav_map.get('nav_3a'))
+#set($wapbuyerorderlisthtm="$!imageWebServer/$!layer_nav_map.get('nav_3a')")
+#end
+#if($!op=="order")
+#set($wapbuyerorderlisthtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_order.png")
+#if($!layer_nav_map.get('nav_3b'))
+#set($wapbuyerorderlisthtm="$!imageWebServer/$!layer_nav_map.get('nav_3b')")
+#end
+#end
+
+#set($wapgoodscart1htm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_shopcar_1.png")
+#if($!layer_nav_map.get('nav_4a'))
+#set($wapgoodscart1htm="$!imageWebServer/$!layer_nav_map.get('nav_4a')")
+#end
+#if($!op=="cart")
+#set($wapgoodscart1htm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_shopcar.png")
+#if($!layer_nav_map.get('nav_4b'))
+#set($wapgoodscart1htm="$!imageWebServer/$!layer_nav_map.get('nav_4b')")
+#end
+#end
+
+#set($wapbuyercenterhtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png")
+#if($!layer_nav_map.get('nav_5a'))
+#set($wapbuyercenterhtm="$!imageWebServer/$!layer_nav_map.get('nav_5a')")
+#end
+#if($!op=="buyer")
+#set($wapbuyercenterhtm="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me.png")
+#if($!layer_nav_map.get('nav_5b'))
+#set($wapbuyercenterhtm="$!imageWebServer/$!layer_nav_map.get('nav_5b')")
+#end
+#end
+<div class="fake_height"></div>
+  <div class="another_bottom_nav">
+    	<ul>
+        	<li onclick="window.location.href='$!webPath/index'">
+            	<img src="$!wapindexhtm" id="wapindexhtm">
+            	<span>首页</span>
+            </li>
+            <li  onclick="window.location.href='$!webPath/search'">
+            	<img src="$!wapsearchhtm" id="wapsearchhtm">
+            	<span>搜索</span>
+            </li>
+            <li onclick="window.location.href='$!webPath/goods_cart1'">
+            	<img src="$!wapgoodscart1htm" id="wapgoodscart1htm">
+            	<span>购物车</span>
+            </li>
+            <li onclick="window.location.href='$!webPath/buyer/order_list'">
+            	<img src="$!wapbuyerorderlisthtm" id="wapbuyerorderlisthtm">
+            	<span>订单</span>
+            </li>
+            <li onclick="window.location.href='$!webPath/buyer/center'">
+            	<img src="$!wapbuyercenterhtm" id="wapbuyercenterhtm">
+            	<span>我的</span>
+            </li>
+        </ul>
+    </div>    
+#else
+<script>
+jQuery(document).ready(function(){
+		var url = window.location.pathname+"";
+		url = url.replace(/\//gm,"").replace(/\./gm,"");
+		jQuery("#"+url).addClass("this");
+});
+</script>
+<div class="fake_height"></div>
+	<div class="bottom_nav">
+    	<ul>
+        	<li class="bottom_index_wrap" onclick="window.location.href='$!webPath/index'" id="wapindexhtm">
+            	<div class="bottom_index"></div>
+            	
+                <span>首页</span>
+            </li>
+            <li class="bottom_search_wrap" onclick="window.location.href='$!webPath/search'" id="wapsearchhtm">
+            	<div class="bottom_search"></div>
+
+                <span>搜索</span>
+            </li>
+             <li class="bottom_shopcar_wrap" onclick="window.location.href='$!webPath/goods_cart1'" id="wapgoodscart1htm">
+            	<div class="bottom_shopcar"></div>
+
+                <span>购物车</span>
+            </li>
+            <li class="bottom_order_wrap" onclick="window.location.href='$!webPath/buyer/order_list'" id="wapbuyerorderlisthtm">
+            	<div class="bottom_order"></div>
+
+                <span>订单</span>
+            </li>
+           
+            <li class="bottom_me_wrap" onclick="window.location.href='$!webPath/buyer/center'" id="wapbuyercenterhtm">
+            	<div class="bottom_me"></div>
+            	
+                <span>我的</span>
+            </li>
+        </ul>
+</div>
+#end

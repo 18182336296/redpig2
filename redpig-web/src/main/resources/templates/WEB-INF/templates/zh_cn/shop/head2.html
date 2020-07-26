@@ -1,0 +1,136 @@
+<script>
+function search_form(){
+	  var keyword=arguments[0];
+	  var type=arguments[1];
+	  if(keyword!=""&&keyword!=undefined){
+	   jQuery("#keyword").val(keyword);
+	  }
+	  if(type!=""&&type!=undefined){
+	    jQuery("#type").val(type);
+	  }
+	  jQuery("#searchForm").submit();
+	  jQuery("#keyword").val("");
+}
+
+</script>
+<div id="header">
+    <div class="inner">
+      <form action="$!webPath/search" method="post" target="_blank" id="searchForm">
+      <input name="config" type="hidden" id="config" value="$!config.hotSearch" />
+      <input name="type" type="hidden" id="type" value="$!type" />
+      
+      <div class="form">
+        <input class="fl" type="text" name="keyword" placeholder="华为手机" id="idNumber1" onclick="sousl()">
+        <div class="shelper">
+          <div class="delete"></div>
+          <div class="shelper-l">
+          	
+            <span id="his-dele">清除记录</span>
+          </div>
+        </div>
+        
+        <button class="submit-search fl" id="search">
+          <i class="iconfont">&#xe63a;</i>
+        </button>
+      </div>
+      </form>
+      <div id="settleup" class="mycart dropdown">
+        <div class="dd-icon">
+          <i class="iconfont">&#xe608;</i>
+          <a href="#">我的购物车</a>
+          <i id="shopping-count">2</i>
+        </div>
+        <div class="dropdown-layer">
+          <div class="cart_hd">
+            <h4 class="cart_hd_title">最新加入的商品</h4>
+          </div>
+          <div class="cart_bd">
+            <ul class="cart_singlelist">
+              <li class="cart_item">
+                <div class="cart_img">
+                  <a class="cart_img_lk" href="#">      
+									<img src="$!cdnServer/front/module/header/images/items/5595ee2aNce7fc953.jpg" width="50" height="50" alt="">
+									</a>
+                </div>
+                <div class="cart_name">
+                  <a class="cart_name_lk" href="#" title="【京东超市】青苇 制冰格冰模冰棍 48格 钻石款2个装颜色随机">【京东超市】青苇 制冰格冰模冰棍 48格 钻石款2个装颜色随机</a>
+                </div>
+                <div class="cart_info">
+                  <div class="cart_price">¥24.90×1</div>
+                  <a class="cart_delete J_delete">删除</a>
+                </div>
+              </li>
+            </ul>
+            <ul class="cart_giftlist">
+            </ul>
+            <ul class="cart_suitlist">
+            </ul>
+            <ul class="cart_manjianlist">
+            </ul>
+            <ul class="cart_manzenglist">
+              <li class="cart_item">
+                <div class="cart_item_hd">
+                  <div class="cart_item_hd_info">
+                    <span>换购</span> 已购满1件，您可加价换购商品
+                  </div>
+                  <div class="cart_item_hd_price">小计：¥599.00</div>
+                </div>
+                <ul class="cart_item_bd">
+                  <li class="cart_item">
+                    <div class="cart_img">
+                      <a class="cart_img_lk" href="https://item.jd.com/1479140.html">
+												<img src="$!cdnServer/front/module/header/images/items/554032daN5118f5f1.jpg" alt="">
+											</a>
+                    </div>
+                    <div class="cart_name">
+                      <a class="cart_name_lk" href="https://item.jd.com/1479140.html" title="华为（HUAWEI）荣耀畅玩通话平板电脑7英寸（四核 1G/16G 3G通话）银色（黑边框）">华为（HUAWEI）荣耀畅玩通话平板电脑7英寸（四核 1G/16G 3G通话）银色（黑边框）</a>
+                    </div>
+                    <div class="cart_info">
+                      <div class="cart_price">¥599.00×1</div>
+                      <a class="cart_delete J_delete">删除</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="cart_ft">
+            <div class="cart_ft_info">
+              共<span class="cart_num">2</span>件商品 共计
+              <span class="cart_price">¥ 623.90</span>
+            </div>
+            <a class="cart_ft_lk" href="https://cart.jd.com/" title="去购物车">去购物车</a>
+          </div>
+        </div>
+      </div>
+      <div id="hotwords">
+      <a href="javascript:void(0);" class="style-red">热门搜索：</a>
+      #if($!config.hotSearch!="")
+        	
+        	#foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+        			<a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a>
+        	#end 
+        #end
+        
+      </div>
+      <!-- topnav start -->
+      #set($navs=$!navTools.queryNav(0,-1))
+      <div id="navitems">
+        <ul id="navitems-group1">
+          #if($!navs.size()>0)
+          	#foreach($nav in $navs)
+		          <li clstag="h|keycount|2016|05a" class="fore1">
+		            <a #if($!{nav.new_win}==1) target="_blank"#end href="$!nav.url">$!nav.title</a>
+		          </li>
+          	#end
+          #end
+          
+        </ul>
+        
+        
+        
+        
+      </div>
+      <!-- topnav end -->
+    </div>
+  </div>

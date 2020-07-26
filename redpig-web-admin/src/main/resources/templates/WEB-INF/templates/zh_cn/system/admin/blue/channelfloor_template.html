@@ -1,0 +1,594 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link type="text/css" rel="stylesheet" href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/public.css">
+
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath//resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	 var cf_id =   "$!cf_id";
+	 var cf_type = "$!cf_type";
+	 var channel_id = "$!channel_id";
+  	 jQuery.ajax({type:'POST',
+	 			url:'$!webPath/channelfloor_load',
+	 			data:{"cf_id":cf_id},
+	 			dataType:"json",
+			    success:function(data){	
+			    jQuery.each(data, function(index,item){
+				if(cf_type==0){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6){
+					jQuery("#position_"+item.position).attr("class","large");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position).attr("class","fore3 large");	
+					}
+					if(item.position==7){
+					jQuery("#position_"+item.position).attr("class","fore6 large");	
+					}
+					jQuery("#position_"+item.position).append("<a href='"+item.img_url+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a></div>");		
+				}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6){
+					jQuery("#position_"+item.position).attr("class","");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position).attr("class","fore3");	
+					}
+					if(item.position==7){
+					jQuery("#position_"+item.position).attr("class","fore6");	
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position).append("<a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!imageWebServer"+item.photo_url+"></a><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a></div>");	
+					}else{
+					jQuery("#position_"+item.position).append("<a href='$!webPath/items_"+item.goods_id+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a></div>");		
+					}
+				}
+				}
+				if(cf_type==1){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position).empty();
+					if(item.position==2||item.position==4||item.position==5||item.position==7){
+					jQuery("#position_"+item.position).attr("class","large");
+					}
+					if(item.position==3){
+					jQuery("#position_"+item.position).attr("class","fore2 large");	
+					}
+					if(item.position==6){
+					jQuery("#position_"+item.position).attr("class","fore5 large");	
+					}
+					jQuery("#position_"+item.position).append("<a href='"+item.img_url+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position).empty();
+					if(item.position==2||item.position==4||item.position==5||item.position==7){
+					jQuery("#position_"+item.position).attr("class","");
+					}
+					if(item.position==3){
+					jQuery("#position_"+item.position).attr("class","fore2");	
+					}
+					if(item.position==6){
+					jQuery("#position_"+item.position).attr("class","fore5");	
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position).append("<a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!imageWebServer"+item.photo_url+"></a><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a></div>");	}else{
+					jQuery("#position_"+item.position).append("<a href='$!webPath/items_"+item.goods_id+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");
+					}
+				}
+				}
+				if(cf_type==2){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6||item.position==7||item.position==9){
+					jQuery("#position_"+item.position).attr("class","large");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position).attr("class","fore3 large");	
+					}
+					if(item.position==8){
+					jQuery("#position_"+item.position).attr("class","fore7 large");	
+					}
+					jQuery("#position_"+item.position).append("<a href='"+item.img_url+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position).empty();
+					if(item.position==2||item.position==3||item.position==5||item.position==6||item.position==7||item.position==9){
+					jQuery("#position_"+item.position).attr("class","");
+					}
+					if(item.position==4){
+					jQuery("#position_"+item.position).attr("class","fore3");	
+					}
+					if(item.position==8){
+					jQuery("#position_"+item.position).attr("class","fore7");	
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position).append("<a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!imageWebServer"+item.photo_url+"></a><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a></div>");
+				}else{
+					jQuery("#position_"+item.position).append("<a  href='$!webPath/items_"+item.goods_id+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");
+				}
+				}
+				}
+				if(cf_type==3){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position).attr("class","large");
+					}
+					jQuery("#position_"+item.position).append("<a href='"+item.img_url+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position).attr("class","");
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position).append("<dl><dt><a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!imageWebServer"+item.photo_url+"></a></dt><dd><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong></dd></dl><div class='editBox'> <a class='edit' href='javascript:void(0);'  dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a> </div>");
+					}else{
+					jQuery("#position_"+item.position).append("<a href='$!webPath/items_"+item.goods_id+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");	
+					}
+				}
+				}
+				if(cf_type==4){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position).empty();
+					if(item.position!=2&&item.position!=1){
+						jQuery("#position_"+item.position).attr("class","large");
+					}
+					if(item.position==2){
+						jQuery("#position_"+item.position).attr("class","large_width");
+					}
+					jQuery("#position_"+item.position).append("<a href='"+item.img_url+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position).empty();
+					if(item.position!=2&&item.position!=1){
+						jQuery("#position_"+item.position).attr("class","");
+					}
+					if(item.position==2){
+						jQuery("#position_"+item.position).attr("class","large_width");
+					}
+					if(item.position!=1&&item.position!=2){
+					jQuery("#position_"+item.position).append("<dl><dt><a class='product_img' target='_blank' href='$!webPath/items_"+item.goods_id+"'><img src=$!imageWebServer"+item.photo_url+"></a></dt><dd><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong><del>￥"+item.before_price+"</del></dd></dl><div class='editBox'> <a class='edit' href='javascript:void(0);'  dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a> </div>");
+					}else{
+					jQuery("#position_"+item.position).append("<a href='$!webPath/items_"+item.goods_id+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");	
+					}
+				}
+				}
+				if(cf_type==5){					
+				if(item.type=="img"){
+					jQuery("#position_"+item.position).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position).attr("class","large");
+					}
+					jQuery("#position_"+item.position).append("<a href='"+item.img_url+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");}
+				if(item.type=="goods"){	
+				    jQuery("#position_"+item.position).empty();
+					if(item.position!=1){
+					jQuery("#position_"+item.position).attr("class","");
+					}
+					if(item.position!=1){
+					jQuery("#position_"+item.position).append("<dl><dt><p class='product_name'><a target='_blank' href='$!webPath/items_"+item.goods_id+"'>"+item.goods_name+"</a></p><strong class='product_price'>￥"+item.goods_price+"</strong> </dt><dd> <a class='product_img' href=''><img src=$!imageWebServer"+item.photo_url+"></a> </dd></dl><div class='editBox'> <a class='edit' href='javascript:void(0);' dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1' >编辑</a> </div>");	
+					}else{
+					jQuery("#position_"+item.position).append("<a href='$!webPath/items_"+item.goods_id+"' target='_blank'><img src=$!imageWebServer"+item.photo_url+"></a><div class='editBox'><a class='edit' href='javascript:void(0);'dialog_uri='$!webPath/channelfloor_one?cf_id="+cf_id+"&position="+item.position+"&channel_id="+channel_id+"' dialog_title='编辑首页楼层' dialog_width='735' dialog_height='100' dialog_top='100'  dialog_id='goods_floor_style2_1'>编辑</a></div>");
+					}
+				}
+				}
+				});
+			}
+	 });	
+  jQuery(".storey_tab ul li").attr("cursor","pointer").click(function(){
+	jQuery(this).siblings().removeClass("this");
+	jQuery(this).addClass("this");
+	var i = jQuery(this).index();
+	jQuery(this).parent().parent().siblings().not(".hot_sell").hide();
+	jQuery(this).parent().parent().siblings().eq(i).show();
+  });
+  //
+  jQuery(".storey_list li").mouseenter(function(){
+	  jQuery(".storey_list li").stop();											 
+      jQuery(this).parent().parent().find("li").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+   }).mouseleave(function(){
+	  jQuery(".storey_list li").stop();
+      jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+   });	
+   jQuery(".storey_list").mouseleave(function(){
+	  jQuery(".storey_list li").stop();
+      jQuery(this).parent().parent().find("li").css("opacity","1.0"); 
+	});
+   jQuery(".hot_sell_ul li").mouseenter(function(){		
+	  jQuery(".hot_sell_ul li").stop();											 
+	  jQuery(this).parent().find("li").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+   }).mouseleave(function(){
+	  jQuery(".hot_sell_ul li").stop();
+      jQuery(this).animate({"opacity":"1.0"},{queue:false, duration:1000});
+   });
+   jQuery(".hot_sell_ul").mouseleave(function(){
+      jQuery(".hot_sell_ul li").stop();
+      jQuery(this).parent().find("li").css("opacity","1.0");
+   });
+   //
+   jQuery(".storey_show_2_right li").mouseenter(function(event){
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+	  jQuery(".storey_show_2_right li").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(".storey_show_2_left").animate({"opacity":"0.2"},{queue:false, duration:1000});
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+	  jQuery(this).find(".storey_show_on").show();
+   }).mouseleave(function(){
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+      jQuery(this).animate({"opacity":"1.0"},{queue:false, duration:1000});
+	  jQuery(this).find(".storey_show_on").hide(); 
+   });
+   jQuery(".storey_show_2_right").mouseleave(function(){
+      jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+      jQuery(".storey_show_2_right li").css("opacity","1.0");
+	  jQuery(".storey_show_2_left").css("opacity","1.0");
+	  jQuery(this).find(".storey_show_on").hide(); 
+   });
+   //
+   jQuery(".storey_show_2_left").mouseenter(function(){	
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();												 
+	  jQuery(this).css("opacity","0.2");												
+	  jQuery(".storey_show_2_right li").animate({"opacity":"0.2"},{queue:false, duration:1000});											
+	  jQuery(this).animate({"opacity":"0.9"},{queue:false, duration:1000});
+	  jQuery(this).find(".storey_show_on").show();
+   }).mouseleave(function(){
+	  jQuery(".storey_show_2_right li").stop();
+	  jQuery(".storey_show_2_left").stop();
+      jQuery(".storey_show_2_right li").css("opacity","1.0");
+	  jQuery(this).css("opacity","1.0");
+	  jQuery(this).find(".storey_show_on").hide();
+   });
+   //
+});
+</script>
+
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">首页楼层</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/channelfloor_list?channel_id=$!channel_id"><b>楼层管理</b></a></li>
+      <li><a href="$!webPath/channelfloor_add?channel_id=$!channel_id" ><b>楼层新增</b></a> </li>
+      <li><a href="$!webPath/channelfloor_template?channel_id=$!channel_id&cf_id=$!cf_id" class="this"><b>楼层模板编辑</b></a></li>
+    </ul>
+  </div>
+  <div class="floor_editor"> 
+    <!--楼层样式0--> 
+    #if($!obj.cf_type==0)
+    <div class="left_four" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style1?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style2?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+      #if($!rc_list.size()>0)
+      #foreach($obj in $rc_list)
+        	<a href="$!obj.url" target="_blank">$!obj.name</a>
+      #end      
+      #end      
+        </dd>
+      </dl>
+      <div class="left_four_wrap">
+        <div class="col_ads" id="position_1"> <a href="javascript:void(0);" ></a>
+          <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=1&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+        </div>
+        <div class="col_product">
+          <ul>
+            <li id="position_2" class="large"><a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=2&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_3" class="large"> <a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=3&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_4"  class="fore3 large" > <a href="javascript:void(0);"  ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=4&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_5"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=5&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_6"> <a class="product_img" href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=6&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_7" class="fore6"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=7&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==1)
+    <div class="left_two" style="clear:left">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style1?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style2?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+      #if($!rc_list.size()>0)
+      #foreach($obj in $rc_list)
+        	<a href="$!obj.url" target="_blank">$!obj.name</a>
+      #end      
+      #end      
+        </dd>
+      </dl>
+      <div class="left_two_wrap">
+      	<div class="col_ads" id="position_1"> <a href="javascript:void(0);" ></a>
+          <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=1&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> 		  </div>
+        </div>
+        <div class="col_product">
+          <ul>
+          
+            <li id="position_2" class="large"><a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=2&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_3" class="fore2 large"> <a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=3&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_4"  class="large" > <a href="javascript:void(0);"  ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=4&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_5"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=5&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_6" class="fore5"> <a class="product_img" href="javascript:void(0);"></a>
+              
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=6&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_7" class="fore6"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=7&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==2)
+    <div class="lr_four" style="clear:left">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style1?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style2?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+      #if($!rc_list.size()>0)
+      #foreach($obj in $rc_list)
+        	<a href="$!obj.url" target="_blank">$!obj.name</a>
+      #end      
+      #end      
+        </dd>
+      </dl>
+      <div class="lr_four_wrap">
+        <div class="lr_four_ads" id="position_1"> <a href="javascript:void(0);" ></a>
+          <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=1&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> 		  </div>
+        </div>
+        <div class="lr_four_product">
+          <ul>
+            <li id="position_2" class="large"><a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=2&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_3" class="large"> <a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=3&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+             <li id="position_4"  class="fore3 large"> <a href="javascript:void(0);"  ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=4&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+             <li id="position_5"  class="large" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=5&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_6"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=6&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_7"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=7&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_8" class="fore7"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=8&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+             <li id="position_9"> <a class="product_img" href="javascript:void(0);" ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=9&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==3)
+    <div class="right_eight" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style1?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style2?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+      #if($!rc_list.size()>0)
+      #foreach($obj in $rc_list)
+        	<a href="$!obj.url" target="_blank">$!obj.name</a>
+      #end      
+      #end      
+        </dd>
+      </dl>
+      <div class="right_eight_wrap">
+      <div class="right_eight_ads" id="position_1"> <a href="javascript:void(0);" ></a>
+       <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=1&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> 	   </div>
+      </div>
+        <div class="right_eight_product">
+          <ul>
+            <li id="position_2" class="large"><a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=2&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_3" class="large"> <a href="javascript:void(0);"></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=3&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+             <li id="position_4"  class="large"> <a href="javascript:void(0);"  ></a>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=4&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+             <li id="position_5"  class="large" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=5&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+          <ul>
+            <li id="position_6">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=6&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_7">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=7&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_8">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=8&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_9">
+              <dl>
+                <dt> <a class="product_img" href="javascript:void(0);" ></a> </dt>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=9&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+        </div>
+    </div>
+    </div>
+    #end
+    #if($!obj.cf_type==4)
+    <div class="right_seven" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style1?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style2?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+      #if($!rc_list.size()>0)
+      #foreach($obj in $rc_list)
+        	<a href="$!obj.url" target="_blank">$!obj.name</a>
+      #end      
+      #end      
+        </dd>
+      </dl>
+      <div class="right_seven_wrap">
+        <div class="right_seven_ads" id="position_1"> <a href=""></a>
+          <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=1&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+        </div>
+        <div class="right_seven_product">
+          <ul>
+           <li id="position_2"  class="large_width" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=2&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_3"  class="large" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=3&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_4"  class="large" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=4&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+          <ul>
+            <li id="position_5">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=5&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_6">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=6&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_7">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+              </dl>
+               <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=7&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_8">
+              <dl>
+                <dt> <a class="product_img" href=""></a> </dt>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=8&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end
+    #if($!obj.cf_type==5)
+    <div class="right_six" style="clear:left;">
+      <dl class="floor_title">
+        <dt> <strong>$!obj.cf_name</strong> <b>$!obj.cf_style</b>
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style1?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+        </dt>
+        <dd style="background:url($!cdnServer/resources/style/system/manage/blue/images/title_bottom.png) no-repeat left bottom">
+          <div class="ftitle_editBox"> <a class="edit" href="javascript:void(0);"  dialog_uri="$!webPath/channelfloor_style2?cf_id=$!cf_id&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1">编辑</a> </div>
+      #if($!rc_list.size()>0)
+      #foreach($obj in $rc_list)
+        	<a href="$!obj.url" target="_blank">$!obj.name</a>
+      #end      
+      #end      
+        </dd>
+      </dl>
+      <div class="right_six_wrap">
+        <div class="right_six_ads" id="position_1"> <a href=""></a>
+          <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=1&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+        </div>
+        <div class="right_six_product">
+          <ul>
+            <li id="position_2"  class="large" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=2&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_3"  class="large" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=3&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_4"  class="large" > <a href="javascript:void(0);"  ></a>
+             <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=4&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+          <ul>
+            <li id="position_5">
+              <dl>
+                <dd> <a class="product_img" href=""></a></dd>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=5&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>    
+            <li id="position_6">
+              <dl>
+                <dd> <a class="product_img" href=""></a></dd>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=6&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+            <li id="position_7">
+              <dl>
+                <dd> <a class="product_img" href=""></a></dd>
+              </dl>
+              <div class="editBox"> <a class="edit" href="javascript:void(0);" dialog_uri="$!webPath/channelfloor_one?cf_id=$!cf_id&position=7&channel_id=$!channel_id" dialog_title="编辑首页楼层" dialog_width="735" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_style2_1" >编辑</a> </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    #end </div>
+</div>
+</body>
+</html>

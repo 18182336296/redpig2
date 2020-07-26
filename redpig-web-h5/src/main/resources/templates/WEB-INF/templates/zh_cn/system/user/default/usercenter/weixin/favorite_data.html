@@ -1,0 +1,13 @@
+<!--商品收藏追加数据-->
+ #foreach($obj in $objs)
+<div class="g_collect_item">
+  <ul class="g_collect_info">
+    <li class="goods_pic"><a href="$!webPath/items?id=$!obj.goods_id"> <img src="$!imageWebServer/$!obj.goods_photo"></a></li>
+    <li class="goods_name"><a href="$!webPath/items?id=$!obj.goods_id">$!obj.goods_name</a></li>
+    <li class="goods_value">￥$!obj.goods_current_price</li>
+  </ul>
+  <!--点击编辑按钮后edit_mask显示-->
+  <div class="edit_mask" style="display:none"> <span id="goods_$!obj.id" cid="$!obj.id" onClick="choose_goods_pitch($!{obj.id})"> </span><!-- 未选中时加no_pitch 选中时在后面加pitch_on--> 
+  </div>
+</div>
+#end

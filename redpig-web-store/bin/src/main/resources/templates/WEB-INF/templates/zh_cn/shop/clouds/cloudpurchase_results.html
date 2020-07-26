@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>云购 - $!{config.poweredby}</title>
+<meta name="keywords" content="#if($!store.store_seo_keywords!="") $!store.store_seo_keywords #else $!config.keywords #end" />
+<meta name="description" content="#if($!store.store_seo_description!="") $!store.store_seo_description #else $!config.description #end" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/cloud.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+var index="results";
+jQuery(document).ready(function(){
+	jQuery("#order_ul").find("a").live("click",function(element){
+		var orderby=jQuery(this).attr("orderby");
+		var ordertype=jQuery(this).attr("ordertype");
+		jQuery("#orderby").val(orderby);
+		jQuery("#ordertype").val(ordertype);
+		jQuery("#currentPage").val(1);
+		jQuery("#ListForm").submit();
+	});
+});
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" >
+$!httpInclude.include("/top")
+$!httpInclude.include("/cloudbuy/head") 
+$!httpInclude.include("/cloudbuy/nav1?nav=2")
+
+<!---------云购  列表---------->
+  <div class="ten_top">
+  	<img src="file:///C|/Users/Administrator/Desktop/ten_slogan.v1.jpg" />
+  </div>
+<div class="main">
+  <div class="purchase">
+
+    
+    <div class="cloud_main_floor_title"><span>所有商品</span></div>
+    <form method="post" id="ListForm" action="$!webPath/cloudbuy/list">
+      <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      <input type="hidden" id="orderby" name="orderby" value="$!orderby" />
+      <input type="hidden" id="ordertype" name="ordertype" value="$!ordertype" />
+      <input type="hidden" id="class_id" name="class_id" value="$!cloudPurchaseClass.id" />
+      <div class="purchase_goodslist" style="margin-top:0">
+        
+        <div class="purchase_goodslist_c"> #if($objs.size()>0)
+          <ul>
+            #foreach($obj in $objs)
+            <li>
+              <div class="purchase_goodslist_bd">
+                <div class="purchase_goodslist_bd_img"><a target="_blank" href="$!webPath/cloudbuy/items?id=$!obj.id"><img src="$!obj.cloudPurchaseGoods.primary_photo" /></a></div>
+                <div class="purchase_goodslist_bd_word"><a target="_blank" href="$!webPath/cloudbuy/items?id=$!obj.id">$!obj.cloudPurchaseGoods.goods_name</a> </div>
+                <div class="purchase_goodslist_bd_pp">总需：$obj.cloudPurchaseGoods.goods_price 人次</div>
+                #set($percent=100 * $obj.purchased_times / $obj.cloudPurchaseGoods.goods_price)
+                <div class="purchase_goodslist_bd_time"><span style="width:${percent}%"></span></div>
+                <div class="purchase_goodslist_bd_lasttime"><span ><i>$!obj.purchased_times</i>已参与人次</span><b><i>$obj.purchased_left_times</i>剩余人次</b></div>
+                <div class="purchase_goodslist_bd_b">
+                  <div class="purchase_goodslist_bd_b_nb"> <span class="that">我要参与：</span> <span class="this"><i><a href="">-</a></i><b>
+                    <input type="text" value="$!obj.cloudPurchaseGoods.least_rmb" least_rmb="$!obj.cloudPurchaseGoods.least_rmb"/>
+                    </b><i><a href="">+</a></i></span> <span class="that last">人次</span> </div>
+                  <div class="purchase_goodslist_bd_buy"><a href="">立即夺宝</a><a class="this" href="">加入清单</a></div>
+                </div>
+              </div>
+            </li>
+            #end
+          </ul>
+          <div class="fenye"> <span> $!gotoPageFormHTML </span> </div>
+          #else <span class="main_none_box"> <i></i>
+          <p> 抱歉，没有找到符合条件的商品！ <a href="$!webPath/cloudbuy/list">查看全部商品</a> </p>
+          </span> #end </div>
+      </div>
+    </form>
+  </div>
+</div>
+$!httpInclude.include("/footer")
+</body>
+</html>

@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>redpig</groupId>
+		<artifactId>redpig</artifactId>
+		<version>RedPigMallV8</version>
+	</parent>
+	<artifactId>redpig-framework</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>redpig</groupId>
+			<artifactId>redpig-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>redpig</groupId>
+			<artifactId>redpig-payment</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>redpig-framework</finalName>
+	</build>
+
+</project>

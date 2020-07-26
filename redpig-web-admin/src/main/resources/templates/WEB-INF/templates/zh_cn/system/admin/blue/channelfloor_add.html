@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  var cf_type = "$!obj.cf_type";
+  if(cf_type!=""){
+  jQuery(".floor_thumbnail li").attr("class","");
+  jQuery(".floor_thumbnail li").each(function(){
+  if(jQuery(this).attr("level")==cf_type){
+	   jQuery(this).attr("class","this");
+	  } 
+  });
+  }
+  jQuery(".floor_thumbnail li a").click(function(){
+     jQuery(".floor_thumbnail li").attr("class","");
+	 jQuery(this).parent().attr("class","this");
+  });	
+  jQuery("#theForm").validate({
+    rules:{
+	  cf_name:{required :true},
+	  cf_sequence:{required:true,digits:true},
+	  cf_type:{required:true}
+	 },
+	messages:{
+	  cf_name:{required:"楼层名称不能为空"},
+	  cf_sequence:{required:"楼层序号不能为空",digits:"请填写合法数字"},
+	  cf_type:{required:"楼层样式不能为空"}
+	}
+  });
+});
+//
+function saveForm(method){
+   jQuery(".floor_thumbnail li").each(function(){
+   if(jQuery(this).attr("class")=="this"){
+	   jQuery("#cf_type").val(jQuery(this).attr("level"));
+	  } 
+ });
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">频道管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li> <a href="$!webPath/channel_list"><b>管理</b></a></li>
+      <li> <a href="$!webPath/channel_add"><b>新增</b></a> </li>
+      <li><a href="$!webPath/channelfloor_list?channel_id=$!channel_id"><b>楼层列表</b></a></li>
+      <li><a href="$!webPath/channelfloor_add?channel_id=$!channel_id" class="this"><b>楼层新增</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/channelfloor_save" method=post enctype="multipart/form-data" name="theForm" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="channel_id" type="hidden" id="channel_id" value="$!channel_id" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/channelfloor_list?channel_id=$!channel_id" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/channelfloor_add?channel_id=$!channel_id" />
+    <div class="edit">
+      <div class="editul setcont ">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>楼层名称</li>
+          <li><span class="webname">
+            <input name="cf_name" type="text" id="cf_name" value="$!obj.cf_name" size="40" />
+            </span>
+            <span id="nothis"><strong class="q"></strong><strong class="w">建议四个字或八个英文以内，例如：时尚潮服</strong><strong class="c"></strong></span>
+            </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>楼层特色</li>
+          <li><span class="webname">
+            <input name="cf_style" type="text" id="cf_style" value="$!obj.cf_style" size="40" />
+            </span>
+            <span id="nothis"><strong class="q"></strong><strong class="w">建议四个字或八个英文以内，例如：Fashion</strong><strong class="c"></strong></span>
+            </li>
+        </ul>
+        <ul class="set1" id="gf_css_info">
+          <li  class="setcont_bg"><strong class="sred">*</strong>楼层序号</li>
+          <li><span class="webname">
+            <input name="cf_sequence" type="text" id="cf_sequence" value="$!obj.cf_sequence" size="40" />
+            </span></li>
+        </ul>
+        <ul class="set1" id="gf_css_info">
+          <li  class="setcont_bg"><strong class="sred">*</strong>楼层样式</li>
+          <li><span class="webname">
+          <input name="cf_type" type="hidden" id="cf_type" value="$!cf_type" />
+          	请在下面选择本楼层的样式
+             <!--<select id="cf_type" name="cf_type">
+               <option>请选择楼层样式...</option>
+               <option  value="0" >样式一</option>
+               <option value="1">样式二</option>
+               <option value="2">样式三</option>
+               <option value="3">样式四</option>
+               <option value="4">样式五</option>
+               <option value="5">样式六</option>
+             </select>-->
+            </span></li>
+        </ul>
+
+        
+        <ul class="floor_thumbnail">
+        	<li style="margin-left:150px;" class="this"  level="0">
+            	<a href="javascript:void(0);">
+                	<img src="$!cdnServer/resources/style/system/manage/blue/images/floor1.jpg" />
+                </a>
+            </li>
+            <li  level="1" >
+            	<a href="javascript:void(0);" >
+                	<img src="$!cdnServer/resources/style/system/manage/blue/images/floor2.jpg" />
+                </a>
+            </li>
+            <li level="2">
+            	<a href="javascript:void(0);">
+                	<img src="$!cdnServer/resources/style/system/manage/blue/images/floor3.jpg" />
+                </a>
+            </li>
+            <li level="3">
+            	<a href="javascript:void(0);">
+                	<img src="$!cdnServer/resources/style/system/manage/blue/images/floor4.jpg" />
+                </a>
+            </li>
+            <li level="4">
+            	<a href="javascript:void(0);">
+                	<img src="$!cdnServer/resources/style/system/manage/blue/images/floor5.jpg" />
+                </a>
+            </li>
+            <li level="5">
+            	<a href="javascript:void(0);">
+                	<img src="$!cdnServer/resources/style/system/manage/blue/images/floor6.jpg" />
+                </a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js" type="text/javascript" ></script>
+<script type="application/javascript">
+jQuery(document).ready(function(e) {
+	jQuery("#AreaId").bind('input propertychange', function() {
+		var areaName=jQuery("#AreaId").val();
+		if(areaName!=""){
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/grouplife/areaSearch',
+				  data:{"areaName":areaName},
+				beforeSend:function(){
+				},
+			   success:function(data){
+				    var json = eval(data) 
+					jQuery(".city_search_list ul").empty(); 
+  					for(var i=0; i<json.length; i++){  
+						jQuery(".city_search_list ul").append("<li><a href='$!webPath/wap/group/index?type=life&ga_id="+json[i].id+"'>"+json[i].areaName+"</a></li>");
+  					} 
+					jQuery(".city_search_list").show(); 
+              	}
+	    });
+		}else{
+			jQuery(".city_search_list").hide(); 
+			}
+	});
+	
+jQuery(".city_right a:first").addClass("this");
+jQuery(window).scroll(function(){
+	var top = 0;
+	var id;
+	 top = jQuery(document).scrollTop();
+		 jQuery(".city_item h1").each(function(){
+	    var top=jQuery(this).offset().top - jQuery(window).scrollTop();
+		if(top<=10 && top>0){
+		  id = jQuery(this).attr("id");
+		  jQuery(".city_right a").removeClass("this");
+		  jQuery("#word_"+id).addClass("this");
+		}
+	  });	
+	});	
+});<!--end-->
+
+
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+	<div class="city_hd">#if($!area)当前城市-$!{area.areaName}#else全国#end<a class="close" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/close01.png" ></a></div>
+	<div class="group_city">
+    	<div class="city_right">
+          #foreach($list in $all_list)
+        	 <a href="javascript:void(0);" id="word_$!list.get('word')" >$!list.get("word")</a>
+            #end
+        </div> 
+    	<div class="city_search">
+        <div class="city_search_input"><input id="AreaId" type="text" placeholder="请输入城市名称"/></div>
+        <div class="city_search_list" style="display:none">
+        	<ul>
+            </ul>
+        </div>
+        </div>
+		<!-- <div class="city_item">
+        	<h1 class="city_title">热门城市</h1>
+            <ul class="hot_city">
+            	<li><a href="">沈阳</a></li>
+                <li><a href="">沈阳沈阳沈阳沈阳</a></li>
+                <li><a href="">沈阳</a></li>
+                <li><a href="">沈阳</a></li>
+            </ul>
+        </div>-->
+        #foreach($list in $all_list)
+        <div class="city_item">
+        	<h1 class="city_title" id="$!list.get('word')">$!list.get("word")</h1>
+            <ul class="city_list">
+            #foreach($map in $!list.get("area_list"))
+            	<li><a href="$!webPath/wap/group/index?type=life&ga_id=$!map.get("id")">$!map.get("name")</a></li>
+            #end
+            </ul>
+        </div>
+        #end
+    </div>
+</div>
+</body>
+</html>

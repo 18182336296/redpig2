@@ -1,0 +1,105 @@
+  <script>
+var currentPage = 2;
+	var  ret = 1;
+jQuery(document).ready(function(){
+	var totalPage = jQuery("#totalPage").val();
+   jQuery(window).scroll(function(){
+	   totalPage = jQuery("#totalPage").val();
+	   if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1){
+		if(currentPage<=totalPage&&ret==1){
+		var goods_eva = jQuery("#goods_eva").val();	
+		jQuery("#loading2").hide();
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/goods_eva',
+				  data:{"currentPage":currentPage,"goods_id":"$!goods_id","goods_eva":goods_eva},
+				beforeSend:function(){
+				  jQuery("#loading_none2").hide();
+				  jQuery("#loading2").show();
+				  ret = 2;
+				},
+			   success:function(data){
+				 ret = 1;
+				 currentPage =currentPage+1;
+	             if(data){
+				  jQuery("#eva_objs").append(data);
+				  jQuery("#loading2").hide();	
+			 	 }else{ 
+				   jQuery("#loading_none2").show();
+				  }  
+              	}
+	    });
+	 }
+	 }else{
+		if(currentPage>totalPage){
+			jQuery("#loading_none2").show();
+		}else{
+			jQuery("#loading_none2").hide();
+			}
+	}
+	});
+});<!--end-->
+</script>
+   	<div id="eva_objs">
+   	<input id="totalPage" value="$!totalPage" type="hidden" />
+   	<input id="goods_eva" value="$!goods_eva" type="hidden" />
+   #foreach($obj in $eva_objs)
+   <div class="evaluate_content" >
+        	<p class="evaluate_text">$!{obj.evaluate_info}</p>
+            <ul class="evaluate_pic">
+            	#set($imgs=$!evaluateViewTools.queryEvaImgSrc($!obj.evaluate_photos))
+                #if($imgs.size()>0)
+                #foreach($!img in $imgs)
+            	<li><img src="$!imageWebServer/$!img.path/$!img.name"></li>
+                #end
+                #end
+            </ul>
+            <dl  class="evaluate_date">
+            	<dt>#if($!obj.userName)$!{obj.userName} #else $!{obj.evaluate_user.userName} #end</dt>
+                <dd>$!CommUtil.formatShortDate($!obj.addTime)</dd>
+            </dl>
+            <!--若有追加评价则该div显示，否则隐藏-->
+	            #if($!obj.addeva_status==1)
+	             #set($soon=$!orderFormTools.how_soon($!obj.addeva_time))
+                 <div class="append">
+	            	<b class="arrow"></b>
+	            	<p><span>#if($!soon==999)很久之后#else$!soon天后#end追加评论：</span>$!obj.addeva_info</p>
+	                #set($imgs=$!evaluateViewTools.queryEvaImgSrc($!obj.addeva_photos))
+	                #if($imgs.size()>0)
+	                <ul class="evaluate_pic">
+	                #foreach($!img in $imgs)
+	                    <li><img src="$!imageWebServer/$!img.path/$!img.name"></li>
+	                 #end
+	            	</ul>
+	            	#end
+	            </div>
+	            #end
+            #if($!obj.reply_status==1)
+            <div class="merchant_reply">
+            	<p><span>【店主回复】</span>$!obj.reply</p>
+            </div>
+            #end
+	            
+   	</div>
+            #end
+        </div>
+            #if($!$eva_objs.size()<1)
+          <div class="main">
+		    <div class="mt50" style="height:49px;"></div>
+		    <div class="error_page1"> <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+		      <p>暂无记录！</p>
+		    </div>
+          </div>
+          #end
+<div class="loading" id="loading2" style="display: none">
+	<ul>
+		<li><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif"
+			width="16" height="16"></li>
+		<li>正在加载....</li>
+	</ul>
+</div>
+<div class="loading" id="loading_none2" style="display:none">
+		    <ul>
+		      <li>没有更多了....</li>
+		    </ul>
+		  </div>

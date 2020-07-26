@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<title></title>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<style media=print type="text/css"> 
+.noprint{visibility:hidden} 
+</style>
+<div class="noprint" style="display:block; padding:5px 10px; position:absolute; right:10px; top:10px; background:#ccc; border-radius:3px; cursor:pointer;" onclick="window.print();">打&nbsp;印</div>
+<div class="print_box">
+  <div class="print_left">
+    <h1>$!{obj.user_name}发货单</h1>
+     #if($!obj.delivery_type==1)
+        #set($delivery=$!orderFormTools.query_order_delivery("$!obj.delivery_info"))
+        <ul>
+          <li>收货人：$!delivery.da_name</li>
+          <li>电话：$!{delivery.da_tel}（自提点电话）</li>
+          <li>手机：$!{obj.receiver_mobile}（买家手机号）</li>
+          <li>所在地：$!obj.receiver_area</li>
+          <li>地址：$!delivery.da_address</li>
+          <li>邮编：$!{obj.receiver_zip}</li>
+          <li>订单号：$!obj.order_id</li>
+          <li>下单时间：$!CommUtil.formatLongDate($!obj.addTime)</li>
+          <li>发货单号：$!obj.shipCode</li>
+        </ul>  
+      #else  
+    <ul>
+      <li>收货人：$!obj.receiver_Name</li>
+      <li>电话：$!{obj.receiver_telephone}</li>
+      <li>手机：$!{obj.receiver_mobile}</li>
+      <li>所在地：$!obj.receiver_area</li>
+      <li>地址：$!obj.receiver_area_info</li>
+      <li>邮编：$!{obj.receiver_zip}</li>
+      <li>订单号：$!obj.order_id</li>
+      <li>下单时间：$!CommUtil.formatLongDate($!obj.addTime)</li>
+      <li>发货单号：$!obj.shipCode</li>
+    </ul>
+    #end
+    <div class="print_left_tb">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="7%" align="center">序号</td>
+          <td width="55%">商品名称</td>
+          <td width="11%" align="center">规格</td>
+          <td width="10%" align="center">单价（元）</td>
+          <td width="7%" align="center">数量</td>
+          <td width="10%" align="center">小计（元）</td>
+        </tr>
+        #set($allCount = 0)
+        #set($prices = 0)
+         #foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.goods_info"))
+            #set($goods_id = "$!{map.get('goods_id')}")	
+            #set($goods_name = "$!{map.get('goods_name')}")
+            #set($goods_count = "$!{map.get('goods_count')}")
+            #set($goods_price = "$!{map.get('goods_price')}")
+            #set($goods_type = "$!{map.get('goods_type')}")
+            #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+            #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+            #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+        #set($allCount = $!allCount + $!CommUtil.null2Int($!goods_count))
+        #set($prices = $!CommUtil.null2Int($!goods_count) * $!CommUtil.null2Double($!goods_price))
+        <tr>
+          <td height="38" align="center">$!velocityCount</td>
+          <td>$!{goods_name}#if($!goods_type=="group")<span style="color:#F00">(团购商品)</span>#end</td>
+          <td align="center">$!goods_gsp_val</td>
+          <td align="center">¥$!goods_price</td>
+          <td align="center">$!goods_count</td>
+          <td align="center"><strong style="color:#F90" id="price_$!{goods_id}">¥<b>#if($!goods_type=="group")$!{gc.goods.group_goods.gg_price}#else $!CommUtil.formatMoney($!prices)  #end</b></strong></td>
+        </tr>
+        #end
+        <script>
+           jQuery(document).ready(function() {
+			   var all_price=0;
+                jQuery("strong[id^='price_'] b").each(function(index, element) {
+                    var price=jQuery(this).html();
+					all_price=parseFloat(all_price)+parseFloat(price);
+                });
+				jQuery("#all_price_1").html("¥"+all_price.toFixed(2));
+				jQuery("#all_price_2").html("商品总价：¥"+all_price.toFixed(2));
+        });
+        </script>
+        <tr>
+          <td height="38" colspan="4" bgcolor="#eeeeee" style="padding-left:20px;">合计 $!{obj.goods_amount}</td>
+          <td align="center" bgcolor="#eeeeee">$!allCount</td>
+          <td align="center" bgcolor="#eeeeee" id="all_price_1">¥$!{obj.goods_amount}</td>
+        </tr>
+        <tr>
+          <td colspan="6" height="60"><ul>
+              <li id="all_price_2">商品总价:¥$!{obj.goods_amount}</li>
+              <li>运费：¥$!{obj.ship_price}</li>
+              <li>优惠：¥$!{coupon_price}</li>
+              <li>订单总额：¥$!{obj.totalPrice}</li>
+            </ul></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

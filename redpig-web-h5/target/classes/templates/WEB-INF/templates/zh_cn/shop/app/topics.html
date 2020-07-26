@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>首页专题</title>
+<link rel="stylesheet" type="text/css" href="$!cdnServer/resources/style/system/front/default/css/weixin.css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script>
+   jQuery(document).ready(function(e) {
+	   //jQuery(window).width();//浏览器窗口宽度
+	   //document.body.clientWidth;//网页可见宽度
+	   var width=jQuery(window).width();
+	   //设置所有图片的高度
+	   var h2=jQuery("img[id='two_1']").height();
+	   var w2=jQuery("img[id='two_1']").width();
+	   var height2=((width/2)*h2)/w2;
+	   jQuery("img[id^='two_']").each(function(index, element) {
+             jQuery(this).height(parseInt(height2));
+       });
+	   
+	   var h3=jQuery("img[id='three_1']").height();
+	   var w3=jQuery("img[id='three_1']").width();
+	   var height3=((width/3)*h3)/w3;
+	   jQuery("img[id^='three_']").each(function(index, element) {
+             jQuery(this).height(parseInt(height3));
+       });
+	   
+	   var h4=jQuery("img[id='four_1']").height();
+	   var w4=jQuery("img[id='four_1']").width();
+	   var height4=((width/4)*h4)/w4;
+	   jQuery("img[id^='four_']").each(function(index, element) {
+             jQuery(this).height(parseInt(height4));
+       });
+	   
+	   var h6=jQuery("img[id='six_1']").height();
+	   var w6=jQuery("img[id='six_1']").width();
+	   var height6=((width/2)*h6)/w6;
+	   jQuery("img[id='six_1']").height(parseInt(height6));
+	   jQuery("img[id='six_2']").height(parseInt(height6)/2);
+	   jQuery("img[id='six_3']").height(parseInt(height6)/2);
+	   
+	   var h7=jQuery("img[id='six_1']").height();
+	   var w7=jQuery("img[id='six_1']").width();
+	   var height7=((width/3)*h7)/w7;
+	   jQuery("img[id='seven_1']").height(parseInt(height7));
+	   jQuery("img[id='seven_2']").height(parseInt(height7)/3);
+	   jQuery("img[id='seven_3']").height((parseInt(height7)/3)*2);
+	   jQuery("img[id='seven_4']").height((parseInt(height7)/3)*2);
+	   
+	   //设置所有的图片宽度
+	   jQuery("img[id^='two_']").each(function(index, element) {
+             jQuery(this).width(width/2);
+       });
+	   jQuery("img[id^='three_']").each(function(index, element) {
+             jQuery(this).width(width/3);
+       });
+	   jQuery("img[id^='four_']").each(function(index, element) {
+             jQuery(this).width(width/4);
+       });
+	   jQuery("img[id^='six_']").each(function(index, element) {
+             jQuery(this).width(width/2);
+       });
+	   jQuery("img[id='seven_1']").width(width/3);
+	   jQuery("img[id='seven_2']").width((width/3)*2);
+	   jQuery("img[id='seven_3']").width(width/3);
+	   jQuery("img[id='seven_4']").width(width/3);
+  });
+function iosFun(cmd,para)
+{ 
+    document.location="objc://"+cmd+":/"+para;  //cmd代表objective-c中的的方法名，parameter1自然就是参数了
+}
+</script>
+</head>
+<body>
+<div class="phone_main">
+#foreach($floor in $!floor_list)
+<div class="web_special">
+ <div class="web_special_til" #if($!velocityCount==1) style="margin-top:0px;" #end>$!floor.title</div>
+  #foreach($map in $!appIndexTools.getFloorInfo($!floor.id))
+<!---1个商品-->
+   #if($!map.line_type=="1")
+	<div class="web_special_list list_01">
+       #foreach($info in $!{map.line_info})
+    	<a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="one_$!{velocityCount}" ></a>
+       #end
+    </div>
+    #end
+    #if($!map.line_type=="2")
+<!---2个商品-->
+    <div class="web_special_list list_02">
+       #foreach($info in $!{map.line_info})
+    	<span><a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="two_$!{velocityCount}"></a><i></i></span>
+       #end
+    </div>
+    #end
+    #if($!map.line_type=="3")
+<!---3个商品-->
+    <div class="web_special_list list_03">
+       #foreach($info in $!{map.line_info})
+    	<span><a  #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="three_$!{velocityCount}"></a><i></i></span>
+        
+       #end
+       
+    </div>
+    #end
+    #if($!map.line_type=="4")
+<!---4个商品-->
+    <div class="web_special_list list_04">
+    	#foreach($info in $!{map.line_info})
+    	<span><a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="four_$!{velocityCount}"></a><i></i></span>
+       #end
+    </div>
+    #end
+    #if($!map.line_type=="6")
+ <!---左一右俩-->
+    <div class="web_special_list list_05">
+      #foreach($info in $!{map.line_info})
+       #if($!velocityCount==1)
+   	   <div class="list_05_left">
+        	<a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="six_$!{velocityCount}"></a>
+            <i></i>
+       </div>
+       #end
+       #if($!velocityCount==2)
+       <div class="list_05_right">
+        	<span><a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="six_$!{velocityCount}"></a><i></i></span>
+         #end
+         #if($!velocityCount==3)
+            <span><a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="six_$!{velocityCount}"></a></span>
+       </div>
+      #end
+      #end
+    </div>
+    #end
+    #if($!map.line_type=="7")
+ <!---左一右俩右下还俩-->
+    <div class="web_special_list list_06">
+    #foreach($info in $!{map.line_info})
+        #if($!velocityCount==1)
+        <div class="list_06_left">
+            <a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="seven_$!{velocityCount}"></a><i></i>
+        </div>
+        #end
+        #if($!velocityCount==2)
+        <div class="list_06_right">
+           <span><a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="seven_$!{velocityCount}"></a><i></i></span>
+        #end
+        #if($!velocityCount==3)
+           <div class="list_6_r_b">
+        	   <b><a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="seven_$!{velocityCount}"></a><i></i></b>
+               #end
+               #if($!velocityCount==4)
+               <b><a #if($!info.click_type=="goods") #if($!device_type=="Android") onclick="window.jsInterface.gotoGoods('$!{info.click_info}')" href="javascript:void(0);" #elseif($!device_type=="iOS") onclick="iosFun('gotoGoods','$!{info.click_info}')" href="javascript:void(0);" #else href="$!webPath/items_$!{info.click_info}" #end #else href="$!{info.click_info}" #end ><img src="$!webPath/$!info.img_url" id="seven_$!{velocityCount}"></a></b>
+           </div> 
+        </div>
+        #end
+        #end
+    </div>
+    #end
+#end   
+</div>
+#end
+</div>
+</body>
+</html>

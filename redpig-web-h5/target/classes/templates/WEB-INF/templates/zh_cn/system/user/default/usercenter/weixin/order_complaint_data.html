@@ -1,0 +1,99 @@
+#if($!objs.size()>0)
+         	#foreach($obj in $objs)
+        	#foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.goods_info"))
+            #set($goods_id = "$!{map.get('goods_id')}")	
+            #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+            #set($store=$!orderFormTools.goods_second_domain("$!{goods_id}","goods"))
+            #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+            #set($goods_return_status="$!{map.get('goods_return_status')}")
+            #set($goods_choice_type="$!{map.get('goods_choice_type')}")
+            #set($goods_gsp_ids="$!{map.get('goods_gsp_ids')}")
+            #set($goods_complaint_status="$!{map.get('goods_complaint_status')}") 
+        	<div class="c_goods_item">
+            	<h3 class="order_number">订单编号：$!obj.order_id
+                <!--#if($!store)
+                	<span class="mine">$!store.store_name</span>
+               	#else
+                	<span class="mine">自营</span>
+                #end-->
+                </h3>
+            	<div class="goods_content">
+						<div class="goods_pic"><a href="$!webPath/items?id=$!{goods_id}"><img src="$!img"></a></div>
+                        <div  class="goods_text">
+                            <a href="$!webPath/items?id=$!{goods_id}">
+                                <div class="goods_name">$!map.get('goods_name')</div>
+                            </a>
+                        </div>
+                        
+                        <div class="goods_value">
+                            <span class="now_value"><b>￥</b>$!map.get('goods_price')</span>
+                        </div>
+                </div>
+                #if($!{goods_complaint_status}==1||$!{obj.order_form}==1)
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!obj.addTime)</span>
+                    <a href="javascript:void(0);" class="btn this">投诉</a>
+                </div>
+                #else
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!obj.addTime)</span>
+                    <a #if($!{config.complaint_time}==0) href="javascript:void(0);" class="btn this"  #else href="$!webPath/buyer/complaint_handle?order_id=$!obj.id&currentPage=$!currentPage&goods_id=$!goods_id" class="btn" #end >投诉</a>
+                </div>
+                #end
+            </div>
+             #if($!obj.child_order_detail)
+                             #foreach($child_map in $!orderFormTools.queryGoodsInfo("$!obj.child_order_detail"))
+                                     #set($child_order=$!orderFormTools.query_order("$!child_map.get('order_id')"))
+                                     #set($order_total_price=$order_total_price+$child_order.totalPrice)
+                                     #set($order_total_ship_price=$order_total_ship_price+$child_order.ship_price)
+                                     #set($order_id=$!child_map.get('order_id'))
+                                 #foreach($map in $!orderFormTools.queryGoodsInfo("$!child_order.goods_info"))
+                                     #set($goods_id = "$!{map.get('goods_id')}")	
+                                     #set($goods_name = "$!{map.get('goods_name')}")
+                                     #set($goods_count = $!{map.get('goods_count')})
+                                     #set($goods_price = $!{map.get('goods_price')})
+                                     #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+                                     #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+                                     #set($store=$!orderFormTools.goods_second_domain("$!{goods_id}","goods"))
+               						 #set($goods_domainPath="$!webPath/items_$!{goods_id}")
+              						 #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+               						 #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+               						 #end
+                                     #set($goods_return_status="$!{map.get('goods_return_status')}")
+                                     #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+                                     #set($goods_choice_type="$!{map.get('goods_choice_type')}")
+                                      #set($goods_complaint_status="$!{map.get('goods_complaint_status')}")                     
+                    <div class="c_goods_item">
+            	<h3 class="order_number">订单编号：$!child_order.order_id
+                </h3>
+            	<div class="goods_content">
+						<div class="goods_pic"><a href="$!webPath/items?id=$!{goods_id}"><img src="$!img"></a></div>
+                        <div  class="goods_text">
+                            <a href="$!webPath/items?id=$!{goods_id}">
+                                <div class="goods_name">$!goods_name</div>
+                            </a>
+                        </div>
+                        
+                        <div class="goods_value">
+                            <span class="now_value"><b>￥</b>$!goods_price</span>
+                        </div>
+                </div>
+                #if($!{goods_complaint_status}==1||$!{child_order.order_form}==1)
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!child_order.addTime)</span>
+                    <a href="javascript:void(0);" class="btn this">投诉</a>
+                </div>
+                #else
+                <div class="bottom_fun">
+                	<span class="time">下单时间：$!CommUtil.formatLongDate($!child_order.addTime)</span>
+                    <a href="$!webPath/buyer/complaint_handle?order_id=$!child_order.id&goods_id=$!goods_id" class="btn">投诉</a>
+                </div>
+                #end
+            </div>
+                    
+             	 #end
+                 #end
+                 #end
+        	#end
+       #end
+#end 

@@ -1,0 +1,43 @@
+#foreach($obj in $objs)	
+        	  #foreach($map in $!CommUtil.Json2List("$!obj.goods_info"))
+                	#set($goods_id = "$!{map.get('goods_id')}")	
+            		#set($goods_name = "$!{map.get('goods_name')}")
+            		#set($goods_price = "$!{map.get('goods_price')}")
+            		#set($goods_mainphoto_path = "$!{map.get('goods_main_photo')}")
+            		#set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+             		#set($store=$!orderFormTools.goods_second_domain("$!{goods_id}","goods"))
+               		#set($goods_domainPath="$!webPath/wap/items?id=$!{goods_id}")
+             #end							
+        	<div class="consult_item">
+            	<div class="goods_content">
+						<div class="goods_pic"><a href="$goods_domainPath"><img src="$img"></a></div>
+                        <div  class="goods_text">
+                            <a href="$goods_domainPath">
+                                <div class="goods_name">$goods_name</div>
+                                
+                            </a>
+                        </div>
+                        
+                        <div class="goods_value" >
+                            <span class="now_value"><b>￥</b>$goods_price</span>
+                        </div>
+                </div>
+                 
+                <ul class="consult_detail">
+                	<li class="icon"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/service_center_1.png"></li>
+                    <li>
+                    	<p class="question">$!{obj.consult_content}</p>
+                        <p class="time">$!CommUtil.formatLongDate($!obj.addTime)</p>
+                    </li>
+                </ul>
+                #if($!obj.consult_reply)
+                <ul class="answer_detail">
+                	<li class="icon"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/service_center_2.png"></li>
+                    <li>
+                    	<p class="answer">$!{obj.consult_reply}</p>
+                        <p class="time">$!CommUtil.formatLongDate($!obj.reply_time)</p>
+                    </li>
+                </ul>
+                #end
+            </div>
+#end

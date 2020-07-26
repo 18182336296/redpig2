@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.base.js"></script>
+<script src="$!cdnServer/resources/js/jquery.metadata.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js"  charset="utf-8"></script>
+<script>
+jQuery(document).ready(function() {
+	#foreach($obj in ${weixin_nav_map.keySet()})
+	if(jQuery("#$obj").length>0){
+		jQuery("#${obj}"+"_show").parent().attr("class","this");
+		jQuery("#${obj}"+"_show").attr("src","$!imageWebServer/$weixin_nav_map.get($obj)");
+		jQuery("#${obj}"+"_show").show();
+		jQuery("#${obj}"+"_pre").attr("src","$!imageWebServer/$weixin_nav_map.get($obj)");
+	}	
+	#end
+	
+	#if($weixin_nav_map.get("index_navigator")=="true"){
+		jQuery("#index_navigator_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+        jQuery("#index_navigator").val("true");
+	}
+	#end
+	#if($weixin_nav_map.get("navigator_bar")=="true"){
+		jQuery("#navigator_bar_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+        jQuery("#navigator_bar").val("true");
+	}
+	#end
+	
+	jQuery("#index_navigator_button").click(function() {
+    var status = jQuery("#index_navigator").val();
+    if (status == "true") {
+        status = "false";
+    } else {
+        status = "true";
+    }
+    jQuery.post("$!webPath/weixin_navigator_enable", {
+        "name": "index_navigator",
+        "value": status
+    },
+    function(data) {
+        if (data != "") {
+            if (data.status == "true") {
+                jQuery("#index_navigator_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+                jQuery("#index_navigator").val("true");
+
+            } else {
+                jQuery("#index_navigator_button").attr("src", "$!cdnServer/resources/style/system/manage/blue/images/no.jpg");
+                jQuery("#index_navigator").val("false");
+            }
+        }
+
+    },
+    "json");
+	});
+	
+	jQuery("#navigator_bar_button").click(function() {
+    var status = jQuery("#navigator_bar").val();
+    if (status == "true") {
+        status = "false";
+    } else {
+        status = "true";
+    }
+    jQuery.post("$!webPath/weixin_navigator_enable", {
+        "name": "navigator_bar",
+        "value": status
+    },
+    function(data) {
+        if (data != "") {
+            if (data.status == "true") {
+                jQuery("#navigator_bar_button").attr("src", "$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+                jQuery("#navigator_bar").val("true");
+            } else {
+                jQuery("#navigator_bar_button").attr("src", "$!cdnServer/resources/style/system/manage/blue/images/no.jpg");
+                jQuery("#navigator_bar").val("false");
+            }
+        }
+
+    },
+    "json");
+	});
+
+    jQuery("input[type='file']").live("change",
+    function() {
+        var name = jQuery(this).attr("name");
+        jQuery.ajaxFileUpload({
+            url: '/admin/weixin_navigator_upload',
+            fileElementId: [name],
+            fileFilter: "$!imageSuffix1",
+            data: {
+                "name": name
+            },
+            dataType: 'json',
+            success: function(text) {
+                if (text != null) {
+					jQuery("#"+name+"_show").parent().attr("class","this");
+					jQuery("#"+name+"_show").attr("src","$!imageWebServer/"+text.img_url);
+					jQuery("#"+name+"_show").show();	
+					jQuery("#"+name+"_pre").attr("src","$!imageWebServer/"+text.img_url);				
+                }
+            }
+
+        });
+
+    });
+	
+	
+})
+</script>
+</head>
+<body>
+#set($jp="$!cdnServer/resources/style/system/front/default/images/weixin/nav_1.png")
+#set($hot="$!cdnServer/resources/style/system/front/default/images/weixin/nav_2.png")
+#set($cx="$!cdnServer/resources/style/system/front/default/images/weixin/nav_3.png")
+#set($tg="$!cdnServer/resources/style/system/front/default/images/weixin/nav_4.png")
+#set($jf="$!cdnServer/resources/style/system/front/default/images/weixin/nav_5.png")
+#set($mf="$!cdnServer/resources/style/system/front/default/images/weixin/nav_6.png")
+#set($lm="$!cdnServer/resources/style/system/front/default/images/weixin/nav_7.png")
+#set($pp="$!cdnServer/resources/style/system/front/default/images/weixin/nav_8.png")
+<div class="android_app_template">
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>推荐上传使用的图标尺寸为50*50</li>
+      <li>底部导航图标分为未选中和选中两种状态，应使用不同的图标来进行区分</li>
+    </ul>
+  </div>
+  <div class="and_fr">
+    <div id="edit_table">
+      <div class="and_fl">
+        <div class="and_scroll_box"> 
+          <!--导航 -->
+          <div class="adn_scroll_nav">
+            <div class="adn_scroll_nav_top"></div>
+            <div class="adn_scroll_nav_center">
+              <ul>
+                <li><span class="this"><img src="$jp" id="index_1_pre"/></span><i>云购</i></li>
+                <li><span class="this"><img src="$hot" id="index_2_pre"/></span><i>品牌街</i></li>
+                <li><span class="this"><img src="$cx" id="index_3_pre"/></span><i>促销</i></li>
+                <li><span class="this"><img src="$tg" id="index_4_pre"/></span><i>领券中心</i></li>
+                <li><span class="this"><img src="$jf" id="index_5_pre"/></span><i>积分商城</i></li>
+                <li><span class="this"><img src="$mf" id="index_6_pre"/></span><i>0元试用</i></li>
+                <li><span class="this"><img src="$lm" id="index_7_pre"/></span><i>生活购</i></li>
+                <li><span class="this"><img src="$pp" id="index_8_pre"/></span><i>商品购</i></li>
+              </ul>
+            </div>
+            <div class="adn_scroll_nav_top1"> <span class="adn_scroll_nav_top_1"></span> <span class="adn_scroll_nav_top_2"></span> <span class="adn_scroll_nav_top_2"></span> </div>
+            <div class="adn_scroll_nav_bottom">
+              <ul>
+                <li><span class="this"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_index_1.png" id="nav_1a_pre"/></span><i>首页</i></li>
+                <li><span class="this"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_search_1.png" id="nav_2a_pre"/></span><i>搜索</i></li>
+                <li><span class="this"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_order_1.png" id="nav_3a_pre"/></span><i style="width:50px; margin-left:-10px;">购物车</i></li>
+                <li><span class="this"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_shopcar_1.png" id="nav_4a_pre"/></span><i>订单</i></li>
+                <li><span class="this"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png" id="nav_5a_pre"/></span><i style="width:60px; margin-left:-16px;">我的</i></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 导航编辑 -->
+      <div class="android_app_nav_edit">
+        <div class="android_app_nav_edit_t">
+          <div class="android_app_nav_edit_top"> <i>上传首页导航</i> <b> <span>启用自定义导航</span> <em class="webSwitch" style="cursor:pointer">
+            <input name="index_navigator" id="index_navigator" type="hidden" value="$!index_navigator" />
+            <img id="index_navigator_button" src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/no.jpg" /></em> </b> </div>
+          <ul>
+            <li><span>
+              <input name="index_1" id="index_1" type="file" />
+              <img id="index_1_show" src="" style="display:none" /> </span><i>云购</i></li>
+            <li><span>
+              <input name="index_2" id="index_2" type="file" />
+              <img id="index_2_show" src="" style="display:none" /> </span><i>品牌街</i></li>
+            <li><span>
+              <input name="index_3" id="index_3" type="file" />
+              <img id="index_3_show" src="" style="display:none" /> </span><i>促销</i></li>
+            <li><span>
+              <input name="index_4" id="index_4" type="file" />
+              <img id="index_4_show" src="" style="display:none" /> </span><i>领券中心</i></li>
+            <li><span>
+              <input name="index_5" id="index_5" type="file" />
+              <img id="index_5_show" src="" style="display:none" /> </span><i>积分商城</i></li>
+            <li><span>
+              <input name="index_6" id="index_6" type="file" />
+              <img id="index_6_show" src="" style="display:none" /> </span><i>0元试用</i></li>
+            <li><span>
+              <input name="index_7" id="index_7" type="file" />
+              <img id="index_7_show" src="" style="display:none" /> </span><i>生活购</i></li>
+            <li><span>
+              <input name="index_8" id="index_8" type="file" />
+              <img id="index_8_show" src="" style="display:none" /> </span><i>商品购</i></li>
+          </ul>
+        </div>
+        <div class="android_app_nav_edit_b">
+          <div class="android_app_nav_edit_top"> <i>上传底部导航</i> <b> <span>启用自定义导航</span> <em class="webSwitch" style="cursor:pointer">
+            <input name="navigator_bar" id="navigator_bar" type="hidden" value="$!navigator_bar" />
+            <img id="navigator_bar_button" src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/no.jpg" /></em> </b> </div>
+          <ul>
+            <li><span>
+              <input name="nav_1a" id="nav_1a" type="file" />
+              <img id="nav_1a_show" src="" style="display:none" /></span><i>首页</i><b>未选中</b></li>
+            <li><span>
+              <input name="nav_2a" id="nav_2a" type="file" />
+              <img id="nav_2a_show" src="" style="display:none" /></span><i>搜索</i><b>未选中</b></li>
+            <li><span>
+              <input name="nav_3a" id="nav_3a" type="file" />
+              <img id="nav_3a_show" src="" style="display:none" /></span><i>购物车</i><b>未选中</b></li>
+            <li><span>
+              <input name="nav_4a" id="nav_4a" type="file" />
+              <img id="nav_4a_show" src="" style="display:none" /></span><i>订单</i><b>未选中</b></li>
+            <li><span>
+              <input name="nav_5a" id="nav_5a" type="file" />
+              <img id="nav_5a_show" src="" style="display:none" /></span><i>我的</i><b>未选中</b></li>
+          </ul>
+          <ul>
+            <li><span>
+              <input name="nav_1b" id="nav_1b" type="file" />
+              <img id="nav_1b_show" src="" style="display:none" /></span><i>首页</i><b>选中</b></li>
+            <li><span>
+              <input name="nav_2b" id="nav_2b" type="file" />
+              <img id="nav_2b_show" src="" style="display:none" /></span><i>搜索</i><b>选中</b></li>
+            <li><span>
+              <input name="nav_3b" id="nav_3b" type="file" />
+              <img id="nav_3b_show" src="" style="display:none" /></span><i>购物车</i><b>选中</b></li>
+            <li><span>
+              <input name="nav_4b" id="nav_4b" type="file" />
+              <img id="nav_4b_show" src="" style="display:none" /></span><i>订单</i><b>选中</b></li>
+            <li><span>
+              <input name="nav_5b" id="nav_5b" type="file" />
+              <img id="nav_5b_show" src="" style="display:none" /></span><i>我的</i><b>选中</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

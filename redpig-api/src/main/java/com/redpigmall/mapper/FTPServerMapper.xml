@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.FTPServerMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.FTPServer">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ftp_sequence" property="ftp_sequence" jdbcType="INTEGER"/>
+		<result column="ftp_name" property="ftp_name" jdbcType="VARCHAR"/>
+		<result column="ftp_addr" property="ftp_addr" jdbcType="VARCHAR"/>
+		<result column="ftp_ip" property="ftp_ip" jdbcType="VARCHAR"/>
+		<result column="ftp_username" property="ftp_username" jdbcType="VARCHAR"/>
+		<result column="ftp_password" property="ftp_password" jdbcType="VARCHAR"/>
+		<result column="ftp_type" property="ftp_type" jdbcType="INTEGER"/>
+		<result column="ftp_system" property="ftp_system" jdbcType="INTEGER"/>
+		<result column="ftp_amount" property="ftp_amount" jdbcType="INTEGER"/>
+		<result column="ftp_port" property="ftp_port" jdbcType="INTEGER"/>
+		
+		<collection property="ftp_users" column="id" select="com.redpigmall.dao.UserMapper.getFtpByFTPServerId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.FTPServer">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ftp_sequence" property="ftp_sequence" jdbcType="INTEGER"/>
+		<result column="ftp_name" property="ftp_name" jdbcType="VARCHAR"/>
+		<result column="ftp_addr" property="ftp_addr" jdbcType="VARCHAR"/>
+		<result column="ftp_ip" property="ftp_ip" jdbcType="VARCHAR"/>
+		<result column="ftp_username" property="ftp_username" jdbcType="VARCHAR"/>
+		<result column="ftp_password" property="ftp_password" jdbcType="VARCHAR"/>
+		<result column="ftp_type" property="ftp_type" jdbcType="INTEGER"/>
+		<result column="ftp_system" property="ftp_system" jdbcType="INTEGER"/>
+		<result column="ftp_amount" property="ftp_amount" jdbcType="INTEGER"/>
+		<result column="ftp_port" property="ftp_port" jdbcType="INTEGER"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ftp_sequence,ftp_name,ftp_addr,ftp_ip,ftp_username,ftp_password,ftp_type,ftp_system,ftp_amount,ftp_port
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ftp_sequence != null">and ftp_sequence = #{ftp_sequence,jdbcType=INTEGER}</if>
+		<if test="ftp_name != null">and ftp_name = #{ftp_name,jdbcType=VARCHAR}</if>
+		<if test="ftp_addr != null">and ftp_addr = #{ftp_addr,jdbcType=VARCHAR}</if>
+		<if test="ftp_ip != null">and ftp_ip = #{ftp_ip,jdbcType=VARCHAR}</if>
+		<if test="ftp_username != null">and ftp_username = #{ftp_username,jdbcType=VARCHAR}</if>
+		<if test="ftp_password != null">and ftp_password = #{ftp_password,jdbcType=VARCHAR}</if>
+		<if test="ftp_type != null">and ftp_type = #{ftp_type,jdbcType=INTEGER}</if>
+		<if test="ftp_system != null">and ftp_system = #{ftp_system,jdbcType=INTEGER}</if>
+		<if test="ftp_amount != null">and ftp_amount = #{ftp_amount,jdbcType=INTEGER}</if>
+		<if test="ftp_port != null">and ftp_port = #{ftp_port,jdbcType=INTEGER}</if>
+		
+	</sql>
+	<sql id="ifStatement">
+		ftp_sequence= #{ftp_sequence},
+		ftp_name= #{ftp_name},
+		ftp_addr= #{ftp_addr},
+		ftp_ip= #{ftp_ip},
+		ftp_username= #{ftp_username},
+		ftp_password= #{ftp_password},
+		ftp_type= #{ftp_type},
+		ftp_system= #{ftp_system},
+		ftp_amount= #{ftp_amount},
+		ftp_port= #{ftp_port}</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ftp_server 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ftp_server obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="queryList" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ftp_server obj 
+		<where>
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy !=null and orderBy != ''">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="queryPageListNotId" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ftp_server obj 
+		<where>
+			<include refid="whereStatement"/>
+			<if test="redPig_ftp_id != null">
+				obj.id != #{redPig_ftp_id,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<select id="queryFtpServerUserTrans" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap2" parameterType="map">
+		<![CDATA[	
+			select 
+				fs.* 
+			from 
+				redpigmall_ftp_server fs 
+			join 
+				(select  count(u.id) c ,u.ftp_id  from redpigmall_user u group  by u.ftp_id  ) b
+			on 
+				fs.id != #{redpig_ftp_id,jdbcType=BIGINT}
+			and 
+				b.c < fs.ftp_amount
+		]]>
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.FTPServer" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_ftp_server(
+			addTime,
+			deleteStatus,
+			ftp_addr,
+			ftp_amount,
+			ftp_ip,
+			ftp_name,
+			ftp_password,
+			ftp_sequence,
+			ftp_system,
+			ftp_type,
+			ftp_username,
+			ftp_port
+		)
+		values(
+			addTime=#{addTime},
+			deleteStatus=#{deleteStatus},
+			ftp_addr=#{ftp_addr},
+			ftp_amount=#{ftp_amount},
+			ftp_ip=#{ftp_ip},
+			ftp_name=#{ftp_name},
+			ftp_password=#{ftp_password},
+			ftp_sequence=#{ftp_sequence},
+			ftp_system=#{ftp_system},
+			ftp_type=#{ftp_type},
+			ftp_username=#{ftp_username},
+			ftp_port=#{ftp_port}
+		)
+	</insert>
+	<insert id="insert" parameterType="com.redpigmall.domain.FTPServer" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_ftp_server(
+			addTime,
+			deleteStatus,
+			ftp_sequence,
+			ftp_name,
+			ftp_addr,
+			ftp_ip,
+			ftp_username,
+			ftp_password,
+			ftp_type,
+			ftp_system,
+			ftp_amount,
+			ftp_port
+		) values (
+			#{addTime,jdbcType=TIMESTAMP},
+			#{deleteStatus,jdbcType=INTEGER},
+			#{ftp_sequence,jdbcType=INTEGER},
+			#{ftp_name,jdbcType=VARCHAR},
+			#{ftp_addr,jdbcType=VARCHAR},
+			#{ftp_ip,jdbcType=VARCHAR},
+			#{ftp_username,jdbcType=VARCHAR},
+			#{ftp_password,jdbcType=VARCHAR},
+			#{ftp_type,jdbcType=INTEGER},
+			#{ftp_system,jdbcType=INTEGER},
+			#{ftp_amount,jdbcType=INTEGER},
+			#{ftp_port,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="update" flushCache="true" parameterType="com.redpigmall.domain.FTPServer">
+		update redpigmall_ftp_server 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="delete" flushCache="true" parameterType="Long">
+		delete from redpigmall_ftp_server where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_ftp_server obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_ftp_server obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.FTPServer" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_ftp_server(addTime,deleteStatus,ftp_sequence,ftp_name,ftp_addr,ftp_ip,ftp_username,ftp_password,ftp_type,ftp_system,ftp_amount,ftp_port)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ftp_sequence,jdbcType=INTEGER},#{ftp_name,jdbcType=VARCHAR},#{ftp_addr,jdbcType=VARCHAR},#{ftp_ip,jdbcType=VARCHAR},#{ftp_username,jdbcType=VARCHAR},#{ftp_password,jdbcType=VARCHAR},#{ftp_type,jdbcType=INTEGER},#{ftp_system,jdbcType=INTEGER},#{ftp_amount,jdbcType=INTEGER},#{ftp_port,jdbcType=INTEGER}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.FTPServer">
+		update redpigmall_ftp_server
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_ftp_server where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_ftp_server where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_ftp_server obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_ftp_server obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.FTPServer" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_ftp_server
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_ftp_server where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

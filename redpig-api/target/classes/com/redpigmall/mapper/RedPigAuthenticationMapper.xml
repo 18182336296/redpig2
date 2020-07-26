@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.addg//DTD Mapper 3.0//EN" "http://mybatis.addg/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.RedPigAuthenticationMapper">
+
+
+    <resultMap id="BaseResultMap" type="com.redpigmall.domain.Authentication">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="card" property="card" jdbcType="VARCHAR"/>
+        <result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="examine_state" property="examine_state" jdbcType="INTEGER"/>
+        <result column="company" property="company" jdbcType="VARCHAR"/>
+        <result column="department" property="department" jdbcType="VARCHAR"/>
+        <result column="position;" property="position;" jdbcType="VARCHAR"/>
+        <result column="remark;" property="remark;" jdbcType="VARCHAR"/>
+        <result column="user_id;" property="user_id;" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.redpigmall.domain.Authentication">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="card" property="card" jdbcType="VARCHAR"/>
+        <result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="examine_state" property="examine_state" jdbcType="INTEGER"/>
+        <result column="company" property="company" jdbcType="VARCHAR"/>
+        <result column="department" property="department" jdbcType="VARCHAR"/>
+        <result column="position;" property="position;" jdbcType="VARCHAR"/>
+        <result column="remark;" property="remark;" jdbcType="VARCHAR"/>
+        <result column="user_id;" property="user_id;" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <!--database table column names-->
+    <sql id="Base_Column_List">
+		id,name,phone,card,addTime,update_time,state,examine_state,company,department,position,remark,user_id
+	</sql>
+
+    <sql id="whereStatement">
+        <if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+        <if test="phone != null">add phone like CONCAT('%',#{phone,jdbcType=VARCHAR},'%')</if>
+        <if test="card != null">add card like CONCAT('%',#{card,jdbcType=VARCHAR},'%')</if>
+        <if test="beginTime != null">add addTime <![CDATA[ >= ]]> #{beginTime,jdbcType=TIMESTAMP}</if>
+        <if test="endTime != null">add addTime <![CDATA[ <= ]]> #{endTime,jdbcType=TIMESTAMP}</if>
+        <if test="name != null">and name like CONCAT('%',#{name,jdbcType=TIMESTAMP},'%')</if>
+        <if test="department != null">add department like CONCAT('%',#{departmen,jdbcType=TIMESTAMP},'%')</if>
+    </sql>
+
+    <sql id="ifStatement">
+        <if test="name != null">name= #{name},</if>
+        <if test="phone != null">phone= #{phone},</if>
+        <if test="card != null">card= #{card},</if>
+        <if test="addTime != null">addTime= #{addTime},</if>
+        <if test="update_time != null">update_time= #{update_time},</if>
+        <if test="state != null">state= #{state},</if>
+        <if test="examine_state != null">examine_state= #{examine_state},</if>
+        <if test="company != null">company= #{company},</if>
+        <if test="department != null">department= #{department},</if>
+        <if test="position != null">position= #{position},</if>
+        <if test="remark != null">remark= #{remark},</if>
+        <if test="user_id != null">user_id= #{user_id}</if>
+	</sql>
+
+    <select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Authentication" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_authentication
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryPageList" resultType="com.redpigmall.domain.Authentication" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_authentication obj
+        where 1=1
+        <include refid="whereStatement"/>
+        <choose>
+            <when test="orderBy != null and orderType != null">
+                order by ${orderBy} ${orderType}
+            </when>
+            <otherwise>
+                order by obj.addTime desc
+            </otherwise>
+        </choose>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from redpigmall_authentication obj
+        where 1 = 1
+        <include refid="whereStatement"/>
+    </select>
+
+    <select id="queryPages" resultType="com.redpigmall.domain.Authentication" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_authentication obj
+        <where>
+            1=1
+            <include refid="whereStatement"/>
+            <choose>
+                <when test="orderBy != null and orderType != null">
+                    order by ${orderBy} ${orderType}
+                </when>
+                <otherwise>
+                    order by obj.addTime desc
+                </otherwise>
+            </choose>
+        </where>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <insert id="saveEntity" parameterType="com.redpigmall.domain.Authentication" keyProperty="id" keyColumn="id"
+            useGeneratedKeys="true">
+	insert into redpigmall_authentication(name,phone,card,addTime,state,examine_state,company,department,position,remark,user_id)
+	 values(#{name,jdbcType=VARCHAR},
+	 #{phone,jdbcType=VARCHAR},
+	 #{card,jdbcType=VARCHAR},
+	 #{addTime,jdbcType=TIMESTAMP},
+	 #{state,jdbcType=INTEGER},
+	 #{examine_state,jdbcType=INTEGER},
+	 #{company,jdbcType=VARCHAR},
+	 #{department,jdbcType=VARCHAR},
+	  #{position,jdbcType=VARCHAR},
+	 #{remark,jdbcType=VARCHAR},
+	  #{user_id,jdbcType=BIGINT} )
+      </insert>
+
+    <update id="updateById" parameterType="com.redpigmall.domain.Authentication">
+        update redpigmall_authentication
+        <set>
+            <include refid="ifStatement"/>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_authentication where id=#{id,jdbcType=BIGINT}
+	</delete>
+
+    <delete id="batchDeleteByIds" parameterType="java.util.List">
+        delete from redpigmall_authentication where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Authentication" resultMap="BaseResultMap2"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_authentication obj
+        <where>
+            1=1
+            <include refid="whereStatement"/>
+            <choose>
+                <when test="orderBy != null and orderType != null">
+                    order by ${orderBy} ${orderType}
+                </when>
+                <otherwise>
+                    order by obj.addTime desc
+                </otherwise>
+            </choose>
+        </where>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Authentication"
+            resultMap="BaseResultMap2" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_authentication obj
+        where 1=1
+        <include refid="whereStatement"/>
+        <choose>
+            <when test="orderBy != null and orderType != null">
+                order by ${orderBy} ${orderType}
+            </when>
+            <otherwise>
+                order by obj.addTime desc
+            </otherwise>
+        </choose>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectObjByProperty" resultType="com.redpigmall.domain.Authentication" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_authentication
+        where 1 = 1
+        <if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+            and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+        </if>
+    </select>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete from redpigmall_authentication where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="address=no">
+
+<title>无标题文档</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+<style>
+.art_center{ width:96%; background:#fff; padding:2%; float:left;}
+.art_c_top{ width:100%; float:left; line-height:2.5rem; text-align:center; font-size:2em;}
+.art_c_ad{ width:100%; float:left; line-height:2.0rem; float:left; color:#999; text-align:center;}
+.art_c_b{ width:100%; float:left; line-height:1.5rem; margin-top:10px; font-size:1.2em;}
+</style>
+<div class="art_center">
+	<div class="art_c_top">$!article.title</div>
+    <div class="art_c_ad">发送时间：$!CommUtil.formatLongDate($!article.addTime)
+    </div>
+    <div class="art_c_b">$!article.content</div>
+</div>
+</body>
+</html>

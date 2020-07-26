@@ -1,0 +1,32 @@
+#if($!cpls.size()>0)
+<!--今日热门商品开始-->  
+	<div class="hot_div">
+    	<h3 class="title_h">热门商品<a href="$!webPath/wap/cloudpurchase_goods_list" class="more_btn">更多</a></h3>
+        <div class="index_model">
+        	<ul class="model_g_box">
+             #foreach($cpl in $cpls)
+            	<li class="model_g_item">
+                    <div class="model_info_box">
+                        <div class="goods_pic"><a href="$!webPath/wap/cloudpurchase_items?id=$!cpl.id"><img src="$!cpl.cloudPurchaseGoods.primary_photo"></a></div>
+                        <div class="goods_info">
+                            <p class="w_text">$!cpl.cloudPurchaseGoods.goods_name</p>
+                            <div class="w_progressBar">
+                            #set($p = 100*$!cpl.purchased_times/$!cpl.cloudPurchaseGoods.goods_price)
+                                <p class="pro_text">开奖进度<strong>$!{p}%</strong></p>
+                                <p class="w_line">
+                                    <span class="w_bar" style="width:$!{p}%"><!--进度条由百分比控制-->
+                                        <i class="color"></i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                       <a  #if(!$!user) href="$!webPath/wap/login" #else href="javascript:void(0);" id="add_cart_$!{cpl.cloudPurchaseGoods.id}" lottery_id="$!cpl.id"  goods_img="$!cpl.cloudPurchaseGoods.primary_photo"   #end><div class="goods_shortFunc"></div></a>
+                        #if($!cpl.cloudPurchaseGoods.least_rmb==10) <div class="ten_area"></div>#end
+                    </div>
+           		 </li>
+               #end
+            </ul>
+        </div>
+    </div>
+</div> 
+#end

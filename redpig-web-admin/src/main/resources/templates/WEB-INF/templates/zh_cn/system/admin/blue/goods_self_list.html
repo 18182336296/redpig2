@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+  jQuery("input[name='inputscount']").live("keyup",function(){
+	 jQuery(this).val(jQuery(this).val().replace(/[^0-9.]/g,''));  
+	 var count = jQuery(this).val();
+	 jQuery("input[name='inputscount']").val(count);
+	 jQuery("#count").val(count);
+										});
+//
+jQuery(document).ready(function(){
+  jQuery("#brand_id").val("$!brand_id");
+  jQuery("#u_admin_id").val("$!u_admin_id");
+  jQuery("a[id^=goods_qr_img_]").mouseenter(function(){
+      jQuery(this).parent().parent().parent().find(".goods_edit_popup").show();
+  });
+  jQuery(".goods_edit").mouseleave(function(){
+     jQuery(this).find(".goods_edit_popup").hide();
+  });
+  //
+});
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else val=value; 
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/goods_self_ajax',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!cdnServer/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }    
+				 if(value!=undefined){
+				   jQuery(obj.parentNode.parentNode).remove();
+				 }
+              }
+	    });
+}
+
+function query_form(){
+jQuery("#ListForm").submit();
+	}
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <h3 class="seth">出售中的商品</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/goods_self_list?goods_status=0" class="this"><b>出售中的商品</b></a></li>
+      <li><a href="$!webPath/goods_self_list?goods_status=1"><b>仓库中的商品</b></a></li>
+      <li><a href="$!webPath/goods_self_list?goods_status=-2"><b>违规下架商品</b></a></li>
+    </ul>
+  </div>
+
+  <form name="ListForm" id="ListForm" action="$!webPath/goods_self_list" method="post">
+    <div class="search"> <span>商品名称</span> <span class="size100">
+      <input name="goods_name" type="text" id="goods_name" value="$!goods_name" />
+      </span>
+      <span>商品货号</span> <span class="size100">
+      <input name="goods_serial" type="text" id="goods_serial" value="$!goods_serial" />
+      </span>
+       <span>品牌名称</span> <span>
+      <select name="brand_id" id="brand_id">
+        <option value="">所有品牌</option>
+        
+          #foreach($gb in $gbs)
+          
+        <option value="$!gb.id">$!gb.name</option>
+        
+          #end
+          
+      </select>
+      </span> 
+      <span>发布人</span> <span>
+      <select name="u_admin_id" id="u_admin_id">
+        <option value="">发布人姓名</option>
+        
+          #foreach($u_admin in $user_admins)
+          
+        <option value="$!u_admin.id">$!u_admin.userName</option>
+        
+          #end
+          </select>
+          </span>
+        <span>活动状态</span> <span>
+        <select name="goods_activity_status" id="goods_activity_status">
+        <option value="">所有状态</option>
+        <option value="activity_status" #if($!goods_activity_status.equals("activity_status")) selected="selected" #end >促销</option>
+        <option value="group_buy" #if($!goods_activity_status.equals("group_buy")) selected="selected" #end >团购</option>
+        <option value="combin_status" #if($!goods_activity_status.equals("combin_status")) selected="selected" #end  >组合</option>
+        <option value="order_enough_give_status" #if($!goods_activity_status.equals("order_enough_give_status")) selected="selected" #end >满送</option>
+        <option value="enough_reduce" #if($!goods_activity_status.equals("enough_reduce")) selected="selected" #end  >满减</option>
+        <option value="f_sale_type" #if($!goods_activity_status.equals("f_sale_type")) selected="selected" #end >F码</option>
+        <option value="advance_sale_type" #if($!goods_activity_status.equals("advance_sale_type")) selected="selected" #end >预售</option>
+        <option value="goods_limit" #if($!goods_activity_status.equals("goods_limit")) selected="selected" #end >限购</option>
+        </select> 
+      </span>   
+      <span>
+      <input name="" type="button"  value="搜索" style="cursor:pointer;" onclick="query_form()" class="search_btn"/>
+      </span> </div>
+    <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>出售中的商品，在商城前台所有访客均可查看，搜索引擎会在商品发布后一段时间才显示</li>
+        <li>仓库中的商品，暂时没有出售的商品，前台所有游客不可查看</li>
+        <li>编辑预售商品时，需要先将该商品下架，才能更改预售信息</li>
+        <li>按货号搜索，目前只支持商主体货号，不支持规格类商品搜索</li>
+      </ul>
+    </div>
+    
+    <div class="fshoptb">
+    	<!--操作-start-->
+         #if($!objs.size()>0)
+        <div class="operation_box">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><label for="all"><input class="ace" type="checkbox" name="all" id="all" onclick="selectAllPage(this)" /><span class="lbl"> 全部全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd_goods_list('$!webPath/goods_self_del');">删除</a></li>
+                <li><a href="javascript:void(0)" onclick="cmd_goods_list('$!webPath/goods_self_sale');">下架</a></li>
+                <li><a href="javascript:void(0);" onclick="cmd_goods_list('$!webPath/goods_self_qr');">二维码</a></li>
+            </ul>
+        </div>
+        #end
+        <!--操作-end-->
+        
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="4%">&nbsp;
+            </td>
+          <th width="22%"><span class="form_btna">名称</span></th>
+          <th width="10%"><span class="form_btna">商品货号</span></th>
+          <th width="20%"><span class="form_btna">分类</span></th>
+          <th width="8%"><span class="form_btna">发布人</span></th>
+          <th width="8%"><span class="form_btna">品牌</span></th>
+          <th width="8%"><span class="form_btna">价格</span></th>
+          <th width="8%"><span class="form_btna">优惠活动</span></th>
+          <th width="6%" align="center"><span class="form_btna">查看次数</span></th>
+          <th width="8%">二维码</th>
+          <th align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        	#set($small="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name")
+	        #if($!obj.goods_main_photo)
+	        	#set($bigimg="$!imageWebServer/$!obj.goods_main_photo.path/$!obj.goods_main_photo.name")
+	        	#set($small="$!{bigimg}_small.$!{obj.goods_main_photo.ext}")
+	        #end
+        <tr>
+          <td class="check_position" align="center">
+          <label for="ids_$!obj.id">
+        	<input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" />
+            <span class="lbl"></span>
+        </label></td>
+          <td><div class="shop_manage">
+            <span style=" display:block; float:left; margin-right:10px;"> <a href="$!config.indexUrl/items_$!{obj.id}" target="_blank"> <img src="$!CommUtil.getImagePath($!imageWebServer,$!small)" width="55px" height="55px"/> </a> </span>
+              <textarea name="textarea" cols="40" rows="2"  title="可编辑" onblur="ajax_update('$!obj.id','goods_name',this)">$!obj.goods_name</textarea></div>
+            <div class="goods_edit"> 
+            #if($!obj.f_sale_type==1)
+            <span><em><a href="$!webPath/goods_self_f_code_download?id=$!obj.id" target="_blank" goods_id="$!obj.id" id="goods_f_code_download_$!{obj.id}"><img title="下载F码Excel表格" src="$!cdnServer/resources/style/system/front/default/images/d.png" /></a></em></span>
+             <span><em><a href="javascript:void(0);" id="goods_qr_img_$!{obj.id}"><img title="显示二维码" src="$!cdnServer/resources/style/system/front/default/images/e.png" /></a></em><div class="goods_edit_a"><i class="goods_edit_popup"  style="display:none;"><img src="$!CommUtil.getImagePath($!imageWebServer,$!obj.qr_img_path)" /><b></b></i></div></span>       
+           #end 
+          </div></td>
+          <td align="center">$!obj.goods_serial</td>
+          <td align="center">$!obj.gc.className  </td>
+          <td align="center">$!obj.user_admin.userName</td>
+          <td align="center">$!obj.goods_brand.name</td>
+          <td align="center">$!obj.goods_current_price</td>
+           #set($actName="")
+                #if($!obj.activity_status==2)
+                #set($actName="促销")
+                #end
+                #if($!obj.group_buy==2)
+                #set($actName="团购")
+                #end
+            	#if($!obj.combin_status==1)
+                #set($actName="组合")
+                #end
+                #if($!obj.order_enough_give_status==1)
+                #set($actName="满送")
+                #end
+                #if($!obj.enough_reduce==1)
+                #set($actName="满减")
+                #end
+                #if($!obj.f_sale_type==1)
+                #set($actName="F码")
+                #end
+                #if($!obj.advance_sale_type==1)
+                #set($actName="预售")
+                #end
+                #if($!obj.goods_limit==1)
+                #set($actName="限购")
+                #end
+          <td align="center">#if($!{actName}!="")$!{actName}#else无#end</td>
+          <td align="center">$!obj.goods_click</td>
+          <td align="center">#if($!obj.qr_img_path)<img src="$!CommUtil.getImagePath($!imageWebServer,$!obj.qr_img_path)" width="64" height="64" >#else <a href="$!webPath/goods_self_qr?mulitId=$!obj.id&currentPage=$!currentPage">生成</a> #end</td>
+          <td class="hui oprate_con" align="center" style="white-space:nowrap"><a href="$!webPath/goods_self_edit?id=$!obj.id" class="blue">编辑</a> <a href="$!webPath/goods_self_sale?mulitId=$!obj.id" class="blue">下架</a> <a href="javascript:if(confirm('删除后不可恢复?'))window.location.href='$!webPath/goods_self_del?mulitId=$!obj.id'" class="blue">删除</a><a href="$!webPath/goods_self_edit?id=$!obj.id&add_type=add_goods_by_goods" class="blue" title="以此商品为模板发布新商品，此商品原有信息保留">拷贝</a></td>
+        </tr>
+        #end
+        #else
+<tr>
+	<td colspan="11">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+      </table>
+      <!--操作-start-->
+      #if($!objs.size()>0)
+      <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><label for="all"><input class="ace" type="checkbox" name="all" id="all" onclick="selectAllPage(this)" value="all" /><span class="lbl"> 全部全选</span></label></li>
+               <li><a href="javascript:void(0);" onclick="cmd_goods_list('$!webPath/goods_self_del');">删除</a></li>
+                <li><a href="javascript:void(0);" onclick="cmd_goods_list('$!webPath/goods_self_sale');">下架</a></li>
+                <li><a href="javascript:void(0);" onclick="cmd_goods_list('$!webPath/goods_self_qr');">二维码</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye"> <span id="queryCondition" style="display:none"> #foreach($sm in $sms)
+        <input name="$!sm.key" id="$!sm.key" type="hidden" value="$!sm.value"/>
+        #end </span>
+        <input name="mulitId" type="hidden" id="mulitId" />
+        <input name="uncheck_mulitId" type="hidden" id="uncheck_mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          <input name="count" type="hidden" id="count" value="" />
+        $!gotoPageFormHTML </div>
+            </div>
+        </div>
+        #end
+        <!--操作-end-->
+    </div>
+    
+    
+  </form>
+  
+</div>
+</body>
+</html>

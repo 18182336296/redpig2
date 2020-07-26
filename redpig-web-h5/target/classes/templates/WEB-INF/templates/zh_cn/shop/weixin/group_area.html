@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"> <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a> 选择城市 </div>
+<!--选择城市-->
+<div class="select_city">
+  <div class="city_box">
+    <ul>
+      		<li><a href="$!webPath/group/index?type=$!type">全国</a></li>
+    	#foreach($ga in $gas)
+      		<li><a href="$!webPath/group/index?ga_id=$!ga.id&type=$!type">$!ga.ga_name</a></li>
+        #end
+    </ul>
+  </div>
+</div>
+$!httpInclude.include("/layer")
+</body>
+</html>

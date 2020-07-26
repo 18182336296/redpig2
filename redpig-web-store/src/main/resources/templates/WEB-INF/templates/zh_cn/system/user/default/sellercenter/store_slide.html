@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-店铺幻灯-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script>
+jQuery(function(){ 
+  jQuery(".top_mid_slide").slide({mainCell:".top_mid_slider_ul ul",effect:'fold',autoPlay:true,titCell:".seller_banner_top li",titOnClassName:"this",trigger:'mouseover'});
+})
+function image_del(obj){
+	showDialog('msg_info','','删除后不可恢复，是否继续？',1,'question',3,function del(){
+		 jQuery.post("$!webPath/store_slide_image_del",{"id":obj},function(data){
+	           if(data==true){
+			        window.location.href="$!webPath/store_slide";
+		       }else showDialog("msg_info","","删除失败，请重新删除！",2,"warning",3,'');
+	     },"json");
+	})
+}
+
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+<div class="store_main">
+  <div class="seller_center"> $!httpInclude.include("/nav?op=store_set")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/index">商家中心</a></b>><b>我的店铺</b>><b>店铺幻灯</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li><a href="$!webPath/store_set"><i></i>店铺设置</a></li>
+            <li class="this"><a href="$!webPath/store_slide"><i></i>店铺幻灯</a></li>
+          </ul>
+        </div>
+        <div class="seller_banner">
+          <div class="seller_banner_show">
+            <div class="top_mid_slide">
+              <div class="top_mid_slider_ul">
+              <ul>
+
+              #foreach($slide in $slides)
+                <li class="top_mid_slider_ul_li" >
+               <a href="$!slide.url" target="_blank"> <img  width="1030" height="260" src="$!imageWebServer/$!slide.acc.path/$!slide.acc.name" /></a>
+<span class="slider_ul_li_close"><a href="javascript:void(0);" onclick="image_del('$!{slide.id}');">X</a></span>
+              
+                </li>
+               #end
+               </ul>
+              </div>
+              <div class="seller_banner_top">
+                <ul>
+                #foreach($slide in $slides)
+                  <li #if($!velocityCount==1) class="this" #end  style="cursor:pointer;" ></li>
+                #end
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="seller_banner_nav">
+            <ul>
+            #foreach($slide in $slides)
+              <li><a class="this" href="javascript:void(0);" dialog_uri="$!webPath/store_slide_upload?index=$!{velocityCount}" dialog_title="上传图片" dialog_width="400" dialog_height="100" dialog_id="store_slide_upload"><img src="$!imageWebServer/$!slide.acc.path/$!slide.acc.name" width="190" height="48" /></a></li>
+            #end
+            #set($remain=$!slides.size()+1)
+            #foreach($num in [$!{remain}..5])
+              <li><a href="javascript:void(0);" dialog_uri="$!webPath/store_slide_upload?index=$!num" dialog_title="上传图片" dialog_width="400" dialog_height="100" dialog_id="store_slide_upload"></a></li>
+            #end
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

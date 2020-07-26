@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericGroupClassTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.gc_level>0)
+#foreach($count in [0..$!some.gc_level])&nbsp;&nbsp;#end #end $!some.gc_name</option>
+#genericGroupClassTree($some.childs) 
+#end 
+#end
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ 	//改变系统提示的样式
+	#if($!obj)
+	jQuery("#gc_type").val($!obj.gc_type);
+	#end
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  gc_name:{
+	    required :true,
+	    remote:{
+		    url: "$!webPath/group_class_verify",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "gc_name": function(){return jQuery("#gc_name").val();},
+				  "id":function(){return jQuery("#id").val()},
+				  "pid":function(){return jQuery("#pid").val()}
+		     }
+			}
+	   }
+	 },
+	messages:{
+	  gc_name:{required:"分类名称不能为空",remote:"该分类已经存在"}
+	}
+  });	
+  //
+  jQuery("#pid").val("$!obj.parent.id");
+  if(jQuery("#pid").val()!=""){
+	  jQuery("#topClass").hide();
+	  }
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+function changeparentclass(val){
+	if(jQuery(val).val()!=""){
+		jQuery("#topClass").hide();
+		var va=jQuery(val).val();
+		jQuery.ajax({
+			type:'POST',
+			url:'$!webPath/group_class3_verify',
+			data:{"id":va},
+			success:function(data){
+				if(data==1){
+					jQuery("#recomend").show();
+				}else{
+					jQuery("#recomend").hide();
+				}
+			}
+			});	
+			
+	}else{
+		jQuery("#recomend").hide();
+		jQuery("#topClass").show();	
+	}
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">团购分类</h1>
+  <div class="nav_list">
+  <ul>
+   <li><a href="$!webPath/group_list"><b>团购列表</b></a> </li>
+   <li><a href="$!webPath/group_add"><b>新增团购</b></a></li>
+   <li><a href="$!webPath/group_class_list?type=goods" ><b>商品团购分类</b></a> </li>
+   <li><a href="$!webPath/group_class_list?type=life" ><b>生活团购分类</b></a> </li>
+   <li><a href="$!webPath/group_class_add?type=goods" #if($!type=="goods"&&!$!edit) class="this" #end ><b>新增商品类分类</b></a></li>
+   <li><a href="$!webPath/group_class_add?type=life" #if($!type=="life"&&!$!edit) class="this" #end><b>新增生活类分类</b></a></li>
+ <!--<li><a href="$!webPath/group_area_list" ><b>团购区域</b></a></li>
+   <li><a href="$!webPath/group_area_add"><b>新增区域</b></a></li>  -->  
+   <li><a href="$!webPath/group_price_list" ><b>价格区间</b></a></li>
+   <li><a href="$!webPath/group_price_add"><b>添加区间</b></a> </li>
+    #if($!edit)
+     <li><a href="javascript:void(0);" class="this"><b>编辑</b></a> </li>
+     #end
+  </ul>
+    </div>
+ <form name="theForm" id="theForm" action="$!webPath/group_class_save?gc_type=1" method="post" enctype="multipart/form-data">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <div class="edit">
+  <div class="editul setcont">
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>分类名称</li>
+      <li><span class="webname">
+        <input name="gc_name" type="text" id="gc_name" value="$!obj.gc_name" size="40" />
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg">上级分类</li>
+      <li><span class="webnamesec sizese">
+        <select name="pid" id="pid"  onchange="changeparentclass(this);" >
+              <option value="">请选择...</option>
+			  #genericGroupClassTree($!gcs)
+         </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</strong><strong class="c"></strong></span></li>
+    </ul>
+      #if($!obj.gc_img)
+		<ul class="set1">
+      		<li class="setcont_bg">原分类图标</li>
+      		<li><span class="webnamesec sizese">
+        	<img src="$!config.imageWebServer/$!obj.gc_img.path/$!obj.gc_img.name" />
+    	</ul>
+      
+      <!--推荐分类,推荐只存在于第三级别分类,其他分类则隐藏-->	
+      #end
+      
+      <ul class="set1" id="recomend" #if($!obj.gc_level!=2) style="display:none" #end>
+      <li class="setcont_bg">是否添加推荐</li>
+      <li><span class="webnamesec sizese">
+        <select name="gc_recommend" id="gc_recommend">
+			  <option value="1" #if($!obj.gc_recommend==1) selected="selected" #end> 推荐</option>
+              <option value="0" #if($!obj.gc_recommend==0) selected="selected" #end> 不推荐</option>
+         </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">推荐后,改分类将在生活购首页顶级分类旁边显示</strong><strong class="c"></strong></span></li>
+      </ul>
+      
+      
+     <ul class="set1" id="topClass">
+      <li class="setcont_bg">分类图标</li>
+      <li><span class="webnamesec sizese">
+        <input type="file" id="gc_image" name="gc_image"/>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">wap 微信团购首页分类显示图标,仅顶级分类有效</strong><strong class="c"></strong></span></li>
+    </ul>
+    
+    <ul class="set1">
+      <li class="setcont_bg">排序</li>
+      <li><span class="size100">
+        <input name="gc_sequence" type="text" id="gc_sequence" value="$!obj.gc_sequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，分类显示越靠前</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  </div>
+  </form>
+  <div class="submit">
+   <span class="pad120"> <input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

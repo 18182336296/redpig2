@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.PaymentMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Payment">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="unionpay_merId" property="unionpay_merId" jdbcType="VARCHAR"/>
+		<result column="install" property="install" jdbcType="BIT"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="mark" property="mark" jdbcType="VARCHAR"/>
+		<result column="safeKey" property="safeKey" jdbcType="VARCHAR"/>
+		<result column="partner" property="partner" jdbcType="VARCHAR"/>
+		<result column="seller_email" property="seller_email" jdbcType="VARCHAR"/>
+		<result column="interfaceType" property="interfaceType" jdbcType="INTEGER"/>
+		<result column="alipay_rate" property="alipay_rate" jdbcType="DECIMAL"/>
+		<result column="app_private_key" property="app_private_key" jdbcType="VARCHAR"/>
+		<result column="app_public_key" property="app_public_key" jdbcType="VARCHAR"/>
+		<result column="merchantAcctId" property="merchantAcctId" jdbcType="VARCHAR"/>
+		<result column="rmbKey" property="rmbKey" jdbcType="VARCHAR"/>
+		<result column="pid" property="pid" jdbcType="VARCHAR"/>
+		<result column="spname" property="spname" jdbcType="VARCHAR"/>
+		<result column="tenpay_partner" property="tenpay_partner" jdbcType="VARCHAR"/>
+		<result column="tenpay_key" property="tenpay_key" jdbcType="VARCHAR"/>
+		<result column="trade_mode" property="trade_mode" jdbcType="INTEGER"/>
+		<result column="chinabank_account" property="chinabank_account" jdbcType="VARCHAR"/>
+		<result column="chinabank_key" property="chinabank_key" jdbcType="VARCHAR"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="paypal_userId" property="paypal_userId" jdbcType="VARCHAR"/>
+		<result column="currency_code" property="currency_code" jdbcType="VARCHAR"/>
+		<result column="poundage" property="poundage" jdbcType="DECIMAL"/>
+		<result column="wx_appid" property="wx_appid" jdbcType="VARCHAR"/>
+		<result column="wx_appSecret" property="wx_appSecret" jdbcType="VARCHAR"/>
+		<result column="wx_paySignKey" property="wx_paySignKey" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Payment">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="unionpay_merId" property="unionpay_merId" jdbcType="VARCHAR"/>
+		<result column="install" property="install" jdbcType="BIT"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="mark" property="mark" jdbcType="VARCHAR"/>
+		<result column="safeKey" property="safeKey" jdbcType="VARCHAR"/>
+		<result column="partner" property="partner" jdbcType="VARCHAR"/>
+		<result column="seller_email" property="seller_email" jdbcType="VARCHAR"/>
+		<result column="interfaceType" property="interfaceType" jdbcType="INTEGER"/>
+		<result column="alipay_rate" property="alipay_rate" jdbcType="DECIMAL"/>
+		<result column="app_private_key" property="app_private_key" jdbcType="VARCHAR"/>
+		<result column="app_public_key" property="app_public_key" jdbcType="VARCHAR"/>
+		<result column="merchantAcctId" property="merchantAcctId" jdbcType="VARCHAR"/>
+		<result column="rmbKey" property="rmbKey" jdbcType="VARCHAR"/>
+		<result column="pid" property="pid" jdbcType="VARCHAR"/>
+		<result column="spname" property="spname" jdbcType="VARCHAR"/>
+		<result column="tenpay_partner" property="tenpay_partner" jdbcType="VARCHAR"/>
+		<result column="tenpay_key" property="tenpay_key" jdbcType="VARCHAR"/>
+		<result column="trade_mode" property="trade_mode" jdbcType="INTEGER"/>
+		<result column="chinabank_account" property="chinabank_account" jdbcType="VARCHAR"/>
+		<result column="chinabank_key" property="chinabank_key" jdbcType="VARCHAR"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="paypal_userId" property="paypal_userId" jdbcType="VARCHAR"/>
+		<result column="currency_code" property="currency_code" jdbcType="VARCHAR"/>
+		<result column="poundage" property="poundage" jdbcType="DECIMAL"/>
+		<result column="wx_appid" property="wx_appid" jdbcType="VARCHAR"/>
+		<result column="wx_appSecret" property="wx_appSecret" jdbcType="VARCHAR"/>
+		<result column="wx_paySignKey" property="wx_paySignKey" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,unionpay_merId,install,name,mark,safeKey,partner,seller_email,interfaceType,alipay_rate,app_private_key,app_public_key,merchantAcctId,rmbKey,pid,spname,tenpay_partner,tenpay_key,trade_mode,chinabank_account,chinabank_key,content,paypal_userId,currency_code,poundage,wx_appid,wx_appSecret,wx_paySignKey
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="unionpay_merId != null">and unionpay_merId = #{unionpay_merId,jdbcType=VARCHAR}</if>
+		<if test="install != null">and install = #{install,jdbcType=BIT}</if>
+		<if test="name != null and name!=-1">and name = #{name,jdbcType=VARCHAR}</if>
+		<if test="name != null and name==-1">and name is not null</if>
+		<if test="mark != null">and mark = #{mark,jdbcType=VARCHAR}</if>
+		
+		<if test="marks_no != null">
+			and mark not in
+			<foreach collection="marks_no" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="safeKey != null">and safeKey = #{safeKey,jdbcType=VARCHAR}</if>
+		<if test="partner != null">and partner = #{partner,jdbcType=VARCHAR}</if>
+		<if test="seller_email != null">and seller_email = #{seller_email,jdbcType=VARCHAR}</if>
+		<if test="interfaceType != null">and interfaceType = #{interfaceType,jdbcType=INTEGER}</if>
+		<if test="alipay_rate != null">and alipay_rate = #{alipay_rate,jdbcType=DECIMAL}</if>
+		<if test="app_private_key != null">and app_private_key = #{app_private_key,jdbcType=VARCHAR}</if>
+		<if test="app_public_key != null">and app_public_key = #{app_public_key,jdbcType=VARCHAR}</if>
+		<if test="merchantAcctId != null">and merchantAcctId = #{merchantAcctId,jdbcType=VARCHAR}</if>
+		<if test="rmbKey != null">and rmbKey = #{rmbKey,jdbcType=VARCHAR}</if>
+		<if test="pid != null">and pid = #{pid,jdbcType=VARCHAR}</if>
+		<if test="spname != null">and spname = #{spname,jdbcType=VARCHAR}</if>
+		<if test="tenpay_partner != null">and tenpay_partner = #{tenpay_partner,jdbcType=VARCHAR}</if>
+		<if test="tenpay_key != null">and tenpay_key = #{tenpay_key,jdbcType=VARCHAR}</if>
+		<if test="trade_mode != null">and trade_mode = #{trade_mode,jdbcType=INTEGER}</if>
+		<if test="chinabank_account != null">and chinabank_account = #{chinabank_account,jdbcType=VARCHAR}</if>
+		<if test="chinabank_key != null">and chinabank_key = #{chinabank_key,jdbcType=VARCHAR}</if>
+		<if test="content != null">and content = #{content,jdbcType=VARCHAR}</if>
+		<if test="paypal_userId != null">and paypal_userId = #{paypal_userId,jdbcType=VARCHAR}</if>
+		<if test="currency_code != null">and currency_code = #{currency_code,jdbcType=VARCHAR}</if>
+		<if test="poundage != null">and poundage = #{poundage,jdbcType=DECIMAL}</if>
+		<if test="wx_appid != null">and wx_appid = #{wx_appid,jdbcType=VARCHAR}</if>
+		<if test="wx_appSecret != null">and wx_appSecret = #{wx_appSecret,jdbcType=VARCHAR}</if>
+		<if test="wx_paySignKey != null">and wx_paySignKey = #{wx_paySignKey,jdbcType=VARCHAR}</if>
+	</sql>
+	<sql id="ifStatement">
+		unionpay_merId= #{unionpay_merId},
+		install= #{install},
+		name= #{name},
+		mark= #{mark},
+		safeKey= #{safeKey},
+		partner= #{partner},
+		seller_email= #{seller_email},
+		interfaceType= #{interfaceType},
+		alipay_rate= #{alipay_rate},
+		app_private_key= #{app_private_key},
+		app_public_key= #{app_public_key},
+		merchantAcctId= #{merchantAcctId},
+		rmbKey= #{rmbKey},
+		pid= #{pid},
+		spname= #{spname},
+		tenpay_partner= #{tenpay_partner},
+		tenpay_key= #{tenpay_key},
+		trade_mode= #{trade_mode},
+		chinabank_account= #{chinabank_account},
+		chinabank_key= #{chinabank_key},
+		content= #{content},
+		paypal_userId= #{paypal_userId},
+		currency_code= #{currency_code},
+		poundage= #{poundage},
+		wx_appid= #{wx_appid},
+		wx_appSecret= #{wx_appSecret},
+		wx_paySignKey= #{wx_paySignKey},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Payment" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_payment 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.Payment" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_payment(
+			addTime,
+			deleteStatus,
+			unionpay_merId,
+			install,
+			name,mark,
+			safeKey,
+			partner,
+			seller_email,
+			interfaceType,
+			alipay_rate,
+			app_private_key,
+			app_public_key,
+			merchantAcctId,
+			rmbKey,
+			pid,
+			spname,
+			tenpay_partner,
+			tenpay_key,
+			trade_mode,
+			chinabank_account,
+			chinabank_key,
+			content,
+			paypal_userId,
+			currency_code,
+			poundage,
+			wx_appid,
+			wx_appSecret,
+			wx_paySignKey
+		)
+		values(
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{unionpay_merId,jdbcType=VARCHAR},
+		#{install,jdbcType=BIT},
+		#{name,jdbcType=VARCHAR},
+		#{mark,jdbcType=VARCHAR},
+		#{safeKey,jdbcType=VARCHAR},
+		#{partner,jdbcType=VARCHAR},
+		#{seller_email,jdbcType=VARCHAR},
+		#{interfaceType,jdbcType=INTEGER},
+		#{alipay_rate,jdbcType=DECIMAL},
+		#{app_private_key,jdbcType=VARCHAR},
+		#{app_public_key,jdbcType=VARCHAR},
+		#{merchantAcctId,jdbcType=VARCHAR},
+		#{rmbKey,jdbcType=VARCHAR},
+		#{pid,jdbcType=VARCHAR},
+		#{spname,jdbcType=VARCHAR},
+		#{tenpay_partner,jdbcType=VARCHAR},
+		#{tenpay_key,jdbcType=VARCHAR},
+		#{trade_mode,jdbcType=INTEGER},
+		#{chinabank_account,jdbcType=VARCHAR},
+		#{chinabank_key,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
+		#{paypal_userId,jdbcType=VARCHAR},
+		#{currency_code,jdbcType=VARCHAR},
+		#{poundage,jdbcType=DECIMAL},
+		#{wx_appid,jdbcType=VARCHAR},
+		#{wx_appSecret,jdbcType=VARCHAR},
+		#{wx_paySignKey,jdbcType=VARCHAR}		
+		)
+	</insert>
+	<update id="update" parameterType="com.redpigmall.domain.Payment">
+		update redpigmall_payment 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Payment" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_payment obj 
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_payment obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Payment" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_payment obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Payment" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_payment(addTime,deleteStatus,unionpay_merId,install,name,mark,safeKey,partner,seller_email,interfaceType,alipay_rate,app_private_key,app_public_key,merchantAcctId,rmbKey,pid,spname,tenpay_partner,tenpay_key,trade_mode,chinabank_account,chinabank_key,content,paypal_userId,currency_code,poundage,wx_appid,wx_appSecret,wx_paySignKey)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{unionpay_merId,jdbcType=VARCHAR},#{install,jdbcType=BIT},#{name,jdbcType=VARCHAR},#{mark,jdbcType=VARCHAR},#{safeKey,jdbcType=VARCHAR},#{partner,jdbcType=VARCHAR},#{seller_email,jdbcType=VARCHAR},#{interfaceType,jdbcType=INTEGER},#{alipay_rate,jdbcType=DECIMAL},#{app_private_key,jdbcType=VARCHAR},#{app_public_key,jdbcType=VARCHAR},#{merchantAcctId,jdbcType=VARCHAR},#{rmbKey,jdbcType=VARCHAR},#{pid,jdbcType=VARCHAR},#{spname,jdbcType=VARCHAR},#{tenpay_partner,jdbcType=VARCHAR},#{tenpay_key,jdbcType=VARCHAR},#{trade_mode,jdbcType=INTEGER},#{chinabank_account,jdbcType=VARCHAR},#{chinabank_key,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{paypal_userId,jdbcType=VARCHAR},#{currency_code,jdbcType=VARCHAR},#{poundage,jdbcType=DECIMAL},#{wx_appid,jdbcType=VARCHAR},#{wx_appSecret,jdbcType=VARCHAR},#{wx_paySignKey,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Payment">
+		update redpigmall_payment
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_payment where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_payment where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Payment" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_payment obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Payment" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_payment obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Payment" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_payment
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_payment where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

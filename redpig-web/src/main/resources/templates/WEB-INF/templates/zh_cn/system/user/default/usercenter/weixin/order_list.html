@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>订单列表- $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+    jQuery(".user_allorder dl").click(function(){
+		window.location.href="$!webPath/wap/buyer/order_view?id="+id;
+	})
+	 jQuery(".user_allorder h3").click(function(){
+		id = jQuery(this).attr("oid");
+		window.location.href="$!webPath/wap/buyer/order_view?id="+id;
+	})
+	
+	 var status = "$!type";
+   if(status==""){
+		status = 0;	   
+   }
+   jQuery(" li[id^=order_status]").each(function(index, element) {
+    jQuery(element).removeClass("this");
+	});
+	jQuery("#order_status_"+status).addClass("this");
+	jQuery("#url").val(status);
+	
+   var currentPage;
+   var totalPage; 
+   var ret = 1;
+   jQuery(window).scroll(function(){
+	   var l = jQuery(".phone_main").length;		  
+	 if ( l >0 && jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1){
+		 currentPage = parseInt(jQuery("#currentPage").val())+1;
+		 totalPage = parseInt(jQuery("#totalPage").val());
+		 if(currentPage<=totalPage){
+		 var order_status = jQuery("#order_status").val();	 
+		 var type = jQuery("#type").val();	 
+		 jQuery("#currentPage").val(currentPage);	  
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/buyer/order_data',
+				  data:{"order_status":order_status,"type":type,"currentPage":currentPage},
+				beforeSend:function(){
+					ret = 2;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+	             if(data){
+				  ret =1;	
+				  jQuery("#order_data_last").append(data);
+				 }else{
+				 jQuery("#loading_none_text").text("您没有更多的订单了~");	 
+				 jQuery("#loading_none").show();
+				  } 
+				}
+	       });
+		 }else{
+			 jQuery("#loading").hide();	
+			 jQuery("#loading_none_text").text("您没有更多的订单了~");   
+   			 jQuery("#loading_none").show();  	
+  			 }  
+	     }
+	  });	
+   
+   
+});<!--end-->
+function order_pay(id){
+	window.location.href="$!webPath/wap/order_pay_view?id="+id;
+}
+function order_cofirm(id){
+	WapshowDialog(2,"确定要确认收货？",function(){
+			window.location.href="$!webPath/wap/buyer/order_cofirm?id="+id;
+		});
+}
+function order_discuss(id){
+	window.location.href="$!webPath/wap/buyer/order_discuss?id="+id;
+}
+function order_form_refound(order_id,obj){
+	WapshowDialog(2,"确定要退款吗？",function(){
+	jQuery.ajax({url:'$!webPath/wap/buyer/order_form_refund',
+					dataType:'json',
+					data:{"oid":order_id},
+					 success:function(date){
+						  if(date==order_id){
+								jQuery(obj).removeAttr("onclick");
+								jQuery(obj).html("退款审核中");
+						  }
+					 }
+				});	
+		});				
+}
+<!--订单列表ajax更新-->
+function order_list_ajax(type,order_status){
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/buyer/order_data',
+				  data:{"order_status":order_status,"type":type,"currentPage":1},
+				beforeSend:function(){
+					jQuery(".phone_main").remove();
+					jQuery("#loading_none").hide();
+					jQuery("#gc_none").hide();
+					jQuery("#loading").show();
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+  				 jQuery(" li[id^=order_status]").each(function(index, element) {
+  				 jQuery(element).removeClass("this");
+				});
+				if(type==""){
+					type=0;
+				}
+				jQuery("#order_status_"+type).addClass("this");
+				var text = jQuery("#order_status_"+type).text();
+				if("全 部"==text){
+					text="";
+				}
+				if(data.trim()!=""){
+					 jQuery("#order_hd").after(data);
+				}else{
+					 jQuery("#loading_none_text").text("您还没有"+text+"订单~");
+					 jQuery("#loading_none").show();
+				}
+				}
+	       });
+	}
+<!--订单取消弹窗-->
+function order_cancel_pop(id,order_id){
+	jQuery("#orderId b").text("订单号:"+order_id);
+	jQuery(".wap_pop").attr("orderid",id);
+	jQuery(".wap_pop_bg").show();
+	jQuery(".wap_pop").show();
+	}
+function order_cancel_pop_cancel(){
+	jQuery(".wap_pop_bg").hide();
+	jQuery(".wap_pop").hide();
+	}
+function setThis(val){
+	jQuery(".wap_del_list").children().attr("class","wap_del_list_l");
+	jQuery(val).parent().addClass("this");
+	}
+function order_cancel_save(){
+	var id=jQuery(".wap_pop").attr("orderid");
+	var state_info=jQuery(".wap_del_list_l.this").text();
+	 window.location.href="$!webPath/wap/buyer/order_cancel_save?id="+id+"&currentPage=$!currentPage&state_info="+state_info;
+	jQuery.ajax({url:'$!webPath/wap/buyer/order_cancel_save',
+					dataType:'json',
+					data:{"id":id,"state_info":state_info},
+				});				
+}
+</script>
+</head>
+<body class="user_bg" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="wap_pop_bg" style="display:none;"></div>
+<div class="wap_pop" style="display:none;" orderid="">
+  <div class="wap_del_top"> <b><a href="javascript:void(0);" onClick="order_cancel_pop_cancel();">取消</a></b> <span>取消订单</span> <i><a href="javascript:void(0);" onClick="order_cancel_save();">确定</a></i> </div>
+  <div class="wap_del_list">
+    <div class="wap_del_list_l" style="color:#a5a5a5"  id="orderId"><b>订单号：10000000</b></div>
+    <div class="wap_del_list_l this"><a href="javascript:void(0);" onClick="setThis(this);">改买其他商品</a></div>
+    <div class="wap_del_list_l"><a href="javascript:void(0);" onClick="setThis(this);">从其他店铺购买</a></div>
+    <div class="wap_del_list_l"><a href="javascript:void(0);" onClick="setThis(this);">其他原因</a></div>
+  </div>
+</div>
+<div class="user_c_title"> <a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>我的订单 <a class="per_c_icon" href="$!webPath/wap/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a> </div>
+<div class="order_page" style="padding-bottom:0px; background:none;">
+  <div class="order_hd" id="order_hd">
+    <ul>
+      <li id="order_status_0"><a onClick="order_list_ajax('','');" href="javascript:void(0);">全 部</a></li>
+      <li id="order_status_order_nopay"><a onClick="order_list_ajax('order_nopay','10');" href="javascript:void(0);">待付款</a></li>
+      <li id="order_status_order_noship"><a onClick="order_list_ajax('order_noship','20');" href="javascript:void(0);">待发货</a></li>
+      <li id="order_status_order_notake"><a onClick="order_list_ajax('order_notake','30');" href="javascript:void(0);">待收货</a></li>
+      <li id="order_status_order_over"><a onClick="order_list_ajax('order_over','40');" href="javascript:void(0);">待评价</a></li>
+     <!-- <li id="order_status_order_nopay"><a href="$!webPath/wap/buyer/order_list?type=order_nopay&&order_status=10">待付款</a></li>
+      <li id="order_status_order_noship"><a href="$!webPath/wap/buyer/order_list?type=order_noship&&order_status=20">待发货</a></li>
+      <li id="order_status_order_notake"><a href="$!webPath/wap/buyer/order_list?type=order_notake&&order_status=30">待收货</a></li>
+      <li id="order_status_order_over"><a href="$!webPath/wap/buyer/order_list?type=order_over&&order_status=40">待评价</a></li>-->
+    </ul>
+    <input type="hidden" name="url" id="url">
+     <input name="currentPage" type="hidden" id="currentPage" value="1" />
+     <input name="order_status" type="hidden" id="order_status" value="$!order_status" />
+     <input name="type" type="hidden" id="type" value="$!type" />
+     <input name="totalPage" type="hidden" id="totalPage" value="$!totalPage" />
+ 	 <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+ 	 <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+  </div>
+  #if($!objs.size()>0)
+  #foreach($order in $objs)
+  #set($order_merging_phase=$!orderFormTools.query_order_status("$!order.id"))
+  #if($!order.order_status==0)
+            #set($status="已取消")
+            #end
+            #if($!order.order_status==10)
+            #set($status="待付款")
+            #end 
+            #if($!order.order_status==11)
+            #set($status="已付定金")
+            #end
+            #if($!order.order_status==16)
+            #set($status="待发货")
+            #end
+            #if($!order.order_status==20)
+            #set($status="已付款")
+            #end
+            #if($!order.order_status==21)
+            #set($status="申请退款")
+            #end
+            #if($!order.order_status==22)
+            #set($status="正在退款")
+            #end
+            #if($!order.order_status==25)
+            #set($status="已退款")        
+            #end
+            #if($!order.order_status==30)
+            #set($status="已发货")
+            #if($!{order.delivery_type}==1)
+            #set($status="正在发往自提点")        
+            #end        
+            #end
+            #if($!order.order_status==35)
+            #set($status="自提点已代收")        
+            #end               
+            #if($!order.order_status==40)
+            #set($status="已收货")
+            #end
+            #if($!order.order_status==50)
+            #set($status="已评价")                                              
+            #end
+            #if($!order.order_status==65)
+            #if($!order.order_cat==1)
+            #set($status="已完成")             
+            #else
+            #set($status="系统自动评价")           
+            #end                                             
+            #end
+            <div class="phone_main">
+  <div class="phone_goods_list"> #if(!$!order.child_order_detail) 
+                <!--没有子订单-->
+                <div class="phone_goods_list_one">
+      <div class="list_one_top"> <span>订单号:$!order.order_id</span> <span></span> <b>$!status</b> </div>
+      #foreach($map in $!orderFormTools.queryGoodsInfo("$!order.goods_info"))
+      #set($goods_id = "$!{map.get('goods_id')}")	
+      #set($goods_name = "$!{map.get('goods_name')}")
+      #set($goods_count = "$!{map.get('goods_count')}")
+      #set($goods_price = "$!{map.get('goods_price')}")
+      #set($advance_type="")
+      #set($advance_din="")
+      #set($advance_wei="")
+      #if($!{map.get('advance_type')})
+      #set($advance_type = "$!{map.get('advance_type')}")
+      #if($!advance_type==1)
+      #set($advance_din = "$!{map.get('advance_din')}")
+      #set($advance_wei = "$!{map.get('advance_wei')}")
+      #end
+      #end
+      #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+      #set($goods_type = "$!{map.get('goods_type')}")
+      #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+      #set($goods_domainPath="$!webPath/items_$!{goods_id}")
+      #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+      #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+      #end	
+      #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+      #set($order_total_price=$!orderFormTools.query_order_price("$!order.id"))
+      #set($order_total_ship_price=$!order.ship_price)
+      #set($order_total_cancel_price=$!orderFormTools.query_order_pay_price("$!order.id"))
+      #set($order_total_cancel_ship_price=$!orderFormTools.queryOrderCancleShipPrice("$!order.id"))
+      #set($combin_suit_info = "$!{map.get('combin_suit_info')}")
+      #set($suit_map=$!orderFormTools.query_order_suitinfo("$!{combin_suit_info}"))
+      #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}") <a href="$!webPath/wap/items?id=$!goods_id">
+                  <div class="list_one_center">
+        <div class="list_one_center_l"> <img src="$!img"> </div>
+        <div class="list_one_center_c"> <span>$!goods_name</span> <b>$!goods_gsp_val</b></div>
+        <div class="list_right_c">
+                      <div class="list_one_center_r"> <b>￥$!goods_price</b><i>x$!goods_count</i> </div>
+                    </div>
+      </div>
+                  </a> #end
+      <div class="list_one_bottom"> #if($!order.order_status==10)
+                    #if($!config.auto_order_cancel != "") <i>请在$!config.auto_order_cancel小时内支付，如若超时订单自动取消。(预售商品除外)</i> #else <i>请在24小时内支付，如若超时订单自动取消。(预售商品除外)</i> #end
+                    #end 
+                     #if($!advance_type==1)<span>#if($!order.order_status==11)<b>已付定金<strong>￥$!advance_din</strong>待付尾款<strong>￥$!advance_wei</strong></b>#elseif($!order.order_status==20)<b>已付全款（含：定金<strong>￥$!advance_din</strong>尾款<strong>￥$!advance_wei</strong>）</b> #else <b>待付定金<strong>￥$!advance_din</strong>待付尾款<strong>￥$!advance_wei</strong></b>#end</span>
+                    #end
+                    <span> <b>合计: <strong>￥$!order_total_price</strong> （含运费#if($!{order_total_ship_price}) $!{order_total_ship_price} #else 0.00 #end） </b> <b>共 <strong>$!orderFormTools.query_goods_count("$!order.id")</strong>件 </b> </span>
+                   
+                     <span> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/order_view?id=$!{order.id}')">查看订单</a> #if($!order.order_status==10)
+        #if($!order.order_cat!=1)<a class="list_one_b_a" href="javascript:void(0);" onClick="order_pay($!{order.id})">#if($!advance_type==1)付定金#else立即付款#end</a> #end 
+        #end
+        #if($!{order.order_status}==35 && $!{order.delivery_type}==0) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{order.id}')">查看物流</a> #end
+        #if($!{order.order_status}==30) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{order.id}')">查看物流</a> #end
+        #if($!{order.order_status}>=40 && $!{order.order_status}!=47 && $!{order.order_status}!=50 && $!{order.order_status}!=60 && $!{order.order_status}!=65) <a style="border-color:#F94D4D;color: #F94D4D;" href= "$!webPath/wap/buyer/order_discuss?id=$!{order.id}">评价</a> #end
+        #if($!{order.order_status}==20) <a style="border-color:#F94D4D;color: #F94D4D;"href="javascript:void(0)" onclick="order_form_refound('$!{order.id}',this)">申请退款</a> #elseif($!{order.order_status}==21) <a style="border-color:#F94D4D;color: #F94D4D;" href= "javascript:void(0)">退款审核中</a> #end
+        #if($!order.order_status>=10 && $!order.order_status < 20) <a href="javascript:void(0);" onClick="order_cancel_pop($!{order.id},$!{order.order_id})">取消订单</a> #end   
+        #if($!order.order_status==11) <a href="javascript:void(0);" id="list_one_$!order.id" class="list_one_b_a" onClick="order_pay($!{order.id})">付尾款</a> #foreach($!ad in $!orderFormTools.getGoodsAdvanceInfo($!goods_id)) 
+        <script>
+                 var nowDate = new Date();
+				 var sDate = new Date("$!CommUtil.formatDate($!{ad.rest_start_date})");
+				 var eDate = new Date("$!CommUtil.formatDate($!{ad.rest_end_date})");
+				 if(nowDate<sDate){
+					 	jQuery("#list_one_$!order.id").removeClass("list_one_b_a").attr("onClick","");
+				 }else if(nowDate>eDate){
+					 	jQuery("#list_one_$!order.id").remove();
+				 }
+                </script> 
+        #end
+        #end </span> </div>
+    </div>
+                <!--未拆单--> 
+                #elseif($!order_merging_phase < 20 && $!order_merging_phase!=16)
+                #if($!order_merging_phase==0)
+                #set($status="已取消")
+                #end
+                #if($!order_merging_phase==10)
+                #set($status="待付款")
+                #end 
+                #if($!order_merging_phase==16)
+                #set($status="待发货")
+                #end
+                #if($!order_merging_phase==20)
+                #set($status="已付款")
+                #end
+                #if($!order_merging_phase==21)
+                #set($status="申请退款")
+                #end
+                #if($!order_merging_phase==22)
+                #set($status="正在退款")
+                #end
+                #if($!order_merging_phase==25)
+                #set($status="已退款")        
+                #end
+                #if($!order_merging_phase==30)
+                #set($status="已发货")
+                #if($!{obj.delivery_type}==1)
+                #set($status="正在发往自提点")        
+                #end        
+                #end
+                #if($!order_status==35)
+                #set($status="自提点已代收")        
+                #end               
+                #if($!order_status==40)
+                #set($status="已收货")
+                #end
+                #if($!order_status==50)
+                #set($status="已评价")                                              
+                #end
+                #if($!order_status==65)
+                #if($!obj.order_cat==1)
+                #set($status="已完成")             
+                #else
+                #set($status="系统自动评价")           
+                #end                                             
+                #end
+                <div class="phone_goods_list_one">
+      <div class="list_one_top"> <span>订单号:$!order.order_id</span> <span></span> <b>$!status</b> </div>
+      #foreach($map in $!orderFormTools.queryGoodsInfo("$!order.goods_info"))
+      #set($goods_id = "$!{map.get('goods_id')}")	
+      #set($goods_name = "$!{map.get('goods_name')}")
+      #set($goods_count = "$!{map.get('goods_count')}")
+      #set($goods_price = "$!{map.get('goods_price')}")
+      #set($advance_type="")
+      #set($advance_din="")
+      #set($advance_wei="")
+      #if($!{map.get('advance_type')})
+      #set($advance_type = "$!{map.get('advance_type')}")
+      #if($!advance_type==1)
+      #set($advance_din = "$!{map.get('advance_din')}")
+      #set($advance_wei = "$!{map.get('advance_wei')}")
+      #end
+      #end
+      #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+      #set($goods_type = "$!{map.get('goods_type')}")
+      #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+      #set($goods_domainPath="$!webPath/items_$!{goods_id}")
+      #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+      #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+      #end	
+      #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+      #set($order_total_price=$!orderFormTools.query_order_price("$!order.id"))
+      #set($order_total_ship_price=$!order.ship_price)
+      #set($order_total_cancel_price=$!orderFormTools.query_order_pay_price("$!order.id"))
+      #set($order_total_cancel_ship_price=$!orderFormTools.queryOrderCancleShipPrice("$!order.id"))
+      #set($combin_suit_info = "$!{map.get('combin_suit_info')}")
+      #set($suit_map=$!orderFormTools.query_order_suitinfo("$!{combin_suit_info}")) 
+      #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}") <a href="$!webPath/wap/items?id=$!goods_id">
+                  <div class="list_one_center">
+        <div class="list_one_center_l"> <img src="$!img" /> </div>
+        <div class="list_one_center_c"> <span>$!goods_name</span> <b>$!goods_gsp_val</b></div>
+        <div class="list_right_c">
+                      <div class="list_one_center_r"><b>￥$!goods_price</b><i>x$!goods_count</i> </div>
+                    </div>
+      </div>
+                  </a> #end
+      #foreach($child_map in $!orderFormTools.queryGoodsInfo("$!order.child_order_detail"))
+      #set($child_order=$!orderFormTools.query_order("$!child_map.get('order_id')"))
+      #foreach($map in $!orderFormTools.queryGoodsInfo("$!child_map.get('order_goods_info')"))
+      #set($goods_id = "$!{map.get('goods_id')}")	
+      #set($goods_name = "$!{map.get('goods_name')}")
+      #set($goods_count = "$!{map.get('goods_count')}")
+      #set($goods_price = "$!{map.get('goods_price')}")
+      #if($!{velocityCount}=="1")
+      #set($order_total_ship_price=$order_total_ship_price+$child_order.ship_price)
+      #end
+      #set($goods_type="$!{map.get('goods_type')}")
+      #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+      #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+      #set($goods_domainPath="$!webPath/items_$!{goods_id}")
+      #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+      #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+      #end	
+      #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+      #set($combin_suit_info = "$!{map.get('combin_suit_info')}")
+      #set($suit_map=$!orderFormTools.query_order_suitinfo("$!{combin_suit_info}")) <a href="$!webPath/wap/items?id=$!goods_id">
+                  <div class="list_one_center">
+        <div class="list_one_center_l"> <img src="$!img" /> </div>
+        <div class="list_one_center_c"> <span>$!goods_name</span> <b>$!goods_gsp_val</b></div>
+        <div class="list_right_c">
+                      <div class="list_one_center_r"> <b>￥$!goods_price</b><i>x$!goods_count</i> </div>
+                    </div>
+      </div>
+                  </a> #end
+      #end
+      <div class="list_one_bottom"> #if($!order.order_status==10)
+                    #if($!config.auto_order_cancel != "") <i>请在$!config.auto_order_cancel小时内支付，如若超时订单自动取消。(预售商品除外)</i> #else <i>请在24小时内支付，如若超时订单自动取消。(预售商品除外)</i> #end
+                    #end  <span> <b>合计:<strong>￥$!order_total_price</strong>（含运费#if($!{order_total_ship_price}) $!{order_total_ship_price} #else 0.00 #end）</b> <b>共<strong>$!orderFormTools.query_goods_count("$!order.id")</strong>件</b> </span> <span> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/order_view?id=$!{order.id}')">查看订单</a> #if($!order.order_status==10)
+        #if($!order.order_cat!=1) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_pay($!{order.id})">立即付款</a> #end 
+        #end
+        #if($!{order.order_status}==35 && $!{order.delivery_type}==0) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{order.id}')">查看物流</a> #end
+        #if($!{order.order_status}==30) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{order.id}')">查看物流</a> #end
+        #if($!{order.order_status}>=40 && $!{order.order_status}!=47 && $!{order.order_status}!=50 && $!{order.order_status}!=60 && $!{order.order_status}!=65) <a style="border-color:#F94D4D;color: #F94D4D;" href= "$!webPath/wap/buyer/order_discuss?id=$!{order.id}">评价</a> #end
+        #if($!{order.order_status}==20) <a style="border-color:#F94D4D;color: #F94D4D;"href="javascript:void(0)" onclick="order_form_refound('$!{order.id}',this)">申请退款</a> #elseif($!{order.order_status}==21) <a style="border-color:#F94D4D;color: #F94D4D;" href= "javascript:void(0)">退款审核中</a> #end
+        #if($!order.order_status>=10 && $!order.order_status < 20) <a href="javascript:void(0);" onClick="order_cancel_pop($!{order.id},$!{order.order_id})">取消订单</a> #end </span> </div>
+    </div>
+                #else 
+                <!--子订单拆分开始-->
+                <div class="phone_goods_list_one">
+      <div class="list_one_top"> <span>订单号:$!order.order_id</span> <span></span> <b>$!status</b> </div>
+      <div class="list_one_center"> 
+                    <!--主订单--> 
+                    #foreach($map in $!orderFormTools.queryGoodsInfo("$!order.goods_info"))
+                    #set($goods_id = "$!{map.get('goods_id')}")	
+                    #set($goods_name = "$!{map.get('goods_name')}")
+                    #set($goods_count = "$!{map.get('goods_count')}")
+                    #set($goods_price = "$!{map.get('goods_price')}")
+                    #set($goods_type="$!{map.get('goods_type')}")
+                    #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+                    #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+                    #set($goods_domainPath="$!webPath/items_$!{goods_id}")
+                    #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+                    #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+                    #end	
+                    #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+                    #set($order_total_price=$!order.totalPrice)
+                    #set($order_total_ship_price=$!order.ship_price)
+                    #set($combin_suit_info = "$!{map.get('combin_suit_info')}")
+                    #set($suit_map=$!orderFormTools.query_order_suitinfo("$!{combin_suit_info}")) <a href="$!webPath/wap/items?id=$!goods_id">
+        <div class="list_left_c">
+                      <div class="list_one_center_l"> <img src="$!img" > </div>
+                      <div class="list_one_center_c"> <span>$!goods_name</span> </div>
+                      <div class="list_right_c">
+            <div class="list_one_center_r"> <b>￥$!goods_price</b> <i>x$!goods_count</i> </div>
+          </div>
+                    </div>
+        </a> #end </div>
+      <div class="list_one_bottom">  #if($!order.order_status==10)
+                    #if($!config.auto_order_cancel != "") <i>请在$!config.auto_order_cancel小时内支付，如若超时订单自动取消。(预售商品除外)</i> #else <i>请在24小时内支付，如若超时订单自动取消。(预售商品除外)</i> #end
+                    #end  <span> <b>合计:<strong>￥$!order_total_price</strong>（含运费#if($!{order_total_ship_price})$!{order_total_ship_price} #else 0.00 #end）</b> <b>共<strong>$!goods_count</strong>件</b> </span> <span> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/order_view?id=$!{order.id}&mark=split')">查看订单</a> #if($!order.order_status==10)
+        #if($!order.order_cat!=1)<a class="list_one_b_a" href="javascript:void(0);" onClick="order_pay($!{order.id})">立即付款</a> #end 
+        #end
+        #if($!{order.order_status}==35 && $!{order.delivery_type}==0) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{child_order.id}')">查看物流</a> #end
+        #if($!{order.order_status}==30) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{child_order.id}')">查看物流</a> #end
+        #if($!{order.order_status}>=40 && $!{order.order_status}!=47 && $!{order.order_status}!=50 && $!{order.order_status}!=60 && $!{order.order_status}!=65) <a style="border-color:#F94D4D;color: #F94D4D;" href= "$!webPath/wap/buyer/order_discuss?id=$!{order.id}">评价</a> #end
+        #if($!{order.order_status}==20) <a style="border-color:#F94D4D;color: #F94D4D;"href="javascript:void(0)" onclick="order_form_refound('$!{order.id}',this)">申请退款</a> #elseif($!{order.order_status}==21) <a style="border-color:#F94D4D;color: #F94D4D;" href= "javascript:void(0)">退款审核中</a> #end </span> </div>
+      
+      <!--子订单--> 
+      #if($!order.child_order_detail)
+      #foreach($child_map in $!orderFormTools.queryGoodsInfo("$!order.child_order_detail"))
+      #set($child_order=$!orderFormTools.query_order("$!child_map.get('order_id')"))
+      #set($order_count=$!orderFormTools.query_goods_count("$!child_map.get('order_id')"))
+      #if($!child_order.order_status==0)
+      #set($status="已取消")
+      #end
+      #if($!child_order.order_status==10)
+      #set($status="待付款")
+      #end
+      
+      #if($!child_order.order_status==16)
+      #set($status="待发货")
+      #end
+      #if($!child_order.order_status==20)
+      #set($status="已付款")
+      #end
+      #if($!child_order.order_status==21)
+      #set($status="申请退款")
+      #end
+      #if($!child_order.order_status==22)
+      #set($status="正在退款")
+      #end
+      #if($!child_order.order_status==25)
+      #set($status="已退款")        
+      #end
+      #if($!child_order.order_status==30)
+      #set($status="已发货")
+      #if($!{child_order.delivery_type}==1)
+      #set($status="正在发往自提点")        
+      #end        
+      #end
+      #if($!child_order.order_status==35)
+      #set($status="自提点已代收")        
+      #end               
+      #if($!child_order.order_status==40)
+      #set($status="已收货")
+      #end
+      #if($!child_order.order_status==50)
+      #set($status="已评价")                                              
+      #end
+      #if($!child_order.order_status==65)
+      #if($!child_order.order_cat==1)
+      #set($status="已完成")             
+      #else
+      #set($status="系统自动评价")           
+      #end                                             
+      #end
+      <div class="list_one_top"> <span>订单号:$!child_order.order_id</span> <span></span> <b>$!status</b> </div>
+      <div class="list_one_center"> #foreach($map in $!orderFormTools.queryGoodsInfo("$!child_order.goods_info"))  
+                    #set($goods_id = "$!{map.get('goods_id')}")	
+                    #set($goods_name = "$!{map.get('goods_name')}")
+                    #set($goods_count = "$!{map.get('goods_count')}")
+                    #set($goods_price = "$!{map.get('goods_price')}")
+                    #set($goods_type="$!{map.get('goods_type')}")
+                    #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+                    #set($goods_domainPath="$!webPath/items_$!{goods_id}")
+                    #if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+                    #set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+                    #end	
+                    #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+                    #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+                    #set($order_total_price=$!{child_order.totalPrice})
+                    #set($order_total_ship_price=$!{child_order.ship_price})
+                    #set($combin_suit_info = "$!{map.get('combin_suit_info')}")
+                    #set($suit_map=$!orderFormTools.query_order_suitinfo("$!{combin_suit_info}"))
+                    <div class="list_left_c"> <a href="$!webPath/wap/items?id=$!goods_id">
+                      <div class="list_one_center_l"> <img src="$!img"> </div>
+                      </a>
+          <div class="list_one_center_c"> <span>$!goods_name</span><b>$!goods_gsp_val</b> </div>
+          <div class="list_right_c">
+                        <div class="list_one_center_r"> <b>￥$!goods_price</b> <i>x$!{goods_count}</i> </div>
+                      </div>
+        </div>
+                    #end </div>
+      
+      <div class="list_one_bottom"> #if($!child_order.order_status==10)
+                    #if($!config.auto_order_cancel != "") <i>请在$!config.auto_order_cancel小时内支付，如若超时订单自动取消。(预售商品除外)</i> #else <i>请在24小时内支付，如若超时订单自动取消。(预售商品除外)</i> #end
+                    #end <span> <b>合计:<strong>￥$!order_total_price</strong>（含运费#if($!{order_total_ship_price}) $!{order_total_ship_price} #else 0.00 #end）</b> <b>共<strong>$!order_count</strong>件</b> </span> <span> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/order_view?id=$!{child_order.id}')">查看订单</a> #if($!{child_order.order_status}==35 && $!{child_order.delivery_type}==0) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{child_order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{child_order.id}')">查看物流</a> #end
+        #if($!{child_order.order_status}==30) <a class="list_one_b_a" href="javascript:void(0);" onClick="order_cofirm($!{child_order.id})">确认收货</a> <a href="javascript:void(0);" onClick="url('$!webPath/wap/buyer/ship_detail1?order_id=$!{child_order.id}')">查看物流</a> #end
+        #if($!{child_order.order_status}>=40 && $!{child_order.order_status}!=47 && $!{child_order.order_status}!=50 && $!{child_order.order_status}!=60 && $!{child_order.order_status}!=65) <a style="border-color:#F94D4D;color: #F94D4D;" href= "$!webPath/wap/buyer/order_discuss?id=$!{child_order.id}">评价</a> #end
+        #if($!{child_order.order_status}==20) <a style="border-color:#F94D4D;color: #F94D4D;"href="javascript:void(0)" onclick="order_form_refound('$!{child_order.id}',this)">申请退款</a> #elseif($!{child_order.order_status}==21) <a style="border-color:#F94D4D;color: #F94D4D;" href= "javascript:void(0)">退款审核中</a> #end </span> </div>
+        #end
+        #end
+    </div>
+                <!--子订单拆分结束--> 
+                #end </div>
+</div>
+#end 
+  <div id="order_data_last"></div>
+  #else
+  <div class="loading" id="gc_none">
+    <ul>
+      <li>您还没有$!text订单~</li>
+    </ul>
+  </div>
+  #end 
+  <script>
+function url(url){
+	var type = jQuery("#url").val();
+	url = url+"&&type="+type;
+	window.location.href=url;
+}
+</script>
+  <div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+  <div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li id="loading_none_text">没有更多的订单了~</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

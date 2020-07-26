@@ -1,0 +1,375 @@
+<script src="$!cdnServer/resources/js/jquery.cookie.js"></script>
+<script>
+var s ;
+var pageVisibility = (function(){
+	var prefixSupport,keyWithPrefix = function(prefix, key) {
+		if (prefix !== "") {
+		   return prefix + key.slice(0,1).toUpperCase() + key.slice(1);    
+		}
+    	return key;
+	};
+    var isPageVisibilitySupport = (function() {
+		var support = false;
+		if (typeof window.screenX === "number") {
+			  ["webkit", "moz", "ms", "o", ""].forEach(function(prefix) {
+				if (support == false && document[keyWithPrefix(prefix, "hidden")] != undefined) {
+						prefixSupport = prefix;
+						support = true;   
+					}
+			   });        
+		}
+		return support;
+	})();
+	var visibilityState = function() {
+        if (isPageVisibilitySupport) {
+            return document[keyWithPrefix(prefixSupport, "visibilityState")];
+        }
+        return undefined;
+    };
+	return {
+        visibilityState: visibilityState(),
+        visibilitychange: function(fn,usecapture) {
+            usecapture = undefined || false;
+            if (isPageVisibilitySupport && typeof fn === "function") {
+                return document.addEventListener(prefixSupport + "visibilitychange", function(evt) {
+                    this.visibilityState = visibilityState();
+                    fn.call(this, evt);
+                }.bind(this), usecapture);
+            }
+            return undefined;
+        }
+    };  
+})(undefined);
+jQuery(document).ready(function(){
+	#if($!chatting)
+	message_remind_ajax();
+	#end
+	//快捷设置弹出框样式
+	jQuery("#set_menu_img").click(function(){//弹出框
+	    jQuery(".set_menu_wrap").animate({
+	      left:'+24px',top:'+10px',opacity: 'show'
+	   },"600");
+	});
+	jQuery(".set_menu_close").click(function(){//关闭框
+	   jQuery(".set_menu_wrap").animate({
+	      left:'-24px',top:'-10px',opacity: 'hide'
+	   },"600");
+	});
+	jQuery(".mid_menu_btn .finish").click(function(){//确定，关闭框
+	   jQuery(".set_menu_wrap").animate({
+	      left:'-24px',top:'-10px',opacity: 'hide'
+	   },"600");
+	});
+	//初始化快捷操作选择框
+	jQuery("li").each(function(index, element) {
+			if(jQuery(element).attr("child_show")&&jQuery(element).attr("id")!="nav_quick"){
+				jQuery(".mid_menu").append("<div class='mid_menu_item'><h4>"+jQuery(element).find(">b>a").html()+"</h4><div class='itemBox'><ul></ul></div></div>");
+				jQuery(element).find(">ul>li>a").each(function(i, ele) {
+                    var menu_url= jQuery(ele).attr("href").substring(jQuery(ele).attr("href").lastIndexOf("/")+1);					
+					var menu_value=jQuery(ele).html();
+					jQuery(".itemBox:last>ul").append("<li><label  style='cursor:pointer'><input name='menu' type='checkbox' value='"+menu_value+"' menu_url='"+menu_url+"'/>"+menu_value+"</label></li>");
+                });
+			}		
+	});
+	if(typeof pageVisibility.visibilityState !== "undefined"){
+	  if(pageVisibility.visibilityState=="visible"){
+		  s = setInterval("message_remind_ajax()",30000); 
+	  }
+	  pageVisibility.visibilitychange(function() {
+        if(this.visibilityState=="visible"){
+			 s = setInterval("message_remind_ajax()",30000); 
+		}
+		if(this.visibilityState=="hidden"){
+			clearInterval(s);
+		} 
+      });
+    };
+	if("$!{limit}"=="true"){
+		jQuery(".seller_ul>li").each(function(index, element) {
+			if(index!=2){
+				jQuery(element).remove();
+			}		
+        });
+	}
+   jQuery(".seller_ul>li>b").click(function(){
+	  var child_show=jQuery(this).parent().attr("child_show");
+	  if(child_show=="true"){
+	    jQuery(this).parent().find("img").attr("src","$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif");
+	    jQuery(this).parent().find("ul").slideUp('normal');
+	    jQuery(this).parent().attr("child_show","false");
+	  }else{
+	    jQuery(this).parent().find("img").attr("src","$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s2.png");
+	    jQuery(this).parent().find("ul").slideDown('normal');
+	    jQuery(this).parent().attr("child_show","true");
+	  }
+	  var nav_status="";
+	  jQuery(".seller_ul>li").each(function(){
+		nav_status=nav_status+jQuery(this).attr("id")+","+jQuery(this).attr("child_show")+";";
+	  }); 
+	  jQuery.cookie("seller_nav",nav_status);
+	});	
+	
+   //
+	jQuery(".seller_ul li a").removeClass("this");						
+	jQuery(".seller_ul li[op='$!{op}'] a").addClass("this");
+   
+	jQuery(".mid_menu_btn .cancel").click(function(){
+		jQuery("input[name='menu']:checked").each(function(index, element) {
+            jQuery(element).attr("checked",false);
+			jQuery.ajax({type:'POST',
+	              	url:'$!webPath/seller/store_quick_menu_save',
+				  	data:{"menus":""},
+			   	success:function(data){
+					var menus = jQuery.parseJSON(data);
+					jQuery("#nav_quick ul").empty();
+					jQuery.each(menus,function(index,menu){
+						jQuery("#nav_quick ul").append("<li><a href='$!webPath/seller/"+menu.menu_url+"'>"+menu.menu_name+"</a></li>");
+					}); 
+              }
+			}); 
+        });
+	});
+   #if($!user.store.store_quick_menu)
+	    var menus = jQuery.parseJSON('$!{user.store.store_quick_menu}');
+		jQuery.each(menus,function(index,menu){
+			jQuery("input[name='menu'][value='"+menu.menu_name+"']").attr("checked",true);
+			jQuery("#nav_quick ul").append("<li style='background:#f9f9f9; border-left:1px solid #45abe8' op='quick_"+index+"'><a href='$!webPath/seller/"+menu.menu_url+"'>"+menu.menu_name+"</a></li>");
+		});
+   #end   
+	
+   //快捷操作菜单
+   jQuery("input[name='menu']").change(function(){
+		var str = "";
+		jQuery("input[name='menu']:checked").each(function(index, element) {
+           str=str+';'+jQuery(element).val()+","+jQuery(element).attr("menu_url")
+		});
+		jQuery.ajax({type:'POST',
+	              	url:'$!webPath/seller/store_quick_menu_save',
+				  	data:{"menus":str},
+			   	success:function(data){
+					var menus = jQuery.parseJSON(data);
+					jQuery("#nav_quick ul").empty();
+					jQuery.each(menus,function(index,menu){
+						jQuery("#nav_quick ul").append("<li><a href='$!webPath/seller/"+menu.menu_url+"'>"+menu.menu_name+"</a></li>");
+					}); 
+              }
+		});   
+   });
+   jQuery(".set_menu_cancel").click(function(){
+	    var str = "";
+		jQuery.ajax({type:'POST',
+	              	url:'$!webPath/seller/store_quick_menu_save',
+				  	data:{"menus":str},
+			   	success:function(data){
+					var menus = jQuery.parseJSON(data);
+					jQuery("#nav_quick ul").empty();
+					jQuery.each(menus,function(index,menu){
+					jQuery("#nav_quick ul").append("<li><a href='$!webPath/seller/"+menu.menu_url+"'>"+menu.menu_name+"</a></li>"); 
+					}); 
+              }
+		});
+		jQuery("input[name='menu']").attr("checked",false); 
+   });
+   //
+   if(jQuery.cookie("seller_nav")!=null){
+      var nav_status=jQuery.cookie("seller_nav");
+	  jQuery.each(nav_status.split(";"), function(index,item){
+	     var list=item.split(",");
+		 jQuery("#"+list[0]).attr("child_show",list[1]);
+		 if(list[1]=="true"){
+	       jQuery("#"+list[0]+" ul").show();
+		 }else{
+		   jQuery("#"+list[0]+" ul").hide(); 	 
+		 }
+	  });
+   }else{
+	   jQuery(".seller_ul ul").hide();
+	   jQuery(".seller_ul li").attr("child_show",false);
+   }
+   
+   //
+});<!--end-->
+function message_remind_ajax(){
+	jQuery.ajax({type:'POST',url:'$!webPath/seller/new_chatting_remind',
+			  	success:function(data){
+						if(data.indexOf("查看详情")>0){
+							jQuery(".seller_center_left").append(data);
+							jQuery(".message_warn").slideDown();
+						}
+			  	}
+	})
+}
+function message_remind_off(){
+	jQuery(".message_warn").slideUp();
+}
+function open_im2(){
+  var goods_id=arguments[0];
+  var url=arguments[1];
+  var type=arguments[2];  //打开类型，user为用户打开，store为商家打开，plat为平台打开
+  if(type=="store"){
+  window.open (url+"/service_chatting",'store','height=660,width=1000,top=200,left=400,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');	  
+	  }
+}
+</script>
+
+<div class="seller_center_left">
+    
+  <div class="seller_center_box">
+  	<div class="seller_center_left_top">
+    <div class="seller_center_left_top_head">
+     #if($!user.photo)  
+       #set($user_photo="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+     #else
+       #set($user_photo="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+     #end
+    	<img src="$!user_photo" /></div>
+        <div class="seller_center_left_top_head_name"><b>当前用户</b><span>$!{user.userName}</span></div>
+    </div>
+    <div class="seller_center_left_top_set">
+        <a href="$!webPath/redpigmall_logout" title="退出商家中心"><img src="$!cdnServer/resources/style/system/front/default/images/shop_nav/exit.png" /></a>
+    	<a href="javascript:void(0);" id="set_menu_img" title="管理快捷菜单" style="cursor:pointer"><img src="$!cdnServer/resources/style/system/front/default/images/shop_nav/set.png" /></a>
+              <form action="$!webPath/seller/store_quick_menu_save"  method="post" id="store_quick_menu_form" name="store_quick_menu_form">
+        <div class="set_menu_wrap" style="display:none;left:0px">
+          <div class="set_menu_box">
+            <div class="set_menu_back"> <img class="left_top" src="$!cdnServer/resources/style/system/front/default/images/usercenter/left_top.jpg"> <img class="right_top"  src="$!cdnServer/resources/style/system/front/default/images/usercenter/right_top.jpg"> <img class="right_bottom"  src="$!cdnServer/resources/style/system/front/default/images/usercenter/right_bottom.jpg"> <img class="left_bottom"  src="$!cdnServer/resources/style/system/front/default/images/usercenter/left_bottom.jpg"> </div>
+            <div class="menu_text_box">
+              <div class="menu_text"> <a class="set_menu_close" href="javascript:void(0)" style="cursor:pointer"></a>
+                <h3>设置常用菜单</h3>
+                <div class="mid_menu"> </div>
+                <div class="mid_menu_btn"> <a href="javascript:void(0)" class="finish" style="cursor:pointer">完成</a> <a href="javascript:void(0)" class="cancel" style="cursor:pointer">清空</a> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <ul class="seller_ul">
+      <li child_show="true" id="nav_quick"><b style="background:#EFF9FF; border-left:3px solid #45abe8;"><a href="javascript:void(0);">快捷操作</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" /></s></b>
+   		<ul>
+        
+        </ul>     
+      </li>
+      <li child_show="true" id="nav_goods"><b><a href="javascript:void(0);">商品管理</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" /></s></b>
+        <ul>
+          <li op="goods"><a href="$!webPath/seller/items">出售中的商品</a></li>
+          <li><a href="$!webPath/seller/add_goods_first" target="_blank">发布新商品</a></li>
+          <li op="goods_storage"><a href="$!webPath/seller/goods_storage">仓库中的商品</a></li>
+          <li op="goods_out"><a href="$!webPath/seller/goods_out">违规下架商品</a></li>
+          <li op="goods_class"><a href="$!webPath/seller/goods_class_list">商品分类</a></li>
+          <li op="goods_format"><a href="$!webPath/seller/goods_format_list">版式管理</a></li>
+          <li op="goods_brand"><a href="$!webPath/seller/goods_brand_list">品牌申请</a></li>
+          <li op="goods_spec_list"><a href="$!webPath/seller/goods_spec_list">规格管理</a></li>
+          <li op="goods_type_list"><a href="$!webPath/seller/gtp_list">属性管理</a></li>
+          <li op="taobao"><a href="$!webPath/seller/taobao">淘宝导入</a></li>
+        </ul>
+      </li>
+      <li child_show="true" id="nav_order"><b><a href="javascript:void(0);">交易管理</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+           <li op="order_ship"><a href="$!webPath/seller/order_ship">发货管理</a></li>
+           <li op="order_confirm"><a href="$!webPath/seller/order_confirm">收货管理</a></li>
+           <li op="order"><a href="$!webPath/seller/order">订单管理</a></li>
+           <li op="ship_address"><a href="$!webPath/seller/ship_address">发货地址</a></li>
+          <li op="group_code"><a href="$!webPath/seller/group_code">团购码管理</a></li>
+          <li op="transport"><a href="$!webPath/seller/transport_list">运费模板</a></li>
+          <li op="store_express"><a href="$!webPath/seller/ecc_set">常用物流</a></li>
+        </ul>
+      </li>
+      <li child_show="true" id="nav_store"><b><a href="javascript:void(0);">我的店铺</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+          <li op="store_set"><a href="$!webPath/seller/store_set">店铺设置</a></li>
+          <li op="store_decorate"><a href="$!webPath/seller/decorate" target="_blank">店铺装修</a></li>
+          <li op="wap_store_decorate"><a href="$!webPath/seller/wap_decorate">wap店铺装修</a></li>
+          <li op="store_sld"><a href="$!webPath/seller/store_sld">二级域名</a></li>
+          <li op="sub_account_list"><a href="$!webPath/seller/sub_account_list">子账户管理</a></li>
+          <li op="store_nav"><a href="$!webPath/seller/store_nav">店铺导航</a></li>
+          <li op="adjust_goodsClass"><a href="$!webPath/seller/adjust_goodsclass">类目调整</a></li>
+          <li op="store_notice"><a href="$!webPath/seller/store_notice">商城公告</a></li>
+          <li op="store_message"><a href="$!webPath/seller/message">系统通知</a></li>
+        </ul>
+      </li>
+      <li child_show="true" id="nav_promotion"><b><a href="javascript:void(0);">促销推广</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+          <li op="activity"><a href="$!webPath/seller/activity">商城活动</a></li>
+          #if($!config.combin_status==1)
+          <li op="combin"><a href="$!webPath/seller/combin">组合销售</a></li>
+          #end
+          #if($!config.buygift_status==1)
+          <li op="buygift"><a href="$!webPath/seller/buygift_list">满就送</a></li>
+          #end
+          #if($!config.enoughreduce_status==1)
+          <li op="enoughreduce"><a href="$!webPath/seller/enoughreduce_list">满就减</a></li>
+          #end
+          #if($!config.ztc_status)
+          <li op="ztc"><a href="$!webPath/seller/ztc_apply">竞价直通车</a></li>
+          #end
+          <li op="coupon"><a href="$!webPath/seller/coupon">优惠劵管理</a></li>
+        </ul>
+      </li>
+      #if($!config.groupBuy)
+      <li child_show="true" id="nav_group"><b><a href="javascript:void(0);">团购管理</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+          <li op="groupgoods"><a href="$!webPath/seller/group">商品购管理</a></li>
+          <li op="lifegoods"><a href="$!webPath/seller/group?type=life">生活购管理</a></li>
+          <li op="buygroup"><a href="$!webPath/seller/group_meal">团购套餐</a></li>
+          <li op="groupareainfo"><a href="$!webPath/seller/groupareainfo_list">常用地区管理</a></li>
+        </ul>
+      </li>
+      #end
+      #if($!config.whether_free==1)
+      <li child_show="true" id="nav_free"><b><a href="javascript:void(0);">0元试用管理</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+          <li op="freelist"><a href="$!webPath/seller/freegoods_list">0元试用商品</a></li>
+          <li op="freeadd"><a href="$!webPath/seller/freegoods_add">申请0元试用</a></li>
+        </ul>
+      </li>
+      #end
+      <li child_show="true" id="nav_settle"><b><a href="javascript:void(0);">结算管理</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+          <li op="payoff"><a href="$!webPath/seller/payofflog_list">我的账单</a></li>
+        </ul>
+      </li>
+      <li child_show="true" id="nav_member"><b><a href="javascript:void(0);">客户服务</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+          <li op="return"><a href="$!webPath/seller/return">退货管理</a></li>
+          <li op="refund"><a href="$!webPath/seller/refund_apply_form">退款管理</a></li>
+          <li op="consult"><a href="$!webPath/seller/consult">咨询管理</a></li>
+          <li op="complaint"><a href="$!webPath/seller/complaint">投诉管理</a></li>
+           <li op="crm"><a href="$!webPath/seller/crm_list">客户管理</a></li>
+           <li op="evaluate"><a href="$!webPath/seller/evaluate_list">评价管理</a></li>
+           <li op="chatting_online"><a  onclick="open_im('','$!webPath','plat');"  href="javascript:void(0);">在线客服</a></li>
+          <li op="chatting"><a  href="$!webPath/seller/chatting_user_list">客服管理</a></li>
+          <li op="chatting_log"><a  href="$!webPath/seller/chatting_log_list">客服记录</a></li>
+        </ul>
+      </li>
+      <li child_show="true" id="nav_statmanage"><b><a href="javascript:void(0);">商家统计</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>        
+          <li op="stats"><a href="$!webPath/seller/stat_store">店铺统计</a></li>
+          <li op="statg"><a href="$!webPath/seller/stat_items">商品统计</a></li>
+        </ul>
+      </li>
+      <li child_show="true" id="nav_other"><b><a href="javascript:void(0);">其他管理</a><s><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+        <ul>
+          <li op="gold"><a href="$!webPath/seller/gold_record">金币管理</a></li>
+          <li op="sms"><a href="$!webPath/seller/sms_email">短信邮件</a></li>
+          <li op="advert"><a href="$!webPath/seller/advert_list">广告管理</a></li>
+          <li op="album"><a href="$!webPath/seller/album">图片空间</a></li>
+          <li op="information"><a href="$!webPath/seller/information_list">资讯管理</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+#if("$!chatting"!="")
+    <div class="message_warn">
+	<div class="message_warn_left"><a href="javascript:void(0)" onclick="jQuery('.message_warn').remove();open_im2('','$!webPath','store');"><img src="$!cdnServer/resources/style/system/front/default/images/dialogue.png" /></a></div>
+    <div class="message_warn_right">
+    	<a href="javascript:void(0)" onclick="jQuery('.message_warn').remove();open_im2('','$!webPath','store');">
+        <div class="message_warn_right_top1">
+        	<strong style="margin-left:20px">您有新的即时对话信息</strong>
+        </div>
+        <div class="message_warn_right_bottom">查看详情 >></div>
+        </a>
+        <div class="message_warn_right_close"><a href="javascript:void(0)" onclick="message_remind_off()"><img src="$!cdnServer/resources/style/system/front/default/images/message_close.png" /></a></div>
+    </div>
+	</div>
+#end

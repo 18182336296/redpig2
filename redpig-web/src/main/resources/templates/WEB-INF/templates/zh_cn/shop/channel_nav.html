@@ -1,0 +1,490 @@
+<div class="cont">
+#if($!style=="blue")
+<div class="guide_blue">
+	<div class="left_nav">
+    	<h2 class="nav_title nav_title_blue">$!obj.ch_name</h2>
+        <div class="nav_content_blue">
+       
+            <dl class="left_nav_item_blue" style=" width:230px; height:120px; overflow:hidden;">
+                <dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end
+                </dt>
+                <dd>  
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+              
+                </dd>
+            </dl>
+            <dl class="left_nav_item_blue" style=" width:230px; height:90px; overflow:hidden;">
+                <dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank"  style="color:#fff">$!gc.className</a>
+                 #end
+                </dt>
+                <dd>
+                 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+                </dd>
+            </dl>
+            <dl class="left_nav_item_blue"style=" width:230px; height:90px; overflow:hidden;">
+                <dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff" >$!gc.className</a>
+                 #end
+                </dt>
+                <dd>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+                </dd>
+            </dl>
+            <dl class="left_nav_item_blue"style=" width:230px; height:120px; overflow:hidden;">
+                <dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff" >$!gc.className</a>
+                 #end
+                </dt>
+                <dd>
+                 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+                </dd>
+            </dl>
+       </div>							
+    </div>
+    <div class="right_content">
+    	<div class="top_nav_box">
+            <ul class="navitems">
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","1"))<a href="$!wc.href" target="_blank" >$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","2"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","3"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","4"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","5"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","6"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","7"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","8"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","9"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","10"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+            </ul>
+        </div>
+        <div class="slider_ads_box">
+        	<div class="middle_slider_box">
+                <div class="slideBox" style="background:none">
+                <script src="$!webPath/advert_invoke?id=$!{obj.ch_nav_advp_id}"></script>
+                    <div class="bd"></div>
+                 </div>
+             </div>
+       	<div class="middle_slider_right">
+        	<ul>
+            	<li> #foreach($right in $ch_tools.getInfo_list("$!obj.ch_nav_right_img_list","1"))
+                <a href="$!right.href" target="_blank"><img src="$!imageWebServer/$!{right.path}"></a>
+                #end </li>
+                <li> #foreach($right in $ch_tools.getInfo_list("$!obj.ch_nav_right_img_list","2"))
+                <a href="$!right.href" target="_blank"><img src="$!imageWebServer/$!{right.path}"></a>
+                #end </li>
+                <li> #foreach($right in $ch_tools.getInfo_list("$!obj.ch_nav_right_img_list","3"))
+                <a href="$!right.href" target="_blank"><img src="$!imageWebServer/$!{right.path}"></a>
+                #end</li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    </div>
+#elseif($!style=="brown")
+<div class="guide_gray">
+	<div class="left_nav">
+    	<h2 class="nav_title">$!obj.ch_name</h2>
+        <div class="nav_content">
+        	<dl class="left_nav_item"  style=" width:230px; height:120px; overflow:hidden;">
+        	<dt>#foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item"  style=" width:230px; height:90px; overflow:hidden;">
+        	<dt>#foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank" >$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item"  style=" width:230px; height:90px; overflow:hidden;">
+        	<dt> #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item"  style=" width:230px; height:120px; overflow:hidden;">
+        	<dt>#foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>		
+        <dl class="left_nav_item last"  style=" width:230px; height:90px; overflow:hidden;">
+        	<dt>#foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","5"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd class="last">
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","5"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>	
+        </div>					
+    </div>
+    <div class="right_content">
+    	<div class="top_nav_box">
+            <ul class="navitems">
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","1"))<a href="$!wc.href" target="_blank" >$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","2"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","3"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","4"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","5"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","6"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","7"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                 <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","8"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","9"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","10"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+            </ul>
+        </div>
+        <div class="slider_wrap_gray">
+            <div class="slideBox" style="background:none;">
+			<script src="$!webPath/advert_invoke?id=$!obj.ch_nav_advp_id"></script>
+                <div class="bd"> </div>
+            </div>
+        </div>
+        <div class="slide_bottom">
+        	<ul>
+            	<li>
+                 #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","1"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.original">></a></span>
+                    #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href" target="_blank">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+                <li>
+                      #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","2"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.original"></a></span>
+                    #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href" target="_blank">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+                <li>
+                      #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","3"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.original"></a></span>
+                   #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href" target="_blank">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+                <li>
+                     #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","4"))
+                 #if($!goods.type=="goods")
+                   <span class="slide_bottom_img"><a href="$!webPath/$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.original"></a></span>
+                    #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                   <span class="product_name"><a href="$!webPath/$!goods.href" target="_blank">$!goods_list.goods_name</a></span>
+                   <span class="product_price">
+                   		<strong>￥$!goods_list.goods_price</strong>
+                   		<del>￥$!goods_list.store_price</del>
+                   </span>
+                   #end
+                 #else
+                <a href="$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.path"></a>
+                #end
+                #end</li>
+            </ul>
+        </div>
+    </div>
+    </div>
+#else 
+<div class="guide_green">
+	<div class="left_nav">
+
+    	<h2 class=" nav_title nav_title_green">$!obj.ch_name</h2>
+        <div class="nav_content_green">
+        	<dl class="left_nav_item_green" style="width:200px; height:60px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","1"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item_green" style="width:200px; height:60px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff" >$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","2"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item_green" style="width:200px; height:60px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","3"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+        <dl class="left_nav_item_green" style="width:200px; height:60px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","4"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+                <dl class="left_nav_item_green" style="width:200px; height:60px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","5"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","5"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+       <dl class="left_nav_item_green" style="width:200px; height:60px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","6"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","6"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+               <dl class="left_nav_item_green" style="width:200px; height:60px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","7"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","7"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>
+       <dl class="left_nav_item_green" style="width:200px; height:90px; overflow:hidden;">
+        	<dt>
+                #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","8"))
+                 <a href="$!webPath/store_goods_list_$!{gc.id}" target="_blank" style="color:#fff">$!gc.className</a>
+                 #end</dt>
+            <dd>
+            	 #foreach($gc in $ch_tools.getGc_list("$!obj.ch_nav_gc_list","8"))
+                #foreach($c_gc in $gc.childs)
+                <a href="$!webPath/store_goods_list_$!{c_gc.id}" target="_blank">$!c_gc.className</a>
+                #end
+                #end
+            </dd>
+        </dl>	
+        </div>					
+    </div>
+    <div class="right_content_green">
+    	<div class="top_nav_box">
+            <ul class="navitems">
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","1"))<a href="$!wc.href" target="_blank" >$!wc.name</a>#end</li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","2"))<a href="$!wc.href" target="_blank" >$!wc.name</a>#end</li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","3"))<a href="$!wc.href" target="_blank" >$!wc.name</a>#end</li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","4"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end</li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","5"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end</li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","6"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end</li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","7"))<a href="$!wc.href" target="_blank" >$!wc.name</a>#end</li>
+                 <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","8"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li>#foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","9"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+                <li> #foreach($wc in $ch_tools.getInfo_list("$!obj.ch_nav_word_list","10"))<a href="$!wc.href" target="_blank">$!wc.name</a>#end
+                </li>
+            </ul>
+        </div>
+        <div class="content_right_box">
+        	<div class="content_middle">
+            	<div class="slider_wrap_green">
+                    <div class="slideBox"> <script src="$!webPath/advert_invoke?id=$!obj.ch_nav_advp_id"></script>
+                        <div class="bd">
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="slider_img_bottom">
+                	#foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","1"))
+                 #if($!goods.type=="goods")
+                    <ul class="content_product">
+                    	<li class="product_img"><a href="$!webPath/$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.original"></a></li>
+                        #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                        <li class="product_name"><a href="$!webPath/$!goods.href" target="_blank">$!goods_list.goods_name</a></li>
+                        <li class="product_price">
+                        	<strong>￥$!goods_list.goods_price</strong>
+                            <del>￥$!goods_list.store_price</del>
+                        </li>
+                        #end
+                        </ul>
+                 #else
+                 <ul class="content_ads">
+                 <li>
+                <a href="$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.path" style="max-width:100%;"></a>
+               </li>
+                    </ul> #end#end
+                    #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","2"))
+                 #if($!goods.type=="goods")
+                    <ul class="content_product">
+                    	<li class="product_img"><a href="$!webPath/$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.original"></a></li>
+                        #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                        <li class="product_name"><a href="$!webPath/$!goods.href" target="_blank">$!goods_list.goods_name</a></li>
+                        <li class="product_price">
+                        	<strong>￥$!goods_list.goods_price</strong>
+                            <del>￥$!goods_list.store_price</del>
+                        </li>
+                        #end
+                        </ul>
+                 #else
+                 <ul class="content_ads">
+                 <li>
+                <a href="$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.path" style="max-width:100%;"></a>
+               </li>
+                    </ul> #end#end
+                    #foreach($goods in $!ch_tools.getInfo_list("$!obj.ch_nav_bottom_adv_list","3"))
+                 #if($!goods.type=="goods")
+                    <ul class="content_product slider_img_bottom_last">
+                    	<li class="product_img"><a href="$!webPath/$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.original"></a></li>
+                         #foreach($goods_list in $!ch_tools.getGoodsInfo("$!goods.goods_id"))
+                        <li class="product_name"><a href="$!webPath/$!goods.href" target="_blank">$!goods_list.goods_name</a></li>
+                        <li class="product_price">
+                        	<strong>￥$!goods_list.goods_price</strong>
+                            <del>￥$!goods_list.store_price</del>
+                        </li>
+                        #end
+                        </ul>
+                 #else
+                 <ul class="content_ads slider_img_bottom_last">
+                 <li>
+                <a href="$!goods.href" target="_blank"><img src="$!imageWebServer/$!goods.path" style="max-width:100%;"></a>
+               </li>
+                    </ul> #end#end
+                </div>
+            </div>
+            <div class="content_right">
+            	#foreach($right in $ch_tools.getInfo_list("$!obj.ch_nav_right_img_list","1"))
+                <a href="$!right.href" target="_blank"><img src="$!imageWebServer/$!right.path"></a>
+                #end
+               #foreach($right in $ch_tools.getInfo_list("$!obj.ch_nav_right_img_list","2"))
+                <a href="$!right.href" target="_blank"><img src="$!imageWebServer/$!right.path"></a>
+                #end
+                #foreach($right in $ch_tools.getInfo_list("$!obj.ch_nav_right_img_list","3"))
+                <a href="$!right.href" target="_blank"><img src="$!imageWebServer/$!right.path"></a>
+                #end
+            </div>
+        </div>
+    </div>
+</div>
+#end
+</div>

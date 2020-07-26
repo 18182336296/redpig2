@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="redpig-web" />
+        <module name="redpig-payment" />
+        <module name="redpig-delivery" />
+        <module name="redpig-seller" />
+        <module name="redpig-web-admin" />
+        <module name="redpig-cloud-client-ribbon" />
+        <module name="redpig-cms" />
+        <module name="redpig-yungou" />
+        <module name="redpig-api" />
+        <module name="redpig-chat" />
+        <module name="redpig-web-h5" />
+        <module name="redpig-framework" />
+        <module name="redpig-cloud-provider" />
+        <module name="redpig-cloud-zuul" />
+        <module name="redpig-buyer" />
+        <module name="redpig-beans" />
+        <module name="redpig-circle" />
+        <module name="redpig-h5" />
+        <module name="redpig-eureka-server" />
+        <module name="redpig-platform" />
+        <module name="redpig-cloud-client-feign" />
+        <module name="redpig-web-store" />
+        <module name="redpig-sns" />
+        <module name="redpig-express" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="redpig-api" options="-parameters" />
+      <module name="redpig-beans" options="-parameters" />
+      <module name="redpig-buyer" options="-parameters" />
+      <module name="redpig-chat" options="-parameters" />
+      <module name="redpig-circle" options="-parameters" />
+      <module name="redpig-cloud-client-feign" options="-parameters" />
+      <module name="redpig-cloud-client-ribbon" options="-parameters" />
+      <module name="redpig-cloud-provider" options="-parameters" />
+      <module name="redpig-cloud-zuul" options="-parameters" />
+      <module name="redpig-cms" options="-parameters" />
+      <module name="redpig-delivery" options="-parameters" />
+      <module name="redpig-eureka-server" options="-parameters" />
+      <module name="redpig-express" options="-parameters" />
+      <module name="redpig-framework" options="-parameters" />
+      <module name="redpig-h5" options="-parameters" />
+      <module name="redpig-payment" options="-parameters" />
+      <module name="redpig-platform" options="-parameters" />
+      <module name="redpig-seller" options="-parameters" />
+      <module name="redpig-sns" options="-parameters" />
+      <module name="redpig-web" options="-parameters" />
+      <module name="redpig-web-admin" options="-parameters" />
+      <module name="redpig-web-h5" options="-parameters" />
+      <module name="redpig-web-store" options="-parameters" />
+      <module name="redpig-yungou" options="-parameters" />
+    </option>
+  </component>
+</project>

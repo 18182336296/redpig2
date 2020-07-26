@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>登录 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var s = jQuery("#phone_login_ee").find("a").length;
+	if(s==1){
+		jQuery("#phone_login_ee a").width("260%");
+	}else if(s==2){
+		jQuery("#phone_login_ee a").width("49%");
+	}else if(s==3){
+		jQuery("#phone_login_ee a").width("33%");
+	}
+  jQuery("#theForm").validate({
+    errorPlacement: function(error, element) { 
+				var display =jQuery("#nromal_login_error label").css("display");
+				if(display=="none"){
+					jQuery("#nromal_login_error").html(error);
+					jQuery(element).focus()	
+					}	
+   					 },	
+	rules: {
+			username:{required:true},
+			password:{required:true},
+	
+		code:{
+		  required:true,
+		  remote:{
+		    url: "$!webPath/verify_code",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "code": function(){return jQuery("#code").val();}
+		     }
+		  }
+		}
+			},
+	messages: {
+			username:{required:"账号不能为空"},
+			password:{required:"密码不能为空"}
+			,
+					code:{
+		  		required:"验证码不能为空",
+		  		remote:"验证码不正确"
+		}
+		
+			}
+  });
+  jQuery("#eyes").click(function(){
+	  		if(jQuery("#password").attr("type")=="password"){
+				jQuery("#password").attr("type","text");
+			}else{
+				jQuery("#password").attr("type","password");
+			}
+	  });
+});
+function login_submit(){
+	if(jQuery("#theForm").valid()){
+		login_ajax();
+	}
+}
+
+function login_ajax(){
+	 var params = jQuery("#theForm").serialize();
+		 	 jQuery.ajax({type:'POST',url:'$!webPath/verity_user',data:params,
+			   success:function(ret){
+					if(ret==100){
+					jQuery("#theForm").submit();
+					}else if(ret==200 || ret==300||ret==500){
+						if(ret==200){
+						    jQuery("#yzm_dis").show();
+							refreshCode();
+							Wap_alert("验证码错误！或输入次数过多！");		
+							}else{
+								if(ret==500){
+									refreshCode();
+								}
+							Wap_alert("账号或密码错误，请重新输入！");				
+							}
+						#if($!config.securityCodeLogin)
+						refreshCode();
+						#end	
+					}else if(ret==400){
+						Wap_alert("用户未激活，请立即激活！");	
+					}
+				}
+			 });
+	 }
+</script>
+</head>
+
+<body background="#f5f5f5" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd_l"><a href="javascript:history.go(-1);">取消</a>登录</div>
+<form action="$!webPath/redpigmall_login" method="post" name="theForm" id="theForm" autocomplete="off">
+ <input id="referer" value="$!referer" name="referer" type="hidden">
+  <input name="login_role" type="hidden" id="login_role" value="user" />
+  <div class="phone_main">
+    <div class="phone_login_input">
+      <div id="nromal_login_error">
+        <label style="display:none"></label>
+      </div>
+      <span><i>帐号：</i><b>
+      <input name="username" id="username" type="text" placeholder="请输入帐号...">
+      </b></span> <span class="input_type"><i>密码：</i><b>
+      <input name="password" id="password" type="password" autocomplete="off" placeholder="请输入密码...">
+      </b><em><a href="javascript:void(0);" id="eyes"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/eyes.png"></a></em></span> <span id="yzm_dis" #if(!$!config.securityCodeLogin) style="display:none" #end  class="input_type"><i>验证码：</i><b  style="border-top:1px solid #eee">
+      <input name="code" id="code" type="tel" placeholder="验证码...">
+      </b>#if($!config.securityCodeLogin)<em style="top:10px;" onClick="refreshCode();"><img id="code_img" src="$!webPath/verify" width="80" height="30" style="width:80px;"></em>
+      #else<em style="top:10px;" onClick="refreshCode();"><img id="code_img" width="80" height="30" style="width:80px;"></em>
+      #end
+      </span> </div>
+    <script>
+                 function refreshCode(){
+	                 jQuery("#code_img").attr("src","$!webPath/verify?d"+new Date().getTime());
+                 }
+            </script> 
+    
+    <!----登录按钮  填写完毕把this去掉----->
+    <div class="phone_login_button"><a href="javascript:void(0);" onClick="login_submit();">登录</a></div>
+    <div class="phone_login_forget"><a href="$!webPath/register">注册</a><a class="this" href="$!webPath/forget1">忘记密码</a></div>
+          #if($!{config.sina_login}||$!{config.qq_login} || $!{config.weixin_login})
+          <!-- <div class="login_other">
+            <h4>使用合作网站账号登录：</h4>
+            <div class="login_other_box">
+            	<ul>
+                #if($!{config.qq_login})<li class="login_qq"> <a  href="$!webPath/qq_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/qq.png" /></a> 		</li>#end
+                   #if($!{config.sina_login}) <li class="login_sina">  <a  href="$!webPath/sina_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/sina.png" /></a></li>#end
+                     #if($!{config.weixin_login}==1) <li class="login_wechat">  <a  href="$!webPath/wechat_login_api" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/login/wx.png" /></a></li>#end
+                </ul>
+			</div>
+          </div> -->
+          #end
+  </div>
+</form>
+</body>
+</html>

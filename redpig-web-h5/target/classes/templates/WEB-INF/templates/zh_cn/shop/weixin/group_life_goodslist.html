@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js" type="text/javascript" ></script>
+<script src="$!cdnServer/resources/js/wap/jquery.mobile-events.min.js"></script>
+
+<script>
+   jQuery(document).ready(function(){
+	   #if($!gcs)
+		var width = jQuery(window).width();
+		var li_width=width/4;
+		var ul_width=width*$!gcs.size()/4;
+		jQuery("#group_list_ul").attr("style","width:"+ul_width+"px")
+		jQuery("#group_list_ul li").each(function(){
+			jQuery(this).attr("style","width:"+li_width+"px");
+		})
+		var height=jQuery(".group_list_menu").height()+5;
+	   #end
+		//jQuery(".group_list_hd").attr("style","height:"+height+"px");
+		//下拉刷新开始
+		var begin_count =12;
+		var ret = 1;
+		if("$!objs.size()">0){
+		jQuery(window).scroll(function(){								  
+	 	if (jQuery(document).scrollTop() >= jQuery(document).height() - jQuery(window).height()&& ret==1) {
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/grouplife/grouplifegoods_list',
+				  data:{"begin_count":begin_count,"order_status":"$!{order_status}","gc_id":"$!{gc_id}"},
+				beforeSend:function(){
+				  ret = 2;
+				  begin_count = begin_count +6;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+	             if(data){ 
+				  jQuery(".order_page").append(data);
+				  ret=1;
+			 	 }else{
+				 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+	 }
+	});
+   }
+	});
+	function backwards(){
+		window.location.href = "$!webPath/group/index?type=life";
+		}
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+   <div class="phone_hd">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png"
+			width="25" height="25" /></a>$!currentgc.gc_name  <a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a>
+	</div>
+   
+
+	<div class="group_fixed" style="background-color:#F94D4D">
+        <div class="group_list_hd">$!currentgc.gc_name<a class="group_list_arrow" href="javascript:history.go(-1);"><span class="arrow arrow_gray"></span><span onClick="backwards();" class="arrow arrow_white"></span></a></div>
+        #if($!gcs.size()>0)
+        <div style="overflow:hidden; height:37px;">
+            <div class="group_list_menu" style="overflow-x:scroll;">
+                <ul id="group_list_ul" style="width:1000px;">
+                    #foreach($gc in $!gcs)
+                    <li #if($gc.id==$!gc_id)class="this"#end><a href="$!webPath/grouplife/grouplifegoods_list?gc_id=$gc.id">$gc.gc_name</a></li>
+                    #end
+                </ul>
+            </div>
+         </div>
+         #end
+    </div>
+ #if($!gcs.size()>0)
+    <div style="height:65px"></div>
+    #else
+     <div style="height:35px"></div>
+    #end
+    <div class="group_news mt_none" style="margin-top:10px;">
+     #if($!objs.size()>0)
+        <div class="group_news_list">
+        	<!--上传图片比例与电脑端一样即可-->
+			#foreach($obj in $!objs)
+            	<div class="group_news_item">
+            	<a href="$!webPath/grouplife/view?id=$!{obj.id}"></a>
+            	<dl>
+                	<dt><img src="$!imageWebServer/$!obj.group_acc.path/$!obj.group_acc.name"+"._small."+"$!obj.group_acc.ext"></dt>
+                    <dd><p>$obj.gg_name</p><p class="big">¥$!obj.group_price</p><p class="gray"><s>¥$!obj.cost_price</s><span>$!obj.selled_count人购买</span></p></dd>
+                </dl>
+            </div>
+            #end	
+        </div>
+            #else
+            <script>jQuery(".group_news").css("background-color","none")</script>
+            <div class="none_goods" style="width:100px">暂无团购商品</div>
+         #end
+    </div>
+ <script>
+function url(url){
+	var type = jQuery("#url").val();
+	url = url+"&&type="+type;
+	window.location.href=url;
+}
+</script>
+<div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+<div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>  
+</div>
+
+</div>
+</body>
+</html>

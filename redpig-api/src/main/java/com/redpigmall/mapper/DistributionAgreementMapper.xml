@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.DistributionAgreementMapper">
+    <resultMap id="BaseResultMap" type="com.redpigmall.domain.DistributionAgreement">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="agreement" property="agreement" jdbcType="VARCHAR"/>
+        <result column="agreement_version" property="agreement_version" jdbcType="VARCHAR"/>
+        <result column="agreement_state" property="agreement_state" jdbcType="VARCHAR"/>
+        <result column="agreement_type" property="agreement_type" jdbcType="VARCHAR"/>
+        <result column="agreement_name" property="agreement_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.redpigmall.domain.DistributionAgreement">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+        <result column="agreement" property="agreement" jdbcType="VARCHAR"/>
+        <result column="agreement_version" property="agreement_version" jdbcType="VARCHAR"/>
+        <result column="agreement_state" property="agreement_state" jdbcType="VARCHAR"/>
+        <result column="agreement_type" property="agreement_type" jdbcType="VARCHAR"/>
+        <result column="agreement_name" property="agreement_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--database table column names-->
+    <sql id="Base_Column_List">
+		id,addTime,update_time,agreement,agreement_version,agreement_state,agreement_type,agreement_name
+	</sql>
+    <sql id="whereStatement">
+        <if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+        <if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+        <if test="beginTime != null">and addTime <![CDATA[ >= ]]> #{beginTime,jdbcType=TIMESTAMP}</if>
+        <if test="endTime != null">and addTime <![CDATA[ <= ]]> #{endTime,jdbcType=TIMESTAMP}</if>
+        <if test="agreement_name != null">and agreement_name like CONCAT('%',#{agreement_name},'%')</if>
+    </sql>
+
+    <sql id="ifStatement">
+		update_time= #{update_time},
+		agreement= #{agreement},
+		agreement_version= #{agreement_version},
+		agreement_state= #{agreement_state},
+		agreement_type= #{agreement_type},
+		agreement_name= #{agreement_name}
+	</sql>
+
+    <select id="selectByPrimaryKey" resultType="com.redpigmall.domain.DistributionAgreement" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_distribution_agreement
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryPageList" resultType="com.redpigmall.domain.DistributionAgreement" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_distribution_agreement obj
+        where 1=1
+        <include refid="whereStatement"/>
+        <choose>
+            <when test="orderBy != null and orderType != null">
+                order by ${orderBy} ${orderType}
+            </when>
+            <otherwise>
+                order by obj.addTime desc
+            </otherwise>
+        </choose>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from redpigmall_distribution_agreement obj
+        where 1 = 1
+        <include refid="whereStatement"/>
+    </select>
+
+    <select id="queryPages" resultType="com.redpigmall.domain.DistributionAgreement" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_distribution_agreement obj
+        <where>
+            1=1
+            <include refid="whereStatement"/>
+            <choose>
+                <when test="orderBy != null and orderType != null">
+                    order by ${orderBy} ${orderType}
+                </when>
+                <otherwise>
+                    order by obj.addTime desc
+                </otherwise>
+            </choose>
+        </where>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <insert id="saveEntity" parameterType="com.redpigmall.domain.DistributionAgreement" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_distribution_agreement(addTime,agreement,agreement_version,agreement_state,agreement_type,agreement_name)
+	 values(#{addTime,jdbcType=TIMESTAMP},
+	 #{agreement,jdbcType=VARCHAR},
+	 #{agreement_version,jdbcType=VARCHAR},
+	 #{agreement_state,jdbcType=VARCHAR},
+	 #{agreement_type,jdbcType=VARCHAR},
+	 #{agreement_name,jdbcType=VARCHAR}
+	)</insert>
+
+    <update id="updateById" parameterType="com.redpigmall.domain.DistributionAgreement">
+        update redpigmall_distribution_agreement
+        <set>
+            <include refid="ifStatement"/>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_distribution_agreement where id=#{id,jdbcType=BIGINT}
+	</delete>
+
+    <delete id="batchDeleteByIds" parameterType="java.util.List">
+        delete from redpigmall_distribution_agreement where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.DistributionAgreement" resultMap="BaseResultMap2" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_distribution_agreement obj
+        <where>
+            1=1
+            <include refid="whereStatement"/>
+            <choose>
+                <when test="orderBy != null and orderType != null">
+                    order by ${orderBy} ${orderType}
+                </when>
+                <otherwise>
+                    order by obj.addTime desc
+                </otherwise>
+            </choose>
+        </where>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.DistributionAgreement" resultMap="BaseResultMap2" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_distribution_agreement obj
+        where 1=1
+        <include refid="whereStatement"/>
+        <choose>
+            <when test="orderBy != null and orderType != null">
+                order by ${orderBy} ${orderType}
+            </when>
+            <otherwise>
+                order by obj.addTime desc
+            </otherwise>
+        </choose>
+        <if test="currentPage !=null and pageSize !=null">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectObjByProperty" resultType="com.redpigmall.domain.DistributionAgreement" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from redpigmall_distribution_agreement
+        where 1 = 1
+        <if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+            and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+        </if>
+    </select>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete from redpigmall_distribution_agreement where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+</mapper>

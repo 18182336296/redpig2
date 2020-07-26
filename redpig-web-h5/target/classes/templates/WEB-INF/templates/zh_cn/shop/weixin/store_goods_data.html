@@ -1,0 +1,81 @@
+#if($objs.size()>0)
+<script>
+jQuery("#totalPage").val($!totalPage);
+</script>
+#if($!big_map=="小图") 
+   #foreach($obj in $objs) 
+            <li>
+            	<a href="$!webPath/items?id=$!{obj.id}">
+                	<div class="goods_pic"><img src="$!imageWebServer/$!obj.goods_main_photo.path/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}" ></div>
+                    <div  class="goods_info">
+                     	<div class="goods_name">$!obj.goods_name</div>
+                        <div  class="goods_amount">销量$!{obj.goods_salenum}笔</div>
+                    </div>
+                    <div class="goods_value"><span class="value">¥$!obj.store_price</span>
+                    #set($actName="")
+                    #if($!obj.activity_status==2)
+                    #set($actName="促")
+                    #end
+                    #if($!obj.group_buy==2)
+                    #set($actName="团")
+                    #end
+                    #if($!obj.combin_status==1)
+                    #set($actName="组")
+                    #end
+                    #if($!obj.order_enough_give_status==1)
+                    #set($actName="送")
+                    #end
+                    #if($!obj.enough_reduce==1)
+                    #set($actName="减")
+                    #end
+                    #if($!obj.f_sale_type==1)
+                    #set($actName="F")
+                    #end
+                    #if($!obj.advance_sale_type==1)
+                    #set($actName="预")
+                    #end
+                    #if($!actName!="")
+                    <span class="promotion">$!actName</span>#end</div>
+                </a>
+            </li>
+  #end
+  #else
+  	#foreach($obj in $objs) 
+        	<li>
+        	<!-- $!imageWebServer/$!obj.goods_main_photo.path/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext} -->
+          	<a href="$!webPath/items?id=$!{obj.id}">
+               	<div class="goods_pic"><img src="$!imageWebServer/$!obj.goods_main_photo.path/$!{obj.goods_main_photo.name}_middle.$!{obj.goods_main_photo.ext}"></div>
+                    <div class="goods_name">$!obj.goods_name</div>
+                    <div  class="goods_info">
+                        <span class="goods_amount">销量$!{obj.goods_salenum}笔</span>
+                        <span class="goods_value"><span class="value">¥$!obj.store_price</span>
+                   		#set($actName="")
+                   		#if($!obj.activity_status==2)
+                   		#set($actName="促")
+                   		#end
+                   	    #if($!obj.group_buy==2)
+                   	    #set($actName="团")
+                     	#end
+                        #if($!obj.combin_status==1)
+                        #set($actName="组")
+                        #end
+                        #if($!obj.order_enough_give_status==1)
+                        #set($actName="送")
+                        #end
+                        #if($!obj.enough_reduce==1)
+                        #set($actName="减")
+                        #end
+                        #if($!obj.f_sale_type==1)
+                        #set($actName="F")
+                        #end
+                        #if($!obj.advance_sale_type==1)
+                        #set($actName="预")
+                        #end
+                        #if($!actName!="")
+                    <span class="promotion">$!actName</span>#end</span>
+                    </div>
+                </a>
+            </li>
+            #end
+  #end
+  #end

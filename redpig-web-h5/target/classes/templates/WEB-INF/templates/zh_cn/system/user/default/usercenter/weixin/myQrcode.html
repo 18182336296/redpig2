@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style"
+	content="black-translucent">
+<title>分销二维码 - $!config.title</title>
+<link
+	href="$!cdnServer/resources/style/system/front/default/css/weixin.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type="text/css" rel="stylesheet">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/mobiscroll_date.js"></script>
+<script src="$!cdnServer/resources/js/mobiscroll.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+
+<script type="text/javascript">
+function isIdCardNo(num) {
+	var factorArr = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4,
+			2, 1);
+	var parityBit = new Array("1", "0", "X", "9", "8", "7", "6", "5", "4", "3",
+			"2");
+	var varArray = new Array();
+	var intValue;
+	var lngProduct = 0;
+	var intCheckDigit;
+	var intStrLen = num.length;
+	var idNumber = num;
+	// initialize
+	if ((intStrLen != 15) && (intStrLen != 18)) {
+		return false;
+	}
+	// check and set value
+	for (i = 0; i < intStrLen; i++) {
+		varArray[i] = idNumber.charAt(i);
+		if ((varArray[i] < '0' || varArray[i] > '9') && (i != 17)) {
+			return false;
+		} else if (i < 17) {
+			varArray[i] = varArray[i] * factorArr[i];
+		}
+	}
+
+	if (intStrLen == 18) {
+		// check date
+		var date8 = idNumber.substring(6, 14);
+		if (isDate8(date8) == false) {
+			return false;
+		}
+		// calculate the sum of the products
+		for (i = 0; i < 17; i++) {
+			lngProduct = lngProduct + varArray[i];
+		}
+		// calculate the check digit
+		intCheckDigit = parityBit[lngProduct % 11];
+		// check last digit
+		if (varArray[17] != intCheckDigit) {
+			return false;
+		}
+	} else { // length is 15
+		// check date
+		var date6 = idNumber.substring(6, 12);
+		if (isDate6(date6) == false) {
+			return false;
+		}
+	}
+	return true;
+}
+function isDate6(sDate) {
+	if (!/^[0-9]{6}$/.test(sDate)) {
+		return false;
+	}
+	var year, month, day;
+	year = sDate.substring(0, 4);
+	month = sDate.substring(4, 6);
+	if (year < 1700 || year > 2500)
+		return false
+	if (month < 1 || month > 12)
+		return false
+	return true
+}
+
+function isDate8(sDate) {
+	if (!/^[0-9]{8}$/.test(sDate)) {
+		return false;
+	}
+	var year, month, day;
+	year = sDate.substring(0, 4);
+	month = sDate.substring(4, 6);
+	day = sDate.substring(6, 8);
+	var iaMonthDays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ]
+	if (year < 1700 || year > 2500)
+		return false
+	if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+		iaMonthDays[1] = 29;
+	if (month < 1 || month > 12)
+		return false
+	if (day < 1 || day > iaMonthDays[month - 1])
+		return false
+	return true
+}
+
+
+
+function isIdCardNo(num) {
+	var factorArr = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4,
+			2, 1);
+	var parityBit = new Array("1", "0", "X", "9", "8", "7", "6", "5", "4", "3",
+			"2");
+	var varArray = new Array();
+	var intValue;
+	var lngProduct = 0;
+	var intCheckDigit;
+	var intStrLen = num.length;
+	var idNumber = num;
+	// initialize
+	if ((intStrLen != 15) && (intStrLen != 18)) {
+		return false;
+	}
+	// check and set value
+	for (i = 0; i < intStrLen; i++) {
+		varArray[i] = idNumber.charAt(i);
+		if ((varArray[i] < '0' || varArray[i] > '9') && (i != 17)) {
+			return false;
+		} else if (i < 17) {
+			varArray[i] = varArray[i] * factorArr[i];
+		}
+	}
+
+	if (intStrLen == 18) {
+		// check date
+		var date8 = idNumber.substring(6, 14);
+		if (isDate8(date8) == false) {
+			return false;
+		}
+		// calculate the sum of the products
+		for (i = 0; i < 17; i++) {
+			lngProduct = lngProduct + varArray[i];
+		}
+		// calculate the check digit
+		intCheckDigit = parityBit[lngProduct % 11];
+		// check last digit
+		if (varArray[17] != intCheckDigit) {
+			return false;
+		}
+	} else { // length is 15
+		// check date
+		var date6 = idNumber.substring(6, 12);
+		if (isDate6(date6) == false) {
+			return false;
+		}
+	}
+	return true;
+}
+function isDate6(sDate) {
+	if (!/^[0-9]{6}$/.test(sDate)) {
+		return false;
+	}
+	var year, month, day;
+	year = sDate.substring(0, 4);
+	month = sDate.substring(4, 6);
+	if (year < 1700 || year > 2500)
+		return false
+	if (month < 1 || month > 12)
+		return false
+	return true
+}
+
+function isDate8(sDate) {
+	if (!/^[0-9]{8}$/.test(sDate)) {
+		return false;
+	}
+	var year, month, day;
+	year = sDate.substring(0, 4);
+	month = sDate.substring(4, 6);
+	day = sDate.substring(6, 8);
+	var iaMonthDays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ]
+	if (year < 1700 || year > 2500)
+		return false
+	if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+		iaMonthDays[1] = 29;
+	if (month < 1 || month > 12)
+		return false
+	if (day < 1 || day > iaMonthDays[month - 1])
+		return false
+	return true
+}
+
+</script>
+<script>
+
+jQuery.validator.addMethod("isIdCardNo", function(value, element) { 
+	  return this.optional(element) || isIdCardNo(value);
+	  
+	}, "请正确输入您的身份证号码"); 
+
+jQuery(document).ready(function(){  	
+	jQuery("#theForm").validate({
+
+	rules: {
+		photo:{
+			accept:true
+		},
+		userName:{
+			required:true
+		},
+		card:{
+			required:true,isIdCardNo:true
+		},
+	},
+	messages: {
+		photo:{
+			accept:"文件格式不正确"
+		},
+		
+		userName:{
+			required:"真实姓名不能为空"
+			
+		},
+		card:{
+			required:"您的身份证号码不能为空",isIdCardNo:"请正确输入您的身份证号码"
+		},	
+	},	
+	});
+});
+
+
+	jQuery(document).ready(function() {
+		jQuery(":radio[value=$!obj.sex]").attr("checked",true);
+	});
+	function saveForm() {
+		var birtday=jQuery("#USER_AGE").val();
+		var myDate = new Date();
+		var nowtime=myDate.toLocaleDateString();
+	  birtday_time=birtday.split('-');     
+      var sdate=new Date(birtday_time[0],parseInt(birtday_time[1]-1),birtday_time[2]);   
+    nowti=nowtime.split('/');   
+    var edate=new Date();
+	if(sdate > edate) {     
+     Wap_alert('亲！出生日期不能大于当前时间哦！');        
+           
+      }  else {  
+           jQuery("#theForm").submit();
+        }	
+}
+	jQuery(function() {
+		jQuery("#photo").change(function(event) {
+		    // 根据这个 <input> 获取文件的 HTML5 js 对象
+		    var files = event.target.files, file;
+		    if (files && files.length > 0) {
+		      // 获取目前上传的文件
+		      file = files[0];
+		      // 来在控制台看看到底这个对象是什么
+		      console.log(file);
+		      // 那么我们可以做一下诸如文件大小校验的动作
+      		  if(file.size > parseInt("$!imageFilesize")*1024) {
+		    	  Wap_alert('图片大小不能超过 $!imageFilesize KB!');
+		        return false;
+		      } 
+		      // !!!!!!
+		      // 下面是关键的关键，通过这个 file 对象生成一个可用的图像 URL
+		      // 获取 window 的 URL 工具
+		      var URL = window.URL || window.webkitURL;
+		      // 通过 file 生成目标 url
+		      var imgURL = URL.createObjectURL(file);
+		      // 用这个 URL 产生一个 <img> 将其显示出来
+			    jQuery("#hand_img").attr("src",imgURL);
+		     
+			/*jQuery(".head_img_edit").find("img[id^=hand_img]").attr('src', imgURL);*/
+		      // 使用下面这句可以在内存中释放对此 url 的伺服，跑了之后那个 URL 就无效了
+		      // URL.revokeObjectURL(imgURL);
+		    }
+		  });
+		});
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+	<div class="phone_main">
+		<form method="post" name="theForm" id="theForm"
+			action="$!webPath/buyer/account_save"
+			enctype="multipart/form-data">
+			<div class="account_title">
+				<a class="back" href="$!config.h5Url/buyer/center"><img
+					src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+				分销二维码 <a class="finish" href="$!config.h5Url/buyer/myQrcode?type=create" >生成二维码</a>
+			</div>
+			<div class="account_info_box">
+				<ul class="account_info">
+						#if($!user.direct_selling_qr_path)
+						<img
+							id="hand_img" src="$!imageWebServer/$!user.direct_selling_qr_path" height="100" width="100"> 推荐注册成功后，客户购物将会有提成
+							#else
+							<img
+							id="hand_img" src="$!cdnServer/resources/style/common/images/member.jpg" height="100%" width="100%">
+							#end
+							</strong>
+					
+				</ul>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

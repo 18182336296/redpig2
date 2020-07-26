@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>投诉信息填写 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" type="text/css" rel="stylesheet"/>
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/jquery.WapshowDialog.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+//表达提交
+jQuery(document).ready(function(){
+<!--验证表单-->
+	jQuery("#theForm").validate({
+	rules:{
+		content_id:{
+		required:true
+		},
+		from_user_content:{
+			required:true
+		},
+		img1:{
+				accept:true
+			},
+		img2:{
+				accept:true
+			},
+		img3:{
+				accept:true
+			}
+	},
+	messages:{
+		content_id:{
+			required: "问题描述不能为空"
+		},
+		from_user_content:{
+			required: "投诉内容不能为空"
+		},
+		img1:{
+				accept:"文件格式不正确"
+			},
+		img2:{
+				accept:"文件格式不正确"
+			},
+		img3:{
+				accept:"文件格式不正确"
+			}
+		}
+	});
+});
+
+function saveForm(){
+		jQuery("#theForm").submit();	
+}
+function style_title(){
+		if(jQuery("#title").attr("class") == "complain_theme theme_choose"){
+				jQuery("#title").attr("class","complain_theme");
+			}else{
+					jQuery("#title").attr("class","complain_theme theme_choose");
+				}
+	}
+function d1(obj){
+	    jQuery(obj).parent().siblings("li").children("span").attr("class","");
+		if(jQuery(obj).attr("class") != "pitch_on"){
+				jQuery(obj).attr("class","pitch_on");
+			}else{
+				jQuery(obj).attr("class","");
+				}
+		jQuery("span[class=pitch_on]").each(function(index, element){
+        if(jQuery(this).attr("cs_id")!=""){
+			jQuery("#cs_id").val(jQuery(this).attr("cs_id"));
+		}
+    	});		
+	}
+function remove_goods_image(obj){
+	jQuery(obj).parent().hide();
+}	 
+ //本地上传
+ jQuery(function(){
+		  jQuery("input[id^=img]").change(function(event) {
+		    // 根据这个 <input> 获取文件的 HTML5 js 对象
+		    var files = event.target.files, file;
+		    if (files && files.length > 0) {
+		      // 获取目前上传的文件
+		      file = files[0];
+		      // 来在控制台看看到底这个对象是什么
+		      console.log(file);
+		      // 那么我们可以做一下诸如文件大小校验的动作
+		      if(file.size > 1024 * 1024 * 2) {
+				Wap_alert('图片大小不能超过 2MB!');
+		        return false;
+		      }
+		      // !!!!!!
+		      // 下面是关键的关键，通过这个 file 对象生成一个可用的图像 URL
+		      // 获取 window 的 URL 工具
+		      var URL = window.URL || window.webkitURL;
+		      var imgURL = URL.createObjectURL(file);
+			  jQuery(this).parent().parent().parent().find("img").attr("src",imgURL);
+			  jQuery(this).parent().parent().parent().find(".show_img").show();
+		    }
+		  }); 
+	  }); 	 
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+<form action="$!webPath/buyer/complaint_save" method="post" enctype="multipart/form-data" id="theForm">
+	<div class="add_c_title">
+    	<a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+    	投诉详情
+        <a class="sure" href="javascript:void(0);" onclick="saveForm();">确认</a>
+    </div>
+    
+    <div class="complain_info">
+    #foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.of.goods_info"))
+    #set($goods_id = "$!{map.get('goods_id')}")	
+    #set($goods_name = "$!{map.get('goods_name')}")
+    #set($goods_count = "$!{map.get('goods_count')}")
+    #set($goods_price = "$!{map.get('goods_price')}")
+    #set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+    #set($goods_gsp_ids = "$!{map.get('goods_gsp_ids')}")
+    #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+    #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+    #if($!goods_id==$!goods_ids)
+    <input type="hidden" name="goods_gsp_ids" value="$!goods_gsp_ids"  />
+    	<div class="complain_goods">
+        	<div class="goods_content">
+                <div class="goods_pic"><img src="$!img"></div>
+                <div class="goods_name">$!{goods_name}</div>
+                <div class="order_time">下单时间：$!CommUtil.formatLongDate($!obj.of.addTime)</div>
+             </div>
+        </div>
+        <div class="complain_theme" id="title"><!--点击选择时加theme_choose-->
+        	<div class="theme_title">
+            	投诉主题
+            	<span class="arrow" onClick="style_title();"></span>
+            </div>
+            <ul class="theme_items">
+            #foreach($cs in $subs)
+            	<li>
+                	<i class="red_arrow"></i>
+                	<strong>$!cs.title</strong>
+                    <span onclick="d1(this);" id="style_$!cs.id" cs_id="$!cs.id"></span><!--选中时加pitch_on-->
+                </li>
+            #end
+            <input type="hidden" name="cs_id" id="cs_id" value="$!cs.id"/>
+            </ul>
+        </div>
+        
+        <div class="c_describe">
+        	<ul>
+            	<li class="question">
+                	<span>问题描述</span>
+                    <!--content_$!{goods_id}-->
+                    <input type="text" id="content_id" name="content_id" placeholder="问题描述不能为空"></input>
+                </li>
+                <li class="content">
+                	<span>投诉内容</span>
+                    <textarea name="from_user_content" id="from_user_content" placeholder="投诉内容不能为空"></textarea>
+                </li>
+            </ul>
+        </div>
+        #end
+    	#end 
+        <div class="complain_pic">
+        	<h3 class="c_title">投诉图片</h3>
+            <div id="img_show">
+                <div class="add_img">
+                	<div>
+                        <span><input name="img1" id="img1" type="file" accept="image/*"></span>
+                        <p class="top_pic">上传图片</p>
+                    </div>
+                    <div class="show_img" style="display:none">
+                		<span><img id="hand_img1"></span>
+                    	<span class="pic_del" onclick="remove_goods_image(this)"></span>
+                	</div>
+                </div>
+                 <div class="add_img">
+                	<div>
+                        <span><input name="img2" id="img2" type="file" accept="image/*"></span>
+                        <p class="top_pic">上传图片</p>
+                    </div>
+                    <div class="show_img" style="display:none">
+                		<span><img id="hand_img2"></span>
+                    	<span class="pic_del" onclick="remove_goods_image(this)"></span>
+                	</div>
+                </div>
+                 <div class="add_img">
+                	<div>
+                        <span><input name="img3" id="img3" type="file" accept="image/*"></span>
+                        <p class="top_pic">上传图片</p>
+                    </div>
+                    <div class="show_img" style="display:none">
+                		<span><img id="hand_img3"></span>
+                    	<span class="pic_del" onclick="remove_goods_image(this)"></span>
+                	</div> 
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <input name="order_id" type="hidden" id="order_id" value="$!obj.of.id" />
+    <input type="hidden" name="goods_ids" id="goods_ids" value="$!goods_ids" />
+    <input name="to_user_id" type="hidden" id="to_user_id" value="$!obj.to_user.id" />
+    <input name="type" type="hidden" id="type" value="$!obj.type" />
+</form>
+</div>
+</body>
+</html>

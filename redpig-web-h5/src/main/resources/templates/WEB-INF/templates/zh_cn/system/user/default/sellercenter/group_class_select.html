@@ -1,0 +1,6 @@
+#if($!gclist)
+	<option id="" value="">请选择</option>
+#foreach($gc in $!gclist)
+	<option id="$gc.id" value="$!gc.id">$!gc.gc_name</option>
+#end
+#end

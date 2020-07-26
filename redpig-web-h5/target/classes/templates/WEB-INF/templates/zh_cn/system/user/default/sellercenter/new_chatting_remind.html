@@ -1,0 +1,14 @@
+#if("$!chatting"!="")
+    <div class="message_warn">
+	<div class="message_warn_left"><a href="javascript:void(0)" onclick="jQuery('.message_warn').remove();open_im2('','$!webPath','store');"><img src="$!cdnServer/resources/style/system/front/default/images/dialogue.png" /></a></div>
+    <div class="message_warn_right">
+    	<a href="javascript:void(0)" onclick="jQuery('.message_warn').remove();open_im2('','$!webPath','store');">
+        <div class="message_warn_right_top1">
+        	<strong style="margin-left:20px">您有新的即时对话信息</strong>
+        </div>
+        <div class="message_warn_right_bottom">查看详情 >></div>
+        </a>
+        <div class="message_warn_right_close"><a href="javascript:void(0)" onclick="message_remind_off()"><img src="$!cdnServer/resources/style/system/front/default/images/message_close.png" /></a></div>
+    </div>
+	</div>
+#end

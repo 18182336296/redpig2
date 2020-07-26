@@ -1,0 +1,9 @@
+#if($!infos.size()>0)
+           #foreach($obj in $infos)
+           <tr>
+             <td align="center" width="40%" #if($!{velocityCount}=="1") style="border-top:none;" #end>$!obj.group_sn</td>
+             <td align="center" width="20%" #if($!{velocityCount}=="1") style="border-top:none;" #end>#if($!obj.status==0)未使用#end #if($!obj.status==1) 已使用 #end #if($!obj.status==-1) 已过期 #end #if($!obj.status==3||$!obj.status==5)退款中#end #if($!obj.status==7)已退款#end</td>
+             <td align="center" #if($!{velocityCount}=="1") style="border-top:none;" #end>$!CommUtil.formatLongDate($!goods.endTime)</td>
+           </tr>
+           #end
+#end

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#pd_payment").val("$!pd_payment");
+  jQuery("#pd_pay_status").val("$!pd_pay_status");
+  jQuery("#pd_status").val("$!pd_status");
+  jQuery("#pd_remittance_bank").val("$!pd_remittance_bank");
+  jQuery("#pd_remittance_user").val("$!pd_remittance_user");
+  jQuery("#pd_userName").val("$!pd_userName");	
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">增票资质</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="javascript:void(0);" class="this"><b>所有增票资质</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/vatinvoice_list" method="post" id="ListForm" >
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="20%"><span class="form_btna">会员名称</span></th>
+        <th width="22%"><span class="form_btna">提交时间</span></th>
+        <th align="center" width="22%"><span class="form_btna">公司名称</span></th>
+        <th width="16%" align="center"><span class="form_btna">审核状态</span></th>
+        <th align="center"><b class="form_btnb">操作</b></th>
+      </tr>
+      #if($!objs.size()>0)
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.user_name</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+        <td align="center">$!obj.companyName</td>
+        <td align="center">#if($!obj.status==0)
+        未审核
+        #end
+        #if($!obj.status==1)
+        审核通过
+        #end
+        #if($!obj.status==2)
+        审核未通过
+        #end
+        </td>
+        <td align="center" class="hui oprate_con">
+
+        	<a href="$!webPath/vatinvoice_edit?id=$!obj.id&currentPage=$!currentPage" class="blue">审核</a>
+        </td>
+      </tr>
+     #end
+     #else
+<tr>
+	<td colspan="8">
+		<div class="center_nothing">
+			<span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+			<b>没有任何信息</b>
+		</div>
+	</td>
+</tr>
+#end
+    </table>
+  </div>
+  #if($!objs.size()>0)
+  <div class="operate_bar">
+    <div class="fenye">
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+    </div>   
+  </div>
+  #end
+  </form>
+</div>
+</body>
+</html>

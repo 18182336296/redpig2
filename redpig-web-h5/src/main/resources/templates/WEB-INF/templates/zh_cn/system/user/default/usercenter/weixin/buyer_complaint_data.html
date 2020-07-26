@@ -1,0 +1,36 @@
+#foreach($obj in $objs)
+        #foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.of.goods_info"))
+        #if($!{velocityCount}=="1")
+        #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+        #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+        #set($goods_id = "$!{map.get('goods_id')}")	
+       		    #if($!obj.status==0)
+                #set($status="新投诉")
+                #end
+                #if($!obj.status==1)
+                #set($status="待申诉")
+                #end
+                #if($!obj.status==2)
+                #set($status="对话中")
+                #end
+                #if($!obj.status==3)
+                #set($status="待仲裁")
+                #end
+                #if($!obj.status==4)
+                #set($status="已完成")
+                #end 
+        	<div class="complain_item">
+            	<a href="$!webPath/buyer/complaint_view?id=$!obj.id">
+                    <div class="goods_content">
+                        <div class="goods_pic"><img src="$!img"></div>
+                        <div class="store_name">#if($!obj.to_user)$!obj.to_user.userName #else 平台商 #end</div>
+                        <div class="c_state" >
+                            <span class="state">$!status</span>
+                             <span class="time">$!CommUtil.formatLongDate($!obj.addTime)</span>
+                        </div>
+                    </div>
+                 </a>
+            </div>
+         #end
+         #end
+         #end

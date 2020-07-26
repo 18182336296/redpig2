@@ -1,0 +1,1225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.SysConfigMapper">
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.SysConfig">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="keywords" property="keywords" jdbcType="VARCHAR"/>
+		<result column="description" property="description" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="poweredby" property="poweredby" jdbcType="VARCHAR"/>
+		<result column="copyRight" property="copyRight" jdbcType="VARCHAR"/>
+		<result column="meta_generator" property="meta_generator" jdbcType="VARCHAR"/>
+		<result column="meta_author" property="meta_author" jdbcType="VARCHAR"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="uploadFilePath" property="uploadFilePath" jdbcType="VARCHAR"/>
+		<result column="sysLanguage" property="sysLanguage" jdbcType="VARCHAR"/>
+		<result column="sysPcLanguage" property="sysPcLanguage" jdbcType="VARCHAR"/>
+		<result column="sysStoreLanguage" property="sysStoreLanguage" jdbcType="VARCHAR"/>
+		<result column="integralRate" property="integralRate" jdbcType="INTEGER"/>
+		<result column="smsEnbale" property="smsEnbale" jdbcType="BIT"/>
+		<result column="smsURL" property="smsURL" jdbcType="VARCHAR"/>
+		<result column="smsUserName" property="smsUserName" jdbcType="VARCHAR"/>
+		<result column="smsPassword" property="smsPassword" jdbcType="VARCHAR"/>
+		<result column="smsTest" property="smsTest" jdbcType="VARCHAR"/>
+		<result column="emailEnable" property="emailEnable" jdbcType="BIT"/>
+		<result column="emailHost" property="emailHost" jdbcType="VARCHAR"/>
+		<result column="emailPort" property="emailPort" jdbcType="INTEGER"/>
+		<result column="emailUser" property="emailUser" jdbcType="VARCHAR"/>
+		<result column="emailUserName" property="emailUserName" jdbcType="VARCHAR"/>
+		<result column="emailPws" property="emailPws" jdbcType="VARCHAR"/>
+		<result column="emailTest" property="emailTest" jdbcType="VARCHAR"/>
+		<result column="websiteName" property="websiteName" jdbcType="VARCHAR"/>
+		<result column="hotSearch" property="hotSearch" jdbcType="VARCHAR"/>
+		<result column="websiteCss" property="websiteCss" jdbcType="VARCHAR"/>
+		<result column="codeStat" property="codeStat" jdbcType="VARCHAR"/>
+		<result column="websiteState" property="websiteState" jdbcType="BIT"/>
+		<result column="visitorConsult" property="visitorConsult" jdbcType="BIT"/>
+		<result column="closeReason" property="closeReason" jdbcType="VARCHAR"/>
+		<result column="securityCodeType" property="securityCodeType" jdbcType="VARCHAR"/>
+		<result column="securityCodeRegister" property="securityCodeRegister" jdbcType="BIT"/>
+		<result column="securityCodeLogin" property="securityCodeLogin" jdbcType="BIT"/>
+		<result column="securityCodeConsult" property="securityCodeConsult" jdbcType="BIT"/>
+		<result column="imageSuffix" property="imageSuffix" jdbcType="VARCHAR"/>
+		<result column="imageWebServer" property="imageWebServer" jdbcType="VARCHAR"/>
+		<result column="imageFilesize" property="imageFilesize" jdbcType="INTEGER"/>
+		<result column="smallWidth" property="smallWidth" jdbcType="INTEGER"/>
+		<result column="smallHeight" property="smallHeight" jdbcType="INTEGER"/>
+		<result column="middleWidth" property="middleWidth" jdbcType="INTEGER"/>
+		<result column="middleHeight" property="middleHeight" jdbcType="INTEGER"/>
+		<result column="bigWidth" property="bigWidth" jdbcType="INTEGER"/>
+		<result column="bigHeight" property="bigHeight" jdbcType="INTEGER"/>
+		<result column="integral" property="integral" jdbcType="BIT"/>
+		<result column="integralStore" property="integralStore" jdbcType="BIT"/>
+		<result column="voucher" property="voucher" jdbcType="BIT"/>
+		<result column="deposit" property="deposit" jdbcType="BIT"/>
+		<result column="groupBuy" property="groupBuy" jdbcType="BIT"/>
+		<result column="group_meal_gold" property="group_meal_gold" jdbcType="INTEGER"/>
+		<result column="gold" property="gold" jdbcType="BIT"/>
+		<result column="goldMarketValue" property="goldMarketValue" jdbcType="INTEGER"/>
+		<result column="memberRegister" property="memberRegister" jdbcType="INTEGER"/>
+		<result column="memberDayLogin" property="memberDayLogin" jdbcType="INTEGER"/>
+		<result column="indentComment" property="indentComment" jdbcType="INTEGER"/>
+		<result column="consumptionRatio" property="consumptionRatio" jdbcType="INTEGER"/>
+		<result column="everyIndentLimit" property="everyIndentLimit" jdbcType="INTEGER"/>
+		<result column="imageSaveType" property="imageSaveType" jdbcType="VARCHAR"/>
+		<result column="complaint_time" property="complaint_time" jdbcType="INTEGER"/>
+		<result column="store_allow" property="store_allow" jdbcType="BIT"/>
+		<result column="user_level" property="user_level" jdbcType="VARCHAR"/>
+		<result column="templates" property="templates" jdbcType="VARCHAR"/>
+		<result column="store_payment" property="store_payment" jdbcType="VARCHAR"/>
+		<result column="share_code" property="share_code" jdbcType="VARCHAR"/>
+		<result column="ztc_status" property="ztc_status" jdbcType="BIT"/>
+		<result column="ztc_goods_view" property="ztc_goods_view" jdbcType="INTEGER"/>
+		<result column="ztc_price" property="ztc_price" jdbcType="INTEGER"/>
+		<result column="second_domain_open" property="second_domain_open" jdbcType="BIT"/>
+		<result column="domain_allow_count" property="domain_allow_count" jdbcType="INTEGER"/>
+		<result column="sys_domain" property="sys_domain" jdbcType="VARCHAR"/>
+		<result column="qq_login" property="qq_login" jdbcType="BIT"/>
+		<result column="qq_login_id" property="qq_login_id" jdbcType="VARCHAR"/>
+		<result column="qq_login_key" property="qq_login_key" jdbcType="VARCHAR"/>
+		<result column="qq_domain_code" property="qq_domain_code" jdbcType="VARCHAR"/>
+		<result column="sina_login" property="sina_login" jdbcType="BIT"/>
+		<result column="sina_login_id" property="sina_login_id" jdbcType="VARCHAR"/>
+		<result column="sina_login_key" property="sina_login_key" jdbcType="VARCHAR"/>
+		<result column="sina_domain_code" property="sina_domain_code" jdbcType="VARCHAR"/>
+		<result column="lucene_update" property="lucene_update" jdbcType="TIMESTAMP"/>
+		<result column="combin_status" property="combin_status" jdbcType="INTEGER"/>
+		<result column="combin_amount" property="combin_amount" jdbcType="INTEGER"/>
+		<result column="combin_count" property="combin_count" jdbcType="INTEGER"/>
+		<result column="combin_scheme_count" property="combin_scheme_count" jdbcType="INTEGER"/>
+		<result column="service_telphone_list" property="service_telphone_list" jdbcType="VARCHAR"/>
+		<result column="service_qq_list" property="service_qq_list" jdbcType="VARCHAR"/>
+		<result column="auto_order_notice" property="auto_order_notice" jdbcType="INTEGER"/>
+		<result column="auto_order_confirm" property="auto_order_confirm" jdbcType="INTEGER"/>
+		<result column="auto_order_return" property="auto_order_return" jdbcType="INTEGER"/>
+		<result column="auto_order_evaluate" property="auto_order_evaluate" jdbcType="INTEGER"/>
+		<result column="grouplife_order_return" property="grouplife_order_return" jdbcType="INTEGER"/>
+		<result column="kuaidi_id" property="kuaidi_id" jdbcType="VARCHAR"/>
+		<result column="kuaidi_id2" property="kuaidi_id2" jdbcType="VARCHAR"/>
+		<result column="kuaidi_type" property="kuaidi_type" jdbcType="INTEGER"/>
+		<result column="currency_code" property="currency_code" jdbcType="VARCHAR"/>
+		<result column="weixin_store" property="weixin_store" jdbcType="INTEGER"/>
+		<result column="weixin_account" property="weixin_account" jdbcType="VARCHAR"/>
+		<result column="weixin_token" property="weixin_token" jdbcType="VARCHAR"/>
+		<result column="weixin_appId" property="weixin_appId" jdbcType="VARCHAR"/>
+		<result column="weixin_appSecret" property="weixin_appSecret" jdbcType="VARCHAR"/>
+		<result column="weixin_welecome_content" property="weixin_welecome_content" jdbcType="VARCHAR"/>
+		<result column="payoff_count" property="payoff_count" jdbcType="INTEGER"/>
+		<result column="payoff_date" property="payoff_date" jdbcType="TIMESTAMP"/>
+		<result column="payoff_mag_type" property="payoff_mag_type" jdbcType="INTEGER"/>
+		<result column="payoff_mag_default" property="payoff_mag_default" jdbcType="VARCHAR"/>
+		<result column="payoff_mag_auto" property="payoff_mag_auto" jdbcType="VARCHAR"/>
+		<result column="payoff_all_sale" property="payoff_all_sale" jdbcType="DECIMAL"/>
+		<result column="payoff_all_commission" property="payoff_all_commission" jdbcType="DECIMAL"/>
+		<result column="payoff_all_amount" property="payoff_all_amount" jdbcType="DECIMAL"/>
+		<result column="payoff_all_amount_reality" property="payoff_all_amount_reality" jdbcType="DECIMAL"/>
+		<result column="ofcard" property="ofcard" jdbcType="BIT"/>
+		<result column="ofcard_userid" property="ofcard_userid" jdbcType="VARCHAR"/>
+		<result column="ofcard_userpws" property="ofcard_userpws" jdbcType="VARCHAR"/>
+		<result column="ofcard_mobile_profit" property="ofcard_mobile_profit" jdbcType="DECIMAL"/>
+		<result column="app_download" property="app_download" jdbcType="INTEGER"/>
+		<result column="android_download" property="android_download" jdbcType="VARCHAR"/>
+		<result column="android_version" property="android_version" jdbcType="VARCHAR"/>
+		<result column="ios_download" property="ios_download" jdbcType="VARCHAR"/>
+		<result column="ios_version" property="ios_version" jdbcType="VARCHAR"/>
+		<result column="app_seller_download" property="app_seller_download" jdbcType="INTEGER"/>
+		<result column="android_seller_download" property="android_seller_download" jdbcType="VARCHAR"/>
+		<result column="android_seller_version" property="android_seller_version" jdbcType="VARCHAR"/>
+		<result column="ios_seller_download" property="ios_seller_download" jdbcType="VARCHAR"/>
+		<result column="ios_seller_version" property="ios_seller_version" jdbcType="VARCHAR"/>
+		<result column="buygift_status" property="buygift_status" jdbcType="INTEGER"/>
+		<result column="buygift_meal_gold" property="buygift_meal_gold" jdbcType="INTEGER"/>
+		<result column="enoughreduce_status" property="enoughreduce_status" jdbcType="INTEGER"/>
+		<result column="enoughreduce_meal_gold" property="enoughreduce_meal_gold" jdbcType="INTEGER"/>
+		<result column="enoughreduce_max_count" property="enoughreduce_max_count" jdbcType="INTEGER"/>
+		<result column="email_buy" property="email_buy" jdbcType="INTEGER"/>
+		<result column="email_buy_cost" property="email_buy_cost" jdbcType="INTEGER"/>
+		<result column="sms_buy" property="sms_buy" jdbcType="INTEGER"/>
+		<result column="sms_buy_cost" property="sms_buy_cost" jdbcType="INTEGER"/>
+		<result column="whether_free" property="whether_free" jdbcType="INTEGER"/>
+		<result column="lucenen_queue" property="lucenen_queue" jdbcType="INTEGER"/>
+		<result column="lucenen_cluster" property="lucenen_cluster" jdbcType="INTEGER"/>
+		<result column="sms_queue" property="sms_queue" jdbcType="INTEGER"/>
+		<result column="email_queue" property="email_queue" jdbcType="INTEGER"/>
+		<result column="circle_open" property="circle_open" jdbcType="INTEGER"/>
+		<result column="circle_count" property="circle_count" jdbcType="INTEGER"/>
+		<result column="circle_limit" property="circle_limit" jdbcType="INTEGER"/>
+		<result column="circle_audit" property="circle_audit" jdbcType="INTEGER"/>
+		<result column="publish_post_limit" property="publish_post_limit" jdbcType="INTEGER"/>
+		<result column="publish_seller_limit" property="publish_seller_limit" jdbcType="INTEGER"/>
+		<result column="qr_login" property="qr_login" jdbcType="INTEGER"/>
+		<result column="apiKey" property="apiKey" jdbcType="VARCHAR"/>
+		<result column="secretKey" property="secretKey" jdbcType="VARCHAR"/>
+		<result column="evaluate_edit_deadline" property="evaluate_edit_deadline" jdbcType="INTEGER"/>
+		<result column="evaluate_add_deadline" property="evaluate_add_deadline" jdbcType="INTEGER"/>
+		<result column="smsPlatType" property="smsPlatType" jdbcType="BIGINT"/>
+		<result column="ymrt_smsURL" property="ymrt_smsURL" jdbcType="VARCHAR"/>
+		<result column="ymrt_smsUserName" property="ymrt_smsUserName" jdbcType="VARCHAR"/>
+		<result column="ymrt_smsPassword" property="ymrt_smsPassword" jdbcType="VARCHAR"/>
+		<result column="ymrt_smsTest" property="ymrt_smsTest" jdbcType="VARCHAR"/>
+		<result column="sign_integral" property="sign_integral" jdbcType="BIGINT"/>
+		<result column="auto_order_cancel" property="auto_order_cancel" jdbcType="BIGINT"/>
+		<result column="app_push_buyer_apiKey" property="app_push_buyer_apiKey" jdbcType="VARCHAR"/>
+		<result column="app_push_buyer_secretKey" property="app_push_buyer_secretKey" jdbcType="VARCHAR"/>
+		<result column="app_push_seller_apiKey" property="app_push_seller_apiKey" jdbcType="VARCHAR"/>
+		<result column="app_push_seller_secretKey" property="app_push_seller_secretKey" jdbcType="VARCHAR"/>
+		<result column="app_navigator" property="app_navigator" jdbcType="VARCHAR"/>
+		<result column="app_launch_ad" property="app_launch_ad" jdbcType="VARCHAR"/>
+		<result column="email_register" property="email_register" jdbcType="BIGINT"/>
+		<result column="phone_register" property="phone_register" jdbcType="BIGINT"/>
+		<result column="weixin_login" property="weixin_login" jdbcType="BIGINT"/>
+		<result column="weixin_navigator" property="weixin_navigator" jdbcType="VARCHAR"/>
+		<result column="open_weixin_appId" property="open_weixin_appId" jdbcType="VARCHAR"/>
+		<result column="open_weixin_appSecret" property="open_weixin_appSecret" jdbcType="VARCHAR"/>
+		<result column="index_type" property="index_type" jdbcType="BIGINT"/>
+		<result column="cloudbuy" property="cloudbuy" jdbcType="BIGINT"/>
+		<result column="adminUrl" property="adminUrl" jdbcType="VARCHAR"/>
+		<result column="sellerUrl" property="sellerUrl" jdbcType="VARCHAR"/>
+		<result column="indexUrl" property="indexUrl" jdbcType="VARCHAR"/>
+		<result column="h5Url" property="h5Url" jdbcType="VARCHAR"/>
+		<result column="lucenePath" property="lucenePath" jdbcType="VARCHAR"/>
+		<result column="direct_selling" property="direct_selling" jdbcType="BIGINT"/>
+		<result column="direct_selling_first_level_rate" property="direct_selling_first_level_rate" jdbcType="DECIMAL"/>
+		<result column="direct_selling_second_level_rate" property="direct_selling_second_level_rate" jdbcType="DECIMAL"/>
+		<result column="static_folder" property="static_folder" jdbcType="VARCHAR"/>
+		<result column="vm_folder" property="vm_folder" jdbcType="VARCHAR"/>
+		<result column="cdnServer" property="cdnServer" jdbcType="VARCHAR"/>
+		
+		
+		
+		<association property="websiteLogo" column="websiteLogo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey" />
+		<association property="storeImage" column="storeImage_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="goodsImage" column="goodsImage_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="memberIcon" column="memberIcon_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="admin_login_logo" column="admin_login_logo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="admin_manage_logo" column="admin_manage_logo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="weixin_qr_img" column="weixin_qr_img_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="store_weixin_logo" column="store_weixin_logo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="welcome_img" column="welcome_img_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="qr_logo" column="qr_logo_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="Website_ico" column="Website_ico_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="websiteLogo_wide" column="websiteLogo_wide_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<collection property="login_imgs" column="id" select="com.redpigmall.dao.AccessoryMapper.getConfigBySysConfigId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.SysConfig">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="keywords" property="keywords" jdbcType="VARCHAR"/>
+		<result column="description" property="description" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="poweredby" property="poweredby" jdbcType="VARCHAR"/>
+		<result column="copyRight" property="copyRight" jdbcType="VARCHAR"/>
+		<result column="meta_generator" property="meta_generator" jdbcType="VARCHAR"/>
+		<result column="meta_author" property="meta_author" jdbcType="VARCHAR"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="uploadFilePath" property="uploadFilePath" jdbcType="VARCHAR"/>
+		<result column="sysLanguage" property="sysLanguage" jdbcType="VARCHAR"/>
+		<result column="sysPcLanguage" property="sysPcLanguage" jdbcType="VARCHAR"/>
+		<result column="sysStoreLanguage" property="sysStoreLanguage" jdbcType="VARCHAR"/>
+		<result column="integralRate" property="integralRate" jdbcType="INTEGER"/>
+		<result column="smsEnbale" property="smsEnbale" jdbcType="BIT"/>
+		<result column="smsURL" property="smsURL" jdbcType="VARCHAR"/>
+		<result column="smsUserName" property="smsUserName" jdbcType="VARCHAR"/>
+		<result column="smsPassword" property="smsPassword" jdbcType="VARCHAR"/>
+		<result column="smsTest" property="smsTest" jdbcType="VARCHAR"/>
+		<result column="emailEnable" property="emailEnable" jdbcType="BIT"/>
+		<result column="emailHost" property="emailHost" jdbcType="VARCHAR"/>
+		<result column="emailPort" property="emailPort" jdbcType="INTEGER"/>
+		<result column="emailUser" property="emailUser" jdbcType="VARCHAR"/>
+		<result column="emailUserName" property="emailUserName" jdbcType="VARCHAR"/>
+		<result column="emailPws" property="emailPws" jdbcType="VARCHAR"/>
+		<result column="emailTest" property="emailTest" jdbcType="VARCHAR"/>
+		<result column="websiteName" property="websiteName" jdbcType="VARCHAR"/>
+		<result column="hotSearch" property="hotSearch" jdbcType="VARCHAR"/>
+		<result column="websiteCss" property="websiteCss" jdbcType="VARCHAR"/>
+		<result column="codeStat" property="codeStat" jdbcType="VARCHAR"/>
+		<result column="websiteState" property="websiteState" jdbcType="BIT"/>
+		<result column="visitorConsult" property="visitorConsult" jdbcType="BIT"/>
+		<result column="closeReason" property="closeReason" jdbcType="VARCHAR"/>
+		<result column="securityCodeType" property="securityCodeType" jdbcType="VARCHAR"/>
+		<result column="securityCodeRegister" property="securityCodeRegister" jdbcType="BIT"/>
+		<result column="securityCodeLogin" property="securityCodeLogin" jdbcType="BIT"/>
+		<result column="securityCodeConsult" property="securityCodeConsult" jdbcType="BIT"/>
+		<result column="imageSuffix" property="imageSuffix" jdbcType="VARCHAR"/>
+		<result column="imageWebServer" property="imageWebServer" jdbcType="VARCHAR"/>
+		<result column="imageFilesize" property="imageFilesize" jdbcType="INTEGER"/>
+		<result column="smallWidth" property="smallWidth" jdbcType="INTEGER"/>
+		<result column="smallHeight" property="smallHeight" jdbcType="INTEGER"/>
+		<result column="middleWidth" property="middleWidth" jdbcType="INTEGER"/>
+		<result column="middleHeight" property="middleHeight" jdbcType="INTEGER"/>
+		<result column="bigWidth" property="bigWidth" jdbcType="INTEGER"/>
+		<result column="bigHeight" property="bigHeight" jdbcType="INTEGER"/>
+		<result column="integral" property="integral" jdbcType="BIT"/>
+		<result column="integralStore" property="integralStore" jdbcType="BIT"/>
+		<result column="voucher" property="voucher" jdbcType="BIT"/>
+		<result column="deposit" property="deposit" jdbcType="BIT"/>
+		<result column="groupBuy" property="groupBuy" jdbcType="BIT"/>
+		<result column="group_meal_gold" property="group_meal_gold" jdbcType="INTEGER"/>
+		<result column="gold" property="gold" jdbcType="BIT"/>
+		<result column="goldMarketValue" property="goldMarketValue" jdbcType="INTEGER"/>
+		<result column="memberRegister" property="memberRegister" jdbcType="INTEGER"/>
+		<result column="memberDayLogin" property="memberDayLogin" jdbcType="INTEGER"/>
+		<result column="indentComment" property="indentComment" jdbcType="INTEGER"/>
+		<result column="consumptionRatio" property="consumptionRatio" jdbcType="INTEGER"/>
+		<result column="everyIndentLimit" property="everyIndentLimit" jdbcType="INTEGER"/>
+		<result column="imageSaveType" property="imageSaveType" jdbcType="VARCHAR"/>
+		<result column="complaint_time" property="complaint_time" jdbcType="INTEGER"/>
+		<result column="store_allow" property="store_allow" jdbcType="BIT"/>
+		<result column="user_level" property="user_level" jdbcType="VARCHAR"/>
+		<result column="templates" property="templates" jdbcType="VARCHAR"/>
+		<result column="store_payment" property="store_payment" jdbcType="VARCHAR"/>
+		<result column="share_code" property="share_code" jdbcType="VARCHAR"/>
+		<result column="ztc_status" property="ztc_status" jdbcType="BIT"/>
+		<result column="ztc_goods_view" property="ztc_goods_view" jdbcType="INTEGER"/>
+		<result column="ztc_price" property="ztc_price" jdbcType="INTEGER"/>
+		<result column="second_domain_open" property="second_domain_open" jdbcType="BIT"/>
+		<result column="domain_allow_count" property="domain_allow_count" jdbcType="INTEGER"/>
+		<result column="sys_domain" property="sys_domain" jdbcType="VARCHAR"/>
+		<result column="qq_login" property="qq_login" jdbcType="BIT"/>
+		<result column="qq_login_id" property="qq_login_id" jdbcType="VARCHAR"/>
+		<result column="qq_login_key" property="qq_login_key" jdbcType="VARCHAR"/>
+		<result column="qq_domain_code" property="qq_domain_code" jdbcType="VARCHAR"/>
+		<result column="sina_login" property="sina_login" jdbcType="BIT"/>
+		<result column="sina_login_id" property="sina_login_id" jdbcType="VARCHAR"/>
+		<result column="sina_login_key" property="sina_login_key" jdbcType="VARCHAR"/>
+		<result column="sina_domain_code" property="sina_domain_code" jdbcType="VARCHAR"/>
+		<result column="lucene_update" property="lucene_update" jdbcType="TIMESTAMP"/>
+		<result column="combin_status" property="combin_status" jdbcType="INTEGER"/>
+		<result column="combin_amount" property="combin_amount" jdbcType="INTEGER"/>
+		<result column="combin_count" property="combin_count" jdbcType="INTEGER"/>
+		<result column="combin_scheme_count" property="combin_scheme_count" jdbcType="INTEGER"/>
+		<result column="service_telphone_list" property="service_telphone_list" jdbcType="VARCHAR"/>
+		<result column="service_qq_list" property="service_qq_list" jdbcType="VARCHAR"/>
+		<result column="auto_order_notice" property="auto_order_notice" jdbcType="INTEGER"/>
+		<result column="auto_order_confirm" property="auto_order_confirm" jdbcType="INTEGER"/>
+		<result column="auto_order_return" property="auto_order_return" jdbcType="INTEGER"/>
+		<result column="auto_order_evaluate" property="auto_order_evaluate" jdbcType="INTEGER"/>
+		<result column="grouplife_order_return" property="grouplife_order_return" jdbcType="INTEGER"/>
+		<result column="kuaidi_id" property="kuaidi_id" jdbcType="VARCHAR"/>
+		<result column="kuaidi_id2" property="kuaidi_id2" jdbcType="VARCHAR"/>
+		<result column="kuaidi_type" property="kuaidi_type" jdbcType="INTEGER"/>
+		<result column="currency_code" property="currency_code" jdbcType="VARCHAR"/>
+		<result column="weixin_store" property="weixin_store" jdbcType="INTEGER"/>
+		<result column="weixin_account" property="weixin_account" jdbcType="VARCHAR"/>
+		<result column="weixin_token" property="weixin_token" jdbcType="VARCHAR"/>
+		<result column="weixin_appId" property="weixin_appId" jdbcType="VARCHAR"/>
+		<result column="weixin_appSecret" property="weixin_appSecret" jdbcType="VARCHAR"/>
+		<result column="weixin_welecome_content" property="weixin_welecome_content" jdbcType="VARCHAR"/>
+		<result column="payoff_count" property="payoff_count" jdbcType="INTEGER"/>
+		<result column="payoff_date" property="payoff_date" jdbcType="TIMESTAMP"/>
+		<result column="payoff_mag_type" property="payoff_mag_type" jdbcType="INTEGER"/>
+		<result column="payoff_mag_default" property="payoff_mag_default" jdbcType="VARCHAR"/>
+		<result column="payoff_mag_auto" property="payoff_mag_auto" jdbcType="VARCHAR"/>
+		<result column="payoff_all_sale" property="payoff_all_sale" jdbcType="DECIMAL"/>
+		<result column="payoff_all_commission" property="payoff_all_commission" jdbcType="DECIMAL"/>
+		<result column="payoff_all_amount" property="payoff_all_amount" jdbcType="DECIMAL"/>
+		<result column="payoff_all_amount_reality" property="payoff_all_amount_reality" jdbcType="DECIMAL"/>
+		<result column="ofcard" property="ofcard" jdbcType="BIT"/>
+		<result column="ofcard_userid" property="ofcard_userid" jdbcType="VARCHAR"/>
+		<result column="ofcard_userpws" property="ofcard_userpws" jdbcType="VARCHAR"/>
+		<result column="ofcard_mobile_profit" property="ofcard_mobile_profit" jdbcType="DECIMAL"/>
+		<result column="app_download" property="app_download" jdbcType="INTEGER"/>
+		<result column="android_download" property="android_download" jdbcType="VARCHAR"/>
+		<result column="android_version" property="android_version" jdbcType="VARCHAR"/>
+		<result column="ios_download" property="ios_download" jdbcType="VARCHAR"/>
+		<result column="ios_version" property="ios_version" jdbcType="VARCHAR"/>
+		<result column="app_seller_download" property="app_seller_download" jdbcType="INTEGER"/>
+		<result column="android_seller_download" property="android_seller_download" jdbcType="VARCHAR"/>
+		<result column="android_seller_version" property="android_seller_version" jdbcType="VARCHAR"/>
+		<result column="ios_seller_download" property="ios_seller_download" jdbcType="VARCHAR"/>
+		<result column="ios_seller_version" property="ios_seller_version" jdbcType="VARCHAR"/>
+		<result column="buygift_status" property="buygift_status" jdbcType="INTEGER"/>
+		<result column="buygift_meal_gold" property="buygift_meal_gold" jdbcType="INTEGER"/>
+		<result column="enoughreduce_status" property="enoughreduce_status" jdbcType="INTEGER"/>
+		<result column="enoughreduce_meal_gold" property="enoughreduce_meal_gold" jdbcType="INTEGER"/>
+		<result column="enoughreduce_max_count" property="enoughreduce_max_count" jdbcType="INTEGER"/>
+		<result column="email_buy" property="email_buy" jdbcType="INTEGER"/>
+		<result column="email_buy_cost" property="email_buy_cost" jdbcType="INTEGER"/>
+		<result column="sms_buy" property="sms_buy" jdbcType="INTEGER"/>
+		<result column="sms_buy_cost" property="sms_buy_cost" jdbcType="INTEGER"/>
+		<result column="whether_free" property="whether_free" jdbcType="INTEGER"/>
+		<result column="lucenen_queue" property="lucenen_queue" jdbcType="INTEGER"/>
+		<result column="lucenen_cluster" property="lucenen_cluster" jdbcType="INTEGER"/>
+		
+		<result column="sms_queue" property="sms_queue" jdbcType="INTEGER"/>
+		<result column="email_queue" property="email_queue" jdbcType="INTEGER"/>
+		<result column="circle_open" property="circle_open" jdbcType="INTEGER"/>
+		<result column="circle_count" property="circle_count" jdbcType="INTEGER"/>
+		<result column="circle_limit" property="circle_limit" jdbcType="INTEGER"/>
+		<result column="circle_audit" property="circle_audit" jdbcType="INTEGER"/>
+		<result column="publish_post_limit" property="publish_post_limit" jdbcType="INTEGER"/>
+		<result column="publish_seller_limit" property="publish_seller_limit" jdbcType="INTEGER"/>
+		<result column="qr_login" property="qr_login" jdbcType="INTEGER"/>
+		<result column="apiKey" property="apiKey" jdbcType="VARCHAR"/>
+		<result column="secretKey" property="secretKey" jdbcType="VARCHAR"/>
+		<result column="evaluate_edit_deadline" property="evaluate_edit_deadline" jdbcType="INTEGER"/>
+		<result column="evaluate_add_deadline" property="evaluate_add_deadline" jdbcType="INTEGER"/>
+		<result column="smsPlatType" property="smsPlatType" jdbcType="BIGINT"/>
+		<result column="ymrt_smsURL" property="ymrt_smsURL" jdbcType="VARCHAR"/>
+		<result column="ymrt_smsUserName" property="ymrt_smsUserName" jdbcType="VARCHAR"/>
+		<result column="ymrt_smsPassword" property="ymrt_smsPassword" jdbcType="VARCHAR"/>
+		<result column="ymrt_smsTest" property="ymrt_smsTest" jdbcType="VARCHAR"/>
+		<result column="sign_integral" property="sign_integral" jdbcType="BIGINT"/>
+		<result column="auto_order_cancel" property="auto_order_cancel" jdbcType="BIGINT"/>
+		<result column="app_push_buyer_apiKey" property="app_push_buyer_apiKey" jdbcType="VARCHAR"/>
+		<result column="app_push_buyer_secretKey" property="app_push_buyer_secretKey" jdbcType="VARCHAR"/>
+		<result column="app_push_seller_apiKey" property="app_push_seller_apiKey" jdbcType="VARCHAR"/>
+		<result column="app_push_seller_secretKey" property="app_push_seller_secretKey" jdbcType="VARCHAR"/>
+		<result column="app_navigator" property="app_navigator" jdbcType="VARCHAR"/>
+		<result column="app_launch_ad" property="app_launch_ad" jdbcType="VARCHAR"/>
+		<result column="email_register" property="email_register" jdbcType="BIGINT"/>
+		<result column="phone_register" property="phone_register" jdbcType="BIGINT"/>
+		<result column="weixin_login" property="weixin_login" jdbcType="BIGINT"/>
+		<result column="weixin_navigator" property="weixin_navigator" jdbcType="VARCHAR"/>
+		<result column="open_weixin_appId" property="open_weixin_appId" jdbcType="VARCHAR"/>
+		<result column="open_weixin_appSecret" property="open_weixin_appSecret" jdbcType="VARCHAR"/>
+		<result column="index_type" property="index_type" jdbcType="BIGINT"/>
+		<result column="cloudbuy" property="cloudbuy" jdbcType="BIGINT"/>
+		<result column="adminUrl" property="adminUrl" jdbcType="VARCHAR"/>
+		<result column="sellerUrl" property="sellerUrl" jdbcType="VARCHAR"/>
+		<result column="indexUrl" property="indexUrl" jdbcType="VARCHAR"/>
+		<result column="h5Url" property="h5Url" jdbcType="VARCHAR"/>
+		<result column="lucenePath" property="lucenePath" jdbcType="VARCHAR"/>
+		<result column="direct_selling" property="direct_selling" jdbcType="BIGINT"/>
+		<result column="direct_selling_first_level_rate" property="direct_selling_first_level_rate" jdbcType="DECIMAL"/>
+		<result column="direct_selling_second_level_rate" property="direct_selling_second_level_rate" jdbcType="DECIMAL"/>
+		<result column="static_folder" property="static_folder" jdbcType="VARCHAR"/>
+		<result column="vm_folder" property="vm_folder" jdbcType="VARCHAR"/>
+		<result column="cdnServer" property="cdnServer" jdbcType="VARCHAR"/>
+		
+		
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,title,keywords,description,address,poweredby,copyRight,meta_generator,meta_author,company_name,uploadFilePath,sysLanguage,sysPcLanguage,sysStoreLanguage,integralRate,smsEnbale,smsURL,smsUserName,smsPassword,smsTest,emailEnable,emailHost,emailPort,emailUser,emailUserName,emailPws,emailTest,websiteName,hotSearch,websiteCss,websiteLogo_id,codeStat,websiteState,visitorConsult,closeReason,securityCodeType,securityCodeRegister,securityCodeLogin,securityCodeConsult,imageSuffix,imageWebServer,imageFilesize,smallWidth,smallHeight,middleWidth,middleHeight,bigWidth,bigHeight,integral,integralStore,voucher,deposit,groupBuy,group_meal_gold,gold,goldMarketValue,memberRegister,memberDayLogin,indentComment,consumptionRatio,everyIndentLimit,imageSaveType,complaint_time,storeImage_id,goodsImage_id,memberIcon_id,store_allow,user_level,templates,store_payment,share_code,ztc_status,ztc_goods_view,ztc_price,second_domain_open,domain_allow_count,sys_domain,qq_login,qq_login_id,qq_login_key,qq_domain_code,sina_login,sina_login_id,sina_login_key,sina_domain_code,lucene_update,combin_status,combin_amount,combin_count,combin_scheme_count,service_telphone_list,service_qq_list,admin_login_logo_id,admin_manage_logo_id,auto_order_notice,auto_order_confirm,auto_order_return,auto_order_evaluate,grouplife_order_return,kuaidi_id,kuaidi_id2,kuaidi_type,currency_code,weixin_store,weixin_qr_img_id,weixin_account,weixin_token,weixin_appId,weixin_appSecret,weixin_welecome_content,store_weixin_logo_id,payoff_count,payoff_date,payoff_mag_type,payoff_mag_default,payoff_mag_auto,payoff_all_sale,payoff_all_commission,payoff_all_amount,payoff_all_amount_reality,ofcard,ofcard_userid,ofcard_userpws,ofcard_mobile_profit,app_download,android_download,android_version,ios_download,ios_version,app_seller_download,android_seller_download,android_seller_version,ios_seller_download,ios_seller_version,buygift_status,buygift_meal_gold,enoughreduce_status,enoughreduce_meal_gold,enoughreduce_max_count,email_buy,email_buy_cost,sms_buy,sms_buy_cost,whether_free,lucenen_queue,lucenen_cluster,sms_queue,email_queue,circle_open,circle_count,circle_limit,circle_audit,publish_post_limit,publish_seller_limit,welcome_img_id,qr_logo_id,Website_ico_id,qr_login,apiKey,secretKey,evaluate_edit_deadline,evaluate_add_deadline,smsPlatType,ymrt_smsURL,ymrt_smsUserName,ymrt_smsPassword,ymrt_smsTest,websiteLogo_wide_id,sign_integral,auto_order_cancel,app_push_buyer_apiKey,app_push_buyer_secretKey,app_push_seller_apiKey,app_push_seller_secretKey,app_navigator,app_launch_ad,email_register,phone_register,weixin_login,weixin_navigator,open_weixin_appId,open_weixin_appSecret,index_type,cloudbuy,adminUrl,sellerUrl,indexUrl,h5Url,lucenePath,direct_selling,direct_selling_first_level_rate,direct_selling_second_level_rate,static_folder,vm_folder,cdnServer
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="title != null">and title = #{title,jdbcType=VARCHAR}</if>
+		<if test="keywords != null">and keywords = #{keywords,jdbcType=VARCHAR}</if>
+		<if test="description != null">and description = #{description,jdbcType=VARCHAR}</if>
+		<if test="address != null">and address = #{address,jdbcType=VARCHAR}</if>
+		<if test="poweredby != null">and poweredby = #{poweredby,jdbcType=VARCHAR}</if>
+		<if test="copyRight != null">and copyRight = #{copyRight,jdbcType=VARCHAR}</if>
+		<if test="meta_generator != null">and meta_generator = #{meta_generator,jdbcType=VARCHAR}</if>
+		<if test="meta_author != null">and meta_author = #{meta_author,jdbcType=VARCHAR}</if>
+		<if test="company_name != null">and company_name = #{company_name,jdbcType=VARCHAR}</if>
+		<if test="uploadFilePath != null">and uploadFilePath = #{uploadFilePath,jdbcType=VARCHAR}</if>
+		<if test="sysLanguage != null">and sysLanguage = #{sysLanguage,jdbcType=VARCHAR}</if>
+		<if test="sysPcLanguage != null">and sysPcLanguage = #{sysPcLanguage,jdbcType=VARCHAR}</if>
+		<if test="sysStoreLanguage != null">and sysStoreLanguage = #{sysStoreLanguage,jdbcType=VARCHAR}</if>
+		<if test="integralRate != null">and integralRate = #{integralRate,jdbcType=INTEGER}</if>
+		<if test="smsEnbale != null">and smsEnbale = #{smsEnbale,jdbcType=BIT}</if>
+		<if test="smsURL != null">and smsURL = #{smsURL,jdbcType=VARCHAR}</if>
+		<if test="smsUserName != null">and smsUserName = #{smsUserName,jdbcType=VARCHAR}</if>
+		<if test="smsPassword != null">and smsPassword = #{smsPassword,jdbcType=VARCHAR}</if>
+		<if test="smsTest != null">and smsTest = #{smsTest,jdbcType=VARCHAR}</if>
+		<if test="emailEnable != null">and emailEnable = #{emailEnable,jdbcType=BIT}</if>
+		<if test="emailHost != null">and emailHost = #{emailHost,jdbcType=VARCHAR}</if>
+		<if test="emailPort != null">and emailPort = #{emailPort,jdbcType=INTEGER}</if>
+		<if test="emailUser != null">and emailUser = #{emailUser,jdbcType=VARCHAR}</if>
+		<if test="emailUserName != null">and emailUserName = #{emailUserName,jdbcType=VARCHAR}</if>
+		<if test="emailPws != null">and emailPws = #{emailPws,jdbcType=VARCHAR}</if>
+		<if test="emailTest != null">and emailTest = #{emailTest,jdbcType=VARCHAR}</if>
+		<if test="websiteName != null">and websiteName = #{websiteName,jdbcType=VARCHAR}</if>
+		<if test="hotSearch != null">and hotSearch = #{hotSearch,jdbcType=VARCHAR}</if>
+		<if test="websiteCss != null">and websiteCss = #{websiteCss,jdbcType=VARCHAR}</if>
+		<if test="codeStat != null">and codeStat = #{codeStat,jdbcType=VARCHAR}</if>
+		<if test="websiteState != null">and websiteState = #{websiteState,jdbcType=BIT}</if>
+		<if test="visitorConsult != null">and visitorConsult = #{visitorConsult,jdbcType=BIT}</if>
+		<if test="closeReason != null">and closeReason = #{closeReason,jdbcType=VARCHAR}</if>
+		<if test="securityCodeType != null">and securityCodeType = #{securityCodeType,jdbcType=VARCHAR}</if>
+		<if test="securityCodeRegister != null">and securityCodeRegister = #{securityCodeRegister,jdbcType=BIT}</if>
+		<if test="securityCodeLogin != null">and securityCodeLogin = #{securityCodeLogin,jdbcType=BIT}</if>
+		<if test="securityCodeConsult != null">and securityCodeConsult = #{securityCodeConsult,jdbcType=BIT}</if>
+		<if test="imageSuffix != null">and imageSuffix = #{imageSuffix,jdbcType=VARCHAR}</if>
+		<if test="imageWebServer != null">and imageWebServer = #{imageWebServer,jdbcType=VARCHAR}</if>
+		<if test="imageFilesize != null">and imageFilesize = #{imageFilesize,jdbcType=INTEGER}</if>
+		<if test="smallWidth != null">and smallWidth = #{smallWidth,jdbcType=INTEGER}</if>
+		<if test="smallHeight != null">and smallHeight = #{smallHeight,jdbcType=INTEGER}</if>
+		<if test="middleWidth != null">and middleWidth = #{middleWidth,jdbcType=INTEGER}</if>
+		<if test="middleHeight != null">and middleHeight = #{middleHeight,jdbcType=INTEGER}</if>
+		<if test="bigWidth != null">and bigWidth = #{bigWidth,jdbcType=INTEGER}</if>
+		<if test="bigHeight != null">and bigHeight = #{bigHeight,jdbcType=INTEGER}</if>
+		<if test="integral != null">and integral = #{integral,jdbcType=BIT}</if>
+		<if test="integralStore != null">and integralStore = #{integralStore,jdbcType=BIT}</if>
+		<if test="voucher != null">and voucher = #{voucher,jdbcType=BIT}</if>
+		<if test="deposit != null">and deposit = #{deposit,jdbcType=BIT}</if>
+		<if test="groupBuy != null">and groupBuy = #{groupBuy,jdbcType=BIT}</if>
+		<if test="group_meal_gold != null">and group_meal_gold = #{group_meal_gold,jdbcType=INTEGER}</if>
+		<if test="gold != null">and gold = #{gold,jdbcType=BIT}</if>
+		<if test="goldMarketValue != null">and goldMarketValue = #{goldMarketValue,jdbcType=INTEGER}</if>
+		<if test="memberRegister != null">and memberRegister = #{memberRegister,jdbcType=INTEGER}</if>
+		<if test="memberDayLogin != null">and memberDayLogin = #{memberDayLogin,jdbcType=INTEGER}</if>
+		<if test="indentComment != null">and indentComment = #{indentComment,jdbcType=INTEGER}</if>
+		<if test="consumptionRatio != null">and consumptionRatio = #{consumptionRatio,jdbcType=INTEGER}</if>
+		<if test="everyIndentLimit != null">and everyIndentLimit = #{everyIndentLimit,jdbcType=INTEGER}</if>
+		<if test="imageSaveType != null">and imageSaveType = #{imageSaveType,jdbcType=VARCHAR}</if>
+		<if test="complaint_time != null">and complaint_time = #{complaint_time,jdbcType=INTEGER}</if>
+		<if test="store_allow != null">and store_allow = #{store_allow,jdbcType=BIT}</if>
+		<if test="user_level != null">and user_level = #{user_level,jdbcType=VARCHAR}</if>
+		<if test="templates != null">and templates = #{templates,jdbcType=VARCHAR}</if>
+		<if test="store_payment != null">and store_payment = #{store_payment,jdbcType=VARCHAR}</if>
+		<if test="share_code != null">and share_code = #{share_code,jdbcType=VARCHAR}</if>
+		<if test="ztc_status != null">and ztc_status = #{ztc_status,jdbcType=BIT}</if>
+		<if test="ztc_goods_view != null">and ztc_goods_view = #{ztc_goods_view,jdbcType=INTEGER}</if>
+		<if test="ztc_price != null">and ztc_price = #{ztc_price,jdbcType=INTEGER}</if>
+		<if test="second_domain_open != null">and second_domain_open = #{second_domain_open,jdbcType=BIT}</if>
+		<if test="domain_allow_count != null">and domain_allow_count = #{domain_allow_count,jdbcType=INTEGER}</if>
+		<if test="sys_domain != null">and sys_domain = #{sys_domain,jdbcType=VARCHAR}</if>
+		<if test="qq_login != null">and qq_login = #{qq_login,jdbcType=BIT}</if>
+		<if test="qq_login_id != null">and qq_login_id = #{qq_login_id,jdbcType=VARCHAR}</if>
+		<if test="qq_login_key != null">and qq_login_key = #{qq_login_key,jdbcType=VARCHAR}</if>
+		<if test="qq_domain_code != null">and qq_domain_code = #{qq_domain_code,jdbcType=VARCHAR}</if>
+		<if test="sina_login != null">and sina_login = #{sina_login,jdbcType=BIT}</if>
+		<if test="sina_login_id != null">and sina_login_id = #{sina_login_id,jdbcType=VARCHAR}</if>
+		<if test="sina_login_key != null">and sina_login_key = #{sina_login_key,jdbcType=VARCHAR}</if>
+		<if test="sina_domain_code != null">and sina_domain_code = #{sina_domain_code,jdbcType=VARCHAR}</if>
+		<if test="lucene_update != null">and lucene_update = #{lucene_update,jdbcType=TIMESTAMP}</if>
+		<if test="combin_status != null">and combin_status = #{combin_status,jdbcType=INTEGER}</if>
+		<if test="combin_amount != null">and combin_amount = #{combin_amount,jdbcType=INTEGER}</if>
+		<if test="combin_count != null">and combin_count = #{combin_count,jdbcType=INTEGER}</if>
+		<if test="combin_scheme_count != null">and combin_scheme_count = #{combin_scheme_count,jdbcType=INTEGER}</if>
+		<if test="service_telphone_list != null">and service_telphone_list = #{service_telphone_list,jdbcType=VARCHAR}</if>
+		<if test="service_qq_list != null">and service_qq_list = #{service_qq_list,jdbcType=VARCHAR}</if>
+		<if test="auto_order_notice != null">and auto_order_notice = #{auto_order_notice,jdbcType=INTEGER}</if>
+		<if test="auto_order_confirm != null">and auto_order_confirm = #{auto_order_confirm,jdbcType=INTEGER}</if>
+		<if test="auto_order_return != null">and auto_order_return = #{auto_order_return,jdbcType=INTEGER}</if>
+		<if test="auto_order_evaluate != null">and auto_order_evaluate = #{auto_order_evaluate,jdbcType=INTEGER}</if>
+		<if test="grouplife_order_return != null">and grouplife_order_return = #{grouplife_order_return,jdbcType=INTEGER}</if>
+		<if test="kuaidi_id != null">and kuaidi_id = #{kuaidi_id,jdbcType=VARCHAR}</if>
+		<if test="kuaidi_id2 != null">and kuaidi_id2 = #{kuaidi_id2,jdbcType=VARCHAR}</if>
+		<if test="kuaidi_type != null">and kuaidi_type = #{kuaidi_type,jdbcType=INTEGER}</if>
+		<if test="currency_code != null">and currency_code = #{currency_code,jdbcType=VARCHAR}</if>
+		<if test="weixin_store != null">and weixin_store = #{weixin_store,jdbcType=INTEGER}</if>
+		<if test="weixin_account != null">and weixin_account = #{weixin_account,jdbcType=VARCHAR}</if>
+		<if test="weixin_token != null">and weixin_token = #{weixin_token,jdbcType=VARCHAR}</if>
+		<if test="weixin_appId != null">and weixin_appId = #{weixin_appId,jdbcType=VARCHAR}</if>
+		<if test="weixin_appSecret != null">and weixin_appSecret = #{weixin_appSecret,jdbcType=VARCHAR}</if>
+		<if test="weixin_welecome_content != null">and weixin_welecome_content = #{weixin_welecome_content,jdbcType=VARCHAR}</if>
+		<if test="payoff_count != null">and payoff_count = #{payoff_count,jdbcType=INTEGER}</if>
+		<if test="payoff_date != null">and payoff_date = #{payoff_date,jdbcType=TIMESTAMP}</if>
+		<if test="payoff_mag_type != null">and payoff_mag_type = #{payoff_mag_type,jdbcType=INTEGER}</if>
+		<if test="payoff_mag_default != null">and payoff_mag_default = #{payoff_mag_default,jdbcType=VARCHAR}</if>
+		<if test="payoff_mag_auto != null">and payoff_mag_auto = #{payoff_mag_auto,jdbcType=VARCHAR}</if>
+		<if test="payoff_all_sale != null">and payoff_all_sale = #{payoff_all_sale,jdbcType=DECIMAL}</if>
+		<if test="payoff_all_commission != null">and payoff_all_commission = #{payoff_all_commission,jdbcType=DECIMAL}</if>
+		<if test="payoff_all_amount != null">and payoff_all_amount = #{payoff_all_amount,jdbcType=DECIMAL}</if>
+		<if test="payoff_all_amount_reality != null">and payoff_all_amount_reality = #{payoff_all_amount_reality,jdbcType=DECIMAL}</if>
+		<if test="ofcard != null">and ofcard = #{ofcard,jdbcType=BIT}</if>
+		<if test="ofcard_userid != null">and ofcard_userid = #{ofcard_userid,jdbcType=VARCHAR}</if>
+		<if test="ofcard_userpws != null">and ofcard_userpws = #{ofcard_userpws,jdbcType=VARCHAR}</if>
+		<if test="ofcard_mobile_profit != null">and ofcard_mobile_profit = #{ofcard_mobile_profit,jdbcType=DECIMAL}</if>
+		<if test="app_download != null">and app_download = #{app_download,jdbcType=INTEGER}</if>
+		<if test="android_download != null">and android_download = #{android_download,jdbcType=VARCHAR}</if>
+		<if test="android_version != null">and android_version = #{android_version,jdbcType=VARCHAR}</if>
+		<if test="ios_download != null">and ios_download = #{ios_download,jdbcType=VARCHAR}</if>
+		<if test="ios_version != null">and ios_version = #{ios_version,jdbcType=VARCHAR}</if>
+		<if test="app_seller_download != null">and app_seller_download = #{app_seller_download,jdbcType=INTEGER}</if>
+		<if test="android_seller_download != null">and android_seller_download = #{android_seller_download,jdbcType=VARCHAR}</if>
+		<if test="android_seller_version != null">and android_seller_version = #{android_seller_version,jdbcType=VARCHAR}</if>
+		<if test="ios_seller_download != null">and ios_seller_download = #{ios_seller_download,jdbcType=VARCHAR}</if>
+		<if test="ios_seller_version != null">and ios_seller_version = #{ios_seller_version,jdbcType=VARCHAR}</if>
+		<if test="buygift_status != null">and buygift_status = #{buygift_status,jdbcType=INTEGER}</if>
+		<if test="buygift_meal_gold != null">and buygift_meal_gold = #{buygift_meal_gold,jdbcType=INTEGER}</if>
+		<if test="enoughreduce_status != null">and enoughreduce_status = #{enoughreduce_status,jdbcType=INTEGER}</if>
+		<if test="enoughreduce_meal_gold != null">and enoughreduce_meal_gold = #{enoughreduce_meal_gold,jdbcType=INTEGER}</if>
+		<if test="enoughreduce_max_count != null">and enoughreduce_max_count = #{enoughreduce_max_count,jdbcType=INTEGER}</if>
+		<if test="email_buy != null">and email_buy = #{email_buy,jdbcType=INTEGER}</if>
+		<if test="email_buy_cost != null">and email_buy_cost = #{email_buy_cost,jdbcType=INTEGER}</if>
+		<if test="sms_buy != null">and sms_buy = #{sms_buy,jdbcType=INTEGER}</if>
+		<if test="sms_buy_cost != null">and sms_buy_cost = #{sms_buy_cost,jdbcType=INTEGER}</if>
+		<if test="whether_free != null">and whether_free = #{whether_free,jdbcType=INTEGER}</if>
+		<if test="lucenen_queue != null">and lucenen_queue = #{lucenen_queue,jdbcType=INTEGER}</if>
+		<if test="lucenen_cluster != null">and lucenen_cluster = #{lucenen_cluster,jdbcType=INTEGER}</if>
+		
+		<if test="sms_queue != null">and sms_queue = #{sms_queue,jdbcType=INTEGER}</if>
+		<if test="email_queue != null">and email_queue = #{email_queue,jdbcType=INTEGER}</if>
+		<if test="circle_open != null">and circle_open = #{circle_open,jdbcType=INTEGER}</if>
+		<if test="circle_count != null">and circle_count = #{circle_count,jdbcType=INTEGER}</if>
+		<if test="circle_limit != null">and circle_limit = #{circle_limit,jdbcType=INTEGER}</if>
+		<if test="circle_audit != null">and circle_audit = #{circle_audit,jdbcType=INTEGER}</if>
+		<if test="publish_post_limit != null">and publish_post_limit = #{publish_post_limit,jdbcType=INTEGER}</if>
+		<if test="publish_seller_limit != null">and publish_seller_limit = #{publish_seller_limit,jdbcType=INTEGER}</if>
+		<if test="qr_login != null">and qr_login = #{qr_login,jdbcType=INTEGER}</if>
+		<if test="apiKey != null">and apiKey = #{apiKey,jdbcType=VARCHAR}</if>
+		<if test="secretKey != null">and secretKey = #{secretKey,jdbcType=VARCHAR}</if>
+		<if test="evaluate_edit_deadline != null">and evaluate_edit_deadline = #{evaluate_edit_deadline,jdbcType=INTEGER}</if>
+		<if test="evaluate_add_deadline != null">and evaluate_add_deadline = #{evaluate_add_deadline,jdbcType=INTEGER}</if>
+		<if test="smsPlatType != null">and smsPlatType = #{smsPlatType,jdbcType=BIGINT}</if>
+		<if test="ymrt_smsURL != null">and ymrt_smsURL = #{ymrt_smsURL,jdbcType=VARCHAR}</if>
+		<if test="ymrt_smsUserName != null">and ymrt_smsUserName = #{ymrt_smsUserName,jdbcType=VARCHAR}</if>
+		<if test="ymrt_smsPassword != null">and ymrt_smsPassword = #{ymrt_smsPassword,jdbcType=VARCHAR}</if>
+		<if test="ymrt_smsTest != null">and ymrt_smsTest = #{ymrt_smsTest,jdbcType=VARCHAR}</if>
+		<if test="sign_integral != null">and sign_integral = #{sign_integral,jdbcType=BIGINT}</if>
+		<if test="auto_order_cancel != null">and auto_order_cancel = #{auto_order_cancel,jdbcType=BIGINT}</if>
+		<if test="app_push_buyer_apiKey != null">and app_push_buyer_apiKey = #{app_push_buyer_apiKey,jdbcType=VARCHAR}</if>
+		<if test="app_push_buyer_secretKey != null">and app_push_buyer_secretKey = #{app_push_buyer_secretKey,jdbcType=VARCHAR}</if>
+		<if test="app_push_seller_apiKey != null">and app_push_seller_apiKey = #{app_push_seller_apiKey,jdbcType=VARCHAR}</if>
+		<if test="app_push_seller_secretKey != null">and app_push_seller_secretKey = #{app_push_seller_secretKey,jdbcType=VARCHAR}</if>
+		<if test="app_navigator != null">and app_navigator = #{app_navigator,jdbcType=VARCHAR}</if>
+		<if test="app_launch_ad != null">and app_launch_ad = #{app_launch_ad,jdbcType=VARCHAR}</if>
+		<if test="email_register != null">and email_register = #{email_register,jdbcType=BIGINT}</if>
+		<if test="phone_register != null">and phone_register = #{phone_register,jdbcType=BIGINT}</if>
+		<if test="weixin_login != null">and weixin_login = #{weixin_login,jdbcType=BIGINT}</if>
+		<if test="weixin_navigator != null">and weixin_navigator = #{weixin_navigator,jdbcType=VARCHAR}</if>
+		<if test="open_weixin_appId != null">and open_weixin_appId = #{open_weixin_appId,jdbcType=VARCHAR}</if>
+		<if test="open_weixin_appSecret != null">and open_weixin_appSecret = #{open_weixin_appSecret,jdbcType=VARCHAR}</if>
+		<if test="index_type != null">and index_type = #{index_type,jdbcType=BIGINT}</if>
+		<if test="cloudbuy != null">and cloudbuy = #{cloudbuy,jdbcType=BIGINT}</if>
+		<if test="adminUrl != null">and adminUrl = #{adminUrl,jdbcType=VARCHAR}</if>
+		<if test="sellerUrl != null">and sellerUrl = #{sellerUrl,jdbcType=VARCHAR}</if>
+		<if test="indexUrl != null">and indexUrl = #{indexUrl,jdbcType=VARCHAR}</if>
+		<if test="h5Url != null">and h5Url = #{h5Url,jdbcType=VARCHAR}</if>
+		<if test="websiteLogo_id != null">and websiteLogo_id = #{websiteLogo_id,jdbcType=BIGINT}</if>
+		<if test="storeImage_id != null">and storeImage_id = #{storeImage_id,jdbcType=BIGINT}</if>
+		<if test="goodsImage_id != null">and goodsImage_id = #{goodsImage_id,jdbcType=BIGINT}</if>
+		<if test="memberIcon_id != null">and memberIcon_id = #{memberIcon_id,jdbcType=BIGINT}</if>
+		<if test="admin_login_logo_id != null">and admin_login_logo_id = #{admin_login_logo_id,jdbcType=BIGINT}</if>
+		<if test="admin_manage_logo_id != null">and admin_manage_logo_id = #{admin_manage_logo_id,jdbcType=BIGINT}</if>
+		<if test="weixin_qr_img_id != null">and weixin_qr_img_id = #{weixin_qr_img_id,jdbcType=BIGINT}</if>
+		<if test="store_weixin_logo_id != null">and store_weixin_logo_id = #{store_weixin_logo_id,jdbcType=BIGINT}</if>
+		<if test="welcome_img_id != null">and welcome_img_id = #{welcome_img_id,jdbcType=BIGINT}</if>
+		<if test="qr_logo_id != null">and qr_logo_id = #{qr_logo_id,jdbcType=BIGINT}</if>
+		<if test="Website_ico_id != null">and Website_ico_id = #{Website_ico_id,jdbcType=BIGINT}</if>
+		<if test="websiteLogo_wide_id != null">and websiteLogo_wide_id = #{websiteLogo_wide_id,jdbcType=BIGINT}</if>
+		<if test="lucenePath != null">and lucenePath = #{lucenePath,jdbcType=VARCHAR}</if>
+		<if test="direct_selling != null">and direct_selling = #{direct_selling,jdbcType=BIGINT}</if>
+		<if test="direct_selling_first_level_rate != null">and direct_selling_first_level_rate = #{direct_selling_first_level_rate,jdbcType=DECIMAL}</if>
+		<if test="direct_selling_second_level_rate != null">and direct_selling_second_level_rate = #{direct_selling_second_level_rate,jdbcType=DECIMAL}</if>
+		<if test="static_folder != null">and static_folder = #{static_folder,jdbcType=VARCHAR}</if>
+		<if test="vm_folder != null">and vm_folder = #{vm_folder,jdbcType=VARCHAR}</if>
+		<if test="cdnServer != null">and cdnServer = #{cdnServer,jdbcType=VARCHAR}</if>
+				
+		
+	</sql>
+	<sql id="ifStatement">
+		title= #{title},
+		keywords= #{keywords},
+		description= #{description},
+		address= #{address},
+		poweredby= #{poweredby},
+		copyRight= #{copyRight},
+		meta_generator= #{meta_generator},
+		meta_author= #{meta_author},
+		company_name= #{company_name},
+		uploadFilePath= #{uploadFilePath},
+		sysLanguage= #{sysLanguage},
+		sysPcLanguage= #{sysPcLanguage},
+		sysStoreLanguage= #{sysStoreLanguage},
+		integralRate= #{integralRate},
+		smsEnbale= #{smsEnbale},
+		smsURL= #{smsURL},
+		smsUserName= #{smsUserName},
+		smsPassword= #{smsPassword},
+		smsTest= #{smsTest},
+		emailEnable= #{emailEnable},
+		emailHost= #{emailHost},
+		emailPort= #{emailPort},
+		emailUser= #{emailUser},
+		emailUserName= #{emailUserName},
+		emailPws= #{emailPws},
+		emailTest= #{emailTest},
+		websiteName= #{websiteName},
+		hotSearch= #{hotSearch},
+		websiteCss= #{websiteCss},
+		<if test="websiteLogo != null and websiteLogo.id != null">websiteLogo_id = #{websiteLogo.id,jdbcType=BIGINT},</if>
+		<if test="websiteLogo == null or websiteLogo.id == null">websiteLogo_id = null,</if>
+		codeStat= #{codeStat},
+		websiteState= #{websiteState},
+		visitorConsult= #{visitorConsult},
+		closeReason= #{closeReason},
+		securityCodeType= #{securityCodeType},
+		securityCodeRegister= #{securityCodeRegister},
+		securityCodeLogin= #{securityCodeLogin},
+		securityCodeConsult= #{securityCodeConsult},
+		imageSuffix= #{imageSuffix},
+		imageWebServer= #{imageWebServer},
+		imageFilesize= #{imageFilesize},
+		smallWidth= #{smallWidth},
+		smallHeight= #{smallHeight},
+		middleWidth= #{middleWidth},
+		middleHeight= #{middleHeight},
+		bigWidth= #{bigWidth},
+		bigHeight= #{bigHeight},
+		integral= #{integral},
+		integralStore= #{integralStore},
+		voucher= #{voucher},
+		deposit= #{deposit},
+		groupBuy= #{groupBuy},
+		group_meal_gold= #{group_meal_gold},
+		gold= #{gold},
+		goldMarketValue= #{goldMarketValue},
+		memberRegister= #{memberRegister},
+		memberDayLogin= #{memberDayLogin},
+		indentComment= #{indentComment},
+		consumptionRatio= #{consumptionRatio},
+		everyIndentLimit= #{everyIndentLimit},
+		imageSaveType= #{imageSaveType},
+		complaint_time= #{complaint_time},
+		<if test="storeImage != null and storeImage.id != null">storeImage_id = #{storeImage.id,jdbcType=BIGINT},</if>
+		<if test="storeImage == null or storeImage.id == null">storeImage_id = null,</if>
+		<if test="goodsImage != null and goodsImage.id != null">goodsImage_id = #{goodsImage.id,jdbcType=BIGINT},</if>
+		<if test="goodsImage == null or goodsImage.id == null">goodsImage_id = null,</if>
+		<if test="memberIcon != null and memberIcon.id != null">memberIcon_id = #{memberIcon.id,jdbcType=BIGINT},</if>
+		<if test="memberIcon == null or memberIcon.id == null">memberIcon_id = null,</if>
+		store_allow= #{store_allow},
+		user_level= #{user_level},
+		templates= #{templates},
+		store_payment= #{store_payment},
+		share_code= #{share_code},
+		ztc_status= #{ztc_status},
+		ztc_goods_view= #{ztc_goods_view},
+		ztc_price= #{ztc_price},
+		second_domain_open= #{second_domain_open},
+		domain_allow_count= #{domain_allow_count},
+		sys_domain= #{sys_domain},
+		qq_login= #{qq_login},
+		qq_login_id= #{qq_login_id},
+		qq_login_key= #{qq_login_key},
+		qq_domain_code= #{qq_domain_code},
+		sina_login= #{sina_login},
+		sina_login_id= #{sina_login_id},
+		sina_login_key= #{sina_login_key},
+		sina_domain_code= #{sina_domain_code},
+		lucene_update= #{lucene_update},
+		combin_status= #{combin_status},
+		combin_amount= #{combin_amount},
+		combin_count= #{combin_count},
+		combin_scheme_count= #{combin_scheme_count},
+		service_telphone_list= #{service_telphone_list},
+		service_qq_list= #{service_qq_list},
+		<if test="admin_login_logo != null and admin_login_logo.id != null">admin_login_logo_id = #{admin_login_logo.id,jdbcType=BIGINT},</if>
+		<if test="admin_login_logo == null or admin_login_logo.id == null">admin_login_logo_id = null,</if>
+		<if test="admin_manage_logo != null and admin_manage_logo.id != null">admin_manage_logo_id = #{admin_manage_logo.id,jdbcType=BIGINT},</if>
+		<if test="admin_manage_logo == null or admin_manage_logo.id == null">admin_manage_logo_id = null,</if>
+		auto_order_notice= #{auto_order_notice},
+		auto_order_confirm= #{auto_order_confirm},
+		auto_order_return= #{auto_order_return},
+		auto_order_evaluate= #{auto_order_evaluate},
+		grouplife_order_return= #{grouplife_order_return},
+		kuaidi_id= #{kuaidi_id},
+		kuaidi_id2= #{kuaidi_id2},
+		kuaidi_type= #{kuaidi_type},
+		currency_code= #{currency_code},
+		weixin_store= #{weixin_store},
+		<if test="weixin_qr_img != null and weixin_qr_img.id != null">weixin_qr_img_id = #{weixin_qr_img.id,jdbcType=BIGINT},</if>
+		<if test="weixin_qr_img == null or weixin_qr_img.id == null">weixin_qr_img_id = null,</if>
+		weixin_account= #{weixin_account},
+		weixin_token= #{weixin_token},
+		weixin_appId= #{weixin_appId},
+		weixin_appSecret= #{weixin_appSecret},
+		weixin_welecome_content= #{weixin_welecome_content},
+		<if test="store_weixin_logo != null and store_weixin_logo.id != null">store_weixin_logo_id = #{store_weixin_logo.id,jdbcType=BIGINT},</if>
+		<if test="store_weixin_logo == null or store_weixin_logo.id == null">store_weixin_logo_id = null,</if>
+		payoff_count= #{payoff_count},
+		payoff_date= #{payoff_date},
+		payoff_mag_type= #{payoff_mag_type},
+		payoff_mag_default= #{payoff_mag_default},
+		payoff_mag_auto= #{payoff_mag_auto},
+		payoff_all_sale= #{payoff_all_sale},
+		payoff_all_commission= #{payoff_all_commission},
+		payoff_all_amount= #{payoff_all_amount},
+		payoff_all_amount_reality= #{payoff_all_amount_reality},
+		ofcard= #{ofcard},
+		ofcard_userid= #{ofcard_userid},
+		ofcard_userpws= #{ofcard_userpws},
+		ofcard_mobile_profit= #{ofcard_mobile_profit},
+		app_download= #{app_download},
+		android_download= #{android_download},
+		android_version= #{android_version},
+		ios_download= #{ios_download},
+		ios_version= #{ios_version},
+		app_seller_download= #{app_seller_download},
+		android_seller_download= #{android_seller_download},
+		android_seller_version= #{android_seller_version},
+		ios_seller_download= #{ios_seller_download},
+		ios_seller_version= #{ios_seller_version},
+		buygift_status= #{buygift_status},
+		buygift_meal_gold= #{buygift_meal_gold},
+		enoughreduce_status= #{enoughreduce_status},
+		enoughreduce_meal_gold= #{enoughreduce_meal_gold},
+		enoughreduce_max_count= #{enoughreduce_max_count},
+		email_buy= #{email_buy},
+		email_buy_cost= #{email_buy_cost},
+		sms_buy= #{sms_buy},
+		sms_buy_cost= #{sms_buy_cost},
+		whether_free= #{whether_free},
+		lucenen_queue= #{lucenen_queue},
+		lucenen_cluster= #{lucenen_cluster},
+		
+		sms_queue= #{sms_queue},
+		email_queue= #{email_queue},
+		circle_open= #{circle_open},
+		circle_count= #{circle_count},
+		circle_limit= #{circle_limit},
+		circle_audit= #{circle_audit},
+		publish_post_limit= #{publish_post_limit},
+		publish_seller_limit= #{publish_seller_limit},
+		<if test="welcome_img != null and welcome_img.id != null">welcome_img_id = #{welcome_img.id,jdbcType=BIGINT},</if>
+		<if test="welcome_img == null or welcome_img.id == null">welcome_img_id = null,</if>
+		<if test="qr_logo != null and qr_logo.id != null">qr_logo_id = #{qr_logo.id,jdbcType=BIGINT},</if>
+		<if test="qr_logo == null or qr_logo.id == null">qr_logo_id = null,</if>
+		<if test="Website_ico != null and Website_ico.id != null">Website_ico_id = #{Website_ico.id,jdbcType=BIGINT},</if>
+		<if test="Website_ico == null or Website_ico.id == null">Website_ico_id = null,</if>
+		qr_login= #{qr_login},
+		apiKey= #{apiKey},
+		secretKey= #{secretKey},
+		evaluate_edit_deadline= #{evaluate_edit_deadline},
+		evaluate_add_deadline= #{evaluate_add_deadline},
+		smsPlatType= #{smsPlatType},
+		ymrt_smsURL= #{ymrt_smsURL},
+		ymrt_smsUserName= #{ymrt_smsUserName},
+		ymrt_smsPassword= #{ymrt_smsPassword},
+		ymrt_smsTest= #{ymrt_smsTest},
+		<if test="websiteLogo_wide != null and websiteLogo_wide.id != null">websiteLogo_wide_id = #{websiteLogo_wide.id,jdbcType=BIGINT},</if>
+		<if test="websiteLogo_wide == null or websiteLogo_wide.id == null">websiteLogo_wide_id = null,</if>
+		sign_integral= #{sign_integral},
+		auto_order_cancel= #{auto_order_cancel},
+		app_push_buyer_apiKey= #{app_push_buyer_apiKey},
+		app_push_buyer_secretKey= #{app_push_buyer_secretKey},
+		app_push_seller_apiKey= #{app_push_seller_apiKey},
+		app_push_seller_secretKey= #{app_push_seller_secretKey},
+		app_navigator= #{app_navigator},
+		app_launch_ad= #{app_launch_ad},
+		email_register= #{email_register},
+		phone_register= #{phone_register},
+		weixin_login= #{weixin_login},
+		weixin_navigator= #{weixin_navigator},
+		open_weixin_appId= #{open_weixin_appId},
+		open_weixin_appSecret= #{open_weixin_appSecret},
+		index_type= #{index_type},
+		cloudbuy= #{cloudbuy},
+		adminUrl= #{adminUrl},
+		sellerUrl= #{sellerUrl},
+		indexUrl= #{indexUrl},
+		h5Url= #{h5Url},
+		lucenePath= #{lucenePath},
+		direct_selling= #{direct_selling},
+		direct_selling_first_level_rate= #{direct_selling_first_level_rate},
+		direct_selling_second_level_rate= #{direct_selling_second_level_rate},
+		static_folder= #{static_folder},
+		vm_folder= #{vm_folder},
+		cdnServer= #{cdnServer}
+		
+		
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_sysconfig 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_sysconfig obj 
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_sysconfig obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.SysConfig" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_sysconfig(
+			addTime,deleteStatus,title,keywords,description,address,poweredby,copyRight,meta_generator,meta_author,company_name,uploadFilePath,sysLanguage,sysPcLanguage,sysStoreLanguage,integralRate,smsEnbale,smsURL,smsUserName,smsPassword,smsTest,emailEnable,emailHost,emailPort,emailUser,emailUserName,emailPws,emailTest,websiteName,hotSearch,websiteCss,websiteLogo_id,codeStat,websiteState,visitorConsult,closeReason,securityCodeType,securityCodeRegister,securityCodeLogin,securityCodeConsult,imageSuffix,imageWebServer,imageFilesize,smallWidth,smallHeight,middleWidth,middleHeight,bigWidth,bigHeight,integral,integralStore,voucher,deposit,groupBuy,group_meal_gold,gold,goldMarketValue,memberRegister,memberDayLogin,indentComment,consumptionRatio,everyIndentLimit,imageSaveType,complaint_time,storeImage_id,goodsImage_id,memberIcon_id,store_allow,user_level,templates,store_payment,share_code,ztc_status,ztc_goods_view,ztc_price,second_domain_open,domain_allow_count,sys_domain,qq_login,qq_login_id,qq_login_key,qq_domain_code,sina_login,sina_login_id,sina_login_key,sina_domain_code,lucene_update,combin_status,combin_amount,combin_count,combin_scheme_count,service_telphone_list,service_qq_list,admin_login_logo_id,admin_manage_logo_id,auto_order_notice,auto_order_confirm,auto_order_return,auto_order_evaluate,grouplife_order_return,kuaidi_id,kuaidi_id2,kuaidi_type,currency_code,weixin_store,weixin_qr_img_id,weixin_account,weixin_token,weixin_appId,weixin_appSecret,weixin_welecome_content,store_weixin_logo_id,payoff_count,payoff_date,payoff_mag_type,payoff_mag_default,payoff_mag_auto,payoff_all_sale,payoff_all_commission,payoff_all_amount,payoff_all_amount_reality,ofcard,ofcard_userid,ofcard_userpws,ofcard_mobile_profit,app_download,android_download,android_version,ios_download,ios_version,app_seller_download,android_seller_download,android_seller_version,ios_seller_download,ios_seller_version,buygift_status,buygift_meal_gold,enoughreduce_status,enoughreduce_meal_gold,enoughreduce_max_count,email_buy,email_buy_cost,sms_buy,sms_buy_cost,whether_free,lucenen_queue,lucenen_cluster,sms_queue,email_queue,circle_open,circle_count,circle_limit,circle_audit,publish_post_limit,publish_seller_limit,welcome_img_id,qr_logo_id,Website_ico_id,qr_login,apiKey,secretKey,evaluate_edit_deadline,evaluate_add_deadline,smsPlatType,ymrt_smsURL,ymrt_smsUserName,ymrt_smsPassword,ymrt_smsTest,websiteLogo_wide_id,sign_integral,auto_order_cancel,app_push_buyer_apiKey,app_push_buyer_secretKey,app_push_seller_apiKey,app_push_seller_secretKey,app_navigator,app_launch_ad,email_register,phone_register,weixin_login,weixin_navigator,open_weixin_appId,open_weixin_appSecret,index_type,cloudbuy,adminUrl,sellerUrl,indexUrl,h5Url,lucenePath,direct_selling,direct_selling_first_level_rate,direct_selling_second_level_rate,static_folder,vm_folder,cdnServer
+		)
+		values(
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR},
+		#{keywords,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR},
+		#{poweredby,jdbcType=VARCHAR},
+		#{copyRight,jdbcType=VARCHAR},
+		#{meta_generator,jdbcType=VARCHAR},
+		#{meta_author,jdbcType=VARCHAR},
+		#{company_name,jdbcType=VARCHAR},
+		#{uploadFilePath,jdbcType=VARCHAR},
+		#{sysLanguage,jdbcType=VARCHAR},
+		#{sysPcLanguage,jdbcType=VARCHAR},
+		#{sysStoreLanguage,jdbcType=VARCHAR},
+		#{integralRate,jdbcType=INTEGER},
+		#{smsEnbale,jdbcType=BIT},
+		#{smsURL,jdbcType=VARCHAR},
+		#{smsUserName,jdbcType=VARCHAR},
+		#{smsPassword,jdbcType=VARCHAR},
+		#{smsTest,jdbcType=VARCHAR},
+		#{emailEnable,jdbcType=BIT},
+		#{emailHost,jdbcType=VARCHAR},
+		#{emailPort,jdbcType=INTEGER},
+		#{emailUser,jdbcType=VARCHAR},
+		#{emailUserName,jdbcType=VARCHAR},
+		#{emailPws,jdbcType=VARCHAR},
+		#{emailTest,jdbcType=VARCHAR},
+		#{websiteName,jdbcType=VARCHAR},
+		#{hotSearch,jdbcType=VARCHAR},
+		#{websiteCss,jdbcType=VARCHAR},
+		#{codeStat,jdbcType=VARCHAR},
+		#{websiteState,jdbcType=BIT},
+		#{visitorConsult,jdbcType=BIT},
+		#{closeReason,jdbcType=VARCHAR},
+		#{securityCodeType,jdbcType=VARCHAR},
+		#{securityCodeRegister,jdbcType=BIT},
+		#{securityCodeLogin,jdbcType=BIT},
+		#{securityCodeConsult,jdbcType=BIT},
+		#{imageSuffix,jdbcType=VARCHAR},
+		#{imageWebServer,jdbcType=VARCHAR},
+		#{imageFilesize,jdbcType=INTEGER},
+		#{smallWidth,jdbcType=INTEGER},
+		#{smallHeight,jdbcType=INTEGER},
+		#{middleWidth,jdbcType=INTEGER},
+		#{middleHeight,jdbcType=INTEGER},
+		#{bigWidth,jdbcType=INTEGER},
+		#{bigHeight,jdbcType=INTEGER},
+		#{integral,jdbcType=BIT},
+		#{integralStore,jdbcType=BIT},
+		#{voucher,jdbcType=BIT},
+		#{deposit,jdbcType=BIT},
+		#{groupBuy,jdbcType=BIT},
+		#{group_meal_gold,jdbcType=INTEGER},
+		#{gold,jdbcType=BIT},
+		#{goldMarketValue,jdbcType=INTEGER},
+		#{memberRegister,jdbcType=INTEGER},
+		#{memberDayLogin,jdbcType=INTEGER},
+		#{indentComment,jdbcType=INTEGER},
+		#{consumptionRatio,jdbcType=INTEGER},
+		#{everyIndentLimit,jdbcType=INTEGER},
+		#{imageSaveType,jdbcType=VARCHAR},
+		#{complaint_time,jdbcType=INTEGER},
+		#{store_allow,jdbcType=BIT},
+		#{user_level,jdbcType=VARCHAR},
+		#{templates,jdbcType=VARCHAR},
+		#{store_payment,jdbcType=VARCHAR},
+		#{share_code,jdbcType=VARCHAR},
+		#{ztc_status,jdbcType=BIT},
+		#{ztc_goods_view,jdbcType=INTEGER},
+		#{ztc_price,jdbcType=INTEGER},
+		#{second_domain_open,jdbcType=BIT},
+		#{domain_allow_count,jdbcType=INTEGER},
+		#{sys_domain,jdbcType=VARCHAR},
+		#{qq_login,jdbcType=BIT},
+		#{qq_login_id,jdbcType=VARCHAR},
+		#{qq_login_key,jdbcType=VARCHAR},
+		#{qq_domain_code,jdbcType=VARCHAR},
+		#{sina_login,jdbcType=BIT},
+		#{sina_login_id,jdbcType=VARCHAR},
+		#{sina_login_key,jdbcType=VARCHAR},
+		#{sina_domain_code,jdbcType=VARCHAR},
+		#{lucene_update,jdbcType=TIMESTAMP},
+		#{combin_status,jdbcType=INTEGER},
+		#{combin_amount,jdbcType=INTEGER},
+		#{combin_count,jdbcType=INTEGER},
+		#{combin_scheme_count,jdbcType=INTEGER},
+		#{service_telphone_list,jdbcType=VARCHAR},
+		#{service_qq_list,jdbcType=VARCHAR},
+		#{auto_order_notice,jdbcType=INTEGER},
+		#{auto_order_confirm,jdbcType=INTEGER},
+		#{auto_order_return,jdbcType=INTEGER},
+		#{auto_order_evaluate,jdbcType=INTEGER},
+		#{grouplife_order_return,jdbcType=INTEGER},
+		#{kuaidi_id,jdbcType=VARCHAR},
+		#{kuaidi_id2,jdbcType=VARCHAR},
+		#{kuaidi_type,jdbcType=INTEGER},
+		#{currency_code,jdbcType=VARCHAR},
+		#{weixin_store,jdbcType=INTEGER},
+		#{weixin_account,jdbcType=VARCHAR},
+		#{weixin_token,jdbcType=VARCHAR},
+		#{weixin_appId,jdbcType=VARCHAR},
+		#{weixin_appSecret,jdbcType=VARCHAR},
+		#{weixin_welecome_content,jdbcType=VARCHAR},
+		#{payoff_count,jdbcType=INTEGER},
+		#{payoff_date,jdbcType=TIMESTAMP},
+		#{payoff_mag_type,jdbcType=INTEGER},
+		#{payoff_mag_default,jdbcType=VARCHAR},
+		#{payoff_mag_auto,jdbcType=VARCHAR},
+		#{payoff_all_sale,jdbcType=DECIMAL},
+		#{payoff_all_commission,jdbcType=DECIMAL},
+		#{payoff_all_amount,jdbcType=DECIMAL},
+		#{payoff_all_amount_reality,jdbcType=DECIMAL},
+		#{ofcard,jdbcType=BIT},
+		#{ofcard_userid,jdbcType=VARCHAR},
+		#{ofcard_userpws,jdbcType=VARCHAR},
+		#{ofcard_mobile_profit,jdbcType=DECIMAL},
+		#{app_download,jdbcType=INTEGER},
+		#{android_download,jdbcType=VARCHAR},
+		#{android_version,jdbcType=VARCHAR},
+		#{ios_download,jdbcType=VARCHAR},
+		#{ios_version,jdbcType=VARCHAR},
+		#{app_seller_download,jdbcType=INTEGER},
+		#{android_seller_download,jdbcType=VARCHAR},
+		#{android_seller_version,jdbcType=VARCHAR},
+		#{ios_seller_download,jdbcType=VARCHAR},
+		#{ios_seller_version,jdbcType=VARCHAR},
+		#{buygift_status,jdbcType=INTEGER},
+		#{buygift_meal_gold,jdbcType=INTEGER},
+		#{enoughreduce_status,jdbcType=INTEGER},
+		#{enoughreduce_meal_gold,jdbcType=INTEGER},
+		#{enoughreduce_max_count,jdbcType=INTEGER},
+		#{email_buy,jdbcType=INTEGER},
+		#{email_buy_cost,jdbcType=INTEGER},
+		#{sms_buy,jdbcType=INTEGER},
+		#{sms_buy_cost,jdbcType=INTEGER},
+		#{whether_free,jdbcType=INTEGER},
+		#{lucenen_queue,jdbcType=INTEGER},
+		#{lucenen_cluster,jdbcType=INTEGER},
+		
+		#{sms_queue,jdbcType=INTEGER},
+		#{email_queue,jdbcType=INTEGER},
+		#{circle_open,jdbcType=INTEGER},
+		#{circle_count,jdbcType=INTEGER},
+		#{circle_limit,jdbcType=INTEGER},
+		#{circle_audit,jdbcType=INTEGER},
+		#{publish_post_limit,jdbcType=INTEGER},
+		#{publish_seller_limit,jdbcType=INTEGER},
+		#{qr_login,jdbcType=INTEGER},
+		#{apiKey,jdbcType=VARCHAR},
+		#{secretKey,jdbcType=VARCHAR},
+		#{evaluate_edit_deadline,jdbcType=INTEGER},
+		#{evaluate_add_deadline,jdbcType=INTEGER},
+		#{smsPlatType,jdbcType=BIGINT},
+		#{ymrt_smsURL,jdbcType=VARCHAR},
+		#{ymrt_smsUserName,jdbcType=VARCHAR},
+		#{ymrt_smsPassword,jdbcType=VARCHAR},
+		#{ymrt_smsTest,jdbcType=VARCHAR},
+		#{sign_integral,jdbcType=BIGINT},
+		#{auto_order_cancel,jdbcType=BIGINT},
+		#{app_push_buyer_apiKey,jdbcType=VARCHAR},
+		#{app_push_buyer_secretKey,jdbcType=VARCHAR},
+		#{app_push_seller_apiKey,jdbcType=VARCHAR},
+		#{app_push_seller_secretKey,jdbcType=VARCHAR},
+		#{app_navigator,jdbcType=VARCHAR},
+		#{app_launch_ad,jdbcType=VARCHAR},
+		#{email_register,jdbcType=BIGINT},
+		#{phone_register,jdbcType=BIGINT},
+		#{weixin_login,jdbcType=BIGINT},
+		#{weixin_navigator,jdbcType=VARCHAR},
+		#{open_weixin_appId,jdbcType=VARCHAR},
+		#{open_weixin_appSecret,jdbcType=VARCHAR},
+		#{index_type,jdbcType=BIGINT},
+		#{cloudbuy,jdbcType=BIGINT},
+		#{adminUrl,jdbcType=VARCHAR},
+		#{sellerUrl,jdbcType=VARCHAR},
+		#{indexUrl,jdbcType=VARCHAR},
+		#{h5Url,jdbcType=VARCHAR},
+		#{lucenePath,jdbcType=VARCHAR},
+		#{direct_selling,jdbcType=BIGINT},
+		#{direct_selling_first_level_rate,jdbcType=DECIMAL},
+		#{direct_selling_second_level_rate,jdbcType=DECIMAL},
+		#{static_folder,jdbcType=VARCHAR},
+		#{vm_folder,jdbcType=VARCHAR},
+		#{cdnServer,jdbcType=VARCHAR}
+		
+		)
+	</insert>
+	<update id="update" parameterType="com.redpigmall.domain.SysConfig">
+		update redpigmall_sysconfig 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getWebsiteLogoByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			websiteLogo_id= #{websiteLogo_id,jdbcType=BIGINT}
+	</select>
+	<select id="getStoreImageByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			storeImage_id= #{storeImage_id,jdbcType=BIGINT}
+	</select>
+	<select id="getGoodsImageByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			goodsImage_id= #{goodsImage_id,jdbcType=BIGINT}
+	</select>
+	<select id="getMemberIconByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			memberIcon_id= #{memberIcon_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAdminLoginLogoByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			admin_login_logo_id= #{admin_login_logo_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAdminManageLogoByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			admin_manage_logo_id= #{admin_manage_logo_id,jdbcType=BIGINT}
+	</select>
+	<select id="getWeixinQrImgByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			weixin_qr_img_id= #{weixin_qr_img_id,jdbcType=BIGINT}
+	</select>
+	<select id="getStoreWeixinLogoByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			store_weixin_logo_id= #{store_weixin_logo_id,jdbcType=BIGINT}
+	</select>
+	<select id="getWelcomeImgByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			welcome_img_id= #{welcome_img_id,jdbcType=BIGINT}
+	</select>
+	<select id="getQrLogoByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			qr_logo_id= #{qr_logo_id,jdbcType=BIGINT}
+	</select>
+	<select id="getWebsiteIcoByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			Website_ico_id= #{Website_ico_id,jdbcType=BIGINT}
+	</select>
+	<select id="getWebsiteLogoWideByAccessoryId" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where
+			websiteLogo_wide_id= #{websiteLogo_wide_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.SysConfig" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_sysconfig(addTime,deleteStatus,title,keywords,description,address,poweredby,copyRight,meta_generator,meta_author,company_name,uploadFilePath,sysLanguage,sysPcLanguage,sysStoreLanguage,integralRate,smsEnbale,smsURL,smsUserName,smsPassword,smsTest,emailEnable,emailHost,emailPort,emailUser,emailUserName,emailPws,emailTest,websiteName,hotSearch,websiteCss,codeStat,websiteState,visitorConsult,closeReason,securityCodeType,securityCodeRegister,securityCodeLogin,securityCodeConsult,imageSuffix,imageWebServer,imageFilesize,smallWidth,smallHeight,middleWidth,middleHeight,bigWidth,bigHeight,integral,integralStore,voucher,deposit,groupBuy,group_meal_gold,gold,goldMarketValue,memberRegister,memberDayLogin,indentComment,consumptionRatio,everyIndentLimit,imageSaveType,complaint_time,store_allow,user_level,templates,store_payment,share_code,ztc_status,ztc_goods_view,ztc_price,second_domain_open,domain_allow_count,sys_domain,qq_login,qq_login_id,qq_login_key,qq_domain_code,sina_login,sina_login_id,sina_login_key,sina_domain_code,lucene_update,combin_status,combin_amount,combin_count,combin_scheme_count,service_telphone_list,service_qq_list,auto_order_notice,auto_order_confirm,auto_order_return,auto_order_evaluate,grouplife_order_return,kuaidi_id,kuaidi_id2,kuaidi_type,currency_code,weixin_store,weixin_account,weixin_token,weixin_appId,weixin_appSecret,weixin_welecome_content,payoff_count,payoff_date,payoff_mag_type,payoff_mag_default,payoff_mag_auto,payoff_all_sale,payoff_all_commission,payoff_all_amount,payoff_all_amount_reality,ofcard,ofcard_userid,ofcard_userpws,ofcard_mobile_profit,app_download,android_download,android_version,ios_download,ios_version,app_seller_download,android_seller_download,android_seller_version,ios_seller_download,ios_seller_version,buygift_status,buygift_meal_gold,enoughreduce_status,enoughreduce_meal_gold,enoughreduce_max_count,email_buy,email_buy_cost,sms_buy,sms_buy_cost,whether_free,lucenen_queue,lucenen_cluster,sms_queue,email_queue,circle_open,circle_count,circle_limit,circle_audit,publish_post_limit,publish_seller_limit,qr_login,apiKey,secretKey,evaluate_edit_deadline,evaluate_add_deadline,smsPlatType,ymrt_smsURL,ymrt_smsUserName,ymrt_smsPassword,ymrt_smsTest,sign_integral,auto_order_cancel,app_push_buyer_apiKey,app_push_buyer_secretKey,app_push_seller_apiKey,app_push_seller_secretKey,app_navigator,app_launch_ad,email_register,phone_register,weixin_login,weixin_navigator,open_weixin_appId,open_weixin_appSecret,index_type,cloudbuy,adminUrl,sellerUrl,indexUrl,h5Url,lucenePath,direct_selling,direct_selling_first_level_rate,direct_selling_second_level_rate,websiteLogo_id,storeImage_id,goodsImage_id,memberIcon_id,admin_login_logo_id,admin_manage_logo_id,weixin_qr_img_id,store_weixin_logo_id,welcome_img_id,qr_logo_id,Website_ico_id,websiteLogo_wide_id,static_folder,vm_folder,cdnServer)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{keywords,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{poweredby,jdbcType=VARCHAR},#{copyRight,jdbcType=VARCHAR},#{meta_generator,jdbcType=VARCHAR},#{meta_author,jdbcType=VARCHAR},#{company_name,jdbcType=VARCHAR},#{uploadFilePath,jdbcType=VARCHAR},#{sysLanguage,jdbcType=VARCHAR},#{sysPcLanguage,jdbcType=VARCHAR},#{sysStoreLanguage,jdbcType=VARCHAR},#{integralRate,jdbcType=INTEGER},#{smsEnbale,jdbcType=BIT},#{smsURL,jdbcType=VARCHAR},#{smsUserName,jdbcType=VARCHAR},#{smsPassword,jdbcType=VARCHAR},#{smsTest,jdbcType=VARCHAR},#{emailEnable,jdbcType=BIT},#{emailHost,jdbcType=VARCHAR},#{emailPort,jdbcType=INTEGER},#{emailUser,jdbcType=VARCHAR},#{emailUserName,jdbcType=VARCHAR},#{emailPws,jdbcType=VARCHAR},#{emailTest,jdbcType=VARCHAR},#{websiteName,jdbcType=VARCHAR},#{hotSearch,jdbcType=VARCHAR},#{websiteCss,jdbcType=VARCHAR},#{codeStat,jdbcType=VARCHAR},#{websiteState,jdbcType=BIT},#{visitorConsult,jdbcType=BIT},#{closeReason,jdbcType=VARCHAR},#{securityCodeType,jdbcType=VARCHAR},#{securityCodeRegister,jdbcType=BIT},#{securityCodeLogin,jdbcType=BIT},#{securityCodeConsult,jdbcType=BIT},#{imageSuffix,jdbcType=VARCHAR},#{imageWebServer,jdbcType=VARCHAR},#{imageFilesize,jdbcType=INTEGER},#{smallWidth,jdbcType=INTEGER},#{smallHeight,jdbcType=INTEGER},#{middleWidth,jdbcType=INTEGER},#{middleHeight,jdbcType=INTEGER},#{bigWidth,jdbcType=INTEGER},#{bigHeight,jdbcType=INTEGER},#{integral,jdbcType=BIT},#{integralStore,jdbcType=BIT},#{voucher,jdbcType=BIT},#{deposit,jdbcType=BIT},#{groupBuy,jdbcType=BIT},#{group_meal_gold,jdbcType=INTEGER},#{gold,jdbcType=BIT},#{goldMarketValue,jdbcType=INTEGER},#{memberRegister,jdbcType=INTEGER},#{memberDayLogin,jdbcType=INTEGER},#{indentComment,jdbcType=INTEGER},#{consumptionRatio,jdbcType=INTEGER},#{everyIndentLimit,jdbcType=INTEGER},#{imageSaveType,jdbcType=VARCHAR},#{complaint_time,jdbcType=INTEGER},#{store_allow,jdbcType=BIT},#{user_level,jdbcType=VARCHAR},#{templates,jdbcType=VARCHAR},#{store_payment,jdbcType=VARCHAR},#{share_code,jdbcType=VARCHAR},#{ztc_status,jdbcType=BIT},#{ztc_goods_view,jdbcType=INTEGER},#{ztc_price,jdbcType=INTEGER},#{second_domain_open,jdbcType=BIT},#{domain_allow_count,jdbcType=INTEGER},#{sys_domain,jdbcType=VARCHAR},#{qq_login,jdbcType=BIT},#{qq_login_id,jdbcType=VARCHAR},#{qq_login_key,jdbcType=VARCHAR},#{qq_domain_code,jdbcType=VARCHAR},#{sina_login,jdbcType=BIT},#{sina_login_id,jdbcType=VARCHAR},#{sina_login_key,jdbcType=VARCHAR},#{sina_domain_code,jdbcType=VARCHAR},#{lucene_update,jdbcType=TIMESTAMP},#{combin_status,jdbcType=INTEGER},#{combin_amount,jdbcType=INTEGER},#{combin_count,jdbcType=INTEGER},#{combin_scheme_count,jdbcType=INTEGER},#{service_telphone_list,jdbcType=VARCHAR},#{service_qq_list,jdbcType=VARCHAR},#{auto_order_notice,jdbcType=INTEGER},#{auto_order_confirm,jdbcType=INTEGER},#{auto_order_return,jdbcType=INTEGER},#{auto_order_evaluate,jdbcType=INTEGER},#{grouplife_order_return,jdbcType=INTEGER},#{kuaidi_id,jdbcType=VARCHAR},#{kuaidi_id2,jdbcType=VARCHAR},#{kuaidi_type,jdbcType=INTEGER},#{currency_code,jdbcType=VARCHAR},#{weixin_store,jdbcType=INTEGER},#{weixin_account,jdbcType=VARCHAR},#{weixin_token,jdbcType=VARCHAR},#{weixin_appId,jdbcType=VARCHAR},#{weixin_appSecret,jdbcType=VARCHAR},#{weixin_welecome_content,jdbcType=VARCHAR},#{payoff_count,jdbcType=INTEGER},#{payoff_date,jdbcType=TIMESTAMP},#{payoff_mag_type,jdbcType=INTEGER},#{payoff_mag_default,jdbcType=VARCHAR},#{payoff_mag_auto,jdbcType=VARCHAR},#{payoff_all_sale,jdbcType=DECIMAL},#{payoff_all_commission,jdbcType=DECIMAL},#{payoff_all_amount,jdbcType=DECIMAL},#{payoff_all_amount_reality,jdbcType=DECIMAL},#{ofcard,jdbcType=BIT},#{ofcard_userid,jdbcType=VARCHAR},#{ofcard_userpws,jdbcType=VARCHAR},#{ofcard_mobile_profit,jdbcType=DECIMAL},#{app_download,jdbcType=INTEGER},#{android_download,jdbcType=VARCHAR},#{android_version,jdbcType=VARCHAR},#{ios_download,jdbcType=VARCHAR},#{ios_version,jdbcType=VARCHAR},#{app_seller_download,jdbcType=INTEGER},#{android_seller_download,jdbcType=VARCHAR},#{android_seller_version,jdbcType=VARCHAR},#{ios_seller_download,jdbcType=VARCHAR},#{ios_seller_version,jdbcType=VARCHAR},#{buygift_status,jdbcType=INTEGER},#{buygift_meal_gold,jdbcType=INTEGER},#{enoughreduce_status,jdbcType=INTEGER},#{enoughreduce_meal_gold,jdbcType=INTEGER},#{enoughreduce_max_count,jdbcType=INTEGER},#{email_buy,jdbcType=INTEGER},#{email_buy_cost,jdbcType=INTEGER},#{sms_buy,jdbcType=INTEGER},#{sms_buy_cost,jdbcType=INTEGER},#{whether_free,jdbcType=INTEGER},#{lucenen_queue,jdbcType=INTEGER},#{lucenen_cluster,jdbcType=INTEGER},#{sms_queue,jdbcType=INTEGER},#{email_queue,jdbcType=INTEGER},#{circle_open,jdbcType=INTEGER},#{circle_count,jdbcType=INTEGER},#{circle_limit,jdbcType=INTEGER},#{circle_audit,jdbcType=INTEGER},#{publish_post_limit,jdbcType=INTEGER},#{publish_seller_limit,jdbcType=INTEGER},#{qr_login,jdbcType=INTEGER},#{apiKey,jdbcType=VARCHAR},#{secretKey,jdbcType=VARCHAR},#{evaluate_edit_deadline,jdbcType=INTEGER},#{evaluate_add_deadline,jdbcType=INTEGER},#{smsPlatType,jdbcType=BIGINT},#{ymrt_smsURL,jdbcType=VARCHAR},#{ymrt_smsUserName,jdbcType=VARCHAR},#{ymrt_smsPassword,jdbcType=VARCHAR},#{ymrt_smsTest,jdbcType=VARCHAR},#{sign_integral,jdbcType=BIGINT},#{auto_order_cancel,jdbcType=BIGINT},#{app_push_buyer_apiKey,jdbcType=VARCHAR},#{app_push_buyer_secretKey,jdbcType=VARCHAR},#{app_push_seller_apiKey,jdbcType=VARCHAR},#{app_push_seller_secretKey,jdbcType=VARCHAR},#{app_navigator,jdbcType=VARCHAR},#{app_launch_ad,jdbcType=VARCHAR},#{email_register,jdbcType=BIGINT},#{phone_register,jdbcType=BIGINT},#{weixin_login,jdbcType=BIGINT},#{weixin_navigator,jdbcType=VARCHAR},#{open_weixin_appId,jdbcType=VARCHAR},#{open_weixin_appSecret,jdbcType=VARCHAR},#{index_type,jdbcType=BIGINT},#{cloudbuy,jdbcType=BIGINT},#{adminUrl,jdbcType=VARCHAR},#{sellerUrl,jdbcType=VARCHAR},#{indexUrl,jdbcType=VARCHAR},#{h5Url,jdbcType=VARCHAR},#{lucenePath,jdbcType=VARCHAR},#{direct_selling,jdbcType=BIGINT},#{direct_selling_first_level_rate,jdbcType=DECIMAL},#{direct_selling_second_level_rate,jdbcType=DECIMAL},#{websiteLogo.id,jdbcType=BIGINT},#{storeImage.id,jdbcType=BIGINT},#{goodsImage.id,jdbcType=BIGINT},#{memberIcon.id,jdbcType=BIGINT},#{admin_login_logo.id,jdbcType=BIGINT},#{admin_manage_logo.id,jdbcType=BIGINT},#{weixin_qr_img.id,jdbcType=BIGINT},#{store_weixin_logo.id,jdbcType=BIGINT},#{welcome_img.id,jdbcType=BIGINT},#{qr_logo.id,jdbcType=BIGINT},#{Website_ico.id,jdbcType=BIGINT},#{websiteLogo_wide.id,jdbcType=BIGINT},#{static_folder,jdbcType=VARCHAR},#{vm_folder,jdbcType=VARCHAR},#{cdnServer,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.SysConfig">
+		update redpigmall_sysconfig
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_sysconfig where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_sysconfig where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_sysconfig obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.SysConfig" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_sysconfig
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_sysconfig where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

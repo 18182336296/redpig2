@@ -1,0 +1,48 @@
+﻿<div class="site-footer">
+  <div class="footer-related">
+    <div class="footer-article w1210"> 
+    #foreach($ac in $acs)
+    <dl class="col-article col-article-first">
+    <dt>$!ac.className </dt>
+        #foreach($article in $ac.articles)
+        #if($!article.url!="")
+        #set($url="$!article.url")
+        #else
+        #set($url="$!webPath/article_$!{article.id}")
+        #end
+        #if($!article.display)
+        <dd><a rel="nofollow" href="$!url" target="_blank">$!CommUtil.substring("$!article.title",12)</a></dd>
+		#end
+        #end
+      </dl>
+    #end
+    
+</div>
+ 
+        <div class="footer-info clearfix">
+      <div class="info-text">
+      	        #set($navs=$!navTools.queryNav(1,-1))
+      	        #if($!navs.size()>0)
+      	        <p class="nav_bottom">
+			      	#foreach($nav in $navs)
+			        #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+			        	#set($url="$!nav.url")
+			        #else
+			        	#set($url="$!webPath/$!{nav.url}")
+			        #end 
+			        	<a href="$!url" #if($!nav.new_win==1)target="_blank"#end>$!{nav.title}</a>#if($!{velocityCount}<$navs.size())<em>|</em>#end
+			    	#end 
+                </p>
+                #end
+      </div>
+    </div>
+
+<script type="text/javascript">
+
+//预售
+
+</script>
+<script type="text/javascript" src="$!cdnServer/resources/index/themes/68ecshopcom_360buy/js/base.js"></script>
+ 
+  </div>
+</div>

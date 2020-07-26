@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="no">
+<meta name="format-detection" content="telephone=no,address=no">
+<title>优惠券领取 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/style.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+function refreshCode(){
+	jQuery("#code_img").attr("src","$!webPath/coupon/verify?d"+new Date().getTime());
+}
+
+function capture(){
+	
+	jQuery("#theForm").submit();
+}
+
+jQuery(document).ready(function(){
+	jQuery("#theForm").validate({
+      errorPlacement:function(error,element) {
+    	jQuery(".error_b").html("");
+        error.appendTo(jQuery("#check_code").find(".error_b"));  
+        jQuery("#check_code").find(".error_b").show('normal');
+      },
+	  success:function(label){
+	    label.parent().hide();
+	  },								
+	 rules:{
+		   code:{required:true}
+		 },
+	 messages:{
+		   code:{required:"验证码不能为空"}
+		 }
+	});
+});
+
+function possessCoupon(){
+	jQuery(".error_b").html("该优惠券已经领取");
+}
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>领券中心<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="mt50"></div>
+<div class="phone_main">
+		<div class="coupon">
+		#if($!coupon.coupon_surplus_amount<1||$!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+    	<div class="coupon_item cou_none">
+		#else
+    	<div class="coupon_item">
+    	#end
+        	<dl>
+            	<dt><img src="$!imageWebServer/$!coupon.coupon_acc.path/$!coupon.coupon_acc.name" /></dt>
+                <dd><p>¥<span class="big">$!coupon.coupon_amount</span></p><p class="bg">满$!coupon.coupon_order_amount使用</p></dd>
+            </dl>
+            <p class="shop_name">#if(!$coupon.store)$!config.title自营#else<a href="$!webPath/store?id=$!{coupon.store.id}">$!coupon.store.store_name</a>#end</p>
+            <div class="time"><span class="fl">$!CommUtil.formatShortDate($!coupon.coupon_begin_time)--$!CommUtil.formatShortDate($!coupon.coupon_end_time)</span><span class="fr">剩余：$!coupon.coupon_surplus_amount</span></div>
+            
+            <span class="cou_fl">#if(!$!coupon.store)<img src="$!cdnServer/resources/style/system/front/default/images/weixin/coupon_04.png" />
+            					#else<img src="$!cdnServer/resources/style/system/front/default/images/weixin/coupon_05.png" />
+            					#end	
+            </span>
+        </div>
+        #if($!coupon.coupon_surplus_amount>0&&!$!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+        <form name="theForm" id="theForm" action="$!webPath/coupon/apture_goods_coupon" method="post">
+        #end
+        <input type="hidden" name="id" value="$!coupon.id"></input>
+        <div class="cou_yzm"><input id="code" name="code" type="text" placeholder="请输入验证码"/><span class="yzm"><img id="code_img" src="$!webPath/coupon/verify" onclick="refreshCode();"/></span></div>
+        <div id="check_code"><b class="error_b" style="color:red;">$!error</b></div>
+        #if($!coupon.coupon_surplus_amount<1)
+    	<div class="red_submit"><a href="javascript:void(0)">立即领取</a></div>
+    	<span class="state state_none"></span>
+    	#elseif($!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+    	<div class="red_submit"><a href="javascript:void(0)" onclick="possessCoupon();">立即领取</a></div>
+    	<span class="state state_used"></span>
+    	#else
+    	 <div class="red_submit"><a href="javascript:void(0)" onclick="capture();">立即领取</a></div>
+    	#end
+        </form>
+    </div>
+</div>
+</div>
+$!httpInclude.include("/layer")
+</body>
+</html>

@@ -1,0 +1,74 @@
+<style type="text/css">
+
+</style>
+
+<script>
+function search_form(){
+	  var keyword=arguments[0];
+	  var type=arguments[1];
+	  if(keyword!=""&&keyword!=undefined){
+	   jQuery("#keyword").val(keyword);
+	  }
+	  if(type!=""&&type!=undefined){
+	    jQuery("#type").val(type);
+	  }
+	  jQuery("#searchForm").submit();
+	  jQuery("#keyword").val("");
+}
+
+</script>
+#set($img="$!imageWebServer/$!config.websiteLogo.path/$!config.websiteLogo.name")
+
+<div class="header-wrap">
+  <header class="public-head-layout wrapper">
+    <h1 class="site-logo"><a href="$!webPath/index"><img src="$!img" class="pngFix"></a></h1>
+        <div class="head-app"><span class="pic"></span>
+      <div class="download-app">
+       <div class="qrcode"><img src="$!imageWebServer/data/upload/shop/common/mb_app.png"></div>
+        <div class="hint">
+          <h4>扫描二维码</h4>
+          下载手机客户端</div>
+        <div class="addurl">
+                        <a href=$!webPath target="_blank"><i class="icon-android"></i>Android</a>
+                                    <a href="$!webPath" target="_blank"><i class="icon-apple"></i>iPhone</a>
+                        </div>
+      </div>
+    </div>
+        
+    <div id="search" class="head-search-bar">
+	<!--商品和店铺-->
+      
+      <form  target="_blank" id="searchForm" method="post" action="$!webPath/search">
+        <input name="config" type="hidden" id="config" value="$!config.hotSearch" />
+        <input name="type" type="hidden" id="type" value="$!type" />
+        <!-- 
+        <input placeholder="请输入您要搜索的商品关键字" name="keyword" id="keyword"  class="input-text"  maxlength="60" type="text" lang="zh-CN">
+        <input id="button" value="搜索" class="input-submit" type="submit" >
+      	 -->
+<table style="background-color:#E4393C;width:200px;" border="0" align="center" cellpadding="0" cellspacing="0" class="tab_search">
+  <tr>
+		<td>
+			<input type="text" name="keyword" id="keyword" title="Search" class="searchinput" onkeydown="if (event.keyCode==13) {}" onblur="if(this.value=='')value='请输入您要搜索的商品关键字';" onfocus="if(this.value=='请输入您要搜索的商品关键字')value='';" value="请输入您要搜索的商品关键字" size="10"/>
+		</td>
+		<td>&nbsp;&nbsp;&nbsp;<td>
+		<td style="content:middle;">
+			<span class="searchaction" onclick="search_form();">搜索</span>
+		</td>
+	</tr>
+</table>
+      	
+      </form>
+      
+      #if($!config.hotSearch!="")
+	  <!--搜索关键字-->
+      <div class="keyword">热门搜索：        <ul>
+      #foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+                    <li><a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a></li>
+      #end
+      </ul>
+      </div>
+      #end
+    </div>
+    
+  </header>
+</div>

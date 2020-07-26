@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>金币兑换日志-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	  onSelect: function(dateText, inst) { 
+	     jQuery("#day").val("");
+	     jQuery("#ListForm").submit();
+	  }
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	  onSelect: function(dateText, inst) { 
+	     jQuery("#day").val("");
+		 jQuery("#ListForm").submit();
+	}
+  });
+  jQuery(".day a").click(function(){
+	 jQuery("#day").val(jQuery(this).attr("v"));
+	 if(jQuery(this).attr("v")==""){
+	   jQuery("#endTime").val("");
+	   jQuery("#beginTime").val("");
+	 }
+	 jQuery("#ListForm").submit();  
+  });
+  jQuery(".day a").each(function(index, element) {
+	jQuery(".day a").removeClass("this");
+    var d=jQuery("#day").val();
+	if(d=="30")
+	 jQuery(".day a").eq(0).addClass("this");
+	 if(d=="90")
+	 jQuery(".day a").eq(1).addClass("this");
+});
+  jQuery(".list_a a").click(function(){
+	 var v=jQuery(this).html();
+	 if(v=="全部"){
+	    jQuery("#word").val("");
+	 }else{
+		 jQuery("#word").val(v);
+	 }
+	 jQuery("#ListForm").submit();
+  });
+	  jQuery(".list_a a").each(function(index, element) {
+		var v=jQuery("#word").val();
+        if(v==jQuery(this).html()){
+		   jQuery(this).addClass("this");	
+		}else if(v==""){
+		   jQuery(".list_a a").eq(0).addClass("this");
+		}else{
+		   jQuery(this).removeClass("this");	
+		}
+    });
+	  
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+<div class="store_main">
+  <div class="seller_center"> $!httpInclude.include("/nav?op=gold")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/index">商家中心</a></b>><b>其他管理</b>><b>金币日志</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li><i></i><a href='$!webPath/gold_record'>金币兑换</a></li>
+            <li><i></i><a href='$!webPath/gold_record_list'>兑换列表</a></li>
+            <li class="this"><i></i><a href='$!webPath/gold_log'>消费记录</a></li>
+          </ul>
+        </div>
+        <form action="$!webPath/gold_log" method="post" name="ListForm" id="ListForm">
+        <div class="seller_list_box_gold_top">
+            	<div class="seller_list_box_gold_top_t">
+                 
+                	<div class="seller_list_box_gold_top_t_left">
+                      
+                    	<strong>起止日期：</strong>
+                        <span><input name="beginTime" type="text" class="user_title_txt" id="beginTime" placeholder="起始时间" value="$!beginTime" readonly="readonly"/></span>
+                        <i>-</i>
+                        <span><input name="endTime" type="text" class="user_title_txt" id="endTime" placeholder="结束时间" value="$!endTime" readonly="readonly"/></span>
+                        <b class="day"><a v="30" href="javascript:void(0);" >最近一个月</a><a v="90" href="javascript:void(0);" >三个月</a></b>
+                    </div>
+                   
+                    <div class="seller_list_box_gold_top_t_right">
+                    	<i><img src="$!cdnServer/resources/style/system/front/default/images/gold.png" /></i>
+                        <span><b>当前账户金币:</b><strong>$!{user.gold}</strong><b>金币</b></span>
+                        
+                    </div>
+                </div>
+                <div class="seller_list_box_gold_top_b">
+                	<dl>
+                    	<dt>交易分类：</dt>
+                        <dd class="list_a">
+                        	<a href="javascript:void(0);" class="this">全部</a>
+                        	<a href="javascript:void(0);">购买短信</a>
+                            <a href="javascript:void(0);">购买邮件</a>
+                            <a href="javascript:void(0);">申请直通车</a>
+                            <a href="javascript:void(0);">购买团购套餐</a>
+                            <a href="javascript:void(0);">购买组合销售套餐</a>
+                            <a href="javascript:void(0);">购买满就减套餐</a>
+                            <a href="javascript:void(0);">购买满就送套餐</a>
+                            
+                            
+                        </dd>
+                       
+                    </dl>
+
+                </div>
+            </div>
+        <div class="seller_list_box_gold">
+          
+            <div class="operation_gold">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table">
+                <tr id="opertitle" class="opertitle_t">
+                  <th width="25%">操作日期</th>
+                    <th width="10%">金币（个）</th>
+                    <th width="20%">类型</th>
+                    <th align="center">名称</th>
+                </tr>
+                #if($objs.size()>0)
+                #foreach($obj in $objs)
+                <tr>
+                  <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                  <td align="center" class="nmuber">$!obj.gl_count</td>
+                  #if($!obj.gl_type==0)
+                  #set($type="增加")
+                  #end
+                  #if($!obj.gl_type==-1)
+                  #set($type="减少")
+                  #end
+                  <td align="center">$!type</td>
+                  <td  align="center">$!obj.gl_content</td>
+                </tr>
+                #end
+                #else
+                <tr class="operation_gold_hover">
+                  <td colspan="4" align="center"><div class="seller_center_nothing">
+                      <div class="seller_center_nothing_left"><img src="$!cdnServer/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                      <div class="seller_center_nothing_right">暂时没有数据</div>
+                    </div></td>
+                </tr>
+                #end
+              </table>
+            </div>
+             <input id="day" name="day" type="hidden" value="$!day"/>
+            <input id="word" name="word" type="hidden" value="$!word"/>
+            <input id="currentPage" name="currentPage" type="hidden" value="$!currentPage"/>
+            <div class="seller_list_page">
+              <div  class="seller_page_sp">$!gotoPageFormHTML</div>
+            </div>
+         
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

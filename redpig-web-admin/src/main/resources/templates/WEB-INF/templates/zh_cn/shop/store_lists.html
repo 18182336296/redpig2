@@ -1,0 +1,600 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>店铺列表 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+    <script>
+		//模拟筛选框
+function funListbarCheck(){
+var ser=jQuery("#kf").val();
+var obj=jQuery("#kf").parent();
+    if(obj.hasClass("this")){
+		obj.removeClass("this");
+		obj.find("input").val("");
+		jQuery("#service").val(ser);
+	}else{
+		obj.addClass("this");
+		obj.find("input").val(ser);
+		jQuery("#service").val(ser);	
+		
+	}
+	jQuery("#currentPage").val("1");
+/*	if(ser=="no"){
+	jQuery("#service").val(ser);
+	}else{
+	jQuery("#service").val(ser);	
+	}*/
+	jQuery("#ListForm").submit();
+}
+jQuery(document).ready(function(e) {
+
+	var height=jQuery(".shop_list_filtrate").find("dd").css("height");
+	if("40px"==height){
+		jQuery("#z,#s").hide();
+		}else{
+			jQuery(".shop_list_filtrate").find("dd").css("height","40px");
+			jQuery("#z").show();
+			jQuery("#s").hide();
+			
+			}
+			
+			
+	jQuery(".att").click(function(){
+    #if($!user)
+	var u_id=jQuery(this).find("a").attr("user_id");
+	var user_id=parseInt("$!user.id");
+    var uu_id=parseInt(u_id);
+    var status=true;
+	if(user_id==uu_id){
+	showDialog("msg_info","","不能收藏自己的店铺！",2,"warning",3,'');
+	}else{
+		var s_id=jQuery(this).find("a").attr("store_id");
+	   jQuery.post("$!current_webPath/add_store_favorite",{"id":s_id},function(data){
+		 if(data==0){
+		    showDialog("msg_info","","店铺收藏成功！",2,"warning",3,'');
+		 }
+		 if(data==1){
+		   showDialog("msg_info","","该店铺已经被收藏！",2,"warning",3,'');
+		 }
+	   },"text");
+		
+		}
+
+   #end
+   });
+	
+/*#if($!gb)
+var gb_id="$!gb.id";
+var gb_name="$!gb.name";
+jQuery("#gb_next").remove();
+jQuery("#gb").before("<li class='this'><a style='color:#fff' href='javascript:void(0);' id='gb_next' gb_id='"+gb_id+"'onclick='check_gb_store(this);' >"+gb_name+"</a></li>");
+#end
+#if($!gc)
+var gc_id="$!gc.id";
+var gc_name="$!gc.className";
+jQuery("#gc_next").remove();
+jQuery("#gc").before("<li class='this'><a style='color:#fff' href='javascript:void(0);' id='gc_next' gc_id='"+gc_id+"'onclick='check_gc_store(this);' >"+gc_name+"</a></li>");
+#end*/
+	#if($!service=="no")
+	jQuery("#kf").val("ok");
+	jQuery("#ser").attr("checked","checked");
+	#else
+	jQuery("#kf").val("no");
+	#end
+	#if($!show=="fa")
+	jQuery("#theForm").hide();
+	#end
+		#if($!area.level==0)	
+		jQuery("#a_id1").val("$!area.id");
+		jQuery("#a_id2,#a_id3").val("");
+		#end
+		#if($!area.level==1)	
+		jQuery("#a_id1").val("$!area.parent.id");
+		jQuery("#a_id2").val("$!area.id");
+		jQuery("#a_id3").val("");
+		#end
+		#if($!area.level==2)	
+		jQuery("#a_id1").val("$!area.parent.parent.id");
+		jQuery("#a_id2").val("$!area.parent.id");
+		jQuery("#a_id3").val("$!area.id");
+		#end
+		jQuery("#store_name").val("$!store_name");
+		jQuery("#store_search").val("$!store_name");
+		jQuery("#sg").val("$!grade_id");
+		jQuery("li[id*=store_]").mouseover(function(e) {
+			if(jQuery(this).find("#pppp").length<=1){
+				var store_id=jQuery(this).attr("id");
+jQuery.post("$!webPath/store_data",{"store_id":store_id},function(data){
+	jQuery("#"+store_id).siblings().find(".shop_list_c_b").remove();
+	if(jQuery("#p_"+store_id).parent().attr("type")=="spec"){
+		jQuery("#p_"+store_id).after(data);
+		jQuery("#pppp").addClass("this");
+		}else{
+			jQuery("#p_"+store_id).after(data);
+		}
+	})		
+			}
+        });
+		jQuery("li[id*=store_]").mouseleave(function(e) {
+			var store_id=jQuery(this).attr("id");
+			jQuery(this).find("#pppp").remove();
+        });
+    });
+function show_sg(){
+		jQuery("option[value=0]"),hide();
+jQuery("option[value=0]").after("<option value='0'>店铺类型</option><option value='0'>店铺类型</option><option value='0'>店铺类</option>");
+		}
+function change1(obj){
+			var level=jQuery(obj).attr("level");
+			if(level=="0"){
+				var a_id=jQuery("#a_id1").val();
+				if(a_id!=""){
+				jQuery.post("$!webPath/area_data",{"a_id":a_id},function(data){
+					jQuery("#a_id2,#a_id3").html("").append("<option value=''>请选择</option>");
+					jQuery.each(data,function(i,item){
+						var t1="<option value='"+item.area_id+"'>"+item.area_name+"</option>";
+						jQuery("#a_id2").append(t1);
+						})
+										},"json")	
+				}else{
+						if(jQuery("#ser").val()=="ok"){
+		jQuery("#currentPage").val("1");
+		          }
+				jQuery("#a_id2,#a_id3").html("").append("<option value=''>请选择</option>");
+				jQuery("#a_id").val("");
+				jQuery("#ListForm").submit();
+				}}
+				if(level=="1"){
+					var a_id=jQuery("#a_id2").val();
+					if(a_id!=""){
+				jQuery.post("$!webPath/area_data",{"a_id":a_id},function(data){
+					jQuery("#a_id3").html("").append("<option value=''>请选择</option>");
+					jQuery.each(data,function(i,item){
+						var t1="<option value='"+item.area_id+"'>"+item.area_name+"</option>";
+						jQuery("#a_id3").append(t1);
+						})
+										},"json")
+					}
+					else{
+					jQuery("#a_id3").html("").append("<option value=''>请选择</option>");;
+					}
+				}
+			}
+function change(obj){
+	if(jQuery("#ser").val()=="ok"){
+		jQuery("#currentPage").val("1");
+		}
+		var type=jQuery(obj).attr("type");
+			if(type=="sg"){
+				var sg=jQuery("#sg").val();
+				if(sg!="0"){
+					jQuery("#grade_id").val(sg);
+					jQuery("#ListForm").submit();
+						}
+				}
+		}
+//按地区,名称
+function search_(){
+	var store_search=jQuery("#store_search").val();
+	jQuery("#store_name").val(store_search);
+	var sg=jQuery("#sg").val();
+	jQuery("#grade_id").val(sg);
+jQuery("#")
+	if(jQuery("#ser").val()=="ok"){
+		jQuery("#currentPage").val("1");
+		}
+	         var a_id1=jQuery("#a_id1").val();	
+             var a_id2=jQuery("#a_id2").val(); 
+		     var a_id3=jQuery("#a_id3").val();
+			if(a_id3!=""){
+			jQuery("#a_id").val(a_id3);
+			}if(a_id3==""&&a_id2!=""){
+				jQuery("#a_id").val(a_id2);
+				}if(a_id2==""&&a_id1!=""){
+					jQuery("#a_id").val(a_id1);
+					}
+					if(a_id1!=""){
+			
+					}
+			jQuery("#ListForm").submit();
+		}
+		
+//按名称
+function name_search(){
+	var store_search=jQuery("#store_search").val();
+	if(store_search!=""){
+			jQuery("#store_name").val(store_search);
+			jQuery("#ListForm").submit();
+	}else{
+		jQuery("#store_name").val("");
+			jQuery("#ListForm").submit();
+		
+		}	
+	}	
+//查询收藏店铺
+function check_store(obj){
+	var type=jQuery(obj).attr("type");
+	if(jQuery(".shop_list_type").find("a").html()=="查看收藏"){
+		jQuery("#theForm").show();
+		jQuery(".shop_list_t, #ListForm").hide();
+		jQuery(".shop_list_type").find("a").html("查看全部");
+		}else{
+			jQuery("#theForm").hide();
+		jQuery("#ListForm, .shop_list_t").show();
+		jQuery(".shop_list_type").find("a").html("查看收藏");
+			}
+			}
+//分类查询
+function check_gc_store(obj){
+	if(jQuery("#ser").val()=="ok"){
+		jQuery("#currentPage").val("1");
+		}
+
+				var gc_id=jQuery(obj).attr("gc_id");
+			    jQuery("#gc_id").val(gc_id);
+				jQuery("#ListForm").submit();
+				}
+//品牌查询
+function check_gb_store(obj){
+	jQuery(obj)
+	if(jQuery("#ser").val()=="ok"){
+		jQuery("#currentPage").val("1");
+		}    
+				var gb_id=jQuery(obj).attr("gb_id");
+			    jQuery("#gb_id").val(gb_id);
+				jQuery("#ListForm").submit();
+				}				
+				
+//按照销量
+function check_h_store(mark){
+	//alert(jQuery("#ser").val());
+		if(jQuery("#ser").val()=="ok"){
+		jQuery("#currentPage").val("1");
+		}
+
+					jQuery("#t").val(mark);
+			jQuery("#ListForm").submit();
+					}
+//
+function check_c_store(){
+	var ser=jQuery("#kf").val();
+	jQuery("#currentPage").val("1");
+	if(ser=="no"){
+	jQuery("#service").val(ser);
+	}else{
+	jQuery("#service").val(ser);	
+	}
+	jQuery("#ListForm").submit();
+	
+	}
+	//展开
+function show(obj){
+		var status=jQuery(obj).attr("status");
+		if(status=="show"){
+			jQuery(obj).parent().parent().find("dd").css("height","auto")
+			jQuery(obj).parent().hide();
+			jQuery("#s").show();
+			}if(status=="hide"){
+				jQuery(obj).parent().parent().find("dd").css("height","40px")
+			jQuery(obj).parent().hide();
+			jQuery("#z").show();
+				}
+		}	
+    </script>
+    </head>
+    <body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main">
+      <div class="shop_list_filtrate">
+    <dl>
+          <dd style="height:auto"><a  #if(!$!gc_id || $!gc_id=="")class="this" #end  id="gc" href="javascript:void(0);" gc_id="" onClick="check_gc_store(this);" >全部</a> #foreach($!gc in $gc_list) <a #if($!gc_id==$!gc.id) class="this" #end  href="javascript:void(0);" gc_id="$!gc.id" onClick="check_gc_store(this);" >$!gc.className</a> #end </dd>
+          <dt style="display:" id="z"><a href="javascript:void(0);" status="show" onClick="show(this);">展开</a></dt>
+          <dt style="display:none" id="s"><a href="javascript:void(0);" status="hide" onClick="show(this);">收起</a></dt>
+        </dl>
+  </div>
+      <div class="shop_list">
+    <div class="shop_list_t">
+          <div class="shop_list_t_choice"> <span #if($!t=="" || !$!t)class="this" #end><a class="price" href="javascript:void(0);" onClick="check_h_store('');">默认</a></span><span #if($!t=="point")class="this" #end><a class="price" href="javascript:void(0);" onClick="check_h_store('point');">好评</a></span> <span #if($!t=="favorite") class="this" #end><a class="price" href="javascript:void(0);" onClick="check_h_store('favorite');">收藏</a></span> <span #if($!t=="store_credit") class="this" #end><a class="price" href="javascript:void(0);" onClick="check_h_store('store_credit');" >店铺等级</a></span> </div>
+          <!--       #if($!store_list.size()==0)
+      <div class="shop_list_t_choice"> <span>
+        <label style="cursor:pointer">
+          <input name="ser" id="ser" type="checkbox" onchange="check_c_store();" value="no" style="margin-top:2px; float:left; margin-right:5px;"/>
+          客服在线 </label style="cursor:pointer">
+        </span> </div>
+      #end-->
+          
+          <div class="shop_list_t_service"> <span class="listbar_check"> <a #if($!service=="no") class="this" #end style="cursor:pointer"   onclick="funListbarCheck();">
+          <input name="kf" id="kf"  type="hidden" />
+          客服在线</a> </span> </div>
+          <div class="shop_list_t_area">
+        <div class="shop_list_t_area_search"> <i>店铺名称</i> <span>
+          <input name="store_search" id="store_search" type="text" placeholder="输入店名..." />
+          <em><a href="javascript:void(0);" style="display:none"><img src="$!cdnServer/resources/style/system/front/default/images/search_bg.png" onClick="name_search();" /></a></em></span> </div>
+        <div class="shop_list_t_area_select_t_l">地区选择</div>
+        <div class="shop_list_t_area_select_t">
+              <select name="" id="a_id1" level="0" type="area" onChange="change1(this);">
+            <option value="">请选择</option>
+                    #foreach($!area in $area_list)                       
+            <option value ="$!area.id">$!area.areaName</option>
+              #end
+            </select>
+            </div>
+        <div class="shop_list_t_area_select_t">
+              <select name="" id="a_id2" level="1" onChange="change1(this);" >
+            <option value ="">请选择</option>
+           #if($!area.level==0)
+           #foreach($!city in $!area.childs)
+            <option value="$!city.id">$!city.areaName</option>
+            #end
+           #end 
+            #if($!area.level==2)
+            #if($!area)
+            #foreach($!city in $!area.parent.parent.childs)
+            <option value="$!city.id">$!city.areaName</option>
+            #end
+            #end
+          
+          #end
+          
+          #if($!area.level==1)
+          #if($!area)
+            #foreach($!city in $!area.parent.childs)
+            <option value="$!city.id">$!city.areaName</option>
+            #end
+          #end
+          #end
+          
+          
+          </select>
+            </div>
+        <div class="shop_list_t_area_select_t">
+              <select name="" id="a_id3">
+            <option value ="">请选择</option>
+            
+            
+            
+            
+            #if($!area.level==2)
+             #if($!area)
+            #foreach($!child in $!area.parent.childs)
+            
+            
+            
+            
+            
+            
+            <option value="$!child.id">$!child.areaName</option>
+            
+            
+            
+            
+            
+            
+            #end
+            #end
+          #end
+      #if($!area.level==1)
+      #foreach($!city in $!area.childs)
+            
+            
+            
+            
+            
+            
+            <option value="$!city.id">$!city.areaName</option>
+            
+            
+            
+            
+            
+            
+            #end
+      #end
+
+          
+          
+          </select>
+            </div>
+        <div class="shop_list_t_area_select_t_l">店铺类型</div>
+        <div class="shop_list_t_area_select_t">
+              <select name="" id="sg"  type="sg" >
+            <option value="">店铺类型</option>
+            
+            
+            
+            
+            
+            
+                    #foreach($!sg in $sg_list)   
+            
+            
+            
+            
+            
+            
+            <option value ="$!sg.id">$!sg.gradeName</option>
+            
+            
+            
+            
+            
+            
+                        #end      
+          
+          
+          
+          
+          
+          
+          </select>
+            </div>
+            
+             <div class="shop_list_t_area_y"><a href="javascript:void(0);" onClick="search_();">搜索</a></div>
+      </div>
+        </div>
+    <form action="$!webPath/store/index" name="ListForm" id="ListForm" method="post">
+          <input type="hidden" name="a_id" id="a_id" value="$!area.id" />
+          <input type="hidden" name="gc_id" id="gc_id" value="$!gc_id" />
+          <input type="hidden" name="grade_id" id="grade_id" value="$!grade_id" />
+          <input type="hidden" name="t" id="t" value="$!t" />
+          <input type="hidden" name="favorite" id="favorite" value="$!favorite" />
+          <input type="hidden" name="service" id="service" value="$!service" />
+          <input type="hidden" name="gb_id" id="gb_id" value="$!gb_id" />
+          <input type="hidden" name="store_name" id="store_name" value="$!store_name" />
+          <!--店铺列表start-->
+          <div class="new_shoplist">
+          
+          #if($!objs.size()>0)
+           #foreach($!obj in $objs)
+           #if($!obj)
+              #set($store_url="$!webPath/store_$!{obj.id}")
+              #if($!config.second_domain_open && $!obj.store_second_domain!="")
+              #set($store_url="http://$!{obj.store_second_domain}.$!{domainPath}")
+              #end 
+            #end 
+        <div class="shop_list_item">
+              <div class="sl_left">
+            <dl>
+                  <dt><span class="img"><a href="$!store_url" target="_blank"><img src="#if($!obj.store_logo) $!webPath/$!obj.store_logo.path/$!obj.store_logo.name #else $!cdnServer/resources/style/common/images/store.jpg #end" ></a></span>
+                <p class="att"><a href="javascript:void(0);" id="store_fav" #if(!$!user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login"#end user_id="$!obj.user.id" store_id="$!obj.id" ><span>收藏</span></a></p>
+                <!--店铺优惠券 显示/入口-->
+            <div class="sl_activity">
+            #if($!storeViewTools.getStoreCouponStatus($!obj.id))
+          	<span class="red"><a href="$!webPath/store_coupon?store_id=$!obj.id">领取优惠券</a></span>
+            #end
+          </div>
+              </dt>
+                  <dd>
+                <h3><a href="$!store_url" target="_blank">$!obj.store_name</a></h3>
+                <p><span class="gray">地址：$!obj.store_address</span></p>
+                #set($main_map=$!storeViewTools.main_class("$!obj.id"))
+                <p class="ht48"><span class="gray">经营范围：</span>#foreach($!map in $!main_map) $!map.className  #end </p>
+              </dd>
+                </dl>
+          </div>
+          
+
+              <div class="sl_mid">
+            <ul class="pro_shop_date">
+                  <li><span class="bold">店铺动态评分</span><b class="bold">与行业相比</b></li>
+                  #set($e_map=$!storeViewTools.point($!obj))
+                  <li><span>描述相符：<strong>#if(!$!{obj.point.description_evaluate})0 #else $!{obj.point.description_evaluate} #end分</strong></span><em class="value_normal">$!e_map.get("description_result")</em></li>
+                  <li><span>服务态度：<strong> #if(!$!{obj.point.service_evaluate})0 #else $!{obj.point.service_evaluate} #end分</strong></span><em class="value_strong">$!e_map.get("service_result")</em></li>
+                  <li><span>发货速度：<strong>#if(!$!{obj.point.ship_evaluate})0 #else $!{obj.point.ship_evaluate} #end分</strong></span><em class="value_light">$!e_map.get("ship_result")</em></li>
+                </ul>
+          </div>
+              <script>
+//店铺内商品展开
+function zk(obj){
+					var  m=jQuery(obj).attr("mark");
+					if(m=="0"){
+						jQuery(obj).parent().parent().find(".sl_show").hide();
+						jQuery(obj).attr("mark","1");
+						jQuery(obj).find("em img").attr("src","$!cdnServer/resources/style/system/front/default/images/arrow_down.png")
+						}else{
+							jQuery(obj).attr("mark","0");
+							jQuery(obj).parent().parent().find(".sl_show").show();
+							jQuery(obj).find("em img").attr("src","$!cdnServer/resources/style/system/front/default/images/arrow_up.png")
+							}
+			
+			}
+//右侧收起
+function pack_up(obj){
+			var m=jQuery(obj).attr("m");
+			    if(m=="0"){
+				jQuery(".sl_show").hide();
+				jQuery(obj).find("i").removeClass("up");
+				
+				jQuery(obj).attr("m","1");
+				}else{
+					jQuery(".sl_show").show();
+					jQuery(obj).find("i").addClass("up");
+					jQuery(obj).attr("m","0");
+					}
+			                 }
+							 //收藏店铺
+
+
+                </script>
+                
+              <div class="sl_right"> <a class="btn btn_red" href="$!store_url" target="_blank"><em><img src="$!cdnServer/resources/style/system/front/default/images/shop_icon.png"></em>进入店铺 <b>>></b></a> <a class="btn btn_gray" href="javascript:void(0);" mark="0" onClick="zk(this);"><span class="red">$!e_map.get("count")</span>件相关商品<em><img src="$!cdnServer/resources/style/system/front/default/images/arrow_up.png"></em></a> </div>
+              <div class="sl_show" style="display:"> #set($s_goods=$!e_map.get("s_goods"))
+            #foreach($!obj in $!s_goods)
+             #if($!obj.goods_main_photo)
+                    #set($small_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+                    #set($middle_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_middle.$!{obj.goods_main_photo.ext}")
+                    #else
+                    #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                    #set($middle_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                    #end 
+                    
+                    #set($goods_url="$!webPath/items_$!{obj.id}")
+                    #if($!config.second_domain_open && $!obj.goods_type==1 && $!obj.goods_store.store_second_domain!="")
+                    #set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.id}")
+                    #end
+            <dl class="dl_item">
+                  <dt><a href="$!goods_url" target="_blank"><img src="$!middle_img" width="166" height="166"></a></dt>
+                  <dd class="red"><em>¥</em>$!obj.goods_price</dd>
+                  <dd class="name"><a href="$!goods_url" target="_blank">$!obj.goods_name</a></dd>
+                  <dd>
+                <ul>
+                      <li>
+                    <p class="red">$!obj.goods_salenum</p>
+                    <p>成交量</p>
+                  </li>
+                      <li>
+                    <p class="blue">$!obj.evaluates.size()</p>
+                    <p>评价</p>
+                  </li>
+                      <li class="bd_none">
+                      #if($!userTools.userOnLine($!obj.goods_store.user.userName)=="true")
+                      <p>
+                      <a href="javascript:void(0);" #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onClick="open_im('','$!webPath','user','store','$!obj.goods_store.id');" #end><img src="$!cdnServer/resources/style/system/front/default/images/c_service_online.png" width="19"></a>
+                      </p>
+                      #else
+                    <p><a href="javascript:void(0);" #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onClick="if(confirm('客服当前不在线，是否继续?'))open_im('','$!webPath','user','store','$!obj.goods_store.id');" #end><img src="$!cdnServer/resources/style/system/front/default/images/c_service.png" width="19"></a></p>#end
+                    <p>客服</p>
+                  </li>
+                    </ul>
+              </dd>
+                </dl>
+            #end <span class="arrow"><img src="$!cdnServer/resources/style/system/front/default/images/arrow_up.jpg"></span>
+            <p class="more"><a href="$!store_url" target="_blank">更多相关商品<b>>></b></a></p>
+          </div>
+              <!--箭头向上为：<i class="up"></i>--> 
+              <a class="shopdropbtn" href="javascript:void(0);" m="0" onClick="pack_up(this);">收起商品栏<i></i></a> </div>
+        #end
+        
+        #else
+        <div class="shop_list_c_none_left"><img src="$!cdnServer/resources/style/system/front/default/images/shop_list_c_none_left.png" /></div>
+          <div class="shop_list_c_none_right">没有为您找到店铺</div>
+        #end
+        
+        
+        <div class="fenye"><span> $!gotoPageFormHTML</span></div>
+        <input id="currentPage" name="currentPage" type="hidden" value="$!currentPage" />
+      </div>
+        </form>
+    <!--店铺列表end--> 
+  </div>
+    </div>
+</body>
+    $!httpInclude.include("/footer")
+</html>

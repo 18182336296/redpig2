@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+#if($!config.sina_login)
+$!config.sina_domain_code
+#end
+#if($!config.qq_login)
+$!config.qq_domain_code
+#end
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/index.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.redpigmall.validate.js" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function(){
+		jQuery("#toolbar").load("$!webPath/toolbar");
+ });
+</script>
+<style type="text/css">
+.top_page span.log a.red,.top_page span.log a.red b { color:#E4393C;}
+</style>
+$!httpInclude.include("/top") 
+<div id="head_unbomb"> $!httpInclude.include("/head?id=$!id")</div>
+$!httpInclude.include("/channel_nav?id=$!id") 
+$!httpInclude.include("/channel_floor?id=$!id") 
+<div id="toolbar"></div>
+<div id="footer">$!httpInclude.include("/footer") </div>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.AlbumMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Album">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="album_name" property="album_name" jdbcType="VARCHAR"/>
+		<result column="album_sequence" property="album_sequence" jdbcType="INTEGER"/>
+		<result column="album_default" property="album_default" jdbcType="BIT"/>
+		<result column="alblum_info" property="alblum_info" jdbcType="VARCHAR"/>
+		<association property="album_cover" column="album_cover_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="user" column="user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Album">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="album_name" property="album_name" jdbcType="VARCHAR"/>
+		<result column="album_sequence" property="album_sequence" jdbcType="INTEGER"/>
+		<result column="album_default" property="album_default" jdbcType="BIT"/>
+		<result column="alblum_info" property="alblum_info" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,album_name,album_sequence,album_cover_id,album_default,alblum_info,user_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and obj.id = #{id,jdbcType=BIGINT}</if>
+		<if test="no_id != null">and obj.id != #{no_id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and obj.addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and obj.addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and obj.addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="album_name != null">and album_name = #{album_name,jdbcType=VARCHAR}</if>
+		<if test="album_sequence != null">and album_sequence = #{album_sequence,jdbcType=INTEGER}</if>
+		<if test="album_default != null">and album_default = #{album_default,jdbcType=BIT}</if>
+		<if test="alblum_info != null">and alblum_info = #{alblum_info,jdbcType=VARCHAR}</if>
+		<if test="album_name_like !=null">
+			and album_name like concat(concat('%',#{album_name_like}),'%') 
+		</if>
+		<if test="user_id !=null">and user_id=#{user_id,jdbcType=BIGINT}</if>
+		<if test="album_cover_id != null">and album_cover_id = #{album_cover_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		album_name= #{album_name},
+		album_sequence= #{album_sequence},
+		<if test="album_cover != null and album_cover.id != null">album_cover_id = #{album_cover.id,jdbcType=BIGINT},</if>
+		<if test="album_cover == null or album_cover.id == null">album_cover_id = null,</if>
+		album_default= #{album_default},
+		alblum_info= #{alblum_info},
+		<if test="user == null or user.id == null">user_id = null,</if>
+		<if test="user != null and user.id != null">user_id = #{user.id,jdbcType=BIGINT},</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_album 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap" parameterType="map">
+		select
+		obj.*
+		from redpigmall_album obj 
+		<if test="user_userRole1 !=null or user_userRole2 !=null">
+			join 
+				redpigmall_user user1 
+			on 
+				(user1.userRole like concat(concat('%',#{user_userRole1}),'%') or user1.userRole like concat(concat('%',#{user_userRole2}),'%') ) 
+			and 
+				user1.id=obj.user_id
+		</if>
+		<if test="redpig_user_userRole !=null or redpig_user_userRole1 !=null">
+			join 
+				redpigmall_user user2 
+			on 
+				(user2.userRole=#{redpig_user_userRole,jdbcType=VARCHAR} or user2.userRole=#{redpig_user_userRole1,jdbcType=VARCHAR})
+			and 
+				user2.id = obj.user_id
+		</if>
+		<if test="user_userName !=null">
+			join 
+				redpigmall_user user3 
+			on user3.userName like concat(concat('%',#{user_userName}),'%') and user3.id=obj.user_id
+		</if>
+		<if test="redpig_userRole_single !=null">
+			join redpigmall_user user4 on  user4.userRole like concat(concat('%',#{redpig_userRole_single}),'%')
+			and user4.id=obj.user_id
+		</if>
+		<if test="redpig_userRole !=null">
+			join redpigmall_user user5 on  (user5.userRole = #{redpig_userRole,jdbcType=VARCHAR} and user5.id=obj.user_id)
+		</if>
+		<if test="store_name_like !=null">
+			join redpigmall_user u4 on obj.user_id = u.id
+			join redpigmall_store s on s.id = u4.store_id and s.store_name=#{store_name_like,jdbcType=VARCHAR}
+		</if>
+		<if test="album_user_id !=null">
+			JOIN redpigmall_album ab ON acc.album_id = ab.id
+			JOIN redpigmall_user u ON ab.user_id = u.id
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from 
+		redpigmall_album obj
+		<if test="user_userRole1 !=null or user_userRole2 !=null">
+			join 
+				redpigmall_user user1 
+			on (user1.userRole like concat(concat('%',#{user_userRole1}),'%') or user1.userRole like concat(concat('%',#{user_userRole2}),'%') ) 
+				and user1.id=obj.user_id
+		</if>
+		<if test="redpig_user_userRole !=null or redpig_user_userRole1 !=null">
+			join 
+				redpigmall_user user2 
+			on 
+				(user2.userRole=#{redpig_user_userRole,jdbcType=VARCHAR} or user2.userRole=#{redpig_user_userRole1,jdbcType=VARCHAR})
+				and user2.id = obj.user_id
+		</if>
+		<if test="user_userName !=null">
+			join 
+				redpigmall_user user3 
+			on user3.userName like concat(concat('%',#{user_userName}),'%') and user3.id=obj.user_id
+		</if>
+		<if test="store_name_like !=null">
+			join redpigmall_user u on obj.user_id = u.id
+			join redpigmall_store s on s.id = u.store_id and s.store_name=#{store_name_like,jdbcType=VARCHAR}
+		</if>
+		<if test="redpig_userRole_single !=null">
+			join redpigmall_user user4 on  user4.userRole like concat(concat('%',#{redpig_userRole_single}),'%')
+			and user4.id=obj.user_id
+		</if>
+		<if test="redpig_userRole !=null">
+			join redpigmall_user user5 on  (user5.userRole = #{redpig_userRole,jdbcType=VARCHAR} and user5.id=obj.user_id)
+		</if>
+		<if test="album_user_id !=null">
+			JOIN redpigmall_album ab ON acc.album_id = ab.id
+			JOIN redpigmall_user u ON ab.user_id = u.id
+		</if>
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	
+	<select id="getAlbumCoverByAccessoryId" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_album
+		where
+			album_cover_id= #{album_cover_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getUserByUserId" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_album
+		where
+			user_id = #{user_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_album obj 
+		<if test="user_userRole1 !=null or user_userRole2 !=null">
+			JOIN  redpigmall_user user1  on (user1.userRole like concat(concat('%',#{user_userRole1}),'%') or user1.userRole like concat(concat('%',#{user_userRole2}),'%') ) 
+			AND user1.id=obj.user_id
+		</if>
+		<if test="redpig_user_userRole !=null or redpig_user_userRole1 !=null">
+			JOIN  redpigmall_user user2  ON  (user2.userRole=#{redpig_user_userRole,jdbcType=VARCHAR} OR user2.userRole=#{redpig_user_userRole1,jdbcType=VARCHAR})
+			AND user2.id = obj.user_id
+		</if>
+		<if test="user_userName !=null">
+			join redpigmall_user user3 on user3.userName like concat(concat('%',#{user_userName}),'%') 
+			and user3.id=obj.user_id
+		</if>
+		<if test="store_name_like !=null">
+			join redpigmall_user u on obj.user_id = u.id
+			join redpigmall_store s on s.id = u.store_id and s.store_name=#{store_name_like,jdbcType=VARCHAR}
+		</if>
+		<if test="redpig_userRole_single !=null">
+			join redpigmall_user user4 on  user4.userRole like concat(concat('%',#{redpig_userRole_single}),'%')
+			and user4.id=obj.user_id
+		</if>
+		<if test="redpig_userRole !=null">
+			join redpigmall_user user5 on (user5.userRole = #{redpig_userRole,jdbcType=VARCHAR} and user5.id=obj.user_id)
+		</if>
+		<if test="album_user_id !=null">
+			JOIN redpigmall_album ab ON acc.album_id = ab.id
+			JOIN redpigmall_user u ON ab.user_id = u.id
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Album" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_album(addTime,deleteStatus,album_name,album_sequence,album_default,alblum_info,album_cover_id,user_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{album_name,jdbcType=VARCHAR},#{album_sequence,jdbcType=INTEGER},#{album_default,jdbcType=BIT},#{alblum_info,jdbcType=VARCHAR},#{album_cover.id,jdbcType=BIGINT},#{user.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Album">
+		update redpigmall_album
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_album where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_album where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_album obj 
+		<if test="user_userRole1 !=null or user_userRole2 !=null">
+			join 
+				redpigmall_user user 
+			on (user.userRole like concat(concat('%',#{user_userRole1}),'%') or user.userRole like concat(concat('%',#{user_userRole2}),'%') or) 
+				and user.id=obj.user_id
+		</if>
+		<if test="store_name_like !=null">
+			join redpigmall_user u on obj.user_id = u.id
+			join redpigmall_store s on s.id = u.store_id and s.store_name=#{store_name_like,jdbcType=VARCHAR}
+		</if>
+		<if test="redpig_userRole_single !=null">
+			join redpigmall_user user4 on  user4.userRole like concat(concat('%',#{redpig_userRole_single}),'%')
+			and user4.id=obj.user_id
+		</if>
+		<if test="redpig_userRole !=null">
+			join redpigmall_user user5 on  (user5.userRole = #{redpig_userRole,jdbcType=VARCHAR} and user5.id=obj.user_id)
+		</if>
+		<if test="album_user_id !=null">
+			JOIN redpigmall_album ab ON acc.album_id = ab.id
+			JOIN redpigmall_user u ON ab.user_id = u.id
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.* 
+		from redpigmall_album obj 
+		<if test="redpig_user_userRole !=null or redpig_user_userRole1 !=null">
+			join 
+				redpigmall_user user 
+			on 
+				(user.userRole=#{redpig_user_userRole,jdbcType=VARCHAR} or user.userRole=#{redpig_user_userRole1,jdbcType=VARCHAR})
+				and user.id = obj.user_id
+		</if>
+		
+		<if test="user_userRole1 !=null or user_userRole2 !=null">
+			join 
+				redpigmall_user user2 
+			on (user2.userRole like concat(concat('%',#{user_userRole1}),'%') or user2.userRole like concat(concat('%',#{user_userRole2}),'%') or) 
+				and user2.id=obj.user_id
+		</if>
+		
+		<if test="store_name_like !=null">
+			JOIN redpigmall_user u ON obj.user_id = u.id
+			JOIN redpigmall_store s ON s.id = u.store_id and s.store_name=#{store_name_like,jdbcType=VARCHAR}
+		</if>
+		<if test="redpig_userRole_single !=null">
+			JOIN redpigmall_user user4 on  user4.userRole like concat(concat('%',#{redpig_userRole_single}),'%')
+			and user4.id=obj.user_id
+		</if>
+		<if test="redpig_userRole !=null">
+			JOIN redpigmall_user user5 ON  (user5.userRole = #{redpig_userRole,jdbcType=VARCHAR} AND user5.id=obj.user_id)
+		</if>
+		<if test="album_user_id !=null">
+			JOIN redpigmall_album ab ON acc.album_id = ab.id
+			JOIN redpigmall_user u ON ab.user_id = u.id
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Album" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_album
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_album where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

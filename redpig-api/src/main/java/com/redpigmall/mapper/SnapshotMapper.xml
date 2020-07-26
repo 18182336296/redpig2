@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.SnapshotMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Snapshot">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="good_name" property="good_name" jdbcType="VARCHAR"/>
+		<result column="good_id" property="good_id" jdbcType="VARCHAR"/>
+		<result column="good_num" property="good_num" jdbcType="VARCHAR"/>
+		<result column="good_price" property="good_price" jdbcType="VARCHAR"/>
+		<result column="good_source" property="good_source" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="fee" property="fee" jdbcType="VARCHAR"/>
+		<result column="good_cod" property="good_cod" jdbcType="VARCHAR"/>
+		<result column="good_mian_img" property="good_mian_img" jdbcType="VARCHAR"/>
+		<result column="good_info" property="good_info" jdbcType="VARCHAR"/>
+		<result column="goods_service" property="goods_service" jdbcType="VARCHAR"/>
+		<result column="good_pack_details" property="good_pack_details" jdbcType="VARCHAR"/>
+		<result column="gc" property="gc" jdbcType="VARCHAR"/>
+		<result column="store_info" property="store_info" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="activity_status" property="activity_status" jdbcType="VARCHAR"/>
+		<result column="order_id" property="order_id" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Snapshot">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="good_name" property="good_name" jdbcType="VARCHAR"/>
+		<result column="good_id" property="good_id" jdbcType="VARCHAR"/>
+		<result column="good_num" property="good_num" jdbcType="VARCHAR"/>
+		<result column="good_price" property="good_price" jdbcType="VARCHAR"/>
+		<result column="good_source" property="good_source" jdbcType="VARCHAR"/>
+		<result column="address" property="address" jdbcType="VARCHAR"/>
+		<result column="fee" property="fee" jdbcType="VARCHAR"/>
+		<result column="good_cod" property="good_cod" jdbcType="VARCHAR"/>
+		<result column="good_mian_img" property="good_mian_img" jdbcType="VARCHAR"/>
+		<result column="good_info" property="good_info" jdbcType="VARCHAR"/>
+		<result column="goods_service" property="goods_service" jdbcType="VARCHAR"/>
+		<result column="good_pack_details" property="good_pack_details" jdbcType="VARCHAR"/>
+		<result column="gc" property="gc" jdbcType="VARCHAR"/>
+		<result column="store_info" property="store_info" jdbcType="VARCHAR"/>
+		<result column="user_id" property="user_id" jdbcType="BIGINT"/>
+		<result column="activity_status" property="activity_status" jdbcType="VARCHAR"/>
+		<result column="order_id" property="order_id" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,good_name,good_id,good_num,good_price,good_source,address,fee,good_cod,good_mian_img,good_info,goods_service,good_pack_details,gc,store_info,user_id,activity_status,order_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="good_name != null">and good_name = #{good_name,jdbcType=VARCHAR}</if>
+		<if test="good_id != null">and good_id = #{good_id,jdbcType=VARCHAR}</if>
+		<if test="good_num != null">and good_num = #{good_num,jdbcType=VARCHAR}</if>
+		<if test="good_price != null">and good_price = #{good_price,jdbcType=VARCHAR}</if>
+		<if test="good_source != null">and good_source = #{good_source,jdbcType=VARCHAR}</if>
+		<if test="address != null">and address = #{address,jdbcType=VARCHAR}</if>
+		<if test="fee != null">and fee = #{fee,jdbcType=VARCHAR}</if>
+		<if test="good_cod != null">and good_cod = #{good_cod,jdbcType=VARCHAR}</if>
+		<if test="good_mian_img != null">and good_mian_img = #{good_mian_img,jdbcType=VARCHAR}</if>
+		<if test="good_info != null">and good_info = #{good_info,jdbcType=VARCHAR}</if>
+		<if test="goods_service != null">and goods_service = #{goods_service,jdbcType=VARCHAR}</if>
+		<if test="good_pack_details != null">and good_pack_details = #{good_pack_details,jdbcType=VARCHAR}</if>
+		<if test="gc != null">and gc = #{gc,jdbcType=VARCHAR}</if>
+		<if test="store_info != null">and store_info = #{store_info,jdbcType=VARCHAR}</if>
+		<if test="user_id != null">and user_id = #{user_id,jdbcType=BIGINT}</if>
+		<if test="activity_status != null">and activity_status = #{activity_status,jdbcType=VARCHAR}</if>
+		<if test="order_id != null">and order_id = #{order_id,jdbcType=VARCHAR}</if>
+	</sql>
+	<sql id="ifStatement">
+		good_name= #{good_name},
+		good_id= #{good_id},
+		good_num= #{good_num},
+		good_price= #{good_price},
+		good_source= #{good_source},
+		address= #{address},
+		fee= #{fee},
+		good_cod= #{good_cod},
+		good_mian_img= #{good_mian_img},
+		good_info= #{good_info},
+		goods_service= #{goods_service},
+		good_pack_details= #{good_pack_details},
+		gc= #{gc},
+		store_info= #{store_info},
+		user_id= #{user_id},
+		activity_status= #{activity_status},
+		order_id= #{order_id},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Snapshot" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_snapshot 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Snapshot" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_snapshot obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_snapshot obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Snapshot" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_snapshot obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Snapshot" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_snapshot(addTime,deleteStatus,good_name,good_id,good_num,good_price,good_source,address,fee,good_cod,good_mian_img,good_info,goods_service,good_pack_details,gc,store_info,user_id,activity_status,order_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{good_name,jdbcType=VARCHAR},#{good_id,jdbcType=VARCHAR},#{good_num,jdbcType=VARCHAR},#{good_price,jdbcType=VARCHAR},#{good_source,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{fee,jdbcType=VARCHAR},#{good_cod,jdbcType=VARCHAR},#{good_mian_img,jdbcType=VARCHAR},#{good_info,jdbcType=VARCHAR},#{goods_service,jdbcType=VARCHAR},#{good_pack_details,jdbcType=VARCHAR},#{gc,jdbcType=VARCHAR},#{store_info,jdbcType=VARCHAR},#{user_id,jdbcType=BIGINT},#{activity_status,jdbcType=VARCHAR},#{order_id,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Snapshot">
+		update redpigmall_snapshot
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_snapshot where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_snapshot where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Snapshot" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_snapshot obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Snapshot" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_snapshot obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Snapshot" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_snapshot
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_snapshot where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

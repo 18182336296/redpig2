@@ -1,0 +1,29 @@
+#if($!objs.size()>0)
+<div class="inner_text">
+  <ul class="inner_text_ul">
+  #foreach($!obj in $!objs)
+    <li>
+      <div class="pannel_num">期号 $!obj.period</div>
+      <div class="history_info"> <img src="$!obj.lucky_userphoto" />
+        <div class="base_info">
+          <p>恭喜 <a href="javascript:void(0)" class="name">$!obj.lucky_username</a><span></span>获得了本期商品</p>
+          <p>用户ID：$!obj.lucky_userid（ID为用户唯一不变标识）</p>
+          <p>本期参与：<strong class="red">$!obj.lucky_usertimes人次</strong></p>
+        </div>
+        <div class="countdown" style="display:none"><!-- 没有揭晓之前此div显示--> 
+          <span class="countdown_title">揭晓倒计时</span> <span class="countdown_num"> <b>0</b> <b>1</b> : <b>5</b> <b>9</b> : <b>4</b> <b>6</b> </span> </div>
+      </div>
+      <div class="history_result">
+        <p>幸运号码：<strong class="red">$!obj.lucky_code</strong></p>
+        <p>揭晓时间：$!obj.announced_date</p>
+        <p>夺宝时间：$!obj.soldout_date</p>
+      </div>
+      <div class="history_operation"> <a href="$!webPaht/cloudbuy/items?id=$!obj.id" target="_blank">查看详情</a> </div>
+    </li>
+  #end
+  </ul>
+</div>
+<div class="fenye" target_id="history"> <span> $!history_gotoPageAjaxHTML</span> </div>
+#else
+<div class="novalue"  style="margin-top:52px; margin-left:52px;">还没有往期记录</div>
+#end

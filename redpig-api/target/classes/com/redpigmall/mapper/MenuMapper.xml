@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.MenuMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Menu">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+		<result column="value" property="value" jdbcType="VARCHAR"/>
+		<result column="op" property="op" jdbcType="VARCHAR"/>
+		<association property="parent" column="parent_id" select="com.redpigmall.dao.MenuMapper.selectByPrimaryKey"/>
+		<collection property="childs" column="id" select="com.redpigmall.dao.MenuMapper.getChildsById"/>
+		<collection property="allChilds" column="id" select="com.redpigmall.dao.MenuMapper.getAllChildsById"/>
+	</resultMap>
+	
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Menu">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+		<result column="value" property="value" jdbcType="VARCHAR"/>
+		<result column="op" property="op" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,name,url,type,value,op,parent_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="ids !=null">
+			and obj.id in
+			<foreach collection="ids" index="index" item="item" open="(" separator="," close=")"> 
+	            #{item}
+	        </foreach>
+		</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="name != null">and name = #{name,jdbcType=VARCHAR}</if>
+		<if test="url != null">and url = #{url,jdbcType=VARCHAR}</if>
+		<if test="type != null">and type = #{type,jdbcType=VARCHAR}</if>
+		<if test="value != null">and value = #{value,jdbcType=VARCHAR}</if>
+		<if test="op != null">and op = #{op,jdbcType=VARCHAR}</if>
+		
+		<if test="parent_id !=null and parent_id != -1">and parent_id=#{parent_id,jdbcType=BIGINT}</if>
+		<if test="parent_id !=null and parent_id ==-1">and parent_id is null</if>
+		<if test="parent !=null and parent ==-1">and parent_id is null</if>
+	</sql>
+	<sql id="ifStatement">
+		name= #{name},
+		url= #{url},
+		type= #{type},
+		value= #{value},
+		op= #{op},
+		<if test="parent == null or parent.id == null">parent_id = null,</if>
+		<if test="parent != null and parent.id != null">parent_id = #{parent.id,jdbcType=BIGINT},</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT 
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_menu 
+		WHERE id = #{id,jdbcType=BIGINT} 
+	</select>
+	
+	<select id="getChildsById" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT 
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_menu obj
+		JOIN redpigmall_user_menu um ON obj.id = um.menu_id AND obj.parent_id = #{id,jdbcType=BIGINT} AND obj.deleteStatus=0 
+	</select>
+	
+	<select id="getAllChildsById" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT 
+		<include refid="Base_Column_List"/> 
+		FROM redpigmall_menu obj
+		WHERE obj.parent_id = #{id,jdbcType=BIGINT} AND obj.deleteStatus=0 
+	</select>
+	
+	<select id="queryPageList" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_menu obj 
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+					ORDER BY obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.Menu" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		INSERT INTO redpigmall_menu(
+			id,addTime,deleteStatus,name,url,type,value,op,parent_id
+		)
+		values(
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{value,jdbcType=VARCHAR},
+		#{op,jdbcType=VARCHAR},
+		#{parent_id,jdbcType=BIGINT}
+		)
+	</insert>
+	<update id="update" parameterType="com.redpigmall.domain.Menu">
+		UPDATE redpigmall_menu 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM redpigmall_menu WHERE id=#{id,jdbcType=BIGINT}
+	</delete>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT count(1) from redpigmall_menu obj 
+		WHERE 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	
+	<select id="queryPages" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="map">
+		SELECT  obj.* FROM redpigmall_menu obj 		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Menu" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	 insert into redpigmall_menu(id,addTime,deleteStatus,name,url,type,value,op,parent_id)
+	 values(
+	 	#{addTime,jdbcType=TIMESTAMP},
+	 	#{deleteStatus,jdbcType=INTEGER},
+	 	#{name,jdbcType=VARCHAR},
+	 	#{url,jdbcType=VARCHAR},
+	 	#{type,jdbcType=VARCHAR},
+	 	#{value,jdbcType=VARCHAR},
+	 	#{op,jdbcType=VARCHAR},
+	 	#{parent_id,jdbcType=BIGINT})
+	 </insert>
+	
+	<update id="updateById" parameterType="com.redpigmall.domain.Menu">
+		UPDATE redpigmall_menu
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<delete id="deleteById" parameterType="java.lang.Long">
+			DELETE FROM redpigmall_menu WHERE id=#{id,jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		DELETE FROM redpigmall_menu WHERE id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap2" parameterType="map">
+		SELECT obj.* from redpigmall_menu obj 		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap2" parameterType="map">
+		SELECT obj.* FROM redpigmall_menu obj 
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+					ORDER BY obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM redpigmall_menu
+		WHERE 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				AND ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		DELETE FROM redpigmall_menu where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<select id="getMenusByUserId" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT m.* FROM redpigmall_menu m 
+		JOIN 
+			redpigmall_user_menu ur 
+		ON 
+			m.id = ur.menu_id 
+		AND 
+			ur.user_id = #{id,jdbcType=BIGINT} 
+		AND 
+			m.parent_id is null 
+		AND 
+			m.deleteStatus=0
+		ORDER BY m.sequence 
+	</select>
+	
+	<select id="getUserMenus" resultType="com.redpigmall.domain.Menu" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT obj.* FROM redpigmall_menu obj
+		JOIN redpigmall_user_menu um ON obj.id = um.menu_id 
+		AND obj.parent_id = #{menuId,jdbcType=BIGINT} AND obj.deleteStatus=0 AND um.user_id=#{userId,jdbcType=BIGINT}
+	</select>
+	
+</mapper>

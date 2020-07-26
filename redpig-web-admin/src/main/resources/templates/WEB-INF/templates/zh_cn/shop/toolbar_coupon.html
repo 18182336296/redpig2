@@ -1,0 +1,114 @@
+
+<div class="right_nav_r_r_top">
+      <h3><a href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/backe.png" /></a></h3>
+      <span id="span">优惠券</span> 
+</div>
+
+
+<div class="right_nav_coupon_none" #if($!coupons.size()>0 || $!objs.size() > 0) style="display:none" #end></div>
+      <ul class="coupon">
+      #if($!coupons)
+ <script>
+    jQuery(document).ready(function(e) {
+		if(jQuery("#uncollected li").size()==0 && jQuery("#collected li").size()==0){//该店铺没有优惠信息
+		    jQuery(".right_nav_coupon_none").show();
+			//jQuery(".coupon").hide();
+			//jQuery("#collect_more").hide();
+		}else if(jQuery("#uncollected li").size()==0 && jQuery("#collected li").size()>0){//已领取完优惠券
+		     jQuery("#uncollected").hide();
+			 jQuery("#collected").show();
+		}else if(jQuery("#collected li").size()==0 && jQuery("#uncollected li").size()>0){//未领取优惠券
+		     jQuery("#collected").hide();
+			 jQuery("#uncollected").show();
+		}
+    });
+	function get_coupon(obj){	
+		jQuery.ajax({
+			type:'POST',url:'$!webPath/capture_goods_coupon',
+			data:{"coupon_id":obj},
+			success:function(data){
+			  if(data=="true"){
+					var html=jQuery("#uncollected li[id='coupon_"+obj+"'] div[id='uncollected_info']").html();
+					jQuery("#collected").append(" <a href='$!webPath/buyer/coupon'><li id='coupon_"+obj+"'>"+html+"</li>");		
+			        jQuery("#uncollected li[id='coupon_"+obj+"']").remove();
+					jQuery("#collected").show();
+					if(jQuery("#uncollected li").size()==0 && jQuery("#collected li").size()==0){//该店铺没有优惠信息
+					    jQuery(".right_nav_coupon_none").show();
+						//jQuery(".coupon").hide();
+						//jQuery("#collect_more").hide();
+				    }else if(jQuery("#uncollected li").size()==0 && jQuery("#collected li").size()>0){//已领取完优惠券
+					   jQuery("#uncollected").hide();
+					   jQuery("#collected").show();
+				    }else if(jQuery("#collected li").size()==0 && jQuery("#uncollected li").size()>0){//未领取优惠券
+					   jQuery("#collected").hide();
+					   jQuery("#uncollected").show();
+				    }
+			   }
+			}
+		});
+	}
+</script>
+      #if($!all)
+      #set($coupons=$!objs)
+      #end
+      #if($!coupons.size()>0)
+      <div id="uncollected">
+      <h6 >店铺可领取优惠券</h6>
+      #foreach($coupon in $coupons)
+      #if(!$!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+      #if($!{velocityCount}<=5)
+      <a href="javascript:void(0);">
+      	<li class="stor_coupon" id="coupon_$!{coupon.id}"> <div id="uncollected_info"><span class="coupon_left"> <b>￥</b>$!{coupon.coupon_amount}
+          <h4>单笔满$!{coupon.coupon_order_amount}使用</h4>
+          </span> <span class="coupon_right">
+          <h5>有效期</h5>
+          <h5>$!coupon.coupon_begin_time</h5>
+          <h5>$!coupon.coupon_end_time</h5>
+          </span></div>
+          <div class="coupon_right_r" onclick="get_coupon('$!{coupon.id}');"><b>立即<br />领取</b>
+	<em><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/more_r.png" width="16" height="16" /></em></div>
+           </li>
+      </a>
+      #end
+      #end
+      #end
+      <i class="coupon_more">#if($!goods_id)<a href="$!webPath/goods_coupon?goods_id=$!{goods_id}" target="_blank">#else<a href="$!webPath/store_coupon?store_id=$!{store_id}" target="_blank">#end<b>查看更多</b> <em><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/more_r.png" width="14" height="14" /></em></a></i>
+      </div>
+      <div id="collected">
+      <h6 >已领取的优惠券</h6>
+        #foreach($coupon in $coupons)
+        #if($!couponViewTools.isPossessCoupon($!{coupon.id},$!{user.id}))
+        #if($!{velocityCount}<=5)
+         <a href="$!webPath/buyer/coupon">
+        <li id="coupon_$!{coupon.id}"> <span class="coupon_left"> <b>￥</b>$!{coupon.coupon_amount}
+          <h4>单笔满$!{coupon.coupon_order_amount}使用</h4>
+          </span> <span class="coupon_right">
+          <h5>有效期</h5>
+          <h5>$!coupon.coupon_begin_time</h5>
+          <h5>$!coupon.coupon_end_time</h5>
+          </span> </li>
+        </a> 
+          #end
+          #end  
+          #end  
+        #end
+     #else
+      #foreach($obj in $objs)
+      #if($!obj.store || $!obj.store_id!=-1)
+        <a href="$!webPath/buyer/coupon">
+        <li> <span class="coupon_left"> <b>￥</b>$!obj.coupon_amount
+          <h4>单笔满$!obj.coupon_order_amount使用</h4>
+          </span> <span class="coupon_right">
+          <h5>有效期</h5>
+          <h5>$!obj.coupon.coupon_begin_time</h5>
+          <h5>$!obj.coupon.coupon_end_time</h5>
+          </span> </li>
+        </a> 
+      #end
+      #end     
+    #end      
+    </div>
+      </ul>
+<div  #if($!objs.size()<1) || $!coupons.size()==0) style="display:none" #end  class="right_more" id="collect_more">
+        	<a href="$!webPath/buyer/coupon">查看更多>></a>
+</div>

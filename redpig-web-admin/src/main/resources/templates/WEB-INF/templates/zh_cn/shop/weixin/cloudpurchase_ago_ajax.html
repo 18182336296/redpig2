@@ -1,0 +1,17 @@
+#foreach($obj in $objs)
+<li>
+<p class="title_p">期号：$!{obj.period} ( 揭晓时间：$!{obj.announced_date})</p>
+<dl>
+#set($photo = "$!cdnServer/resources/style/system/front/default/images/weixin/snatch_default.jpg")
+#if($!obj.user.photo)
+#set($photo = "$!obj.lucky_userphoto")
+#end
+<dt><img src="$!{photo}"></dt>
+<dd>
+<p>获奖者：<span class="name">$!obj.lucky_username</span></p>
+<p>幸运号码：<span class="red">$!obj.lucky_code</span></p>
+<p>本期参与：<span class="red">$!obj.lucky_usertimes</span>人次</p>
+</dd>
+</dl>
+</li>
+#end

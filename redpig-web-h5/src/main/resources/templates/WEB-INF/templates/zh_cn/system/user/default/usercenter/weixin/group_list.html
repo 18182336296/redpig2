@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>生活购订单列表 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+    jQuery(".user_allorder dl").click(function(){
+		id = jQuery(this).attr("oid");
+		window.location.href="$!webPath/buyer/group_view?id="+id;
+	})
+	 jQuery(".user_allorder h3").click(function(){
+		id = jQuery(this).attr("oid");
+		window.location.href="$!webPath/buyer/group_view?id="+id;
+	})
+});<!--end-->
+function order_pay(id){
+	window.location.href="$!webPath/order_pay_view?id="+id;
+}
+function order_cofirm(id){
+	if(confirm("确定要确认收货？")){
+		window.location.href="$!webPath/buyer/group_cofirm?id="+id;
+	}
+}
+function order_discuss(id){
+	window.location.href="$!webPath/buyer/group_discuss?id="+id;
+}
+function cancel(obj_id){
+	if(confirm("确定取消订单吗？")){	
+	 window.location.href='$!webPath/buyer/lifeorder_cancel?id='+obj_id;	
+	}	
+};
+jQuery(document).ready(function(){
+   var status = "$!type";
+   if(status==""){
+		status = 0;	   
+   }
+   jQuery(" li[id^=order_status]").each(function(index, element) {
+    jQuery(element).removeClass("this");
+	});
+	jQuery("#order_status_"+status).addClass("this");
+	jQuery("#url").val(status);
+   if("$!orders.size()">0){
+   var begin_count =12;
+   var ret = 1;
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height() && ret==1) {
+		 jQuery.ajax({type:'POST',
+	              url:'$!webPath/buyer/group_data',
+				  data:{"begin_count":begin_count,"order_status":"$!{order_status}","type":"$!type"},
+				beforeSend:function(){
+				  ret = 2;
+				  begin_count = begin_count +12;
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				},
+			   success:function(data){
+				 jQuery("#loading").hide();
+	             if(data){ 
+				  jQuery("#order_list_data").append(data);
+				  ret = 1;
+			 	 }else{
+				 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+	 }
+	});	
+   }
+});<!--end-->
+</script>
+</head>
+<body class="user_bg" style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="user_c_title">
+		<a class="back" href="javascript:history.go(-1);"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"
+			 /></a>我的生活购订单
+		<a class="per_c_icon" href="$!webPath/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a>
+	</div>
+
+<div class="order_page" style="background:none;">
+<!--<div class="order_hd">
+    <ul>
+      <li id="order_status_0"><a href="$!webPath/buyer/group_list">全 部</a></li>
+      <li id="order_status_order_nopay"><a href="$!webPath/buyer/group_list?type=order_nopay&&order_status=10">待付款</a></li>
+      <li id="order_status_order_noship"><a href="$!webPath/buyer/group_list?type=order_noship&&order_status=20">待发货</a></li>
+      <li id="order_status_order_notake"><a href="$!webPath/buyer/group_list?type=order_notake&&order_status=30">待收货</a></li>
+      <li id="order_status_order_over"><a href="$!webPath/buyer/group_list?type=order_over&&order_status=40">已收货</a></li>
+    </ul>
+</div>-->
+<input type="hidden" name="url" id="url">
+<div id="order_list_data">
+#if($orders.size()>0)
+#foreach($order in $orders)
+#if($!order.order_status==0)
+#set($status="已取消")
+#end
+#if($!order.order_status==10)
+#set($status="待付款")
+#end
+#if($!order.order_status==16)
+#set($status="待发货")
+#end
+#if($!order.order_status==20)
+#set($status="已付款")
+#end
+#if($!order.order_status==30)
+#set($status="已发货")        
+#end                
+#if($!order.order_status==40)
+#set($status="已收货")
+#end
+#if($!order.order_status==50)
+#set($status="已完成")                                              
+#end
+#if($!order.order_status==65)
+#set($status="系统自动评价")                                              
+#end
+	<div class="order_page_box">
+    	<h1><span class="fl">订单号：$!order.order_id</span><span class="fr">$!status</span></h1>
+        #set($price = $!orderFormTools.query_order_price("$!order.id"))
+        #set($map = $!orderFormTools.queryGroupInfo("$!order.group_info"))
+        #set($count = $!CommUtil.add($!{count}, $!{map.get("goods_count")}))
+        
+        <div class="order_goods">
+        #set($goods_name = "$!{map.get('goods_name')}")
+        #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+        #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+        #set($goods_id = "$!{map.get('goods_id')}")
+        	<div class="dt"><a href="$!webPath/grouplife/view?id=$!goods_id"><img src="$!img" width="50" height="50" /></a></div>
+            <ul>
+            	<li><b>¥ $!map.get("goods_price")</b></li>
+                <li>X $!orderFormTools.query_group_count("$!order.id")</li>
+            </ul>
+            <div class="dd"><a href="javascript:void(0);">$!goods_name</a></div>
+        </div>
+        <div class="order_total">共 $!orderFormTools.query_group_count("$!order.id") 件商品 实付：<b>¥ $!{price}</b></div>
+        #if($!order.order_status!=0)
+        <div class="order_box_bt">
+        <a href="javascript:void(0);" onClick="url('$!webPath/buyer/group_view?id=$!{order.id}')">查看订单</a>    
+        #if($!order.order_status==30 || $!order.order_status==35)
+        <a class="bg_orange" href="javascript:void(0);" onClick="order_cofirm($!{order.id})">确认收货</a>
+        #elseif($!order.order_status < 11 && $!order.order_status != 0)
+      	<a class="bg_orange" href="javascript:void(0);" onClick="order_pay($!{order.id})">付款</a>
+        <a href="javascript:void(0);" onClick="cancel($!{order.id})">取消订单</a>
+        #end
+        </div>
+        #end
+    </div>
+#end
+#else
+<div class="main">
+          <div class="mt50" style="height:49px;"></div>
+          <div class="error_page1">
+            <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+            <p>暂无记录！</p>
+          </div>
+        </div>
+#end
+</div>
+<script>
+function url(url){
+	var type = jQuery("#url").val();
+	url = url+"&&type="+type;
+	window.location.href=url;
+}
+</script>
+<div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+<div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>  
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+	  sequence:{required:true,
+	            digits:true},
+	  serve_name:{required :true},
+	  serve_price:{required :true,
+	               number:true}
+	},
+	messages:{
+	  sequence:{required:"序号不能为空",
+	            digits:"请输入整数"},
+	  serve_name:{required:"服务名称不能为空"},
+	  serve_price:{required:"收费标准不能为空",
+	                number:"请输入合法的数字"
+				   }
+	}
+  });
+    jQuery("#service_img").change(function(){
+	 jQuery("#service_img_text").val(jQuery("#service_img").val());
+   })
+});
+</script>
+</head>
+<body>
+<form action="$!webPath/merchant_services_save" method="post" name="theForm" id="theForm" enctype="multipart/form-data">
+  <div class="cont">
+    <h1 class="seth">商家服务</h1>
+    <div class="nav_list">
+      <ul>
+        <li><a href="$!webPath/merchant_services_list" ><b>管理</b></a> </li>
+        <li> <a href="$!webPath/merchant_services_add"   class="this" ><b>新增</b></a></li>
+      </ul>
+    </div>
+    <div class="edit">
+      <div class="editul setcont ">
+        <ul class="set3">
+          <li>序号</li>
+          <li><span class="size70">
+            <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">越小显示越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+       <ul class="set3">
+          <li>标识</li>
+          <li> <span class="size13" >
+            <input name="service_img_text" type="text" id="service_img_text" />
+            </span> <span class="filebtn">
+            <input name="button" type="button" id="button1" value=""/>
+            </span> <span style="float:left;" class="file">
+            <input name="service_img" type="file" id="service_img" class="file-text" size="30"/>
+            </span> <span class="preview" onmousemove="jQuery('#logoImg').show();" onmouseout="jQuery('#logoImg').hide();"> <img src="$!cdnServer/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span> <span id="nothis"><strong class="q"></strong><strong class="w">最佳尺寸:20像素 * 20像素</strong><strong class="c"></strong></span>
+            <div class="bigimgpre" id="logoImg" style="display:none;">#if($!obj.service_img)<img src="$!imageWebServer/$!obj.service_img.path/$!obj.service_img.name" ></img>#end</div>
+          </li>
+        </ul>
+        <ul class="set3">
+          <li><strong class="sred">*</strong>服务名称
+            <input name="id" type="hidden" id="id" value="$!obj.id" />
+            <input name="add_url" type="hidden" id="add_url" value="$!webPath/merchant_services_add" />
+            <input name="list_url" type="hidden" id="list_url" value="$!webPath/merchant_services_list" />
+          </li>
+          <li><span class="size250">
+            <input name="serve_name" type="text" id="serve_name" value="$!obj.serve_name"  />
+            </span></li>
+        </ul>
+        <ul class="set3">
+          <li><strong class="sred">*</strong>收费标准</li>
+          <li><span class="size250">
+            <input name="serve_price" type="text" id="serve_price" value="$!obj.serve_price" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">若违反服务承诺，按当前收费标准收取费用</strong><strong class="c"></strong></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit">
+      <input name="" type="submit" value="提交" />
+    </div>
+  </div>
+</form>
+</body>
+</html>

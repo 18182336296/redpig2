@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>1元云购清单 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//计算数值-
+ jQuery("a[id^=co_down_]").click(function(){
+	var gc_id=jQuery(this).attr("gc_id");
+	var count=parseInt(jQuery("#count_"+gc_id).val());
+	  if(count>1){
+	   var isTen=jQuery("#count_"+gc_id).attr("isTen");
+	if(isTen=="true"){
+		count=count-10;
+		if(count==0){
+			count=10;
+			}
+	}else{
+		 count--;
+		}
+	    jQuery("#count_"+gc_id).val(count);
+        goods_count_adjust(gc_id,count);
+	  }
+  });
+  //计算数值+
+  jQuery("a[id^=co_up_]").click(function(){
+	var gc_id=jQuery(this).attr("gc_id");
+	var count=parseInt(jQuery("#count_"+gc_id).val());
+	var isTen=jQuery("#count_"+gc_id).attr("isTen");
+	if(isTen=="true"){
+		count=count+10;
+	}else{
+		 count++;
+		}
+	   
+		jQuery("#count_"+gc_id).val(count);
+	    goods_count_adjust(gc_id,count);
+  });
+  //计算数值input
+  jQuery("input[id^=count_]").keyup(function(){
+	var gc_id=jQuery(this).attr("gc_id");	
+	var count=jQuery("#count_"+gc_id).val().replace(/\D/g,'');
+	if(count==""){
+       count=1;
+	}	
+	  if(count>0){
+	    goods_count_adjust(gc_id,count);
+	  }
+	  if(count==0){
+		jQuery("#count_"+gc_id).val("1");
+		goods_count_adjust(gc_id,1);
+	  }
+
+  });
+  var c = all_counts();
+jQuery("#ap").html(c+"元");
+});	
+
+
+function all_counts(){
+			var all_count = 0;
+			jQuery("input[id^=count_]").each(function(){
+		    all_count = all_count + parseInt(jQuery(this).val());
+	  		});
+			return all_count;
+}
+
+function goods_count_adjust(gc_id,count){
+	var times=parseInt(jQuery("#count_"+gc_id).attr("times"));
+	if(count>times){
+	   count=times;
+	}
+	jQuery.post("$!webPath/cloudpurchase_cart_adjust",{"id":gc_id,"count":count},function(data){
+		if(data.status=="1"){
+			jQuery("#count_"+gc_id).val(data.count);
+			var all_count = all_counts();
+			jQuery("#ap").html(all_count+"元");
+		}																											  
+	},"json");
+	
+}
+var size = "$!{objs.size()}";
+
+
+function remove_cart(arg){
+	var p = jQuery("#count_"+arg).val();
+	jQuery.post("$!webPath/cloudpurchase_cart_remove",{"id":arg},function(data){
+			if("success"==data){
+				 jQuery("#cart_item_"+arg).remove();
+				 size = size - 1;
+				 var now_price = all_counts();
+				 jQuery("#all_size").html("共参与"+size+"件商品，总计：<i class='red'>"+now_price+"元</i>")
+				 if(size==0){
+					 jQuery(".none_snatch").show();
+					 jQuery("#submit_button").hide();
+				 }
+				}																											  
+		});
+}
+</script>
+</head>
+
+<body>
+<div class="phone_hd">
+   <a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png"></a>
+    云购清单
+     <a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png"></a>
+</div>
+<div class="m_cart" style="margin-top:2rem;">
+    #foreach($obj in $objs)
+    #if($!obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo)                              					  
+        #set($img="$!obj.cloudPurchaseLottery.cloudPurchaseGoods.primary_photo")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+	<div class="cart_item" id="cart_item_$!obj.id">
+    	<div class="pic">
+        	<a href="$!webPath/cloudpurchase_items?id=$!obj.cloudPurchaseLottery.id"><img src="$!img"></a>
+        </div>
+        <div class="text">
+        	<h1 class="s_title">$!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_name</h1>
+            <p class="total_num">总需 $!obj.cloudPurchaseLottery.cloudPurchaseGoods.goods_price人次，剩余<span> $!obj.cloudPurchaseLottery.purchased_left_times </span>人次</p>
+            <div class="add_number_box">
+            	参与人次
+                <div class="add_number">
+                #set($isTen = $!obj.cloudPurchaseLottery.cloudPurchaseGoods.least_rmb==10)
+                #set($isF = $!obj.purchased_times%10==0)
+                    <input #if($!isTen&&$!isF||!$!isTen) value="$!obj.purchased_times" #else value="10" #end  id="count_$!obj.id" type="text" name="count_$!obj.id" gc_id="$!obj.id" times="$!obj.cloudPurchaseLottery.purchased_left_times" isTen="$!isTen" />
+                    <a href="javascript:void(0);" id="co_up_$!obj.id" gc_id="$!obj.id">+</a>
+                    <a href="javascript:void(0);" id="co_down_$!obj.id" gc_id="$!obj.id" class="reduce">-</a>
+                </div>
+                 <a class="delete" href="javascript:void(0);" onClick="remove_cart($!obj.id);"></a>
+            </div>
+           
+           	
+            #if($!isTen) <p class="ten_hint red">参与人次需是10的倍数</p>#end
+        </div>
+        #if($!isTen) <div class="ten_area"></div>#end
+    </div>
+    #end
+    
+    
+<div class="none_snatch" #if($!objs.size()!=0) style="display:none" #end>
+        	<a href="$!webPath/cloudpurchase_index">
+                <p>还没有商品噢，去首页看看吧</p>
+            </a>
+        </div>    
+</div>
+
+<div style="height:55px;"></div>
+<div class="m_detail_go">
+	<span id="all_size" price="$!all_price">共参与$!objs.size()件商品，总计：<i class="red" id="ap">元</i></span>
+   #if($!objs.size()!=0) <a class="quick_go quick_submit" id="submit_button" href="$!webPath/cloudpurchase_cart2">提交</a> #end
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>$!store.store_name - 上新</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ jQuery("#store_class").html(jQuery("#store_class").html()+" -上新");
+ jQuery(".more").click(function(){
+		if(jQuery(".down").css("display")=="none"){
+			jQuery(".down").show();
+			jQuery(".black_bg").show();
+		}else{
+			jQuery(".down").hide();
+			jQuery(".black_bg").hide();
+		}
+	})
+   jQuery(document).click(function(e){   
+   var tar = jQuery(e.target);
+   if(!"mo_img"==tar.attr("id") || !tar.attr("id")){
+	   jQuery(".down").css("display","none");
+	   jQuery(".black_bg").css("display","none");
+   }
+	});
+})
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main"> 
+  <!--店铺首页-->
+  <div class="store_index">
+    <div class="shop_hd" style="float:none"> <a class="fl" href="$!webPath/store?id=$!store.id"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_icon.png"></a> <span id="store_class">$!store.store_name</span>
+      <div class="fr" id="fr"> <a class="more" href="javascript:void(0);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/shop_more.png" id="mo_img"></a>
+        <div class="down" style="display:none"><a class="car" href="$!webPath/goods_cart1">购物车</a><a class="home" href="$!webPath/index">首页</a><i></i></div>
+        <div class="black_bg" style="display:none"></div>
+      </div>
+    </div>
+    #if($!list.size()>0)
+    <div class="store_list"> #foreach($li in $!list)
+      <h1>$!li.date</h1>
+      <ul class="store_ul">
+        #foreach($goods in $!li.goods_list)
+        #if($!goods.goods_main_photo)
+        #set($goods_c_photo="$!imageWebServer/$!goods.goods_main_photo.path/$!goods.goods_main_photo.name")
+        #else
+        #set($goods_c_photo="$!imageWebServer/$!config.goodsImage.path/$!config.goodsImage.name")
+        #end
+        <li><a href="$!webPath/items?id=$!goods.id"><img src="$!goods_c_photo" />
+          <p class="name">$!goods.goods_name</p>
+          <p class="price">¥$!goods.store_price</p>
+          </a></li>
+        #end
+      </ul>
+      #end </div>
+    #else
+    <div class="error_page1"> <span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+      <p>暂无新品！</p>
+    </div>
+    #end </div>
+</div>
+<div class="mt50"></div>
+</body>
+</html>

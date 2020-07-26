@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.UserDistributionMapper">
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.UserDistribution">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="parent_user_id" property="parent_user_id" jdbcType="BIGINT" />
+		<association property="user" column="user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+
+	
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,user_id,parent_user_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="parent_user_id != null">and parent_user_id = #{parent_user_id,jdbcType=BIGINT}</if>
+        <if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+        <if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+	</sql>
+
+	<sql id="sqlAll">
+		SELECT * FROM redpigmall_user_distribution
+	</sql>
+
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.UserDistribution" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user_distribution
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectByPrimaryKeyEagerStore" resultType="com.redpigmall.domain.UserDistribution" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_user_distribution
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<!--获取所有列表-->
+	<select id="selectAll" resultType="com.redpigmall.domain.UserDistribution" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_distribution
+	</select>
+	<!--以传入的user_id作为基准，查询其下的一级和二级分销商-->
+	<select id="queryTwoAndThreeData" resultType="com.redpigmall.domain.UserDistribution" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	<include refid="sqlAll"/>
+	where  id IN (
+	SELECT
+		id
+	FROM
+		redpigmall_user_distribution
+	WHERE
+		parent_user_id = #{parent_user_id,jdbcType=BIGINT}
+	)
+	UNION
+	<include refid="sqlAll"/>
+	WHERE
+	id IN (
+		SELECT
+			id
+			FROM
+			redpigmall_user_distribution
+			WHERE
+		id IN (
+			SELECT
+			id
+			FROM
+			redpigmall_user_distribution
+			WHERE
+			parent_user_id = #{parent_user_id,jdbcType=BIGINT}
+		)
+	)
+</select>
+	<!--以传入的参数user_id为基准，查询第一级-->
+	<select id="queryTwoData" resultType="com.redpigmall.domain.UserDistribution" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		<include refid="sqlAll"/>
+		where
+			id IN (
+				SELECT
+				id
+				FROM
+				redpigmall_user_distribution
+				WHERE
+				parent_user_id = #{parent_user_id,jdbcType=BIGINT}
+			)
+		<!--UNION
+		<include refid="sqlAll"/>
+		WHERE
+		id IN (
+			SELECT
+			id
+			FROM
+			redpigmall_user_distribution
+			WHERE
+		parent_user_id IN (
+				SELECT
+				id
+				FROM
+				redpigmall_user_distribution
+				WHERE
+				parent_user_id = #{parent_user_id,jdbcType=BIGINT}
+				)
+			)-->
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.NukeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_user_distribution
+		where 1 = 1
+		<include refid="whereStatement"/>
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+			and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from redpigmall_user_distribution obj
+        where 1 = 1
+        <include refid="whereStatement"/>
+    </select>
+</mapper>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>认证信息</title>
+	<link href="$!cdnServer/resources/yingerMall/css/mui.min.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="$!cdnServer/resources/yingerMall/css/common.css" />
+</head>
+<body style="background-color: #fff;">
+<header class="mui-bar mui-bar-nav mui-common-bar">
+	<a class="mui-icon mui-action-back mui-pull-left mui-icon-back-black"></a>
+	<h1 class="mui-title">认证信息</h1>
+</header>
+
+<div class="mui-content">
+	<form class="mui-input-group cer-input-group">
+		<div class="mui-input-row">
+			<label class="cer-lable">姓名</label>
+			<input type="text" class="mui-input-clear cer-input" placeholder="请输入姓名">
+		</div>
+		<div class="mui-input-row">
+			<label class="cer-lable">手机号</label>
+			<input type="text" class="mui-input-clear cer-input" placeholder="请输入手机号">
+		</div>
+		<div class="bor-div"></div>
+
+		<div class="mui-input-row bor-top">
+			<label class="cer-lable">所属单位</label>
+			<input type="text" class="mui-input-clear cer-input" placeholder="请输入所属单位">
+		</div>
+		<div class="mui-input-row">
+			<label class="cer-lable">所属部门</label>
+			<input type="text" class="mui-input-clear cer-input" placeholder="请输入所属部门">
+		</div>
+		<div class="mui-input-row">
+			<label class="cer-lable">职位</label>
+			<input type="text" class="mui-input-clear cer-input" placeholder="请输入职位">
+		</div>
+		<div class="bor-div"></div>
+		<div class="mui-input-row">
+			<label class="cer-lable">身份证号</label>
+			<input type="text" class="mui-input-clear cer-input" placeholder="请输入身份证号">
+		</div>
+		<div class="alone-div">
+			<label class="cer-lable alone-lable">上传身份证</label>
+		</div>
+		<!--上传身份证-->
+		<div class="card-input-row">
+			<!--身份证正面-->
+			<div class="card-pos">
+				<input type="file" class="card-file"/>
+				<!--未上传图片时显示-->
+				<div class="up-ori">
+					<img src="$!cdnServer/resources/yingerMall/images/Positive.png" class="card-img"/>
+					<span class="up-info">点击上传正面</span>
+				</div>
+
+				<!--预览的图片-->
+				<img src="" alt="" class="card-preview" />
+
+			</div>
+			<!--身份证反面-->
+			<div class="card-pos">
+				<input type="file" class="card-file"/>
+				<!--未上传图片时显示-->
+				<div class="up-ori">
+					<img src="$!cdnServer/resources/yingerMall/images/reverse.png" class="card-img"/>
+					<span class="up-info">点击上传反面</span>
+				</div>
+
+				<!--预览的图片-->
+				<img src="" alt="" class="card-preview" />
+			</div>
+		</div>
+	</form>
+</div>
+
+<!--提交订单的占位符-->
+<div class="placeholder"></div>
+<!--提交申请-->
+<div class="cer-btn">
+	<button type="button" class="mui-btn">提交申请</button>
+</div>
+<script src="$!cdnServer/resources/yingerMall/js/mui.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分商城 -$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/integral.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.redpigmall.validate.js" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function() {
+	jQuery(".inte_rank").slide({titCell:".li_list",targetCell:".li_hover",defaultIndex:1,effect:"slideDown",triggerTime:0,returnDefault:true}); 
+	jQuery(".inte_choose").find("li").removeClass("this");
+	jQuery(".inte_choose").find("li").eq($!rank).addClass("this");
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1?op=integral")
+<div class="main">
+	<div class="integral_left">
+    	<h1><b><img src="$!cdnServer/resources/style/system/front/default/images/integral/left_nav_1.png" /></b>商城积分信息</h1>
+        <!--用户头像 -->
+        	#if($!config.memberIcon)
+               #set($img="$!imageWebServer/$!config.memberIcon.path/$!config.memberIcon.name")
+              #end
+               #if($!user.photo)
+               #set($img="$!imageWebServer/$!user.photo.path/$!user.photo.name")
+              #end
+       <div class="userlevel_pho"><img src="$!{img}"></div> 
+        
+        #if(!$!user)
+        <div class="my_inte">
+        	
+            <a class="inte_login_btn" href="javascript:void(0)" dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login">立即登录</a><div class="inte_login">登录显示积分情况</div>
+        </div>
+        #else
+        <div class="my_inte">
+        	<span>
+            	<ul>
+                    #set($level_map=$integralViewTools.query_user_level("$!user.id"))
+                    <li><em></em><span><img src="$!imageWebServer/$!{level_map.icon}" width="20" height="35" /><div class="level"><i>$!{level_map.name}</i></div></span></li>
+                    <li><em>用户积分</em><b>$!user.integral</b></li>
+                </ul> 
+             </span>
+        </div>
+        #end
+        
+        <div class="inte_detail">
+        	<ul>
+                <li><a href="$!webPath/doc?mark=integral" target="_blank">积分兑换说明</a></li>
+            </ul>
+        </div>
+        
+        <div class="inte_arrow"></div>
+        <h1><b><img src="$!cdnServer/resources/style/system/front/default/images/integral/left_nav_2.png" /></b>积分选择区</h1>
+        <div class="inte_choose">
+        	<ul>
+            	<li class="this"><a href="$!webPath/integral/index">全部</a></li>
+            	<li><a href="$!webPath/integral/index?begin=0&end=1999&rank=1">1999分以下</a></li>
+                <li><a href="$!webPath/integral/index?begin=2000&end=3999&rank=2">2000分~3999分</a></li>
+                <li><a href="$!webPath/integral/index?begin=4000&end=5999&rank=3">4000分~5999分</a></li>
+                <li><a href="$!webPath/integral/index?begin=6000&end=9999&rank=4">6000分~9999分</a></li>
+                <li><a href="$!webPath/integral/index?begin=10000&end=0&rank=5">10000以上</a></li>
+            </ul>
+        </div>
+        
+        <div class="inte_arrow"></div>
+        <h1><b><img src="$!cdnServer/resources/style/system/front/default/images/integral/left_nav_3.png" /></b>兑换排行榜</h1>
+        <div class="inte_rank">
+            #foreach($exchange_ig in $exchange_igs)
+            #set($big="$!imageWebServer/$!exchange_ig.ig_goods_img.path/$!exchange_ig.ig_goods_img.name")
+                <h3 class="li_list #if($!velocityCount==1) on #end"><b>$!velocityCount</b><a href="$!webPath/integral/view_$!{exchange_ig.id}" target="_blank">$!exchange_ig.ig_goods_name</a></h3>
+                <div class="li_hover" #if($!velocityCount==1) style="display:block;" #end>
+                    <div class="li_hover_img"><a href="$!webPath/integral/view_$!{exchange_ig.id}" target="_blank"><img src="$!{big}" /></a></div>
+                    <div class="inte_price">
+                        <span>市场价格：¥$!{exchange_ig.ig_goods_price}</span>
+                        <span>兑换积分：<i class="red" style="font-weight:bold">$!exchange_ig.ig_goods_integral</i>分</span>
+                        <span>兑换数量：<i class="red" style="font-weight:bold">$!exchange_ig.ig_exchange_count</i>个</span>
+                    </div>
+                </div>
+            #end
+        </div>
+    </div>
+    
+    <div class="integral_right">
+    	<div class="inte_banner">
+        	<div class="inte_slide">
+            	<script src="$!webPath/advert_invoke?id=5"></script>
+            </div>
+            <div class="inte_advert"><script src="$!webPath/advert_invoke?id=3"></script></div>
+        </div>
+        
+        <h2><b>推荐兑换商品</b><a href="$!webPath/integral/list">更多>></a></h2>
+        <div class="inte_list_box">
+            <div class="inte_list">
+            	#foreach($recommend_ig in $recommend_igs)
+            	<ul>
+                	<li class="recom_img"><a href="$!webPath/integral/view_${recommend_ig.id}" target="_blank"><img src="$!imageWebServer/$!recommend_ig.ig_goods_img.path/$!recommend_ig.ig_goods_img.name" width="200" height="200" /></a><span>
+                    <a href="$!webPath/integral/view_${recommend_ig.id}" target="_blank">$!recommend_ig.ig_goods_name</a></span>
+                    </li>
+                    <li class="inte_number">
+                         #set($level_map = $!integralViewTools.query_level("$!recommend_ig.ig_user_Level"))
+                    	<div class="level_img"><img src="$!imageWebServer/$!{level_map.icon}" width="25" height="40" /></div>
+                        <div class="level_num">
+                        <strong>$!{level_map.name}专享</strong>
+                    	<b>需要$!recommend_ig.ig_goods_integral积分</b>
+                        </div>
+                    <a href="javascript:void(0);" #if(!$!user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="window.location.href='$!webPath/integral/exchange1?id=$!recommend_ig.id'" #end>兑换</a>
+                    </li>
+                </ul>
+                #end 
+            </div>
+        </div>
+    </div>
+</div>
+ $!httpInclude.include("/footer")
+  $!httpInclude.include("/toolbar") 
+</body>
+</html>

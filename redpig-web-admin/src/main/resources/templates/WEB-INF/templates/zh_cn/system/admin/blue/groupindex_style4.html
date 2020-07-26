@@ -1,0 +1,159 @@
+<script>
+jQuery(document).ready(function(){
+  jQuery(":radio").click(function(){
+     var val=jQuery(this).val();
+	 jQuery("li[id^=user_adv_]").hide();
+	 jQuery("li[id^=system_adv_]").hide();
+	 if(val=="img"){
+	  jQuery("li[id^=user_adv_]").show();
+	 }
+	 if(val=="adv"){
+	  jQuery("li[id^=system_adv_]").show();
+	 }
+  });
+  //
+  jQuery("#img").change(function(){
+     jQuery("#file_val").val(jQuery(this).val());
+  });
+  //
+  
+   jQuery("#theForm").validate({		
+	 ignore: "",						   
+     rules:{
+	   img:{accept:"$!config.imageSuffix"},
+	   adv_url:{url:true}
+	 },
+	messages:{
+	  img:{accept:'图片格式不正确'},
+	  adv_url:{url:"广告链接格式不正确"}
+	}
+  });  
+  jQuery("#logoShow").hover(function(){
+		jQuery("#logoImg").show();							   
+	},function(){
+		jQuery("#logoImg").hide();	
+		});
+  });
+
+  function save_form(){
+	 //var value=jQuery("input[name='aps_type']:checked").val();
+	var ids="";
+	jQuery("#goodsContainer1 input[type=checkbox]").each(function(){									  
+	 	if(jQuery(this).attr("checked")){
+             ids += ","+jQuery(this).val();
+		}
+   });
+   if(ids!=""){
+	   ids=ids.substring(1);
+	   }
+	jQuery("#ggid").val(ids);
+	jQuery("#theForm").submit();
+	
+  }
+  
+  function getClass(val,flag){
+  	var gid="";
+	if(flag==1){
+		gid=jQuery("#topClass").val();
+		}else{
+			gid=jQuery("#secondClass").val();
+		}
+		jQuery.ajax({
+			 type:'POST',
+			 url:'$!webPath/getGroupClass',
+			 data:{"pid":gid,"flag":flag},
+			 success:function(data){
+	           if(data!=null && data!=""){
+				   if(flag==1){
+						jQuery("#secondClass").empty().append(data);   
+					}else{
+						jQuery("#thirdClass").empty().append(data);
+					}
+	           }
+	         }
+		  }); 
+  }
+  function choseClass(val){
+		var gid=jQuery(val).val();
+		  jQuery.ajax({
+			 type:'POST',
+			 url:'$!webPath/getGroupitems',
+			 data:{"pid":gid},
+			 success:function(data){
+	           if(data!=null){
+				  jQuery("#goodsContainer").empty().append(data); 
+				  jQuery("#goodsContainer1 input[type=checkbox]").each(function(index1, element1) {
+        			jQuery("#goodsContainer input[type=checkbox]").each(function(index2, element2) {
+						if(jQuery(element1).val()==jQuery(element2).val()){
+							jQuery(element2).prop("disabled", true);
+						}
+        			});
+    			});
+	           }
+	         }
+		  }); 
+}
+function deleteClass(val){
+	jQuery("#goodsContainer input[type=checkbox]").each(function() {
+		if(jQuery(this).val()==jQuery(val).val()){
+			jQuery(this).prop("disabled", false);
+			this.checked=false;
+		}
+	});
+	jQuery(val).parent().remove();
+}
+function setClass(val){
+	var id=jQuery(val).val();
+	var name=jQuery(val).parent().text();
+	jQuery(val).prop("disabled", true);
+	jQuery("#goodsContainer1").append("<b style='background:#f9f9f9' ><input type='checkbox' id='"+id+"' checked='checked' onClick='deleteClass(this);' value='"+id+"'/>"+name+"</b>");
+}
+</script>
+<style>
+.floor_adv_s{width:280px;}
+.floor_adv_s select{width:70px; height:25px; line-height:25px; border:solid 1px #DBDBDB; border-radius:3px; margin-right:10px;}
+</style>
+<form action="$!webPath/groupindex_style_save" method="post" enctype="multipart/form-data" id="theForm" name="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id">
+  <input name="seq" type="hidden" id="seq" value="$!seq">
+  <input name="type" type="hidden" id="type" value="$!style">
+  <input name="ggid" type="hidden" id="ggid" value="$!obj.gid_nav_right_img_list">
+<div class="box_floor">
+  <div class="floor_advertisment">
+   <em class="floor_warning">选择多个生活购商品用于轮播</em>
+   <div id="goodsContainer1" style="clear:both; border-bottom: 1px solid #D8D8D8;width: 645px;margin-left: 20px;
+text-align: left;padding: 10px 0px;">
+  	#foreach($gg in $!group_tools.getGrouplifeGoods($!obj.gid_nav_right_img_list)) <b style="background:#f9f9f9" >
+        <input type="checkbox" id="$!gc.id" checked="checked" onClick="deleteClass(this);" value="$!gg.id"/>
+        $!gg.gg_name</b> 
+     #end
+  </div>
+    <ul class="floor_adv">
+      <li>
+      	<div style="" class="floor_adv_s">
+        	<span>选择:</span>
+             <select id="topClass" style="" onChange="getClass(this,1)">
+			<option id="">请选择...</option>
+             #foreach($gc1 in $!gpcs)
+            <option id="$!gc1.id" value="$!gc1.id">$!gc1.gc_name</option>
+            #end
+        </select>
+        <select id="secondClass" onChange="getClass(this,2)">
+        	<option id="">选择</option>
+        </select>
+        <select id="thirdClass" onChange="choseClass(this)">
+        	<option id="">选择</option>
+        </select>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="goodsContainer" style="clear:both; border-bottom: 1px solid #D8D8D8;width: 645px;margin-left: 20px;
+text-align: left;padding: 10px 0px;">
+  	
+  </div>
+  <div class="submit">
+      <input name="按钮" type="button" value="保存" onClick="save_form();" />
+    </div>
+</div>
+</form>

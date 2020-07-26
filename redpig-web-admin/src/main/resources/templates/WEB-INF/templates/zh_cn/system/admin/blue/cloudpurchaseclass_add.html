@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script>
+jQuery(document).ready(function() {
+    //改变系统提示的样式
+    jQuery("span .w").mousemove(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "nothis") {
+            jQuery(this.parentNode).attr("id", "this")
+        }
+    }).mouseout(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "this") {
+            jQuery(this.parentNode).attr("id", "nothis")
+        }
+    });
+    jQuery("#class_img").live("change",
+    function() {
+        jQuery.ajaxFileUpload({
+            url: '$!webPath/cloudpurchaseclass_upload',
+            fileElementId: ['class_img'],
+			fileFilter: "$!imageSuffix1",
+            data: {id:$!obj.id},
+            dataType: 'json',
+            success: function(data) {
+                jQuery("#img_url").val(data.src);
+                jQuery("#img_ul").show();
+                jQuery("#img_ul").find("img").attr("src", data.src);
+            }
+        });
+    });
+    //  
+
+    //
+    jQuery("#theForm").validate({
+        rules: {
+            class_name: {
+                required: true
+            },
+            img_url: {
+                required: true
+            },
+			sequence: {
+                required: true,
+				number:true
+            }
+			
+        },
+        messages: {
+            class_name: {
+                required: "云购分类不能为空"
+            },
+            img_url: {
+                required: "分类图片不能为空"
+            },
+			sequence: {
+                required: "分类排序不能为空",
+				number:"请输入正确数字"
+            }
+			
+        }
+    });
+});
+//
+function saveForm(method) {
+    jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">云购分类管理</h1>
+  <div class="nav_list">
+    <ul>
+      <li> <a href="$!webPath/cloudpurchaseclass_list"><b>管理</b></a></li>
+      <li> <a href="$!webPath/cloudpurchaseclass_add"  #if(!$!edit) class="this" #end ><b>新增</b></a> </li>
+      #if($!edit)
+      <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+      #end
+    </ul>
+  </div>
+  <form action="$!webPath/cloudpurchaseclass_save" method=post enctype="multipart/form-data" name="theForm" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/cloudpurchaseclass_list" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/cloudpurchaseclass_add" />
+    <div class="edit">
+      <div class="editul setcont ">
+       <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>分类名称</li>
+          <li><span class="webname">
+            <input name="class_name" type="text" id="class_name" value="$!obj.class_name"  />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>分类排序</li>
+          <li><span class="webname">
+            <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>分类图片</li>
+          <li>
+            <div class="choose_img_upload"> <i>
+              <input class="ip200" type="file" id="class_img" name="class_img"/>
+              </i> <span id="img" >上传图片</span> </div>
+            <input name="img_url" type="text" id="img_url" value="$!obj.img_url" style="height:0px;width:0px;border:none;color:#FDFDFD" />
+          </li>
+        </ul>
+        <ul class="set1" #if(!$obj.img_url) style="display:none" #end id="img_ul">
+          <li class="setcont_bg">图片预览</li>
+          <li><span class="webname"> <img src="$!CommUtil.replaceImgWebServer($!imageWebServer,$!obj.img_url)" width="40" height="40"  /> </span> </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" id="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

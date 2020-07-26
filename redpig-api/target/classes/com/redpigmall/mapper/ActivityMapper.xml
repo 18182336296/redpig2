@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ActivityMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Activity">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ac_title" property="ac_title" jdbcType="VARCHAR"/>
+		<result column="ac_begin_time" property="ac_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ac_end_time" property="ac_end_time" jdbcType="TIMESTAMP"/>
+		<result column="ac_sequence" property="ac_sequence" jdbcType="INTEGER"/>
+		<result column="ac_status" property="ac_status" jdbcType="INTEGER"/>
+		<result column="ac_content" property="ac_content" jdbcType="VARCHAR"/>
+		<result column="ac_rebate" property="ac_rebate" jdbcType="DECIMAL"/>
+		<result column="ac_rebate1" property="ac_rebate1" jdbcType="DECIMAL"/>
+		<result column="ac_rebate2" property="ac_rebate2" jdbcType="DECIMAL"/>
+		<result column="ac_rebate3" property="ac_rebate3" jdbcType="DECIMAL"/>
+		<result column="ac_rebate_json" property="ac_rebate_json" jdbcType="VARCHAR"/>
+		<association property="ac_acc" column="ac_acc_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<association property="ac_acc3" column="ac_acc3_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+		<collection property="ags" column="id" select="com.redpigmall.dao.ActivityGoodsMapper.getActByActivityId"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Activity">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ac_title" property="ac_title" jdbcType="VARCHAR"/>
+		<result column="ac_begin_time" property="ac_begin_time" jdbcType="TIMESTAMP"/>
+		<result column="ac_end_time" property="ac_end_time" jdbcType="TIMESTAMP"/>
+		<result column="ac_sequence" property="ac_sequence" jdbcType="INTEGER"/>
+		<result column="ac_status" property="ac_status" jdbcType="INTEGER"/>
+		<result column="ac_content" property="ac_content" jdbcType="VARCHAR"/>
+		<result column="ac_rebate" property="ac_rebate" jdbcType="DECIMAL"/>
+		<result column="ac_rebate1" property="ac_rebate1" jdbcType="DECIMAL"/>
+		<result column="ac_rebate2" property="ac_rebate2" jdbcType="DECIMAL"/>
+		<result column="ac_rebate3" property="ac_rebate3" jdbcType="DECIMAL"/>
+		<result column="ac_rebate_json" property="ac_rebate_json" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ac_title,ac_begin_time,ac_end_time,ac_acc_id,ac_acc3_id,ac_sequence,ac_status,ac_content,ac_rebate,ac_rebate1,ac_rebate2,ac_rebate3,ac_rebate_json
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="ids != null and ids.size() >0 ">and id in
+			<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ac_title != null">and ac_title = #{ac_title,jdbcType=VARCHAR}</if>
+		<if test="ac_begin_time != null">and ac_begin_time = #{ac_begin_time,jdbcType=TIMESTAMP}</if>
+		<if test="ac_end_time != null">and ac_end_time = #{ac_end_time,jdbcType=TIMESTAMP}</if>
+		<if test="ac_end_time_more_than_equal != null">and ac_end_time <![CDATA[ >= ]]> #{ac_end_time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="ac_begin_time_less_than_equal != null">and ac_begin_time <![CDATA[ <= ]]> #{ac_begin_time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="ac_sequence != null">and ac_sequence = #{ac_sequence,jdbcType=INTEGER}</if>
+		<if test="ac_status != null">and ac_status = #{ac_status,jdbcType=INTEGER}</if>
+		<if test="ac_content != null">and ac_content = #{ac_content,jdbcType=VARCHAR}</if>
+		<if test="ac_rebate != null">and ac_rebate = #{ac_rebate,jdbcType=DECIMAL}</if>
+		<if test="ac_rebate1 != null">and ac_rebate1 = #{ac_rebate1,jdbcType=DECIMAL}</if>
+		<if test="ac_rebate2 != null">and ac_rebate2 = #{ac_rebate2,jdbcType=DECIMAL}</if>
+		<if test="ac_rebate3 != null">and ac_rebate3 = #{ac_rebate3,jdbcType=DECIMAL}</if>
+		<if test="ac_rebate_json != null">and ac_rebate_json = #{ac_rebate_json,jdbcType=VARCHAR}</if>
+		<if test="ac_acc_id !=null">and ac_acc_id = #{ac_acc_id,jdbcType=BIGINT}</if>
+		<if test="ac_acc3_id !=null">and ac_acc3_id = #{ac_acc3_id,jdbcType=BIGINT}</if>
+		<if test="ac_title_like !=null">and ac_title like CONCAT('%',#{ac_title_like},'%')</if>
+		<if test="ac_begin_time_more_than_equal !=null">and ac_begin_time <![CDATA[ >= ]]>#{ac_begin_time_more_than_equal,jdbcType=TIMESTAMP} </if>
+		<if test="ac_begin_time_less_than_equal !=null">and ac_begin_time <![CDATA[ <= ]]>#{ac_begin_time_less_than_equal,jdbcType=TIMESTAMP} </if>
+	</sql>
+	<sql id="ifStatement">
+		ac_title= #{ac_title},
+		ac_begin_time= #{ac_begin_time},
+		ac_end_time= #{ac_end_time},
+		<if test="ac_acc != null and ac_acc.id != null">ac_acc_id = #{ac_acc.id,jdbcType=BIGINT},</if>
+		<if test="ac_acc == null or ac_acc.id == null">ac_acc_id = null,</if>
+		<if test="ac_acc3 != null and ac_acc3.id != null">ac_acc3_id = #{ac_acc3.id,jdbcType=BIGINT},</if>
+		<if test="ac_acc3 == null or ac_acc3.id == null">ac_acc3_id = null,</if>
+		ac_sequence= #{ac_sequence},
+		ac_status= #{ac_status},
+		ac_content= #{ac_content},
+		ac_rebate= #{ac_rebate},
+		ac_rebate1= #{ac_rebate1},
+		ac_rebate2= #{ac_rebate2},
+		ac_rebate3= #{ac_rebate3},
+		ac_rebate_json= #{ac_rebate_json},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_activity 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_activity obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_activity obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getAcAccByAccessoryId" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity
+		where
+			ac_acc_id= #{ac_acc_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAcAcc3ByAccessoryId" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity
+		where
+			ac_acc3_id= #{ac_acc3_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Activity" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_activity(
+			addTime,deleteStatus,ac_title,ac_begin_time,ac_end_time,ac_sequence,ac_status,
+			ac_content,ac_rebate,ac_rebate1,ac_rebate2,ac_rebate3,ac_rebate_json,ac_acc_id,ac_acc3_id)
+		values(
+			#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ac_title,jdbcType=VARCHAR},
+			#{ac_begin_time,jdbcType=TIMESTAMP},#{ac_end_time,jdbcType=TIMESTAMP},#{ac_sequence,jdbcType=INTEGER},
+			#{ac_status,jdbcType=INTEGER},#{ac_content,jdbcType=VARCHAR},#{ac_rebate,jdbcType=DECIMAL},#{ac_rebate1,jdbcType=DECIMAL},
+			#{ac_rebate2,jdbcType=DECIMAL},#{ac_rebate3,jdbcType=DECIMAL},#{ac_rebate_json,jdbcType=VARCHAR},#{ac_acc.id,jdbcType=BIGINT},
+			#{ac_acc3.id,jdbcType=BIGINT}
+		)
+	</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Activity">
+		update redpigmall_activity
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_activity where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_activity where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_activity obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Activity" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_activity where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

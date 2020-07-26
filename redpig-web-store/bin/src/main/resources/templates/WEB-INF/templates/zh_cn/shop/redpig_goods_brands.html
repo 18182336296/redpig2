@@ -1,0 +1,19 @@
+<div class="index_brand_right">
+  <div class="brand">
+    <h3><span><a href="$!webPath/brand/index" target="_blank">更多</a></span>推荐品牌</h3>
+    <ul>
+      #foreach($gb in $!goodsBrands)
+      	#set($gb_url="$!webPath/brand_goods_$!{gb.id}")
+      	<li>
+      		#if($!{gb.brandLogo})
+      		<img src="$!imageWebServer/$!{gb.brandLogo.path}/$!{gb.brandLogo.name}" width="142" height="66" />
+      			<a href="$!gb_url" target="_blank">$!{gb.name}</a>
+      		#end
+      	</li>
+      #end
+    </ul>
+  </div>
+  <div class="brand_bottom_adv">
+    <script src="$!webPath/redpig_advert_invoke?id=8"></script>
+  </div>
+</div>

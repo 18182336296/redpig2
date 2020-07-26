@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-商家商品分类-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+function showSubClass(id,obj){
+	var jia="$!cdnServer/resources/style/system/front/default/images/usercenter/jia.jpg";
+	var jian="$!cdnServer/resources/style/system/front/default/images/usercenter/jian.jpg"
+	if(jQuery(obj).attr("src")==jia){
+		jQuery("tr[id=child_"+id+"]").show();
+		jQuery(obj).attr("src",jian)
+	}else{
+		jQuery("tr[id=child_"+id+"]").hide();
+		jQuery(obj).attr("src",jia)
+	}
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+<div class="store_main">
+  <div class="seller_center">
+    <div class="seller_center_left"> $!httpInclude.include("/nav?op=goods_class") </div>
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/index">商家中心</a></b>><b>商品管理</b> > <b>商品分类</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <div class="seller_title_sp"> <span class="user_list_t_btn"> <a class="sell_newadd" href="javascript:void(0);" dialog_uri="$!webPath/goods_class_add?currentPage=$!currentPage" dialog_title="新增分类" dialog_width="480" dialog_height="100" dialog_id="cart_address"><b><i class="newadd_i"></i>新增分类</b></a> </span> </div>
+          #if($objs.size()>0)
+          <div class="operation_box">
+        	<div class="operation_left" style="width:100%">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this);" /><span class="lbl"> 全选</span></label></li>
+                
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/goods_class_del');">删除</a></li>
+                
+            </ul>
+            </div>
+            
+        </div>
+          
+    
+          #end </div>
+        <form action="$!webPath/goods_class_list" method="post" name="ListForm" id="ListForm">
+          <div class="seller_list_box">
+            <table width="790" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table">
+              <tr id="opertitle">
+                <th >分类名称
+                  <input name="mulitId" type="hidden" id="mulitId" /></th>
+                <th align="center">排序</th>
+                <th >显示</th>
+                <th align="center">操作</th>
+              </tr>
+              #if($objs.size()>0)
+              #foreach($obj in $objs)
+              <tr class="opertr">
+                <td class="classname" ><span class="class_check" style="margin-left:15px;">
+                 <label for="ids_$!obj.id"> <input name="ids" class="ace" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl" /></label>
+                  </span><span class="classname2"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/jia.jpg" width="14" height="14" onclick="showSubClass($!obj.id,this)"/></span><span class="classname3">$!obj.className</span><span class="classname4"><a href="javascript:void(0);" dialog_uri="$!webPath/goods_class_add?pid=$!obj.id&currentPage=$!currentPage" dialog_title="新增分类" dialog_width="480" dialog_height="100" dialog_id="cart_address">新增下级</a></span></td>
+                <td class="sort" align="center">$!obj.sequence</td>
+                <td class="show"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/$!{obj.display}.jpg" width="14" height="14" /></td>
+                <td class="del_operate" align="center"><a href="javascript:void(0);" dialog_uri="$!webPath/goods_class_edit?id=$!obj.id&currentPage=$!currentPage" dialog_title="编辑商品分类" dialog_width="480" dialog_height="100" dialog_id="cart_address"  class="del_a">编辑</a> <a href="javascript:void(0);" onclick="showDialog('msg_info','','确认删除该条数据吗？',1,'question',3,function(){window.location.href='$!webPath/goods_class_del?mulitId=$!obj.id'});"  class="del_a">删除</a></td>
+              </tr>
+              #foreach($child in $obj.childs)
+              <tr class="opertr" id="child_${obj.id}" style="display:none">
+                <td class="classname" ><span class="class_check" style="margin-left:15px;">
+                  <label for="ids_$!obj.id"><input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!child.id" /><span class="lbl" /></label>
+                  </span><span class="classname2">&nbsp;</span><span class="classname5">$!child.className</span></td>
+                <td class="sort" align="center">$!{child.sequence}</td>
+                <td class="show"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/$!{child.display}.jpg" width="16" height="14" /></td>
+                <td class="del_operate" align="center"><a href="javascript:void(0);" dialog_uri="$!webPath/goods_class_edit?id=$!child.id&currentPage=$!currentPage" dialog_title="编辑地址" dialog_width="480" dialog_height="100" dialog_id="cart_address"  class="del_a">编辑</a><a onclick="showDialog('msg_info','','确认删除该条数据吗？',1,'question',3,function(){window.location.href='$!webPath/goods_class_del?mulitId=$!child.id'});"  class="del_a">删除</a></td>
+              </tr>
+              #end
+              #end
+              #else
+              <tr>
+                <td colspan="4" align="center"><div class="seller_center_nothing">
+                    <div class="seller_center_nothing_left"><img src="$!cdnServer/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                    <div class="seller_center_nothing_right">暂时没有数据</div>
+                  </div></td>
+              </tr>
+              #end
+            </table>
+          </div>
+          #if($objs.size()>0)
+          <div class="userlist_allop">
+          <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this);" /><span class="lbl"> 全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/goods_class_del','');">删除</a></li>
+                
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="page"> 
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+            </div>
+        </div>
+          
+          </div>
+          
+          
+          
+          #end
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer1")
+</body>
+</html>

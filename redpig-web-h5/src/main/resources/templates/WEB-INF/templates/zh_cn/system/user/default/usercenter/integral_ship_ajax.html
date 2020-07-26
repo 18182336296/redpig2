@@ -1,0 +1,39 @@
+<div class="order_flow_box" style="margin-bottom:0px;">
+        	<div class="order_flow_top">
+                <img style="width:967px;" src="$!cdnServer/resources/style/system/front/default/images/usercenter/flow.png" />
+            </div>
+            <div class="order_flow_list">
+            <div class="order_flow_list_loca" #if($!transInfo.status==4) style="left:50px;" #elseif($!transInfo.status==3)
+            style="left:350px;" #elseif($!transInfo.status==8) style="left:640px;" #elseif($!transInfo.status==6) style="left:940px;"  #else style="left:50px;" #end>
+            	<img src="$!cdnServer/resources/style/system/front/default/images/usercenter/order_flow_list_loca.png" />
+            </div>
+            #set($info="")
+            #if($!transInfo.status==4)
+            #set($info="商家正通知快递公司揽件")
+            #end
+            #if($!transInfo.status==3)
+            #set($info="您的快件正在运输")
+            #end
+            #if($!transInfo.status==8)
+            #set($info="您的快件正在派送")
+            #end
+            #if($!transInfo.status==6)
+            #set($info="您的快件已被签收")
+            #end
+            	<h3>$!info</h3>
+                <div class="order_flow_list_c">
+                 #if($!transInfo.status==3 || $!transInfo.status==4 || $!transInfo.status==6 || $!transInfo.status==8)  
+                	<ul>
+                    #foreach($info in $transInfo.data)
+                    	<li>
+                        	<span class="time"><strong>$!info.time</strong></span>
+                            <span class="loca">$!info.context</span>
+                        </li>
+                    #end
+                    </ul>
+                 #else
+                   $!transInfo.reason
+                 #end
+                </div>
+            </div>
+            </div>

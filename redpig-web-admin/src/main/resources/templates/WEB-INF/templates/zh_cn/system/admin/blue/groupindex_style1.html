@@ -1,0 +1,63 @@
+<script>
+jQuery(document).ready(function(){
+  //改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  
+  jQuery("#theForm").validate({
+	ignore: "",
+    rules:{
+	  name:{required :true},
+	  name_href:{required :true,url:true} 
+	 },
+	messages:{
+	  name:{required:"文字信息不能为空"},
+	  name_href:{required:"链接不能为空",url:"链接格式不正确"}
+	}
+  });
+  
+});
+function save_form(){
+    jQuery("#theForm").submit();	
+}
+function del_form(){
+	jQuery.ajax({
+			  type:'POST',
+			  url:'$!webPath/channel_del_word_ajax',
+			  data:{"id":$!obj.id,"seq":$!seq},
+			  success:function(data){
+				 window.location.href="$!webPath/groupindex_design_design?id=$!obj.id";  
+			  }
+	   });
+}
+</script>
+
+<form action="$!webPath/groupindex_style_save" method="post" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id">
+  <input name="seq" type="hidden" id="seq" value="$!seq">
+  <input name="type" type="hidden" id="type" value="$!style">
+  <input name="status" type="hidden" id="status" value="">
+  <div class="box_floor">
+    <!--分类开始-->
+    <div class="box_floor_class"><b>文字信息：</b>
+    <span>  <input name="name" id="name" style="height:23px;" #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","$!seq")) value="$!wc.name" #end /></span>
+    </div>
+     <div class="box_floor_class"><b>文字链接：</b>
+     <span> <input name="name_href" id="name_href" style="height:23px;" #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","$!seq")) value="$!wc.href" #end/></span>
+     <span id="nothis"><strong class="q"></strong><strong class="w">格式：http://www.xxx.com</strong><strong class="c"></strong></span>
+    </div>
+    <div class="submit">
+       <input name="按钮" type="button" value="保存" onClick="save_form();" />
+       <input name="按钮" type="button" value="删除" onClick="del_form();" />
+    </div>
+  </div>
+</form>

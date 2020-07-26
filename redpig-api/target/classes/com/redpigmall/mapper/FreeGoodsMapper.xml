@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.FreeGoodsMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.FreeGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="free_name" property="free_name" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="freeType" property="freeType" jdbcType="INTEGER"/>
+		<result column="freeStatus" property="freeStatus" jdbcType="INTEGER"/>
+		<result column="default_count" property="default_count" jdbcType="INTEGER"/>
+		<result column="current_count" property="current_count" jdbcType="INTEGER"/>
+		<result column="apply_count" property="apply_count" jdbcType="INTEGER"/>
+		<result column="class_id" property="class_id" jdbcType="BIGINT"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="free_details" property="free_details" jdbcType="VARCHAR"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="failed_reason" property="failed_reason" jdbcType="VARCHAR"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<association property="free_acc" column="free_acc_id" select="com.redpigmall.dao.AccessoryMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.FreeGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_id" property="goods_id" jdbcType="BIGINT"/>
+		<result column="free_name" property="free_name" jdbcType="VARCHAR"/>
+		<result column="beginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP"/>
+		<result column="freeType" property="freeType" jdbcType="INTEGER"/>
+		<result column="freeStatus" property="freeStatus" jdbcType="INTEGER"/>
+		<result column="default_count" property="default_count" jdbcType="INTEGER"/>
+		<result column="current_count" property="current_count" jdbcType="INTEGER"/>
+		<result column="apply_count" property="apply_count" jdbcType="INTEGER"/>
+		<result column="class_id" property="class_id" jdbcType="BIGINT"/>
+		<result column="store_id" property="store_id" jdbcType="BIGINT"/>
+		<result column="free_details" property="free_details" jdbcType="VARCHAR"/>
+		<result column="goods_name" property="goods_name" jdbcType="VARCHAR"/>
+		<result column="failed_reason" property="failed_reason" jdbcType="VARCHAR"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,goods_id,free_name,free_acc_id,beginTime,endTime,freeType,freeStatus,default_count,current_count,apply_count,class_id,store_id,free_details,goods_name,failed_reason,weixin_recommend,weixin_recommendTime,mobile_recommend,mobile_recommendTime
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="goods_id != null">and goods_id = #{goods_id,jdbcType=BIGINT}</if>
+		<if test="free_name != null">and free_name = #{free_name,jdbcType=VARCHAR}</if>
+		<if test="free_name_like != null">and free_name like CONCAT('%',#{free_name_like},'%') </if>
+		<if test="beginTime != null">and beginTime = #{beginTime,jdbcType=TIMESTAMP}</if>
+		<if test="beginTime_more_than_equal != null">and beginTime <![CDATA[ >= ]]> #{beginTime_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="beginTime_less_than_equal != null">and beginTime <![CDATA[ <= ]]> #{beginTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="endTime != null">and endTime = #{endTime,jdbcType=TIMESTAMP}</if>
+		
+		<if test="endTime_more_than_equal != null">and endTime <![CDATA[ >= ]]> #{endTime_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="endTime_less_than_equal != null">and endTime <![CDATA[ <= ]]> #{endTime_less_than_equal,jdbcType=TIMESTAMP}</if>
+		
+		<if test="freeType != null">and freeType = #{freeType,jdbcType=INTEGER}</if>
+		<if test="freeStatus != null">and freeStatus = #{freeStatus,jdbcType=INTEGER}</if>
+		<if test="default_count != null">and default_count = #{default_count,jdbcType=INTEGER}</if>
+		<if test="current_count != null">and current_count = #{current_count,jdbcType=INTEGER}</if>
+		<if test="apply_count != null">and apply_count = #{apply_count,jdbcType=INTEGER}</if>
+		<if test="class_id != null">and class_id = #{class_id,jdbcType=BIGINT}</if>
+		<if test="store_id != null">and store_id = #{store_id,jdbcType=BIGINT}</if>
+		<if test="free_details != null">and free_details = #{free_details,jdbcType=VARCHAR}</if>
+		<if test="goods_name != null">and goods_name = #{goods_name,jdbcType=VARCHAR}</if>
+		<if test="failed_reason != null">and failed_reason = #{failed_reason,jdbcType=VARCHAR}</if>
+		<if test="weixin_recommend != null">and weixin_recommend = #{weixin_recommend,jdbcType=INTEGER}</if>
+		<if test="weixin_recommendTime != null">and weixin_recommendTime = #{weixin_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=INTEGER}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="free_name_like !=null">and free_name like CONCAT('%',#{free_name_like},'%') </if>
+		<if test="beginTime_more_than_equal !=null">and beginTime  <![CDATA[ >= ]]> #{beginTime_more_than_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="endTime_less_than_equal !=null">and endTime  <![CDATA[ <= ]]> #{endTime_less_than_equal,jdbcType=TIMESTAMP}  </if>
+		<if test="free_acc_id != null">and free_acc_id = #{free_acc_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		goods_id= #{goods_id},
+		free_name= #{free_name},
+		<if test="free_acc != null and free_acc.id != null">free_acc_id = #{free_acc.id,jdbcType=BIGINT},</if>
+		<if test="free_acc == null or free_acc.id == null">free_acc_id = null,</if>
+		beginTime= #{beginTime},
+		endTime= #{endTime},
+		freeType= #{freeType},
+		freeStatus= #{freeStatus},
+		default_count= #{default_count},
+		current_count= #{current_count},
+		apply_count= #{apply_count},
+		class_id= #{class_id},
+		store_id= #{store_id},
+		free_details= #{free_details},
+		goods_name= #{goods_name},
+		failed_reason= #{failed_reason},
+		weixin_recommend= #{weixin_recommend},
+		weixin_recommendTime= #{weixin_recommendTime},
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.FreeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_freegoods 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.FreeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_freegoods obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_freegoods obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getFreeAccByAccessoryId" resultType="com.redpigmall.domain.FreeGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_freegoods
+		where
+			free_acc_id= #{free_acc_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.FreeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_freegoods obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.FreeGoods" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_freegoods(addTime,deleteStatus,goods_id,free_name,beginTime,endTime,freeType,freeStatus,default_count,current_count,apply_count,class_id,store_id,free_details,goods_name,failed_reason,weixin_recommend,weixin_recommendTime,mobile_recommend,mobile_recommendTime,free_acc_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{goods_id,jdbcType=BIGINT},#{free_name,jdbcType=VARCHAR},#{beginTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP},#{freeType,jdbcType=INTEGER},#{freeStatus,jdbcType=INTEGER},#{default_count,jdbcType=INTEGER},#{current_count,jdbcType=INTEGER},#{apply_count,jdbcType=INTEGER},#{class_id,jdbcType=BIGINT},#{store_id,jdbcType=BIGINT},#{free_details,jdbcType=VARCHAR},#{goods_name,jdbcType=VARCHAR},#{failed_reason,jdbcType=VARCHAR},#{weixin_recommend,jdbcType=INTEGER},#{weixin_recommendTime,jdbcType=TIMESTAMP},#{mobile_recommend,jdbcType=INTEGER},#{mobile_recommendTime,jdbcType=TIMESTAMP},#{free_acc.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.FreeGoods">
+		update redpigmall_freegoods
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_freegoods where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_freegoods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.FreeGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_freegoods obj 			
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.FreeGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_freegoods obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.FreeGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_freegoods
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_freegoods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

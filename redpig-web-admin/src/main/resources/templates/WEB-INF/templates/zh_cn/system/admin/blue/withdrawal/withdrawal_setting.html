@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+  <link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+  <link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+  <link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+</head>
+<body>
+	<h1 class="seth">提现设置</h1>
+	<form action="$!webPath/withdrawal_setting_add" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+	<div class="edit">
+      <div class="editul setcont" id="base">
+        <ul class="set1">
+			<li class="setcont_bg"><strong class="sred">*</strong>分销提现
+				<input name="id" type="hidden" id="id" value="$!obj.id"/>
+			</li>
+			<li>
+				<span class="use_code">
+					<label>
+						<input type="radio" id="open" name="isDistribeWithdrawal" value="2">开启</input>
+						<input type="radio" id="close" name="isDistribeWithdrawal" value="1" checked="checked">关闭</input>
+					</label>
+				</span>
+			</li>
+        </ul>
+        <ul class="set1">
+			<li class="setcont_bg"><strong class="sred">*</strong>提现限额</li>
+			<li>
+				<span class="size200">
+					<input type="text" id="quota" name="quota" value="$!obj.quota" required/>
+				</span>
+			</li>
+        </ul>
+        <ul class="set1">
+			<li class="setcont_bg"><strong class="sred">*</strong>提现时间</li>
+			<li> 
+				<span class="size100">
+					<input name="withdrawalBeginDate" type="text" id="beginTime" value="" readonly="readonly" class="user_title_txt"  style="width:128px"  placeholder="开始时间"/>
+				</span>
+			</li>
+			<li>
+				<span class="size100">
+					<input name="withdrawalEndDate" type="text" id="endTime" value="" readonly="readonly" class="user_title_txt"  style="width:128px"  placeholder="结束时间"/>
+				</span>
+			</li>
+			<li>
+				<span id="nothis">
+					<strong class="q"></strong>
+					<strong class="w">提现时间区间在本月2号至28号</strong>
+					<strong class="c"></strong>
+				</span>
+			</li>
+        </ul>
+        <ul class="set1">
+			<li class="setcont_bg"><strong class="sred">*</strong>提现方式
+			</li>
+			<li>
+				<span class="use_code">
+					<label>
+						<input type="checkbox" id="alipay" name="withdrawalWay" value="1">支付宝</input>
+						<input type="checkbox" id="wx" name="withdrawalWay" value="2">微信</input>
+						<input type="checkbox" id="upacp" name="withdrawalWay" value="3">银联</input>
+					</label>
+				</span>
+			</li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit">
+        <span class="pad80"> <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"></span>
+  	</div>
+	</form>
+	
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		var d=new Date();
+		
+		//初始化时间控件
+		jQuery('#beginTime').attr("readonly","readonly").datepicker({
+			dateFormat:"yy-mm-dd",
+			changeMonth: true,
+			changeYear: true,
+			minDate: new Date(d.getFullYear(),d.getMonth()+1,2),
+			maxDate: new Date(d.getFullYear(),d.getMonth()+1,28)
+		});
+		jQuery('#endTime').attr("readonly","readonly").datepicker({
+			dateFormat:"yy-mm-dd",
+			changeMonth: true,
+			changeYear: true,
+			minDate: new Date(d.getFullYear(),d.getMonth()+1,2),
+			maxDate: new Date(d.getFullYear(),d.getMonth()+1,28)
+		});
+		//如果是编辑则设置redio的选中，设置checkbox的选中
+		#if($!obj)
+		    var isWithdrawal=$!obj.isDistribeWithdrawal;
+		    //设置单选选中
+		    if(1==isWithdrawal){
+			   jQuery("#close").attr("checked","checked");
+			   jQuery("#open").removeAttr("checked");
+		    }else{
+			   jQuery("#open").attr("checked","checked");
+			   jQuery("#close").removeAttr("checked");
+		    }
+			//编辑的情况下初始化日期
+		    jQuery('#beginTime').datepicker('setDate', "$!CommUtil.formatTime('yyyy-MM-dd',$!obj.withdrawalBeginDate)");
+		    jQuery('#endTime').datepicker('setDate', "$!CommUtil.formatTime('yyyy-MM-dd',$!obj.withdrawalEndDate)");
+		    //设置提现方式选中
+		    if($!obj.withdrawalWay){
+				var withdrawalWayAy="$!obj.withdrawalWay";
+				//截取字符方式
+				jQuery.each(withdrawalWayAy.split(','),function(i,val){
+				    if(1==val){
+						jQuery("#alipay").attr("checked",true);
+				    }
+				    if(2==val){
+						jQuery("#wx").attr("checked",true);
+				    }
+					if(3==val){
+						jQuery("#upacp").attr("checked",true);
+					}
+				});
+		   }
+	    #end
+	    
+	    //结束时间不能大于开始时间
+	    jQuery.validator.methods.compareDate = function(value, element, param) {
+            var startDate = jQuery(param).val();
+            var date1 = new Date(Date.parse(startDate.replace("-", "/")));
+            var date2 = new Date(Date.parse(value.replace("-", "/")));
+            return date1 < date2;
+        };
+	    //表单验证
+	    jQuery("#theForm").validate({
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent());
+            },
+            rules:{
+            	quota:{required:true,number:true,min:1},
+            	withdrawalBeginDate:{required:true},
+            	withdrawalEndDate:{required:true,compareDate:"#beginTime"},
+            	withdrawalWay:{required:true}
+            },
+            messages:{
+            	quota:{required:"提现限额不能为空",number:"必须输入数字",min:"至少大于0"},
+            	withdrawalBeginDate:{required:"提现起始时间不能为空"},
+            	withdrawalEndDate:{required:"提现截止时间不能为空",compareDate:"提现截止时间必须大于提现起始时间"},
+            	withdrawalWay:{required:"提现方式至少选择一个"}
+            },
+        });
+	});
+	//form表单提交
+	function saveForm(){
+		jQuery("#theForm").submit();
+	}
+</script>
+</body>
+</html>

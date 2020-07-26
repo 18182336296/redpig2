@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.redpigmall.dao.WithdrawalSettingMapper" >
+
+  <resultMap id="BaseResultMap" type="com.redpigmall.domain.WithdrawalSetting" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="quota" property="quota" jdbcType="DECIMAL" />
+    <result column="withdrawal_begin_date" property="withdrawalBeginDate" jdbcType="DATE" />
+    <result column="withdrawal_end_date" property="withdrawalEndDate" jdbcType="DATE" />
+    <result column="withdrawal_way" property="withdrawalWay" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_distribe_withdrawal" property="isDistribeWithdrawal" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, quota, withdrawal_begin_date AS withdrawalBeginDate, withdrawal_end_date AS withdrawalEndDate, withdrawal_way AS withdrawalWay, update_time AS updateTime, 
+    is_distribe_withdrawal AS isDistribeWithdrawal
+  </sql>
+  
+  <!-- 根据ID查询表字段 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from redpigmall_withdrawal_setting
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <!-- 查询表中记录数 -->
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_withdrawal_setting obj where 1 = 1  
+  </select>
+  
+  <!-- 查询一条记录 -->
+  <select id="selectOne" resultType="com.redpigmall.domain.WithdrawalSetting">
+  	select <include refid="Base_Column_List" /> from redpigmall_withdrawal_setting where 1 = 1 limit 0,1
+  </select>
+	
+  <!-- 根据ID删除表记录 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from redpigmall_withdrawal_setting
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <!-- 插入一条数据 -->
+  <insert id="insert" parameterType="com.redpigmall.domain.WithdrawalSetting" >
+    insert into redpigmall_withdrawal_setting (id, quota, withdrawal_begin_date, 
+      withdrawal_end_date, withdrawal_way, 
+      is_distribe_withdrawal)
+    values (#{id,jdbcType=BIGINT}, #{quota,jdbcType=DECIMAL}, #{withdrawalBeginDate,jdbcType=DATE}, 
+      #{withdrawalEndDate,jdbcType=DATE}, #{withdrawalWay,jdbcType=VARCHAR}, 
+      #{isDistribeWithdrawal,jdbcType=TINYINT})
+  </insert>
+  
+  <!-- 根据条件选择性插入 -->
+  <insert id="insertSelective" parameterType="com.redpigmall.domain.WithdrawalSetting" >
+    insert into redpigmall_withdrawal_setting
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="quota != null" >
+        quota,
+      </if>
+      <if test="withdrawalBeginDate != null" >
+        withdrawal_begin_date,
+      </if>
+      <if test="withdrawalEndDate != null" >
+        withdrawal_end_date,
+      </if>
+      <if test="withdrawalWay != null" >
+        withdrawal_way,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDistribeWithdrawal != null" >
+        is_distribe_withdrawal,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="quota != null" >
+        #{quota,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawalBeginDate != null" >
+        #{withdrawalBeginDate,jdbcType=DATE},
+      </if>
+      <if test="withdrawalEndDate != null" >
+        #{withdrawalEndDate,jdbcType=DATE},
+      </if>
+      <if test="withdrawalWay != null" >
+        #{withdrawalWay,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDistribeWithdrawal != null" >
+        #{isDistribeWithdrawal,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <!-- 根据ID更新表字段 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.redpigmall.domain.WithdrawalSetting" >
+    update redpigmall_withdrawal_setting
+    <set >
+      <if test="quota != null" >
+        quota = #{quota,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawalBeginDate != null" >
+        withdrawal_begin_date = #{withdrawalBeginDate,jdbcType=DATE},
+      </if>
+      <if test="withdrawalEndDate != null" >
+        withdrawal_end_date = #{withdrawalEndDate,jdbcType=DATE},
+      </if>
+      <if test="withdrawalWay != null" >
+        withdrawal_way = #{withdrawalWay,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDistribeWithdrawal != null" >
+        is_distribe_withdrawal = #{isDistribeWithdrawal,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- 更新ID更新除ID以外的字段 -->
+  <update id="updateByPrimaryKey" parameterType="com.redpigmall.domain.WithdrawalSetting" >
+    update redpigmall_withdrawal_setting
+    set quota = #{quota,jdbcType=DECIMAL},
+      withdrawal_begin_date = #{withdrawalBeginDate,jdbcType=DATE},
+      withdrawal_end_date = #{withdrawalEndDate,jdbcType=DATE},
+      withdrawal_way = #{withdrawalWay,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_distribe_withdrawal = #{isDistribeWithdrawal,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

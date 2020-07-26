@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>云购 - $!{config.poweredby}</title>
+<meta name="keywords" content="#if($!store.store_seo_keywords!="") $!store.store_seo_keywords #else $!config.keywords #end" />
+<meta name="description" content="#if($!store.store_seo_description!="") $!store.store_seo_description #else $!config.description #end" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/cloud.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/requestAnimationFrame.js"></script> 
+<script src="$!cdnServer/resources/js/jquery.fly.min.js"></script> 
+<script>
+jQuery(document).ready(function(){
+	
+	jQuery("#order_ul").find("a").live("click",function(element){
+		var orderby=jQuery(this).attr("orderby");
+		var ordertype=jQuery(this).attr("ordertype");
+		jQuery("#orderby").val(orderby);
+		jQuery("#ordertype").val(ordertype);
+		jQuery("#currentPage").val(1);
+		jQuery("#ListForm").submit();
+		
+	});
+	jQuery("a[id^=plus]").live("click",function(){
+		var id=jQuery(this).attr("id")
+		id=id.replace("plus_","");
+		var count=jQuery("#count_"+id).val();
+		var least=jQuery("#count_"+id).attr("least_rmb");
+		count=parseInt(count);
+		least=parseInt(least);
+		count+=least;
+		if(count<=jQuery("#count_"+id).attr("max"))
+			jQuery("#count_"+id).val(count)
+	});
+	jQuery("a[id^=minus]").live("click",function(){
+		var id=jQuery(this).attr("id")
+		id=id.replace("minus_","");
+		var count=jQuery("#count_"+id).val();
+		var least=jQuery("#count_"+id).attr("least_rmb");
+		count=parseInt(count);
+		least=parseInt(least);
+		count-=least;
+		if(count>0)
+			jQuery("#count_"+id).val(count)
+	});
+	jQuery("input[id^=count]").live("change",function(){
+				
+		var addcount=jQuery(this).val();
+		if(isNaN(addcount)){
+			jQuery(this).val(jQuery(this).attr("least_rmb"));
+		}
+		addcount=parseInt(addcount);
+		var least=jQuery(this).attr("least_rmb");
+		least=parseInt(least);
+		if(least==10&&addcount%least!=0)
+			addcount=addcount/10*10;
+		if(addcount>jQuery(this).attr("max"))
+			jQuery(this).val(jQuery(this).attr("max"));
+		if(addcount<0)
+			jQuery(this).val(jQuery(this).attr("least_rmb"));
+		
+	});
+	#if($!user)
+	jQuery("a[id^=buy]").live("click",function(){
+		var id=jQuery(this).attr("id")
+		id=id.replace("buy_","");
+		var count=jQuery("#count_"+id).val();
+		jQuery.post("$!current_webPath/cloudbuy/cart_add", {
+            "lottery_id": id,
+            "count": count
+        },
+        function(data) {
+           if(data.data.status==1){
+			   	window.location.href="$!webPath/cloudbuy/cart"; 
+		   }else{
+			   showDialog("msg_info","","添加失败！",2,"warning",3,'');
+		   }
+
+        },
+        "json");
+	});
+	jQuery("a[id^=add]").live("click",function(){
+		var id=jQuery(this).attr("id")
+		var goods_img=jQuery(this).attr("goods_img");
+		var left=jQuery(this).offset().left;
+	    var top=jQuery(this).offset().top-30;
+		id=id.replace("add_","");
+		var count=jQuery("#count_"+id).val();
+		jQuery.post("$!current_webPath/cloudbuy/cart_add", {
+            "lottery_id": id,
+            "count": count
+        },
+        function(data) {
+           if(data.data.status==1){
+		        if(!jQuery(".u-flyer").is(':animated')){
+			 	var offset = jQuery('.cart_nb').offset(), flyer = jQuery('<img style="z-index:101" width="30px" height="30" class="u-flyer" src="'+goods_img+'"/>');
+															flyer.fly({
+																start: {
+																	left: left-jQuery(document).scrollLeft(),
+																	top: top-jQuery(document).scrollTop()
+																},
+																end: {
+																	left: offset.left-jQuery(document).scrollLeft(),
+																	top: offset.top-jQuery(document).scrollTop(),
+																	width: 10,
+																	height: 10
+																},onEnd: function(){
+										                            jQuery(".u-flyer").remove();
+																	jQuery(".cart_nb").html(data.data.count);
+																	
+																	} 
+															});
+															}
+			   
+		   }else{
+			   showDialog("msg_info","","添加失败！",2,"warning",3,'');
+		   }
+
+        },
+        "json");
+	});
+	#end
+});
+</script>
+</head>
+<body bgcolor="#FFFFFF" >
+$!httpInclude.include("/top")
+$!httpInclude.include("/cloudbuy/head") 
+$!httpInclude.include("/cloudbuy/nav1?nav=2") 
+
+<!---------云购  列表---------->
+<div class="main">
+  <div class="purchase">
+    <div class="purchase_location"><a href="$!webPath/cloudbuy/index">首页</a><b>&gt;</b><span><a href="$!webPath/cloudbuy/list">全部商品</a></span>#if($cloudPurchaseClass)<b>&gt;</b><span>$cloudPurchaseClass.class_name</span>#end</div>
+    <div class="purchase_type">
+      <div class="purchase_type_hd"><a href="$!webPath/cloudbuy/list">所有商品</a><span>（共<b>$!count</b>件相关商品）</span></div>
+      <div class="purchase_type_bd">
+        <ul>
+          #foreach($class in $goodsclass)
+          <li #if($velocityCount==$goodsclass.size())class="last"#end> <a href="$!webPath/cloudbuy/list?class_id=$!class.id"> <span> <em class="icon_1"><img src="$class.img_url" /></em> <em class="icon_2"><img src="$class.img_url" /></em> </span> <b>$class.class_name</b> </a> </li>
+          #end
+        </ul>
+      </div>
+    </div>
+    <form method="post" id="ListForm" action="$!webPath/cloudbuy/list">
+      <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      <input type="hidden" id="orderby" name="orderby" value="$!orderby" />
+      <input type="hidden" id="ordertype" name="ordertype" value="$!ordertype" />
+      <input type="hidden" id="class_id" name="class_id" value="$!cloudPurchaseClass.id" />
+      <input type="hidden" id="keyword" name="keyword" value="$!keyword" />
+      <div class="purchase_goodslist">
+        <div class="purchase_goodslist_hd">
+          <ul id="order_ul">
+            <h3>排序：</h3>
+            <li #if($!orderby=="popularity")class="this"#end><a href="javascript:void(0)" orderby="popularity" >人气商品</a></li>
+            <li #if($!orderby=="purchased_times")class="this"#end><a href="javascript:void(0)" orderby="purchased_times">剩余人次</a></li>
+            <li #if($!orderby=="addTime")class="this"#end><a href="javascript:void(0)" orderby="addTime">最新商品</a></li>
+            <li #if($!orderby=="goods_price"&&$!ordertype=="asc")class="this"#end><a href="javascript:void(0)" orderby="goods_price" ordertype="asc">总需人次<em class="hd_up"></em></a></li>
+            <li #if($!orderby=="goods_price"&&$!ordertype=="desc")class="this"#end><a href="javascript:void(0)" orderby="goods_price" ordertype="desc">总需人次<em class="hd_down"></em></a></li>
+          </ul>
+        </div>
+        <div class="purchase_goodslist_c"> #if($objs.size()>0)
+          <ul>
+            #foreach($obj in $objs)
+            <li>
+              <div class="purchase_goodslist_bd">
+                <div class="purchase_goodslist_bd_img">#if($obj.cloudPurchaseGoods.least_rmb==10)<span class="cloud_main_right_recommend cloub_ten"></span>#end<a target="_blank" href="$!webPath/cloudbuy/items?id=$!obj.id"><img src="$!obj.cloudPurchaseGoods.primary_photo" /></a></div>
+                <div class="purchase_goodslist_bd_word"><a target="_blank" href="$!webPath/cloudbuy/items?id=$!obj.id">$!obj.cloudPurchaseGoods.goods_name</a> </div>
+                <div class="purchase_goodslist_bd_pp">总需：$obj.cloudPurchaseGoods.goods_price 人次</div>
+                #set($percent=100 * $obj.purchased_times / $obj.cloudPurchaseGoods.goods_price)
+                <div class="purchase_goodslist_bd_time"><span style="width:${percent}%;text-align: left;"></span></div>
+                <div class="purchase_goodslist_bd_lasttime"><span ><i>$!obj.purchased_times</i>已参与人次</span><b><i>$obj.purchased_left_times</i>剩余人次</b></div>
+                <div class="purchase_goodslist_bd_b">
+                  <div class="purchase_goodslist_bd_b_nb"> <span class="that">我要参与：</span> <span class="this"><i><a href="javascript:void(0)" id="minus_$obj.id">-</a></i><b>
+                    <input type="text" value="$!obj.cloudPurchaseGoods.least_rmb" least_rmb="$!obj.cloudPurchaseGoods.least_rmb" id="count_$obj.id" max="$obj.purchased_left_times"/>
+                    </b><i><a href="javascript:void(0)" id="plus_$obj.id">+</a></i></span> <span class="that last">人次</span> </div>
+                  <div class="purchase_goodslist_bd_buy"><a href="javascript:void(0)" id="buy_$obj.id" #if(!$user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login"#end>立即夺宝</a><a class="this" href="javascript:void(0)" goods_img=" $!obj.cloudPurchaseGoods.primary_photo" id="add_$obj.id" #if(!$user)dialog_uri="$!webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login"#end>加入清单</a></div>
+                </div>
+              </div>
+            </li>
+            #end
+            #if($objs.size()%4>0)
+            #set($length=4-$objs.size()%4)
+            #foreach($foo in [1..$length])
+            <li>
+              <div class="purchase_goodslist_bd">
+                <div class="purchase_goodslist_bd_nothing"> <img src="$!cdnServer/resources/style/system/front/default/images/cloudpurchase/nothing.png" /> </div>
+              </div>
+            </li>
+            #end
+            #end
+          </ul>
+          <div class="fenye"> <span> $!gotoPageFormHTML </span> </div>
+          #else <span class="main_none_box"> <i></i>
+          <p> 抱歉，没有找到符合条件的商品！ <a href="$!webPath/cloudbuy/list">查看全部商品</a> </p>
+          </span> #end </div>
+      </div>
+    </form>
+  </div>
+</div>
+$!httpInclude.include("/footer")
+</body>
+</html>

@@ -1,0 +1,31 @@
+<div class="top">
+			<form method="post" name="theForm" id="theForm"
+		action="$!webPath/wap/buyer/address_save">
+				<a href="javascript:void(0);" class="finish" onclick="saveForm();">完成</a>
+				<ul class="info">
+					<li><span>收货人姓名</span><input id="trueName" name="trueName"
+						value="$!obj.trueName"></li>
+					<li><span>手机号码</span><input id="mobile" name="mobile"
+						value="$!obj.mobile"></li>
+					<li class="area"><span style="width:23%;">所在区域 </span> #if($!obj) <a
+						href="javascript:void(0)"
+						onClick="address_box_show($!obj.area.id)">
+						<input value="$!areaViewTools.generic_area_info("$!obj.area.id")" >
+					</a> #else <a href="javascript:void(0)"
+						onClick="address_box_show($!bj.id)"><input
+							value="$!areaViewTools.generic_area_info("$!bj.id")"></a>
+						#end</li>
+					<input id="area_id" name="area_id" value="$!obj.area.id"
+						type="hidden">
+					<input id="id" name="id" value="$!obj.id" type="hidden">
+					<input id="type" name="type" value="$!type" type="hidden">
+					<li><span>详细地址</span><input id="area_info" name="area_info"
+						value="$!obj.area_info"></li>
+					<li><span>邮政编码</span><input id="zip" name="zip"
+						value="$!obj.zip"></li>
+				</ul>
+			</div>
+			<div class="bottom">
+		<a href="javascript:void(0)"class="close" onclick="backmain(this)"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/address_close.png"></a>
+	</div>

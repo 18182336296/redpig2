@@ -1,0 +1,6 @@
+2018-8-1 20:13:04 restartedMain INFO Starting RedPigWebWap on OHCQQJTD6YJ2NKW with PID 11964 (D:\redpigcloud_jd\redpigcloud\redpig-web-h5\target\classes started by Administrator in D:\redpigcloud_jd\redpigcloud\redpig-web-h5)
+2018-8-1 20:13:04 restartedMain DEBUG Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2018-8-1 20:13:04 restartedMain INFO No active profile set, falling back to default profiles: default
+2018-8-1 20:13:16 localhost-startStop-1 DEBUG 开始初始化SpringUtil...
+2018-8-1 20:13:16 localhost-startStop-1 DEBUG web root abs path=D:\redpigcloud_jd\redpigcloud\redpig-web-h5\src\main\webapp\
+2018-8-1 20:13:16 localhost-startStop-1 DEBUG SpringUtil初始化完成.

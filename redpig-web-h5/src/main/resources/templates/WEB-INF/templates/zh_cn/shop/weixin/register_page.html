@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="no">
+<meta name="format-detection" content="telephone=no,address=no">
+<title>手机密码设置</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script type="text/javascript" src="js/jquery1.42.min.js"></script>
+<script type="text/javascript" src="js/jquery.SuperSlide.2.1.1.js"></script>
+<script>
+	function generic_mobile_verify_code(){
+			var mobile = jQuery("#mobile").val();
+			jQuery.post("$!webPath/buyer/account_mobile_sms_weixin",{"type":"mobile_vetify_code","mobile":mobile},function(data){  
+			if(data=="100"){
+			jQuery("#mobile_verify_code").hide();
+			jQuery("#red_phone").show();
+			var mi = 60;
+			jQuery("#red_correct_phone").html(mi+"秒之后重新获取，验证码15分钟有效!");
+			var timer =window.setInterval(go,1000);
+	 		function go(){
+				if(mi==0){
+					clearInterval(timer);
+					jQuery("#mobile_verify_code").show();
+					jQuery("#red_phone").hide();
+				}else{
+					mi--;
+					jQuery("#red_correct_phone").html(mi+"秒之后重新获取，验证码15分钟有效!");
+					}
+	     		}
+			}
+			if(data=="200"){					
+				alert("短信发送失败");
+				jQuery("#import_correct").hide();
+				jQuery(obj).attr("mark","0");
+			}
+				if(data=="300"){
+					alert("商城未开启短信服务");
+					Query("#import_correct").hide();
+					jQuery(obj).attr("mark","0");
+				}
+			}
+			,"text");
+		}
+	function order_pay(){
+			jQuery("#pay_repassword").hide();
+			jQuery("#pay_code").hide();
+			jQuery("#pay_password").hide();
+			jQuery("#sure_code").hide();
+			jQuery("#false_password").hide();
+			var mobile = jQuery("#mobile").val();	
+			var password = jQuery("#password").val();
+			var repassword = jQuery("#repassword").val();
+			var code = jQuery("#code").val();
+			if(repassword == ""){
+				jQuery("#pay_repassword").show();
+			}else{
+				jQuery("#pay_repassword").hide();
+			}
+			if(code == ""){
+				jQuery("#pay_code").show();
+			}else{
+				jQuery("#pay_code").hide();
+			}
+			if(password == ""){
+					jQuery("#pay_password").show();
+				}else{
+					jQuery("#pay_password").hide();
+					if(repassword == ""){
+							jQuery("#pay_repassword").show();
+						}else{
+							jQuery("#pay_repassword").hide();
+							if(password == repassword){
+									jQuery.ajax({
+										type:'POST',
+										url:"$!webPath/set_password",
+										data:{"mobile":mobile,
+											  "password":password,
+											  "code":code},
+										success:function(data){
+											if(data == "true"){
+													window.location.href="$!webPath/set_password_success";
+												}else{
+													if(code == ""){
+														jQuery("#pay_code").show();
+													}else{
+														jQuery("#pay_code").hide();
+														jQuery("#sure_code").show();
+													}
+													
+												}
+											}
+									})
+								}else{
+									jQuery("#false_password").show();
+								}
+						}
+				}
+	}
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>手机密码设置<a class="menu home" href="$!webPath/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+<div class="mt50"></div>
+<div class="phone_main">
+    <ul class="pay_key_ul">
+    	<li><input type="hidden" id="mobile" value=$!mobile>$!star_mobile</li>
+        <li><input type="text" placeholder="新支付密码" id="password"/></li>
+        <li id="pay_password" style="display:none"><span><font color="#FF0000" id="d1">新支付密码不能为空!</font></span></li>
+        <li><input type="text" placeholder="重复密码" id="repassword" /></li>
+        <li id="pay_repassword" style="display:none"><span><font color="#FF0000">重复密码不能为空!</font></span></li>
+        <li><span class="fl"><input type="text" placeholder="手机验证码" id="code"/></span><span class="fr" id="mobile_verify_code"><a href="javascript:void(0);" onclick="generic_mobile_verify_code();">发送验证码</a></span></li> 
+        <li id="red_phone" style="display:none"><span><font color="red" id="red_correct_phone"></font></span></li>
+        <li id="pay_code" style="display:none"><span><font color="#FF0000">验证码不能为空!</font></span></li>
+        <li id="sure_code" style="display:none"><span><font color="#FF0000">验证码不正确!</font></span></li>
+        <li id="false_password" style="display:none"><span><font color="red">两次输入的密码不一致，请重新输入</font></span></li>
+    </ul>	 
+    <div class="pay_key_yz"><span class="att">注意：请输入用户名/邮箱/已验证手机</span></div>
+    <div class="red_submit"><a href="javascript:void(0);" onClick="order_pay();">验证</a></div>
+</div>
+</body>
+</html>

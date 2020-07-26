@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<title>投诉信息填写</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" type="text/css" rel="stylesheet"/>
+<script>
+	function cancal(obj){
+	if(confirm("确定要取消投诉？")){
+		window.location.href='$!webPath/buyer/complaint_cancel?id='+obj+'&currentPage=$!currentPage';
+	}
+	}
+function complaint_talk(){
+   var talk_content=jQuery("#talk_content").val();
+  jQuery.post("$!webPath/buyer/complaint_talk",{"talk_content":talk_content,"id":"$!obj.id"},function(data){
+	  jQuery("#talk_content_detail").empty();	
+      jQuery.each(data, function(index,item){
+	      jQuery("#talk_content_detail").append("<div class='talk_title'><span class='name "+item.role+"'>"+item.name+"</span><span class='time'>"+item.time1+"&nbsp;"+item.time2+"</span></div><p class='text'>"+item.content+"</p>");
+	  })
+  },"json");
+   jQuery("#talk_content").val("");
+
+}
+function complaint_arbitrate(){
+		var params = jQuery("#theForm").serialize();
+	  jQuery.ajax({type:'POST',url:'$!webPath/buyer/complaint_arbitrate',data:params,
+				   success:function(data){	
+				   						alert("提交成功！")	
+			 		 					window.location.href='$!webPath/buyer/order_complaint_list';
+								 }
+	  },'json'); 
+	
+}
+</script>
+</head>
+
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="phone_main">
+<form action="$!webPath/buyer/complaint_save" method="post" enctype="multipart/form-data" id="theForm">
+				 #if($!obj.status==0)
+                 	#set($status="新投诉")
+                 #end
+                 #if($!obj.status==1)
+                 	#set($status="待申诉")
+                 #end
+                 #if($!obj.status==2)
+                 	#set($status="对话中")
+                 #end
+                 #if($!obj.status==3)
+                 	#set($status="待仲裁")
+                 #end
+                 #if($!obj.status==4)
+                 	#set($status="已完成")
+                 #end
+	<div class="add_c_title">
+    	<a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png"></a>
+    	投诉详情
+        <a class="back_person" href="$!webPath/buyer/center"> <img src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png" alt="返回用户中心"> </a>
+    </div>
+    			#foreach($cg in $obj.cgs)
+           		#foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.of.goods_info"))
+          		#set($goods_id = "$!{map.get('goods_id')}")	
+            	#if($cg.goods.id==$goods_id)
+            		#set($goods_name = "$!{map.get('goods_name')}")
+            		#set($goods_count = "$!{map.get('goods_count')}")
+            		#set($goods_price = "$!{map.get('goods_price')}")
+            		#set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+            		#set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+           	 		#set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+                	#set($store=$!orderFormTools.goods_second_domain("$!{goods_id}","goods"))
+            		#set($goods_domainPath="$!webPath/items_$!{goods_id}")
+	            	
+	            	#if($!store&&$!config.second_domain_open && $!store.store_second_domain!="")
+	            		#set($goods_domainPath="http://$!{store.store_second_domain}.$!{domainPath}/items_$!{goods_id}")
+	            	#end  
+                <div class="complain_detail">
+    	<div class="c_detail_item">
+        	<div class="goods_content">
+                <div class="goods_pic"><img src="$!img"></div>
+                <div class="goods_name">$!goods_name</div>
+                <div class="order_time">$!CommUtil.formatLongDate($!obj.of.addTime)</div>
+             </div>
+        </div>
+        
+        <div class="c_detail_item">
+        	<div class="complain_state">
+                <span class="text">投诉状态</span>
+                <span class="state">$!status</span>
+            </div>
+            <ul class="c_text">
+            	<li class="contentrs">
+                	<span>投诉内容</span>
+                    <textarea>$!obj.from_user_content</textarea>
+                </li>
+                #if($!obj.status>1)
+                <li class="appeal">
+                	<span>申诉内容</span>
+                    <textarea>$!obj.to_user_content</textarea>
+                </li>
+                #end
+            </ul>
+        </div>
+        
+        <div class="c_detail_item"><!--如果为新投诉则加new_complain_s，否则去掉-->
+        	<div class="contentrs_pic">
+                <h3 class="c_title">投诉图片</h3>
+                <ul>
+               		#if($!obj.from_acc1)
+            		<li><img src="$!imageWebServer/$!obj.from_acc1.path/$!obj.from_acc1.name" height="$!obj.from_acc1.height" width="$!obj.from_acc1.width" /></li>
+                	#end
+               		#if($!obj.from_acc2)
+                	<li><img src="$!imageWebServer/$!obj.from_acc2.path/$!obj.from_acc2.name" height="$!obj.from_acc2.height" width="$!obj.from_acc2.width" /></li>
+                	#end
+                	#if($!obj.from_acc3)
+               		<li><img src="$!imageWebServer/$!obj.from_acc3.path/$!obj.from_acc3.name" height="$!obj.from_acc3.height" width="$!obj.from_acc3.width" /></li>
+                	#end
+            
+                </ul>
+        	</div>
+            #if($!obj.status==0)
+            <div class="cancel_btn"><a href="javascript:void(0);" onclick="cancal('$!obj.id');">取消投诉</a></div>
+			#end
+            #if($!obj.status>1)
+            <div class="appeal_pic">
+                <h3 class="c_title">申诉图片</h3>
+                <ul>
+               		#if($!obj.to_acc1)
+            		<li><img src="$!imageWebServer/$!obj.to_acc1.path/$!obj.to_acc1.name" height="$!obj.from_acc1.height" width="$!obj.to_acc1.width" /></li>
+                	#end
+                	#if($!obj.to_acc2)
+                    <li><img src="$!imageWebServer/$!obj.to_acc2.path/$!obj.to_acc2.name" height="$!obj.to_acc2.height" width="$!obj.to_acc2.width" /></li>
+                    #end
+                    #if($!obj.to_acc3)
+                    <li><img src="$!imageWebServer/$!obj.to_acc3.path/$!obj.to_acc3.name" height="$!obj.from_acc3.height" width="$!obj.to_acc3.width" /></li>
+                    #end
+                </ul>
+        	</div>
+            #end
+        </div>
+        
+        <div class="c_detail_item">
+        #if($!obj.status>1)
+        	<div class="chat_record">
+            	<h3 class="c_title">对话记录</h3>
+                <div class="talk_item" id="talk_content_detail">
+               	#foreach($talk in $CommUtil.str2list("$!obj.talk_content"))
+                #if($!CommUtil.indexOf("$!talk","投诉")==0)
+                #set($class="")
+                #else
+                #set($class="other")
+                #end
+                #set($talk_content = $!weixinFootPointTools.gettalk_content_info("$!talk"))
+                <div class="talk_title">
+                    	<span class="name $!class">$!talk_content.name</span>
+                        <span class="time">$!talk_content.time1 $!talk_content.time2</span>
+                </div>
+              	<p class="text">$!talk_content.content</p>
+                #end          	
+                </div>
+            </div>
+            #if($!obj.status>1 && $!obj.status<4)
+            
+            <div class="release_chat">
+            	<span>发布对话</span>
+                <textarea name="talk_content" id="talk_content"></textarea>
+            </div>
+          
+            #end
+            <input name="id" type="hidden" id="id" value="$!obj.id" />
+            <input name="order_id" type="hidden" id="order_id" value="$!obj.of.id" />
+            <input type="hidden" name="goods_ids" id="goods_ids" />
+            <input name="to_user_id" type="hidden" id="to_user_id" value="$!obj.to_user.id" />
+            <input name="type" type="hidden" id="type" value="$!obj.type" />
+            <ul class="all_btns">
+            	#if($!obj.status>1 && $!obj.status<4)
+                <li class="release_btn"><a href="javascript:void(0);" onclick="complaint_talk();">发布对话</a></li>
+                #end
+                #if($!obj.status==2)
+                <li class="submit_btn"><a href="javascript:void(0);" onclick="complaint_arbitrate();">提交仲裁</a></li>
+                #end
+            </ul>
+         #end
+        </div>
+            	#end
+        </div>
+        #end
+        #end
+</form>
+</div>
+</body>
+</html>

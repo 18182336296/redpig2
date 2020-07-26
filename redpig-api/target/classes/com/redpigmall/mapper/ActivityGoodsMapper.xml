@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ActivityGoodsMapper">
+	 
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.ActivityGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ag_status" property="ag_status" jdbcType="INTEGER"/>
+		<result column="ag_type" property="ag_type" jdbcType="INTEGER"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+		<association property="ag_goods" column="ag_goods_id" select="com.redpigmall.dao.GoodsMapper.selectByPrimaryKey"/>
+		<association property="ag_admin" column="ag_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="act" column="act_id" select="com.redpigmall.dao.ActivityMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.ActivityGoods">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="ag_status" property="ag_status" jdbcType="INTEGER"/>
+		<result column="ag_type" property="ag_type" jdbcType="INTEGER"/>
+		<result column="mobile_recommend" property="mobile_recommend" jdbcType="INTEGER"/>
+		<result column="mobile_recommendTime" property="mobile_recommendTime" jdbcType="TIMESTAMP"/>
+		<result column="weixin_recommend" property="weixin_recommend" jdbcType="INTEGER"/>
+		<result column="weixin_recommendTime" property="weixin_recommendTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,ag_goods_id,ag_status,ag_admin_id,act_id,ag_type,mobile_recommend,mobile_recommendTime,weixin_recommend,weixin_recommendTime
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="ag_status != null">and ag_status = #{ag_status,jdbcType=INTEGER}</if>
+		<if test="ag_type != null">and ag_type = #{ag_type,jdbcType=INTEGER}</if>
+		<if test="mobile_recommend != null">and mobile_recommend = #{mobile_recommend,jdbcType=INTEGER}</if>
+		<if test="mobile_recommendTime != null">and mobile_recommendTime = #{mobile_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="weixin_recommend != null">and weixin_recommend = #{weixin_recommend,jdbcType=INTEGER}</if>
+		<if test="weixin_recommendTime != null">and weixin_recommendTime = #{weixin_recommendTime,jdbcType=TIMESTAMP}</if>
+		<if test="act_id!=null">and act_id = #{act_id,jdbcType=BIGINT}</if>
+		<if test="ag_goods_id != null">and ag_goods_id = #{ag_goods_id,jdbcType=BIGINT}</if>
+		<if test="ag_admin_id != null">and ag_admin_id = #{ag_admin_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		<if test="ag_goods == null or ag_goods.id == null">ag_goods_id = null,</if>
+		<if test="ag_goods != null and ag_goods.id != null">ag_goods_id = #{ag_goods.id,jdbcType=BIGINT},</if>
+		ag_status= #{ag_status},
+		<if test="ag_admin == null or ag_admin.id == null">ag_admin_id = null,</if>
+		<if test="ag_admin != null and ag_admin.id != null">ag_admin_id = #{ag_admin.id,jdbcType=BIGINT},</if>
+		<if test="act == null or act.id == null">act_id = null,</if>
+		<if test="act != null and act.id != null">act_id = #{act.id,jdbcType=BIGINT},</if>
+		ag_type= #{ag_type},
+		mobile_recommend= #{mobile_recommend},
+		mobile_recommendTime= #{mobile_recommendTime},
+		weixin_recommend= #{weixin_recommend},
+		weixin_recommendTime= #{weixin_recommendTime},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_activity_goods 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap" parameterType="map">
+		SELECT
+			obj.*
+		FROM redpigmall_activity_goods obj 
+		<if test="ag_goods_goods_name !=null">
+			JOIN redpigmall_goods ag_goods ON ag_goods.id=obj.ag_goods_id 
+			AND  ag_goods.goods_name LIKE CONCAT('%',#{ag_goods_goods_name},'%')
+		</if>
+		<if test="ag_goods_goods_store_user_id !=null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id
+			JOIN redpigmall_store s on g.goods_store_id = s.id 
+			JOIN redpigmall_user u on u.store_id = s.id and u.id=#{ag_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ag_goods_goods_status != null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id AND g.goods_status=#{ag_goods_goods_status,jdbcType=INTEGER}
+		</if>
+		
+		WHERE 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_activity_goods obj 
+		<if test="ag_goods_goods_name !=null">
+			JOIN redpigmall_goods ag_goods ON ag_goods.id=obj.ag_goods_id 
+			AND  ag_goods.goods_name LIKE CONCAT('%',#{ag_goods_goods_name},'%')
+		</if>
+		<if test="ag_goods_goods_store_user_id !=null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id
+			JOIN redpigmall_store s on g.goods_store_id = s.id 
+			JOIN redpigmall_user u on u.store_id = s.id and u.id=#{ag_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		
+		<if test="ag_goods_goods_status != null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id AND g.goods_status=#{ag_goods_goods_status,jdbcType=INTEGER}
+		</if>
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getAgGoodsByGoodsId" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity_goods
+		where
+			ag_goods_id = #{ag_goods_id,jdbcType=BIGINT}
+	</select>
+	<select id="getAgAdminByUserId" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity_goods
+		where
+			ag_admin_id = #{ag_admin_id,jdbcType=BIGINT}
+	</select>
+	<select id="getActByActivityId" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity_goods
+		where
+			act_id = #{act_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_activity_goods obj 	
+		<if test="ag_goods_goods_name !=null">
+			JOIN redpigmall_goods ag_goods ON ag_goods.id=obj.ag_goods_id 
+			AND  ag_goods.goods_name LIKE CONCAT('%',#{ag_goods_goods_name},'%')
+		</if>
+		<if test="ag_goods_goods_name!=null">
+			JOIN redpigmall_goods ag_goods ON ag_goods.id = obj.ag_goods_id
+			AND ag_goods.goods_name LIKE CONCAT('%',#{ag_goods_goods_name},'%')
+		</if>
+		<if test="ag_goods_goods_store_user_id !=null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id
+			JOIN redpigmall_store s ON g.goods_store_id = s.id 
+			JOIN redpigmall_user u ON u.store_id = s.id and u.id=#{ag_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		<if test="ag_goods_goods_status != null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id AND g.goods_status=#{ag_goods_goods_status,jdbcType=INTEGER}
+		</if>
+		
+		<if test="ag_goods_goods_store_id != null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id and g.goods_store_id = #{ag_goods_goods_store_id,jdbcType=INTEGER}
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					ORDER BY ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					ORDER BY obj.addTime DESC
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			LIMIT #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.ActivityGoods" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_activity_goods(addTime,deleteStatus,ag_status,ag_type,mobile_recommend,mobile_recommendTime,weixin_recommend,weixin_recommendTime,ag_goods_id,ag_admin_id,act_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{ag_status,jdbcType=INTEGER},#{ag_type,jdbcType=INTEGER},#{mobile_recommend,jdbcType=INTEGER},#{mobile_recommendTime,jdbcType=TIMESTAMP},#{weixin_recommend,jdbcType=INTEGER},#{weixin_recommendTime,jdbcType=TIMESTAMP},#{ag_goods.id,jdbcType=BIGINT},#{ag_admin.id,jdbcType=BIGINT},#{act.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.ActivityGoods">
+		update redpigmall_activity_goods
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_activity_goods where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_activity_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.*
+		from redpigmall_activity_goods obj 		
+		<if test="ag_goods_goods_name!=null">
+			JOIN redpigmall_goods ag_goods ON ag_goods.id=obj.ag_goods_id 
+			AND  ag_goods.goods_name LIKE CONCAT('%',#{ag_goods_goods_name},'%')
+		</if>
+		<if test="ag_goods_goods_store_user_id !=null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id
+			JOIN redpigmall_store s on g.goods_store_id = s.id 
+			JOIN redpigmall_user u on u.store_id = s.id and u.id=#{ag_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		<if test="ag_goods_goods_status != null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id AND g.goods_status=#{ag_goods_goods_status,jdbcType=INTEGER}
+		</if>
+		
+		<if test="ag_goods_goods_store_id != null">
+			JOIN redpigmall_goods g on obj.ag_goods_id = g.id and g.goods_store_id = #{ag_goods_goods_store_id,jdbcType=INTEGER}
+		</if>
+		
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.*
+		from redpigmall_activity_goods obj 
+		<if test="ag_goods_goods_name !=null">
+			JOIN redpigmall_goods ag_goods ON ag_goods.id=obj.ag_goods_id 
+			AND  ag_goods.goods_name LIKE CONCAT('%',#{ag_goods_goods_name},'%')
+		</if>
+		<if test="ag_goods_goods_store_user_id !=null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id
+			JOIN redpigmall_store s on g.goods_store_id = s.id 
+			JOIN redpigmall_user u on u.store_id = s.id and u.id=#{ag_goods_goods_store_user_id,jdbcType=BIGINT}
+		</if>
+		<if test="ag_goods_goods_status != null">
+			JOIN redpigmall_goods g ON obj.ag_goods_id = g.id AND g.goods_status=#{ag_goods_goods_status,jdbcType=INTEGER}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.ActivityGoods" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_activity_goods
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_activity_goods where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

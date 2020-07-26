@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-wap-web-app-capable" content="yes">
+<meta name="apple-wap-web-app-status-bar-style" content="black-translucent">
+<title>账户收支明细 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+   var e = "$!type";
+   jQuery(".balance_nav li").removeClass();
+   jQuery(".balance_nav li:eq("+e+")").addClass('this');
+  }); 
+   var currentPage = 2;
+   var  ret = 1;
+   var totalPage = "$!totalPage"; 
+   if(totalPage>1){  
+   jQuery(window).scroll(function(){
+   if (jQuery(document).scrollTop()+200 >=jQuery(document).height()-jQuery(window).height()&&ret==1) {  
+   if(currentPage<=totalPage){	  
+  jQuery.ajax({
+	type:'POST',
+    url:'$!webPath/wap/buyer/predeposit_log_data',
+ 	data:{"currentPage":currentPage,
+  		  "time":"$!{addTime}",
+ 		  "orderBy":"$!{orderBy}",
+		  "orderType":"$!{orderType}",
+		  "type":"$!{type}"},
+ beforeSend:function(){
+  	 ret = 2;
+	 jQuery("#loading").show();
+ 	 jQuery("#loading_none").hide();	
+  },
+ success:function(data){ 
+	 if(data){
+	 currentPage = currentPage+1;
+	 ret = 1;
+  	 jQuery(".receipts_box").append(data); 	   	
+	 }
+  }
+});
+}else{
+	jQuery("#loading").hide();	   
+    jQuery("#loading_none").show();  	
+   }  
+  }
+ });
+   }
+</script>
+</head>
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="account_main">
+  <div class="balance_box">
+    <div class="fun_top"> <a class="back" href="javascript:history.go(-1);"> <img src="$!cdnServer/resources/style/system/front/default/images/weixin/balance_back.png"></a> <a class="back_person" href="$!webPath/wap/buyer/center"> <img src="$!cdnServer/resources/style/system/front/default/images/weixin/balance_person.png" alt="返回用户中心"> </a> </div>
+    <dl class="balance_account">
+      <dt>余额 (元)</dt>
+      <dd><em>￥</em>$!user.availableBalance</dd>
+    </dl>
+  </div>
+  <div class="balance_nav">
+    <ul>
+      <li id="type_0" ><a href="$!webPath/wap/buyer/predeposit_log?type=0">全部</a></li>
+      <li id="type_1" ><a href="$!webPath/wap/buyer/predeposit_log?type=1">充值</a></li>
+      <li id="type_2" ><a href="$!webPath/wap/buyer/predeposit_log?type=2">消费</a></li>
+      <li id="type_3" ><a href="$!webPath/wap/buyer/predeposit_log?type=3">人工退款</a></li>
+      <li id="type_4" ><a href="$!webPath/wap/buyer/predeposit_log?type=4">手动修改</a></li>
+    </ul>
+  </div>
+  <div class="receipts_box"  #if($!objs.size()>0) style="background:#fff" #else style="background:none"  #end> #if($!objs.size()>0)
+    #foreach($obj in $objs)
+    <div class="item">
+      <p class="time">$!CommUtil.formatLongDate($!obj.addTime)</p>
+      <ul>
+        <!--若为支出则加“expense”若为收入则加“income“--> 
+        #if($!obj.pd_log_amount<0)
+        <li class="sign expense"></li>
+        <li class="info">
+          <dl>
+            <dt class="type">$!obj.pd_op_type</dt>
+            <dd class="description">$!obj.pd_log_info</dd>
+          </dl>
+        </li>
+        <!--当超过四位数时添加small_font控制字体变小--> 
+        #if($!obj.pd_log_amount>=1000 || $!obj.pd_log_amount<=-1000)
+        <li class="value small_font">¥$!obj.pd_log_amount</li>
+        #else
+        <li class="value">¥$!obj.pd_log_amount</li>
+        #end                 
+        #else 
+        <!--若为支出则加“expense”若为收入则加“income“-->
+        <li class="sign income"></li>
+        <li class="info">
+          <dl>
+            <dt class="type">$!obj.pd_op_type</dt>
+            <dd class="description">$!obj.pd_log_info</dd>
+          </dl>
+        </li>
+        <!--当超过四位数时添加small_font控制字体变小--> 
+        #if($!obj.pd_log_amount>=1000 || $!obj.pd_log_amount<=-1000)
+        <li class="value small_font">¥$!obj.pd_log_amount</li>
+        #else
+        <li class="value">¥$!obj.pd_log_amount</li>
+        #end
+        #end
+      </ul>
+    </div>
+    #end 
+    #else 
+    <!--没有记录的情况--> 
+    #if($!type==0||$!type=="")
+    <div class="none_receipts">您目前任何没有消费记录 </div>
+    #end
+    #if($!type==1)
+    <div class="none_receipts">您目前没有充值记录 </div>
+    #end
+    #if($!type==2)
+    <div class="none_receipts">您目前没有消费记录 </div>
+    #end
+    #if($!type==3)
+    <div class="none_receipts">您目前没有人工退款记录 </div>
+    #end
+    #if($!type==4)
+    <div class="none_receipts">您目前没有手动修改记录 </div>
+    #end
+    #end </div>
+  <div class="loading" id="loading" style="display:none">
+    <ul>
+      <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.gif" width="16" height="16"></li>
+      <li>正在加载....</li>
+    </ul>
+  </div>
+  <div class="loading" id="loading_none" style="display:none">
+    <ul>
+      <li>没有更多了....</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

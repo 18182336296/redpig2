@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+</head>
+<script>
+jQuery(document).ready(function(){
+	 jQuery("#name").val("$!name");
+});
+
+</script>
+
+<body>
+<div class="cont">
+  <h1 class="seth">商家服务</h1>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/merchant_services_list"  class="this"><b>管理</b></a> </li>
+      <li> <a href="$!webPath/merchant_services_add" ><b>新增</b></a> </li>
+    </ul>
+  </div>
+  <form action="$!webPath/merchant_services_list" method="post">
+    <div class="search">
+      <ul>
+        <li> <span>服务名称</span> <span class="size250">
+          <input name="name" type="text" id="name" value="$!name" />
+          </span> <span>
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+          </span> </li>
+      </ul>
+    </div>
+  </form>
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/merchant_services_list" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="4%">&nbsp;</th>
+          <th width="5%">序号</th>
+          <th width="15%"><span class="form_btna">服务名称</span></th>
+          <th width="15%"><span class="form_btna">收费标准</span></th>
+          <th  align="center"><span class="form_btna">操作</span></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $objs)
+        <tr>
+          <td class="check_position"><label for="ids_$!obj.id"><input class="ace" name="ids" type="checkbox" id="ids_$!obj.id" value="$!obj.id" /><span class="lbl"></span></label></td>
+          <td align="center">$!obj.sequence</td>
+          <td align="center">$!obj.serve_name</td>
+          <td align="center">$!obj.serve_price</td>
+          <td align="center" class="hui oprate_con"><a href="$!webPath/merchant_services_edit?id=$!obj.id&currentPage=$!currentPage" class="blue">编辑</a> | <a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/merchant_services_del?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a></td>
+        </tr>
+        #end
+        #else
+        <tr>
+          <td colspan="8"><div class="center_nothing"> <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span> <b>没有任何信息</b> </div></td>
+        </tr>
+        #end
+      </table>
+    </div>
+    #if($!objs.size()>0)
+    <div class="operation_box">
+        	<div class="operation_left">
+        	<ul>
+            	<li><label for="currentAll"><input class="ace" type="checkbox" name="currentAll" id="currentAll" onclick="selectAll(this)" /><span class="lbl"> 本页全选</span></label></li>
+                <li><a href="javascript:void(0);" onclick="cmd('$!webPath/merchant_services_del')">删除</a></li>
+            </ul>
+            </div>
+            <div class="operation_right">
+            	<div class="fenye">
+    	           <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	 	           <input name="mulitId" type="hidden" id="mulitId" />
+      	           $!gotoPageFormHTML
+                </div>
+            </div>
+     </div>
+    
+  
+    #end
+  </FORM>
+</div>
+</body>
+</html>

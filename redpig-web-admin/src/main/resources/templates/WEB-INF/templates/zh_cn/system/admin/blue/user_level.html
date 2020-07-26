@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员等级</title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+   jQuery("#add_grade").click(function(){
+	jQuery("#user_level").toggle();
+	jQuery("#nothing").toggle();
+   });
+	
+	 
+	var data='$!config.user_level';
+	var obj=eval("("+data+")");	 
+	jQuery.each(obj, function(id,val){
+		jQuery("#"+id).val(val);
+	}); 
+  
+	//改变系统提示的样式
+  jQuery(".w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+	
+});
+
+function saveForm(){
+    if(downMsg){
+	    jQuery("#credit_up").removeClass("ignore");
+	}else{
+	    jQuery("#credit_up").addClass("ignore");
+	}
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">会员等级管理</h1>
+  <div class="nav_list">
+     <ul>
+        <li><a href="$!webPath/user_level?orderBy=sys_seq&orderType=desc" class="this" ><b>管理</b></a> </li>
+         <li><a href="$!webPath/user_level_update" ><b>新增</b></a> </li>
+     </ul>
+  </div>
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>用户消费金额(元)达到相应区间后获得相应会员等级，会员等级永不回滚</li>
+      <li>不同等级的会员，购买商城活动商品时可以享有不同的折扣优惠</li> 
+      <li>不同等级的会员，使用系统积分可以兑换不同的积分商城礼品</li> 
+      <li>会员等级达到上限时，需要先更改最高等级的上限值</li>
+    </ul>
+  </div>
+   <form action="$!webPath/user_level"   method="post" name="theForm" id="theForm"  enctype="multipart/form-data">
+     <table class="level_table" border="0" cellspacing="0" cellpadding="0" >
+      <tbody>
+        <tr>
+          <th width="25%">
+              <span class="form_btna">等级图标（点击可更换）</span>
+          </th>
+          <th width="25%">
+             <span class="form_btna" style="text-align:center">等级名称</span>
+          </th>
+          <th width="25%"><span class="form_btna" style="text-align:center">总消费额介于</span></th>
+          <th width="25%"><span class="form_btna" >操作</span></th>
+        </tr>
+        #if($!objs.size()>0)
+        #foreach($obj in $!objs)
+        <tr id="level">
+          <td class="spoprat">
+            <span style="margin-left:210px;height: 20px;width: 20px;float: left; margin-top:-6px;">
+            <a href="javascript:void(0);" dialog_uri="$!webPath/user_level_ico?id=$!obj.id" dialog_title="设置会员等级图标" dialog_width="500" dialog_height="480" dialog_id="plat_quick_menu"><img src="$!imageWebServer/$!obj.level_icon" width="20" height="30" style="float:left;" title="点击可更换图标"/></a>
+            </span>
+          </td>
+          <td class="spoprat" align="center" height="25"> 
+             $!obj.level_name
+          </td>
+          <td class="spoprat" align="center">
+          $!obj.level_down
+           &nbsp;&nbsp;-&nbsp;&nbsp; 
+           $!obj.level_up
+          </td>
+          <td class="center">
+            <a style="margin-left:43%;"  href="$!webPath/user_level_update?id=$!obj.id" class="blue">编辑</a> |
+            <a  href="$!webPath/user_level_del?id=$!obj.id" class="blue">删除</a> 
+          </td>
+        </tr> 
+        #end
+        <tr>
+          <td colspan="4" style="border-bottom:0px; padding:0px;">
+            #if($!objs.size()>0)
+            <div class="operation_box"></div>
+            #end
+          </td>
+        </tr>
+        #else
+         <tr id="nothing">
+          <td colspan="4" >
+            <div class="center_nothing">
+                <span><img src="$!cdnServer/resources/style/system/manage/blue/images/nothing.png" /></span>
+                <b>没有任何信息</b>
+            </div>
+          </td>
+        </tr>
+       #end
+      </tbody>
+    </table>
+   </form>
+ </div>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor-min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+var options = {
+        cssPath : '$!cdnServer/resources/editor/plugins/code/prettify.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload',
+		width : '600px',
+		height:'400px',
+		resizeType : 1,
+		allowImageUpload : true,
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image','flash', 'media', 'baidumap','table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+      // 校验表单
+     jQuery("#theForm").validate({
+       ignore: "",
+       rules: {
+		    nuke_id:{required:true},
+			ng_name:{required:true},
+			goods_name:{required:true},
+			ng_price:{required:true,number:true,priceMax:true},
+			ng_count:{required:true,digits:true,inventoryMax:true},
+			nc_id:{required:true},
+            limit_number:{required:true,digits:true,min:1,limitNumberMax:true},
+            origin_price:{required:true},
+            specs_name:{required:true}
+		  },
+	   messages: {
+		    nuke_id:{required:"秒杀活动不能为空"},
+		    ng_name:{required:"秒杀名称不能为空"},
+			goods_name:{required:"秒杀商品不能为空"},
+			ng_price:{required:"秒杀价格不能为空",number:"秒杀价格只能为数字",priceMax:"秒杀价格不能超过原价"},
+			ng_count:{required:"秒杀数量不能为空",digits:"秒杀数量只能为整数",inventoryMax:"秒杀数量不能超过库存"},
+            origin_price:{required:"商品原价不能为空"},
+            limit_number:{required:"限制份数不能为空",digits:"必须输入整数",min:"至少1份",limitNumberMax:"限购份数不能超过拼团库存"},
+            specs_name:{required:"商品规格不能为空"},
+			nc_id:{required:"秒杀分类不能为空"}
+		}
+  });
+    // 校验秒杀价不能超过原价
+    jQuery.validator.addMethod("priceMax", function(value,element) {
+        var ng_price=jQuery("#ng_price").val();
+        var store_price_info = parseInt(jQuery("#store_price_info").text());
+        return ng_price<=store_price_info?true:false;
+    });
+    // 校验秒杀库存不能超过原库存
+    jQuery.validator.addMethod("inventoryMax", function(value,element) {
+        var ng_count=jQuery("#ng_count").val();
+        var store_inventory_info = parseInt(jQuery("#store_inventory_info").text());
+        return ng_count<=store_inventory_info?true:false;
+    });
+    // 限购份数不能超过秒杀库存
+    jQuery.validator.addMethod("limitNumberMax", function(value,element) {
+        var limit_number=jQuery("#limit_number").val();
+        var ng_count=jQuery("#ng_count").val();
+        return limit_number<=ng_count?true:false;
+    });
+  jQuery("#nuke_id").val("$!obj.nuke.id");
+  jQuery("#nc_id").val("$!obj.ng_nc.id");
+});
+</script>
+</head>
+<body scroll="yes">
+<div class="cont">
+  <h3 class="seth">秒杀管理</h3>
+  <div class="nav_list">
+  		<ul>
+        	<li><a href="$!webPath/nuke_goods" ><b>秒杀商品列表</b></a></li>
+            #if($!edit)
+            <li><a href="$!webPath/nuke_goods_edit" class="this"><b>编辑秒杀商品</b></a></li>
+            #else
+            <li><a href="$!webPath/nuke_goods_add" class="this"><b>新增秒杀商品</b></a></li>
+            #end
+        </ul>
+  </div>
+  <form action="$!webPath/nuke_goods_save" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+    <div class="editul setcont" id="base">
+      <ul class="set1">
+        <li class="setcont_bg">秒杀活动：</li>
+        <li class="px10">
+        <select name="nuke_id" id="nuke_id">
+        #if($!nukes.size()>0)
+            #foreach($nuke in $nukes)
+            #set($time="$!CommUtil.formatTime('yyyy年MM月dd日 HH:mm:ss',$!{nuke.beginTime}) - $!CommUtil.formatTime('yyyy年MM月dd日 HH:mm:ss',$!{nuke.endTime})")
+            <option value="$!nuke.id">$!nuke.nuke_name [$!time]</option>
+            #end
+        #else
+            <option value=" ">暂无秒杀申请</option>
+        #end
+        </select>
+            <input name="id" type="hidden" id="id" value="$!obj.id" />
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>秒杀名称：</li>
+        <li class="px10"><input name="ng_name" type="text" id="ng_name" style="height:25px;" value="$!obj.ng_name" size="40" /></li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"> <strong class="sred">*</strong>秒杀商品：</li>
+        <li class="px10">
+          <input name="goods_name" type="text" id="goods_name" style="height:25px;"
+                                value="$!obj.ng_goods.goods_name" size="40" readonly="readonly"
+                                dialog_uri="$!webPath/nuke_goods_select" dialog_title="选择秒杀商品"
+                                dialog_width="450" dialog_height="200" dialog_id="nuke_goods" />
+          <input name="goods_id" type="hidden" id="goods_id" value="$!obj.ng_goods.id" />
+        </li>
+      </ul>
+      <!--以下选择商品的规格-->
+      <ul class="set1">
+        <li class="setcont_bg"> <strong class="sred">*</strong>商品规格：</li>
+        <li class="px10">
+            <input name="specs_name" type="text" id="specs_name" style="height:25px;"
+                   value="$!obj.goods_spec_id" size="40" readonly="readonly"
+                   dialog_uri="$!webPath/nuke_goods_spec_select" dialog_title="选择商品规格"
+                   dialog_width="450" dialog_height="200" dialog_id="nuke_goods_spec" />
+            <input name="goods_spec_id" type="hidden" id="goods_spec_id" value="$!obj.goods_spec_id" />
+        </li>
+      </ul>
+      <ul class="set1" id="store_price">
+        <li class="setcont_bg"><strong class="sred">*</strong>商品原价：</li>
+        <li class="px10" id="store_price_info">&nbsp;$!obj.origin_price</li>
+        <input name="origin_price" type="hidden" id="origin_price" value="$!obj.origin_price" />
+      </ul>
+      <ul class="set1" id="store_inventory">
+        <li class="setcont_bg"><strong class="sred">*</strong>商品库存：</li>
+        <li class="px10" id="store_inventory_info">&nbsp;$!goods_cur_inventory</li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>秒杀价格：</li>
+        <li class="px10"><input name="ng_price" type="text" id="ng_price" style="height:25px;" value="$!obj.ng_price" size="40" />
+       </li>
+      </ul>
+      <ul class="set1">
+         <li class="setcont_bg"><strong class="sred">*</strong>秒杀总数：</li>
+         <li class="px10"><input name="ng_count" type="text" id="ng_count" style="height:25px;" value="$!obj.ng_count" size="40" />
+         商品总数请少于商品库存数</li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>每人限购</li>
+        <li><span class="size100"><input name="limit_number" type="text" id="limit_number" value="$!obj.limit_number"/>份</span></li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>秒杀类别：</li>
+        <li class="px10">
+        <select name="nc_id" id="nc_id">
+        <option value="">请选择秒杀类别...</option>
+        #foreach($nc in $ncs)
+            <option value="$!nc.id">$!nc.nc_name</option>
+        #end
+        </select>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">&nbsp;</li>
+        <li class="px10"><span class="setsub">
+          <input name="提交" type="submit"  value="保存"  style="cursor:pointer;"/>
+          </span></li>
+        </ul>
+  </div>
+  </form>
+</div>
+</body>
+</html>

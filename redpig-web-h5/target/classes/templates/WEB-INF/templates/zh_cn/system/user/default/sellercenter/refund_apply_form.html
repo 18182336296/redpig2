@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台 - 退款管理-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/kindeditor-min.js"></script>
+<script charset="utf-8" src="$!cdnServer/resources/editor/lang/zh_CN.js"></script>
+<script>
+jQuery(document).ready(function(e) {
+    var status = "$!{status}";
+	if(status){
+		jQuery(".seller_title_ul li").removeClass("this");
+		jQuery("#seller_title_ul_"+status).addClass("this");
+	}
+});
+function refund_audit(apply_form_id,result){
+	showDialog("msg_info","","操作不可撤销，是否继续?",1,"warning",3,function(){
+		window.location.href="$!webPath/seller/refund_audit?apply_form_id="+apply_form_id+"&&result="+result+"&&currentPage="+$!{currentPage};
+	});		
+}
+</script>
+</head>
+
+<body>
+$!httpInclude.include("/seller/top")
+<div class="main">
+  <div class="seller_center">
+    $!httpInclude.include("/seller/nav?op=refund")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index">商家中心</a></b>><b>客户服务</b> > <b>退款管理</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li class="this" ><a href="$!webPath/seller/refund_apply_form"><i></i>待审核</a></li>
+            <li id="seller_title_ul_all"><a href="$!webPath/seller/refund_apply_form?status=all"><i></i>全部申请</a></li>
+            <li id="seller_title_ul_10"><a href="$!webPath/seller/refund_apply_form?status=10"><i></i>申请通过</a></li>
+            <li id="seller_title_ul_5"><a href="$!webPath/seller/refund_apply_form?status=5"><i></i>申请被拒绝</a></li>
+            <li id="seller_title_ul_15"><a href="$!webPath/seller/refund_apply_form?status=15"><i></i>已退款</a></li>
+          </ul>
+        </div>
+        <div class="seller_list_box">
+           <form method="post" name="ListForm" id="ListForm" action="$!webPath/seller/refund_apply_form">
+            <div class="operation">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table">
+                <tr id="opertitle">
+                  <th width="5%"></th>
+                  <th width="10%">订单号</th>	
+                  <th width="10%">用户名</th>
+                  <th width="15%">申请时间</th>
+				  <th width="10%">审核人</th>
+                  <th width="15%">审核时间</th>
+                  <th width="10%">退款金额</th>	
+                  <th align="center">操作</th>
+                </tr>
+                #if($objs.size()>0)
+                #foreach($obj in $objs)
+                <tr>
+                  <td align="center">$!velocityCount</td>
+                  <td align="center">$!obj.order_id</td>
+                  <td align="center">$!obj.user_name</td>
+                  <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                  <td align="center">#if($!obj.audit_user_name)$!obj.audit_user_name#else暂无数据#end</td>
+                  <td align="center">#if($!obj.audit_date)$!CommUtil.formatLongDate($!obj.audit_date)#else暂无数据#end</td>
+                  <td align="center">$!obj.refund_price</td>
+                  
+                  <td class="del_operate" align="center">
+                  #if($!{obj.status}==0)
+                  <a href="javascript:void(0);" class="del_a" onclick="refund_audit('$!{obj.id}','true')">审核通过</a><a href="javascript:void(0);" class="del_a"  onclick="refund_audit('$!{obj.id}','')">审核拒绝</a>
+                  #end
+                  #if($!{obj.status}==5)
+				  申请已拒绝
+                  #end
+                  #if($!{obj.status}==10)
+                  申请已通过
+                  #end
+                  #if($!{obj.status}==15)
+                  已退款
+                  #end
+                  | <a href="$!webPath/seller/refund_orderform_view?order_id=$!{obj.order_form_id}" class="del_a">查看详情</a>
+                  </td>                  
+                </tr>
+                #end
+                #else
+                <tr>
+                <td colspan="8" align="center"><div class="seller_center_nothing">
+                    <div class="seller_center_nothing_left"><img src="$!cdnServer/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                    <div class="seller_center_nothing_right">暂时没有数据</div>
+                  </div></td>
+              	</tr>
+                #end
+              </table>
+            </div>
+            #if($objs.size()>0)
+           <div class="userlist_allop">
+            <div class="seller_list_page">
+              <div  class="seller_page_sp">$!gotoPageFormHTML</div>                             
+            </div>
+          </div>
+           #end
+           <input id="status" name="status" type="hidden" value="$!status"/>
+           <input id="currentPage" name="currentPage" type="hidden" value="$!currentPage"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+ $!httpInclude.include("/footer1")
+</body>
+</html>

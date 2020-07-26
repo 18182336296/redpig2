@@ -1,0 +1,8 @@
+<div class="phone_uploading_center_c"> #if($!photos.size()>0)
+  <ul>
+    #foreach($photo in $photos)
+    <li class="this" onclick="app_detail_imgs_select(this)"><i><img use="app_img" bigsrc="$!imageWebServer/$!photo.path/$!{photo.name}" src="$!imageWebServer/$!photo.path/$!{photo.name}_small.$!{photo.ext}" /></i> <span style="display:none"><img src="$!cdnServer/resources/style/system/front/default/images/usercenter/select_img.png" /></span> </li>
+    #end
+  </ul>
+  #end </div>
+<div class="fenye_phone"> <span  class="page" id="app_detail_imgs" ajax_type=".tab_body_b" ajax_page="app_detail_imgs" album_id="$!{album_id}" type="app_detail_imgs">$!gotoPageAjaxHTML</span> </div>

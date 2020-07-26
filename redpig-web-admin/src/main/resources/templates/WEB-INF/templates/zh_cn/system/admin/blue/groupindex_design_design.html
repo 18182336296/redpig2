@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/public.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet"/>
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet"/>
+<link href="$!cdnServer/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/groupBuying.js" type="text/javascript"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script type="application/javascript">
+<title>RedPigMall团购二级页面导航</title>
+jQuery(document).ready(function(){
+		//广告滚动
+		var movePx=220;
+	var LeftLengh = 0-movePx;
+	var doubleLeftLengh=LeftLengh*2;
+
+				function changeImg(){
+						jQuery(".box").animate({top:0},1000,function(){
+					jQuery(".box").css("top",LeftLengh)
+					jQuery(".box li:last").insertBefore(".box li:first");
+					})
+
+									}
+					var timer=setInterval(changeImg,2500);
+					jQuery(".windowsBox").hover(function(){
+						clearInterval(timer);
+						},function(){
+							timer=setInterval(changeImg,2500);
+							})
+	
+		
+				jQuery(".previous").click(function(){
+				
+					jQuery(".box").animate({top:0},1000,function(){
+					jQuery(".box").css("top",LeftLengh)
+					jQuery(".box li:last").insertBefore(".box li:first");
+					})
+
+				})
+				
+				
+				jQuery(".next").click(function(){
+
+					jQuery(".box").animate({top:doubleLeftLengh},1000,function(){
+					jQuery(".box").css("top",LeftLengh)
+					jQuery(".box li:first").insertAfter(".box li:last")
+					})
+				
+				})
+                });
+				</script>
+</head>
+
+<body>
+<div class="cont">
+  <h3 class="seth">团购首页设计</h3>
+  <div class="nav_list">
+    <ul>
+                  	<li><a href="$!webPath/groupfloor_list"><b>团购楼层列表</b></a> </li>
+            <li> <a href="$!webPath/groupfloor_add" ><b>新增团购楼层</b></a> </li>
+      <li><a href="$!webPath/groupindex_design"><b>管理</b></a></li>
+      <li><a href="$!webPath/groupindex_design_edit" ><b>新增</b></a></li>
+      <li><a href="javascript:void(0);" class="this"><b>设计</b></a></li>
+    </ul>
+  </div>
+  <div class="group_nav">
+  	<div class="top_nav_Box">
+      <div class="nav_title">
+        <h3>全部团购分类</h3>
+      </div>
+      <div class="nav_items">
+        <ul>
+          <li> #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","1"))<a href="$!wc.href" target="_blank" style="color:#111111;">$!wc.name</a>#end 
+            <!--<a href="#">首页</a>-->
+            <div class="g_editBox"> <a href="javascript:void(0);" class="edit"   
+				dialog_uri="$!webPath/groupindex_style?style=1&seq=1&id=$!obj.id" 
+				dialog_title="编辑导航文字信息" 
+            	dialog_width="540" 
+            	dialog_height="100" 
+            	dialog_top="100"  
+				dialog_id="groupindex_style_1">编辑 </a> </div>
+          </li>
+          <li> #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","2"))<a href="$!wc.href" target="_blank" style="color:#111111;">$!wc.name</a>#end
+            <div class="g_editBox"> <a href="javascript:void(0);" class="edit"   
+				dialog_uri="$!webPath/groupindex_style?style=1&seq=2&id=$!obj.id" 
+				dialog_title="编辑导航文字信息" 
+            	dialog_width="540" 
+            	dialog_height="100" 
+            	dialog_top="100"  
+				dialog_id="groupindex_style_2">编辑 </a> </div>
+          </li>
+          <li> #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","3"))<a href="$!wc.href" target="_blank" style="color:#111111;">$!wc.name</a>#end
+            <div class="g_editBox"> <a href="javascript:void(0);" class="edit"   
+				dialog_uri="$!webPath/groupindex_style?style=1&seq=3&id=$!obj.id" 
+				dialog_title="编辑导航文字信息" 
+            	dialog_width="540" 
+            	dialog_height="100" 
+            	dialog_top="100"  
+				dialog_id="groupindex_style_3">编辑 </a> </div>
+          </li>
+          <li> #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","4"))<a href="$!wc.href" target="_blank" style="color:#111111;">$!wc.name</a>#end
+            <div class="g_editBox"> <a href="javascript:void(0);" class="edit"   
+				dialog_uri="$!webPath/groupindex_style?style=1&seq=4&id=$!obj.id" 
+				dialog_title="编辑导航文字信息" 
+            	dialog_width="540" 
+            	dialog_height="100" 
+            	dialog_top="100"  
+				dialog_id="groupindex_style_4">编辑 </a> </div>
+          </li>
+          <li> #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","5"))<a href="$!wc.href" target="_blank" style="color:#111111;">$!wc.name</a>#end
+            <div class="g_editBox"> <a href="javascript:void(0);" class="edit"   
+				dialog_uri="$!webPath/groupindex_style?style=1&seq=5&id=$!obj.id" 
+				dialog_title="编辑导航文字信息" 
+            	dialog_width="540" 
+            	dialog_height="100" 
+            	dialog_top="100"  
+				dialog_id="groupindex_style_5">编辑 </a> </div>
+          </li>
+          <li> #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","6"))<a href="$!wc.href" target="_blank" style="color:#111111;">$!wc.name</a>#end
+            <div class="g_editBox"> <a href="javascript:void(0);" class="edit"   
+				dialog_uri="$!webPath/groupindex_style?style=1&seq=6&id=$!obj.id" 
+				dialog_title="编辑导航文字信息" 
+            	dialog_width="540" 
+            	dialog_height="100" 
+            	dialog_top="100"  
+				dialog_id="groupindex_style_6">编辑 </a> </div>
+          </li>
+          <li> #foreach($wc in $group_tools.getInfo_list("$!obj.gid_nav_word_list","7"))<a href="$!wc.href" target="_blank" style="color:#111111;">$!wc.name</a>#end
+            <div class="g_editBox"> <a href="javascript:void(0);" class="edit"   
+				dialog_uri="$!webPath/groupindex_style?style=1&seq=7&id=$!obj.id" 
+				dialog_title="编辑导航文字信息" 
+            	dialog_width="540" 
+            	dialog_height="100" 
+            	dialog_top="100"  
+				dialog_id="groupindex_style_7">编辑 </a> </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="groupBuy_wrap">
+    
+    <div class="firstScreen">
+      <div class="left_nav"> 
+      
+    #foreach($gc in $gcs)
+    #set($temp=$velocityCount)
+	#set($temp=($temp - 1)*56)
+      <div class="left_navitem">
+        <div class="first_level">
+          <dl>
+            <dt class="title"> <a href="javascript:void(0);">$!gc.gc_name</a> </dt>
+            #foreach($recom in $groupViewTools.getRecom($!gc.id))
+            <dd><a href="">$recom.gc_name</a></dd>
+          	#end
+          </dl>
+        </div>
+        
+        
+     
+<!--       <div class="second_level" #if(${temp}!=0)style="top:-${temp}px;"#end> 
+        	#foreach($gc2 in $!gc.childs)
+            
+            <div class="second_level_item" style="display:inline-block;">
+              <h4 class="second_title">$!gc2.gc_name</h4>
+              #set ($item=$!groupViewTools.getItems($!gc2.childs))
+
+            
+              #if($!item.get("0"))
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("0"))
+                  <li><a href="">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("1").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("1"))
+                  <li><a href="">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              #if($!item.get("2").size()>0)
+              <div class="items">
+                <ul>
+                  #foreach($gc3 in $!item.get("2"))
+                  <li><a href="">$!gc3.gc_name</a></li>
+                  #end
+                </ul>
+              </div>
+              #end
+              </div>
+              #end
+         </div>-->
+         
+         
+      </div>
+      #end 
+      </div>
+      <div class="mid_content">
+        <div class="mid_slide">
+          <div class="slideBox">
+            <div class="g_editBox" style="z-index:1000; left:0; "><a style="color:#000; background:#fff; border-color:#fff;" href="javascript:void(0);" class="edit" dialog_uri="$!webPath/groupindex_style?id=$!obj.id&seq=9&style=3" dialog_title="编辑导航信息" dialog_width="600" dialog_height="100" dialog_top="100" dialog_id="channel_style_3">编辑</a></div>
+            <script src="$!webPath/advert_invoke?id=$!obj.gid_nav_advp_id"></script> 
+          </div>
+        </div>
+        <div class="recommendBox">
+          <div class="hot_group">
+            <div class="g_editBox"><a href="javascript:void(0);" class="edit" dialog_uri="$!webPath/groupindex_style?id=$!obj.id&style=5" dialog_title="编辑导航信息" dialog_width="600" dialog_height="100" dialog_top="100" dialog_id="channel_style_5">编辑</a></div>
+            <h3>热门团购</h3>
+            <ul>
+              #foreach($!gc in $!group_tools.getHotClass($!$!obj.gid_nav_hot_class))
+              <li><a href="">$!gc.gc_name</a></li>
+              #end
+            </ul>
+          </div>
+          <div class="all_area">
+          <h3>全部区域</h3>
+          <ul id="nationwide">
+            <li><a href="javascript:void(0);" id="4521985">北京</a></li>
+            <li><a href="javascript:void(0);" id="4522848">上海</a></li>
+            <li><a href="javascript:void(0);" id="4524131">广州</a></li>
+            <li><a href="javascript:void(0);" id="4523981">长沙</a></li>
+            <li><a href="javascript:void(0);" id="4524157">深圳</a></li>
+            <li><a href="javascript:void(0);" id="4522483">沈阳</a></li>
+            <li><a href="javascript:void(0);" id="4522498">大连</a></li>
+            <li><a href="javascript:void(0);" id="4522004">天津</a></li>
+            <li><a href="javascript:void(0);" id="4523851">武汉</a></li>
+            <li><a href="javascript:void(0);" id="4524826">昆明</a></li>
+            <li><a href="javascript:void(0);" id="4523481">济南</a></li>
+            <li><a href="javascript:void(0);" id="4523001">杭州</a></li>
+          </ul>
+        </div>
+        </div>
+      </div>
+      <div class="right_side">
+        <div class="windowsBox">
+          <div class="g_editBox"><a style="background:#fff;" href="javascript:void(0);" class="edit" dialog_uri="$!webPath/groupindex_style?id=$!obj.id&seq=1&style=4" dialog_title="编辑导航信息" dialog_width="665" dialog_height="100" dialog_top="100" dialog_id="channel_style_4">编辑</a></div>
+          <ul class="box">
+          
+          #foreach($o in $!group_tools.getGrouplifeGoodsList($!obj.gid_nav_right_img_list))
+          	<li>
+              <div class="product_box"> <a href="#"> <img src="$!imageWebServer/$!o.group_acc.path/$!o.group_acc.name"+"._small."+"$!o.group_acc.ext"> <span class="text">$!o.gg_name</span><span class="value">￥$!o.group_price</span> </a> </div>
+            </li>
+          #end
+          
+          </ul>
+          <div class="side_btn"> <a href="javascript:void(0);" class="previous"></a> <a href="javascript:void(0);" class="next"></a> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

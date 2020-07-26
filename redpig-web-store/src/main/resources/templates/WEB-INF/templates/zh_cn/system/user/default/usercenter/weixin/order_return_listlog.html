@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="no" />
+<meta name="format-detection" content="telephone=no,address=no" />
+<title>返修/退换货记录 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	var currentPage = 2;
+	var  ret = 1;
+	var totalPage = "$!totalPage";
+	if(totalPage>1){
+   jQuery(window).scroll(function(){								  
+	 if (jQuery(document).scrollTop()+200 >= jQuery(document).height() - jQuery(window).height()&&ret==1) {
+		if(currentPage<=totalPage){
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/buyer/order_return_listlog',
+				  data:{"currentPage":currentPage},
+				beforeSend:function(){
+				  jQuery("#loading_none").hide();
+				  jQuery("#loading").show();
+				  ret = 2;
+				},
+			   success:function(data){
+				   jQuery("#loading").hide();
+				   currentPage = currentPage+1;
+	             if(data){ 
+				  jQuery(".goods_resturn").append(data);
+				  ret = 1;
+			 	 }else{
+				 jQuery("#loading_none").show();
+				  }    
+              	}
+	    });
+	 }
+	 }else{
+		jQuery("#loading_none").show();
+	}
+	});
+	}
+});<!--end-->
+</script>
+</head>
+
+<body style="-webkit-tap-highlight-color:rgba(0,0,0,0)">
+<div class="user_c_title">
+<a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/g_arow1.png" /></a>
+商品退货
+<a class="per_c_icon" href="$!webPath/wap/buyer/center"><img
+			src="$!cdnServer/resources/style/system/front/default/images/weixin/bottom_me_1.png"
+			 /></a>
+</div>
+<div class="phone_main">
+    <div class="order_return_list"  style="margin-top:0px;">
+    	<ul class="resturn_tab">
+        	<li><a href="$!webPath/wap/buyer/order_return_list">商品退货</a></li>
+            <li><a href="$!webPath/wap/buyer/group_life_return">生活购退款</a></li>
+            <li class="this"><a href="$!webPath/wap/buyer/order_return_listlog">查看返修/退换货记录</a></li>	
+        </ul>
+        <!--商品退货-->
+        #if($!objs.size()>0)
+        <!--查看返修/退换货记录-->
+        <div class="goods_resturn">
+        	#foreach($obj in $objs)
+        	<dl>#set($ret=1)
+            	#if($!obj.goods_return_status==-2)
+                #set($url="javascript:void(0);")
+                #set($status="已过期")
+                #set($text="退货")
+                #end
+                #if($!obj.goods_return_status==5)
+                #set($url="javascript:void(0);")
+                #set($status="待审核")
+                #set($text="退货")
+                #end
+                #if($!obj.goods_return_status==6)
+                #set($url="$!webPath/wap/buyer/order_returnlog_view?id=$!obj.id")
+                #set($status="填写退货物流")
+                #set($text="退货")
+                #set($ret=2)
+                #end
+                #if($!obj.goods_return_status==7)
+                #set($url="$!webPath/wap/buyer/order_returnlog_view?id=$!obj.id")
+                #set($status="待商家收货")
+                #set($text="待收货")
+                #end
+                #if($!obj.goods_return_status==-1)
+                #set($url="javascript:void(0);")
+                #set($status="审核未通过")
+                #set($text="退货失败")
+                #end
+                #if($!obj.refund_status==0)
+                  #if($!obj.goods_return_status==10)
+                  	#set($url="javascript:void(0);")
+                	#set($status="待退款")
+                    #set($text="待退款")
+                  #end  
+                #else
+                  	#set($url="javascript:void(0);")
+                	#set($status="退款完成")
+                    #set($text="退款完成")
+                #end  
+            	<dt><span class="fl">服务号：$!obj.return_service_id</span><span class="fr orange">$!status</span></dt>
+                <dd><span class="fl"><a href="$!webPath/wap/items?id=$!obj.goods_id"><img src="$!imageWebServer/$!obj.goods_mainphoto_path" width="60" height="60" /></a><p>$!obj.goods_name</p><p class="gray">$!CommUtil.formatLongDate($!obj.addTime)</p></span><span #if($!ret==1) class="fr gray" #else class="fr" #end><a href="$!url">$!text</a></span></dd>
+            </dl>
+            #end
+        </div>
+        #else
+        <div class="main">
+  <div class="mt50" style="height:49px;"></div>
+  <div class="error_page1">
+  	<span class="error_img"><img src="$!cdnServer/resources/style/system/front/default/images/nothing.png" /></span>
+    <p>暂无记录！</p>
+  </div>
+
+	</div>
+        #end
+<div class="loading" id="loading" style="display:none">
+<ul>
+  <li><img src="$!cdnServer/resources/style/system/front/default/images/weixin/loading.png" width="16" height="16" /></li>
+  <li>正在加载....</li>
+</ul>
+</div>
+<div class="loading" id="loading_none" style="display:none">
+<ul>
+  <li>没有更多了....</li>
+</ul>
+</div>        
+    </div>
+</div>
+</body>

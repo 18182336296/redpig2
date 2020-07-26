@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//设置推荐的默认装态
+   if("$!obj.chatting_status"=="1"){
+		jQuery("#chatting_status").val("1");
+        jQuery("#chatting_status_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}else{
+		jQuery("#chatting_status").val("0");
+        jQuery("#chatting_status_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}
+
+//
+jQuery("#theForm").validate({
+    rules:{
+	  chatting_name:{
+	    required :true,
+	     remote:{
+		    url: "$!webPath/chatting_user_verify",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "chatting_name": function(){return jQuery("#chatting_name").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  } ,
+	  chatting_type:{required :true},
+	  chatting_user_id:{required :true}
+	 },
+	messages:{
+	  chatting_name:{required:"客服名不能为空",remote:"该客服名已经存在"} ,
+	  chatting_type:{required :"客服类型不能为空"},
+	  chatting_user_id:{required :"绑定管理员不能为空"}
+	}
+  });
+//
+jQuery("#chatting_type").val("$!obj.chatting_type");
+});
+//修改推荐状态
+function chatting_status_set(){
+	var state = jQuery("#chatting_status").val();
+	if(state=="0"){
+		jQuery("#chatting_status").val("1");
+        jQuery("#chatting_status_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	}else{
+		jQuery("#chatting_status").val("0");
+        jQuery("#chatting_status_img").attr("src","$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	}
+}
+#if(!$!obj)
+function search_admin(){
+  jQuery.ajax({type:'POST',url:'$!webPath/chatting_admin_search',data:'',dataType:'json',
+			  success:function(data){
+				     jQuery("#chatting_user_id").empty();
+				     jQuery.each(data, function(index,item){
+						jQuery("#chatting_user_id").append('<option value="'+item.id+'" selected="selected">'+item.userName+'</option>');
+					 })
+				  }
+			  });
+}
+#end
+//保存
+function save(method){
+	jQuery("#cmd").val(method);
+	var chatting_user_name=jQuery("#chatting_user_id").find("option:selected").text();
+	jQuery("#chatting_user_name").val(chatting_user_name);
+	jQuery("#theForm").submit();
+}
+</script>
+
+</head>
+<body>
+<form action="$!webPath/chatting_user_save" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" id="id" type="hidden" value="$!obj.id"/>
+  <input name="cmd" id="cmd" type="hidden"/>
+  <div class="cont">
+    <h1 class="seth">客服管理</h1>
+    
+    <div class="nav_list"> 
+	 
+    <ul>
+     #if($!edit) 
+	<li><a href="$!webPath/chatting_user_list"><b>客服列表</b></a></li>
+	<li><a href="$!webPath/chatting_user_add"  #if(!$!edit) class="this"  #end ><b>客服分配</b></a></li>
+	<li><a href="javascript:void(0);" class="this"><b>客服编辑</b></a></li>
+     #else
+    <li><a href="$!webPath/chatting_user_list"><b>客服列表</b></a></li> 
+	<li><a href="$!webPath/chatting_user_add"  class="this"><b>客服分配</b></a></li>
+    
+	  #end
+	</ul>
+		
+    </div>
+    <div class="edit">
+    <div class="editul setcont" id="base">
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>客服名</li>
+        <li><span class="webname">
+          <input name="chatting_name" type="text" id="chatting_name" value="$!obj.chatting_name" />
+        </span></li>
+      </ul>
+      <!--鼠标经过样式-->
+      <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>客服类型</li>
+          <li><span class="webnamesec sizese">
+            <select name="chatting_type" id="chatting_type" >
+              <option value="">请选择客服类型...</option>
+              <option value="0">售前客服</option>
+              <option value="1">售后客服</option>
+              <option value="2">商家服务</option>  
+            </select>
+          </span><span id="nothis"><strong class="q"></strong><strong class="c"></strong></span></li>
+        </ul>
+      #if(!$!obj)
+      <ul class="set1">
+      <li class="setcont_bg">搜索管理员</li>
+      <li><span class="webname">
+        <input name="admin_username" type="text" id="admin_username" placeholder="请输入管理员用户名或者真实姓名" />
+        </span><span class="emailtest">
+        <input name="" type="button"  value="搜索" style="cursor:pointer" onclick="search_admin();" />
+        </span></li>
+    </ul>
+    #end
+     <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>客服对应管理员</li>
+          <li><span class="webnamesec sizese">
+            <select name="chatting_user_id" id="chatting_user_id" >
+              #if(!$!obj)
+              <option value="" selected="selected">请选择一个管理员账号...</option>
+              #end   
+              #if($!obj.chatting_user_id)
+              <option value="$!obj.chatting_user_id">$!obj.chatting_user_name</option>
+              #end         
+            </select>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">
+          <input name="chatting_user_name" type="hidden" id="chatting_user_name" value="$!obj.chatting_user_name" />
+          选择绑定管理账号后不可以修改</strong><strong class="c"></strong></span></li>
+        </ul>
+     <ul class="set1">
+       <li  class="setcont_bg">是否启用</li>
+        <li> <span class="webSwitch">
+          <input name="chatting_status" id="chatting_status" type="hidden" value="$!obj.chatting_status" />
+          <img src="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="chatting_status_img" onclick="chatting_status_set();" style="cursor:pointer"/> 
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">未启用的客服账号不能使用</strong><strong class="c"></strong></span></li> 
+      </ul>
+      
+    </div>
+    </div>  
+    <div class="submit">
+    <span class="pad120"><input name="" type="button" value="提交" onclick="save('save');"/></span>
+  </div>
+  </div>
+
+</form>
+</body>
+</html>

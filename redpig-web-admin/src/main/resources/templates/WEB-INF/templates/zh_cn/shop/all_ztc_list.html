@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>更多推广 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/integral.css" rel="stylesheet" type="text/css" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+
+</head>
+<script>
+jQuery(document).ready(function(){
+  jQuery(".img_cspan img").lazyload({effect:"fadeIn",width:210,height:210});
+  jQuery(".pro_them_team img").lazyload({effect:"fadeIn",width:30,height:30});   
+})
+</script>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="group_bg">
+<style>
+.pro_list .pro_list_one {width: 230px;margin-left: 0px;margin-right: 11px;}
+.pro_list {width: 1215px;}
+.pro_list .pro_list_one ul .pro_list_img span {width: 216px;height: 216px;}
+
+</style>
+
+  <div class="main">
+  <div class="auction_center_top">全部推广</div>
+    <form action="$!webPath/more/ztc_goods_list?gc_id=$!gc_id" method="post" id="ListForm">
+    <div class="pro_list"> 
+    #set($isAdminOnline=$!userTools.adminOnLine())
+    #foreach($obj in $objs)
+            <div class="pro_list_one" data-bind="$!obj.id">
+              <ul class="">
+                <li class="pro_list_img"> #if($!obj.goods_main_photo)
+                
+                  #set($small_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_small.$!{obj.goods_main_photo.ext}")
+                  #set($middle_img="$!imageWebServer/$!{obj.goods_main_photo.path}/$!{obj.goods_main_photo.name}_middle.$!{obj.goods_main_photo.ext}")
+                  #else
+                  #set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #set($middle_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end 
+                  
+                  #set($goods_url="$!webPath/items_$!{obj.id}")
+                  #if($!config.second_domain_open && $!obj.goods_type==1 && $!obj.goods_store.store_second_domain!="")
+                  #set($goods_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}/items_$!{obj.id}")
+                  #end <a href="$!goods_url" target="_blank"><span class="img_cspan">
+                  <p><img id="$!{obj.id}_main_img" src="$!cdnServer/resources/style/common/images/loader.gif" original="$!middle_img" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" data-bind="$!obj.id" /></p>
+                  </span></a></li>
+                <li class="pro_them">
+                  <div class="pro_them_team">
+                    <p style="position:absolute; width:700px; left:0px;display:block;"> <b class="pro_team_b this_b" goods_id="$!{obj.id}" middle_img="$!middle_img"> <img src="$!cdnServer/resources/style/common/images/loader.gif" original="$!small_img"  width="28" height="28"   onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';"/> <i class="team_san"></i></b> #foreach($img in $obj.goods_photos) <b  class="pro_team_b" goods_id="$!{obj.id}" middle_img="$!imageWebServer/$!{img.path}/$!{img.name}_middle.$!{img.ext}"> <img original="$!imageWebServer/$!img.path/$!{img.name}_small.$!{img.ext}" src="$!cdnServer/resources/style/common/images/loader.gif"   onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" width="28" height="28" /> <i class="team_san" style="display:none"></i></b> #end </p>
+                  </div>
+                </li>
+                <li class="pro_list_name"><a href="$!goods_url" target="_blank">$!{obj.goods_name}</a></li>
+                <li class="pro_list_price"><b>¥$!{obj.goods_current_price}</b>
+                #set($actName="")
+                #if($!obj.activity_status==2)
+                #set($actName="促销")
+                #end
+                #if($!obj.group_buy==2)
+                #set($actName="团购")
+                #end
+            	#if($!obj.combin_status==1)
+                #set($actName="组合")
+                #end
+                #if($!obj.order_enough_give_status==1)
+                #set($actName="满送")
+                #end
+                #if($!obj.enough_reduce==1)
+                #set($actName="满减")
+                #end
+                #if($!obj.f_sale_type==1)
+                #set($actName="F码")
+                #end
+                #if($!obj.advance_sale_type==1)
+                #set($actName="预售")
+                #end
+                #if($!actName!="")
+                <i>$!actName</i>
+                 #end
+                <li class="pro_list_evaluate" style="display:none;">
+                  <dl>
+                    <dt>$!{obj.goods_salenum}</dt>
+                    <dd>商品销量</dd>
+                  </dl>
+                  <dl>
+                    <dt>$!{obj.evaluate_count}</dt>
+                    <dd>用户评论</dd>
+                  </dl>
+                  <dl style=" border-right:none;">
+                    #if($!obj.goods_store)
+                    #if($!userTools.userOnLine('$!obj.goods_store.user.userName')=="true")
+                    <dt class="content"  #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.id','$!webPath','user','store','$!obj.goods_store.id');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #else
+                    <dt class="content_unonline" #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.id','$!webPath','user','store','$!obj.goods_store.id');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #end
+                    #else
+                    #if($!isAdminOnline)
+                    <dt class="content"  #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.id','$!webPath','user','plat','');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #else
+                    <dt class="content_unonline" #if(!$!user)dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #else onclick="open_im('$!obj.id','$!webPath','user','plat','');" #end ></dt>
+                    <dd>在线客服</dd>
+                    #end
+                    #end
+                  </dl>
+                </li>
+                #set($store_url="$!webPath/store_$!{obj.goods_store.id}")
+                #if($!config.second_domain_open && $!obj.goods_store.store_second_domain!="")
+                #set($store_url="http://$!{obj.goods_store.store_second_domain}.$!{domainPath}")
+                #end
+                <li class="list_contrast" style="display:none;"> #if($!user)
+                  #if($!obj.f_sale_type==1)
+                  <div class="list_contrast_buy"><a href="javascript:void(0);" goods_id="$!obj.id" goods_type="$!obj.goods_type" user_id="$!obj.goods_store.user.id"   id="f_goods_cart_$!{obj.id}"> F码购买</a></div>
+                  #else
+                  <div class="list_contrast_buy"><a href="javascript:void(0);" goods_id="$!obj.id" goods_type="$!obj.goods_type" user_id="$!obj.goods_store.user.id" id="goods_cart_$!{obj.id}">加入购物车</a></div>
+                  #end
+                  #else
+                  #if($!obj.f_sale_type==1)
+                  <div class="list_contrast_buy"><a href="javascript:void(0);" dialog_uri="$!current_webPath/user_dialog_login" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_car_btn">F码购买</a></div>
+                  #else
+                  <div class="list_contrast_buy"><a href="javascript:void(0);" goods_id="$!obj.id" goods_type="$!obj.goods_type" user_id="$!obj.goods_store.user.id" id="goods_cart_$!{obj.id}">加入购物车</a></div>
+                  #end
+                  #end
+                  
+                  #set($compare_display="block")
+                  #set($cancel_compare_display="none")
+                  #foreach($c_goods in $goods_compare_list)
+                  #if($c_goods.id==$!obj.id)
+                  #set($compare_display="none")
+                  #set($cancel_compare_display="block")
+                  #end
+                  #end
+                  <div class="contrast" style="display:$!{compare_display}"><a goods_id="$!obj.id" goods_main_img="$!small_img" href="javascript:void(0);"><i></i>加入对比</a></div>
+                  <div class="contrast_off"  style="display:$!{cancel_compare_display};"><i></i><a goods_id="$!obj.id" href="javascript:void(0);">取消对比</a></div>
+                </li>
+                <li class="pro_list_shop" style="display:none;"> #if($!obj.goods_type==1)<a href="$!store_url" target="_blank">$!{obj.goods_store.store_name}</a>#else 商城自营 #end </li>
+              </ul>
+            </div>
+            #end </div>
+    <div class="fenye"><span>$!gotoPageFormHTML</span></div>
+        <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+        <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+        <input type="hidden" name="currentPage" id="currentPage" />
+        #if($!keyword)
+        <input type="hidden" name="keyword" id="keyword" value="$!keyword" />
+        #end
+    </form>
+  </div>
+    
+  </div>
+</div>
+<div class="main">
+  $!httpInclude.include("/footer")
+</div>
+</body>
+</html>

@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+#if($!config.sina_login)
+$!config.sina_domain_code
+#end
+#if($!config.qq_login)
+$!config.qq_domain_code
+#end
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/index_wide.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/DataLazyLoad.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.lazyload.js"></script>
+<script src="$!cdnServer/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+
+  var hotSearch = "$!{config.hotSearch}";
+  var search_key = hotSearch.split(",")[0];
+  function search_submit(){
+	  var thekey = jQuery("#keyword").val();
+	  if(thekey==""){
+		  jQuery("#keyword").val(search_key);
+	  }
+	  jQuery("#searchForm").submit();
+	  }
+jQuery(document).ready(function(){
+   jQuery("#keyword").attr("placeholder",search_key);
+//鼠标经过顶部导航信息
+  jQuery(".wide_top_pull").mouseover(function(){
+	jQuery(this).find("div").show();
+	jQuery(this).find("em").addClass("em_this");
+	jQuery(this).find("s").addClass("this");
+  	}).mouseleave(function(){
+    jQuery(this).find("div").hide();
+	jQuery(this).find("em").removeClass("em_this");
+	jQuery(this).find("s").removeClass("this");
+  });
+	//关键字搜索
+
+	//鼠标经过左侧分类导航
+  jQuery(".wide_head_nav_b dl").mouseover(function(){	
+	var child_count = jQuery(this).attr("child_count");
+	var id=jQuery(this).attr("id");
+		if(child_count>0){
+		  jQuery("#child_"+id).show();			
+		}
+	var z = -35;
+	var eq =jQuery(this).index();
+	var x = eq*z;
+	jQuery("#child_"+id).css('margin-top',x+'px');
+  }).mouseleave(function(e){
+		 jQuery("dt[id^=dts_]").removeAttr("style");
+		 jQuery("div[id^=left_menu_con_]").removeAttr("style"); 
+		 var child_count = jQuery(this).attr("child_count");
+			if(child_count>0){ 
+			 var id=jQuery(this).attr("id");	  
+			 jQuery("#child_"+id).hide();	
+			}
+  });
+
+});////
+
+//关键字搜索
+function search_form(){
+  var keyword=arguments[0];
+  var type=arguments[1];
+  if(keyword!=""&&keyword!=undefined){
+   jQuery("#keyword").val(keyword);
+  }
+  if(type!=""&&type!=undefined){
+    jQuery("#type").val(type);
+  }
+  jQuery("#searchForm").submit();	
+  jQuery("#keyword").val("");
+}
+</script>
+</head><body>
+<!--低版本提示-->
+<!--[if IE 6]>
+<div class="wide_ie">
+	<div class="wide_ie_c">
+		<span>您当前使用的浏览器版本过低，兼容性和安全性较差，建议升级<a href="http://windows.microsoft.com/zh-cn/internet-explorer/download-ie?tp=1.0.0.0.0.KdMt0Yu">IE浏览器</a>或者下载<a href="http://www.google.cn/intl/zh-CN/chrome/">谷歌浏览器</a>
+        <b><a href="javascript:void(0);" onclick="javascript:jQuery('.wide_ie').hide();"><img src="$!cdnServer/resources/style/system/front/default/images/wide/top_close.png" /></a></b>
+        </span>
+	</div>
+</div>
+<![endif]-->
+<!--顶部广告-->
+<div style="width:100%;overflow:hidden;">
+<script src="$!webPath/advert_invoke?id=23"></script>
+</div>
+<div class="wide_top_nav">
+  <div class="wide_top_nav_c"> #if($!user)
+    <div class="wide_top_nav_c_left"> <span class="login_name">嗨！<a href="$!webPath/buyer/index">$!user.userName</a><a href="$!webPath/integral/index">积分($!user.integral)</a><a href="$!webPath/buyer/message">消息($!msg_size)</a>#if($!CommUtil.indexOf("$!user.userRole","ADMIN")>=0)<a href="$!webPath/admin/index">[管理后台]</a> #end<a href="$!webPath/redpigmall_logout">退出系统</a></span></div>
+    #else
+    <div class="wide_top_nav_c_left"> <span>嗨 ! 欢迎来到$!{config.websiteName}</span><span><a href="$!webPath/user/login">请登录</a></span><span><a href="$!webPath/register">免费注册</a></span></div>
+    #end
+    <div class="wide_top_right">
+      <!--购物车-->
+      <span class="wide_top_car"><a href="$!webPath/goods_cart1" target="_blank">购物车<b id="top_good_cart">$!carts.size()</b>件</a></span>
+      <!--商家支持-->
+      <span class="wide_top_pull"> <em class="" title="请注意切换到商家角色">商家支持<s class="this"></s></em>
+      <div class="wide_top_this" style="display:none;">
+        <ul class="wide_top_pull_con_style2 wide_top_seller">
+          <li class="li_01"><a href="$!webPath/seller/login">商家登录</a></li>
+          <li class="li_02"><a href="$!webPath/seller_apply" target="_blank">商家入驻</a></li>
+          <li class="li_03"><a href="$!webPath/seller/index">商家中心</a></li>
+          <li class="li_04"><a href="$!webPath/seller/order">商家订单</a></li>
+        </ul>
+      </div>
+      </span>
+      <!--我的订单-->
+      <span class="wide_top_pull"> <em class=""><a href="$!webPath/buyer/order">我的订单</a> <s class="this"></s></em>
+      <div class="wide_top_this" style="display:none;">
+        <ul class="wide_top_pull_con_style2" style="width:90px;">
+          <li><a href="$!webPath/buyer/order?order_status=order_submit">待支付</a></li>
+          <li><a href="$!webPath/buyer/order?order_status=order_shipping">待收货</a></li>
+          <li><a href="$!webPath/buyer/order?order_status=order_receive">待评价</a></li>
+        </ul>
+      </div>
+      </span> <span class="wide_top_pull"> <em class=""><a href="$!webPath/buyer/favorite_goods">收藏夹</a> <s class="this"></s></em>
+      <div class="wide_top_this" style="display:none;">
+        <ul class="wide_top_pull_con_style2">
+          <li><a href="$!webPath/buyer/favorite_goods" target="_blank">收藏商品</a></li>
+          <li><a href="$!webPath/buyer/favorite_store" target="_blank">收藏店铺</a></li>
+        </ul>
+      </div>
+      </span> #if($!config.weixin_store==1&&$!config.weixin_qr_img)
+      <!--微信商城-->
+      <span class="wide_top_pull"> <em class="">
+      <h3>微信商城</h3>
+      <s class="this"></s></em>
+      <div class="wide_top_this">
+        <div class="wide_top_this_box_wx" style="display:none;">
+          <h3>扫一扫关注公众账号</h3>
+          <div class="wide_top_this_code"><img src="$!imageWebServer/$!config.weixin_qr_img.path/$!config.weixin_qr_img.name" /></div>
+        </div>
+      </div>
+      </span> #end
+      #if($!config.app_download==1) <span class="wide_top_pull">
+      <!--加em_this和top_this-->
+      <em class=""><i>手机商城</i><s class="this"></s></em>
+      <div class="wide_top_this" style="display:none;">
+        <div class="wide_top_this_box">
+          <div class="wide_top_this_code"><img src="$!imageWebServer/$!{config.uploadFilePath}/app/app_dowload.png" width="77" height="77" /></div>
+          <i class="wide_top_this_i"><a href="$!config.ios_download" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/app-store.png" width="111" height="37" /></a></i> <i class="wide_top_this_i"><a href="$!config.android_download" target="_blank"><img src="$!cdnServer/resources/style/system/front/default/images/android.png" width="111" height="37" /></a></i> </div>
+      </div>
+      </span> #end <span class="wide_top_pull"> <em class="">客户服务<s  class="this"></s></em>
+      <div class="wide_top_this" style="display:none;">
+        <ul class="wide_top_pull_con_style2">
+          <li><a href="$!webPath/articlelist_help" target="_blank">帮助中心</a></li>
+          <li><a href="$!webPath/doc_service" target="_blank">售后服务</a></li>
+          <li><a href="$!webPath/doc_online" target="_blank">在线客服</a></li>
+          <li><a href="$!webPath/doc_complaint" target="_blank">投诉中心</a></li>
+          <li><a href="$!webPath/doc_email" target="_blank">客服邮箱</a></li>
+          <li><a href="$!webPath/delivery_apply0" target="_blank">自提服务</a></li>
+        </ul>
+      </div>
+      </span> #set($navs=$!navTools.queryNav(-1,-1))
+      #if($!navs.size()>0) <span class="wide_top_pull"> <em class="">网站导航<s class=""></s></em>
+      <div class="wide_top_this" style="display:none">
+        <div class="website">
+          <ul>
+            #foreach($nav in $navs)
+            <li><a href="$!nav.url"  #if($!{nav.new_win}==1)target="_blank"#end  rel="nofollow">$!nav.title</a></li>
+            #end
+          </ul>
+        </div>
+      </div>
+      </span> #end </div>
+  </div>
+</div>
+<!--头部-->
+<div class="wide_head">
+  <div class="wide_head_c">
+    <!--logo-->
+    #if($!config.websiteLogo_wide)
+    #set($logo="$!imageWebServer/$!{config.websiteLogo_wide.path}/$!{config.websiteLogo_wide.name}")
+    #else
+    #set($logo="$!cdnServer/resources/style/system/front/default/images/logo_wide.png")
+    #end
+    <div class="wide_head_logo"> <img src="$!logo" /> </div>
+    <!--左侧gif-->
+    <div class="wide_head_ad">
+      <script src="$!webPath/advert_invoke?id=24"></script>
+    </div>
+    <!--搜索-->
+    <form action="$!webPath/search" method="post" target="_blank" id="searchForm">
+      <input name="type" type="hidden" id="type" value="$!type" />
+      <div class="wide_head_search">
+        <div class="wide_head_search_left">
+          <input name="keyword" type="text" id="keyword"  x-webkit-speech lang="zh-CN" onwebkitspeechchange="jQuery('#searchForm').submit()" autocomplete="off"/>
+        </div>
+        <div class="wide_head_search_right"><a href="javascript:void(0);" id="search_submit" onclick="search_submit();">搜 索</a></div>
+        <div class="wide_head_search_b">#if($!config.hotSearch!="")#foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))#if($!velocityCount!=1)<a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a> #end #end #end</div>
+      </div>
+    </form>
+    <!--右侧广告-->
+    <div class="wide_head_ad_r">
+      <script src="$!webPath/advert_invoke?id=25"></script>
+    </div>
+  </div>
+  <!--导航-->
+  <div class="wide_head_nav">
+    <div class="wide_head_nav_c">
+      <!--左侧导航-->
+      <div class="wide_head_nav_left">
+        <div class="wide_head_nav_left_t"><b><img src="$!cdnServer/resources/style/system/front/default/images/nav_left.png" /></b><span><a href="$!webPath/goods_class">全部分类</a></span></div>
+        <div class="wide_head_nav_b" style="display:;"> #foreach($sc in $!sc_list)
+          #if($!sc.display==true)
+          <!--显示-->
+          #set($icon_img="$!cdnServer/resources/style/common/images/icon/default_icon.png") 
+          #if($!sc.icon_type==0)
+          <!--图标-->
+          #if($!sc.icon_sys!="")
+          #set($icon_img="$!cdnServer/resources/style/common/images/icon/icon_$!{sc.icon_sys}.png")
+          #end
+          #else
+          #if($!sc.photo_id)         
+          #set($icon_img="$!imageWebServer/$!showClassTools.getaccessory($!sc.photo_id).path/$!showClassTools.getaccessory($!sc.photo_id).name")
+          #end
+          #end
+          <dl child_count="$!sc.childs.size()" id="$!sc.id" style="position:relative;">
+            <dt id="dts_$!sc.id"><i><img src="$!icon_img" width="16" height="16" /></i> <span> #set($s_ccs=$!showClassTools.getSecondSclist($!sc.id,"3"))
+              #if($!s_ccs.size()>0)
+              #foreach($sgc in $!s_ccs) <a 
+                               #if($!sgc.show_type=="0")
+                               #if($!sgc.url=="") 
+                               href="$!webPath/store_goods_list?sc_id=$!{sgc.id}"
+                               #else
+                               href ="$!sgc.url"
+                               #end 
+                               #end
+                              #if($!sgc.show_type=="1") href ="$!webPath/channel/index_$!{sgc.channel_id}" #end target="_blank" > $!sgc.showName</a> #if($!s_ccs.size()!=$!{velocityCount})<b>/</b>#end
+              #end
+              #else <a #if($!sc.show_type=="0") #if($!sc.url=="") href="$!webPath/store_goods_list?sc_id=$!{sc.id}" #else href ="$!sc.url" #end #end
+                            #if($!sc.show_type=="1") href ="$!webPath/channel/index_$!{sc.channel_id}" #end target="_blank">$!sc.showName</a> #end </span> </dt>
+            <dd style="display:none"  id="child_$!sc.id">
+            #set($adv_map=$!showClassTools.query_sc_advert($!sc.id,"$!webPath"))
+             #set($scbsrc=$!showClassTools.getscbrandsrc($!sc.id,"6"))
+              <div class="wide_head_nav_b_c" id="left_menu_con_$!{sc.id}">
+               #foreach($scc in $sc.childs)
+                   #if($!scc.display==true)
+                <div class="wide_head_nav_b_c_one">
+                  <h3><a 
+                       #if($!scc.show_type=="0")
+                       #if($!scc.url=="")
+                       href="$!webPath/store_goods_list?sc_id=$!{scc.id}" 
+                       #else
+                       href="$!scc.url" 
+                       #end
+                       #end
+                      	 #if($!scc.show_type=="1") href="$!webPath/channel/index_$!{scc.channel_id}" #end target="_blank">$!scc.showName</a></h3>
+                  <span>
+                  #foreach($gc2 in $!showClassTools.getSclist($!scc.id))
+                  #if($!gc2.display==true) <a target="_blank" href="$!webPath/store_goods_list_$!{gc2.id}">$!gc2.className</a> #end<em>|</em>
+       				 #end 
+                  
+                  </span> </div>
+        			#end
+                #end
+              </div>
+            </dd>
+          </dl>
+          #end  
+          #end </div>
+      </div>
+      <ul>
+        #set($navs=$!navTools.queryNav(0,-1))
+        #foreach($nav in $navs)
+        #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+        #set($url="$!nav.url")
+        #else
+        #set($url="$!webPath/$!{nav.url}")
+        #end
+        <li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url">$!{nav.title}</a></li>
+        #end
+      </ul>
+    </div>
+  </div>
+  <!--banner幻灯广告位-->
+  <div class="wide_banner">
+    <script src="$!webPath/advert_invoke?id=22"></script>
+  </div>
+  
+ <script> 
+jQuery(document).ready(function(){	
+		var size="$!{floors.size()}";
+		if(size>0){
+			  jQuery("html").scrollTop(0);	//刷新页面返回顶部						
+			  jQuery("#toolbar").load("$!webPath/toolbar");	 
+				//Call DataLazyLoad
+				jQuery("#floors div[type='floor']").DataLazyLoad({load : function(page, unLocked)
+				{
+					var html = '';
+					var max = $!{floors.size()}+1;
+					var count = page-1;
+					var id =jQuery("#floors div[type='floor'][count="+count+"]").attr("id");
+					var load_url =jQuery("#floors div[type='floor'][id="+id+"]").attr("load_url");
+					//Generate the data
+					jQuery.post("$!webPath/"+load_url,{"id":id,"count":count},function(data){												   
+								 html += data;
+								jQuery(html).appendTo('#floors div[type="floor"][id='+id+']');
+								//Check whether to end
+								page = page >= max ? 0 : page + 1;
+								//To prevent repeated load, The first parameter to the next page, No page is 0
+								unLocked(page);										   											   
+						},"text");
+				}});
+		 }else{
+		    jQuery("#toolbar").load("$!webPath/toolbar");	 
+		 }
+});
+</script> 
+<div id="floors">
+  #foreach($obj in $floors)
+      #if($!obj.wide_template=="wide_adv_rectangle_four")
+      <div class="wide_quick_w" type="floor" id="$!obj.id" count="$!velocityCount" load_url="$!{obj.load_url}">
+      </div>
+      #end
+      #if($!obj.wide_template=="wide_goods")
+      <div class="wide_floor1_w" type="floor" id="$!obj.id" count="$!velocityCount" load_url="$!{obj.load_url}">
+      </div>
+      #end
+      #if($!obj.wide_template=="wide_adv_five")
+      <div class="wide_floor2_w" type="floor" id="$!obj.id" count="$!velocityCount" load_url="$!{obj.load_url}">
+      </div>
+      #end
+      #if($!obj.wide_template=="wide_adv_eight")
+      <div class="wide_floor3_w" type="floor" id="$!obj.id" count="$!velocityCount" load_url="$!{obj.load_url}">
+      </div>
+      #end
+      #if($!obj.wide_template=="wide_adv_brand")
+      <div class="wide_brand_w" type="floor" id="$!obj.id" count="$!velocityCount" load_url="$!{obj.load_url}">
+      </div>
+      #end
+      #if($!obj.wide_template=="wide_adv_square_four")
+      <div class="wide_brand_w" type="floor" id="$!obj.id" count="$!velocityCount" load_url="$!{obj.load_url}">
+      </div>
+      #end
+      
+  #end
+</div>
+
+   <div id="footer">$!httpInclude.include("/footer")</div>
+
+  <div id="toolbar"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.DeliveryAddressMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.DeliveryAddress">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="da_type" property="da_type" jdbcType="INTEGER"/>
+		<result column="da_user_id" property="da_user_id" jdbcType="BIGINT"/>
+		<result column="da_user_name" property="da_user_name" jdbcType="VARCHAR"/>
+		<result column="da_name" property="da_name" jdbcType="VARCHAR"/>
+		<result column="da_content" property="da_content" jdbcType="VARCHAR"/>
+		<result column="da_tel" property="da_tel" jdbcType="VARCHAR"/>
+		<result column="da_contact_user" property="da_contact_user" jdbcType="VARCHAR"/>
+		<result column="da_address" property="da_address" jdbcType="VARCHAR"/>
+		<result column="da_status" property="da_status" jdbcType="INTEGER"/>
+		<result column="da_service_day" property="da_service_day" jdbcType="VARCHAR"/>
+		<result column="da_service_type" property="da_service_type" jdbcType="INTEGER"/>
+		<result column="da_begin_time" property="da_begin_time" jdbcType="VARCHAR"/>
+		<result column="da_end_time" property="da_end_time" jdbcType="VARCHAR"/>
+		<association property="da_area" column="da_area_id" select="com.redpigmall.dao.AreaMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.DeliveryAddress">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="da_type" property="da_type" jdbcType="INTEGER"/>
+		<result column="da_user_id" property="da_user_id" jdbcType="BIGINT"/>
+		<result column="da_user_name" property="da_user_name" jdbcType="VARCHAR"/>
+		<result column="da_name" property="da_name" jdbcType="VARCHAR"/>
+		<result column="da_content" property="da_content" jdbcType="VARCHAR"/>
+		<result column="da_tel" property="da_tel" jdbcType="VARCHAR"/>
+		<result column="da_contact_user" property="da_contact_user" jdbcType="VARCHAR"/>
+		<result column="da_address" property="da_address" jdbcType="VARCHAR"/>
+		<result column="da_status" property="da_status" jdbcType="INTEGER"/>
+		<result column="da_service_day" property="da_service_day" jdbcType="VARCHAR"/>
+		<result column="da_service_type" property="da_service_type" jdbcType="INTEGER"/>
+		<result column="da_begin_time" property="da_begin_time" jdbcType="VARCHAR"/>
+		<result column="da_end_time" property="da_end_time" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,da_type,da_user_id,da_user_name,da_name,da_content,da_tel,da_contact_user,da_area_id,da_address,da_status,da_service_day,da_service_type,da_begin_time,da_end_time
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="da_type != null">and da_type = #{da_type,jdbcType=INTEGER}</if>
+		<if test="da_user_id != null">and da_user_id = #{da_user_id,jdbcType=BIGINT}</if>
+		<if test="da_user_name != null">and da_user_name = #{da_user_name,jdbcType=VARCHAR}</if>
+		<if test="da_name != null">and da_name = #{da_name,jdbcType=VARCHAR}</if>
+		<if test="da_content != null">and da_content = #{da_content,jdbcType=VARCHAR}</if>
+		<if test="da_tel != null">and da_tel = #{da_tel,jdbcType=VARCHAR}</if>
+		<if test="da_contact_user != null">and da_contact_user = #{da_contact_user,jdbcType=VARCHAR}</if>
+		<if test="da_address != null">and da_address = #{da_address,jdbcType=VARCHAR}</if>
+		<if test="da_status != null">and da_status = #{da_status,jdbcType=INTEGER}</if>
+		<if test="da_service_day != null">and da_service_day = #{da_service_day,jdbcType=VARCHAR}</if>
+		<if test="da_service_type != null">and da_service_type = #{da_service_type,jdbcType=INTEGER}</if>
+		<if test="da_begin_time != null">and da_begin_time = #{da_begin_time,jdbcType=VARCHAR}</if>
+		<if test="da_end_time != null">and da_end_time = #{da_end_time,jdbcType=VARCHAR}</if>
+		<if test="da_name_like !=null">and da_name like CONCAT('%',#{da_name_like},'%')</if>
+		<if test="da_status_more_than !=null">and da_status <![CDATA[ > ]]> #{da_status_more_than,jdbcType=INTEGER}</if>
+		<if test="da_status_less_than !=null">and da_status <![CDATA[ < ]]> #{da_status_less_than,jdbcType=INTEGER}</if>
+		<if test="da_area_id != null">and da_area_id = #{da_area_id,jdbcType=BIGINT}</if>
+		<if test="da_area_ids != null">
+			and da_area_id in
+			<foreach collection="da_area_ids" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</sql>
+	<sql id="ifStatement">
+		da_type= #{da_type},
+		da_user_id= #{da_user_id},
+		da_user_name= #{da_user_name},
+		da_name= #{da_name},
+		da_content= #{da_content},
+		da_tel= #{da_tel},
+		da_contact_user= #{da_contact_user},
+		<if test="da_area == null or da_area.id == null">da_area_id = null,</if>
+		<if test="da_area != null and da_area.id != null">da_area_id = #{da_area.id,jdbcType=BIGINT},</if>
+		da_address= #{da_address},
+		da_status= #{da_status},
+		da_service_day= #{da_service_day},
+		da_service_type= #{da_service_type},
+		da_begin_time= #{da_begin_time},
+		da_end_time= #{da_end_time},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.DeliveryAddress" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_delivery_address 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.DeliveryAddress" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from redpigmall_delivery_address obj 
+		<if test="da_area_parent_id !=null">
+			JOIN redpigmall_area a on obj.da_area_id = a.id and a.parent_id = #{da_area_parent_id,jdbcType=BIGINT}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_delivery_address obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getDaAreaByAreaId" resultType="com.redpigmall.domain.DeliveryAddress" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_delivery_address
+		where
+			da_area_id = #{da_area_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.DeliveryAddress" resultMap="BaseResultMap" parameterType="map">
+		select
+		obj.*
+		from redpigmall_delivery_address obj 		
+		<if test="da_area_parent_id !=null">
+			JOIN redpigmall_area a on obj.da_area_id = a.id and a.parent_id = #{da_area_parent_id,jdbcType=BIGINT}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.DeliveryAddress" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_delivery_address(addTime,deleteStatus,da_type,da_user_id,da_user_name,da_name,da_content,da_tel,da_contact_user,da_address,da_status,da_service_day,da_service_type,da_begin_time,da_end_time,da_area_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{da_type,jdbcType=INTEGER},#{da_user_id,jdbcType=BIGINT},#{da_user_name,jdbcType=VARCHAR},#{da_name,jdbcType=VARCHAR},#{da_content,jdbcType=VARCHAR},#{da_tel,jdbcType=VARCHAR},#{da_contact_user,jdbcType=VARCHAR},#{da_address,jdbcType=VARCHAR},#{da_status,jdbcType=INTEGER},#{da_service_day,jdbcType=VARCHAR},#{da_service_type,jdbcType=INTEGER},#{da_begin_time,jdbcType=VARCHAR},#{da_end_time,jdbcType=VARCHAR},#{da_area.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.DeliveryAddress">
+		update redpigmall_delivery_address
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_delivery_address where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_delivery_address where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.DeliveryAddress" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_delivery_address obj 	
+		<if test="da_area_parent_id !=null">
+			JOIN redpigmall_area a on obj.da_area_id = a.id and a.parent_id = #{da_area_parent_id,jdbcType=BIGINT}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.DeliveryAddress" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_delivery_address obj 
+		<if test="da_area_parent_id !=null">
+			JOIN redpigmall_area a on obj.da_area_id = a.id and a.parent_id = #{da_area_parent_id,jdbcType=BIGINT}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.DeliveryAddress" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_delivery_address
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_delivery_address where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

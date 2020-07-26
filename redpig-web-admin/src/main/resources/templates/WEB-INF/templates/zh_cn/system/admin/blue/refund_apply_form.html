@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!cdnServer/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  var status = "$!{status}";
+  if(status=="all"){
+	  jQuery(".nav_list a").eq(1).addClass("this");
+  }else if(status=="15"){
+	  jQuery(".nav_list a").eq(2).addClass("this");
+  }else{
+	  jQuery(".nav_list a").eq(0).addClass("this");
+  }
+  //
+});
+</script>
+</head>
+<body>
+
+<div class="cont">
+  <h3 class="seth">退款管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/refund_apply_form"><b>待退款申请</b></a></li>
+        <li><a href="$!webPath/refund_apply_form?status=all"><b>所有申请</b></a></li>
+        <li><a href="$!webPath/refund_apply_form?status=15"><b>已退款申请</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/refund_apply_form" method="post" id="ListForm" >
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="5%"></th>
+        <th width="10%"><span class="form_btna">所属商家</span></th>
+        <th width="10%"><span class="form_btna">订单号</span></th>
+        <th width="5%"><span class="form_btna">买家名称</span></th>
+        <th width="15%"><span class="form_btna">申请时间</span></th>
+        <th width="5%"><span class="form_btna">审核人</span></th>
+        <th width="15%"><span class="form_btna">审核时间</span></th>
+        <th width="10%"><span class="form_btna">审核状态</span></th>
+        <th width="10%">退款给金额</th>
+        <th align="center"><b class="form_btnb">操作</b></th>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!velocityCount</td>
+        <td align="center">$!obj.store_name</td>
+        <td align="center">$!obj.order_id</td>
+        <td align="center">$!obj.user_name</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+        <td align="center">#if($!{obj.audit_user_name}) $!{obj.audit_user_name} #else 暂无数据 #end</td>
+        <td align="center">#if($!obj.audit_date) $!CommUtil.formatLongDate($!obj.audit_date) #else 暂无数据 #end</td>
+        #if($!obj.status==0)
+        #set($audit_status='待审核')
+        #end
+        #if($!obj.status==5)
+        #set($audit_status='审核拒绝')
+        #end
+        #if($!obj.status==10)
+        #set($audit_status='审核通过')
+        #end
+        #if($!obj.status==15)
+        #set($audit_status='已退款')
+        #end
+        <td align="center">$!audit_status</td>
+        <td align="center">$!obj.refund_price</td>
+        #if($!obj.status==0||$!obj.status==5)
+        <td align="center" class="hui oprate_con">$!audit_status</td>
+        #end
+        #if($!obj.status==10)
+        <td align="center" class="hui oprate_con"><a href="$!webPath/order_refund_view?id=$!obj.id&&currentPage=$!{currentPage}" class="blue">退款</a></td>
+        #end
+        #if($!obj.status==15)
+        <td align="center" class="hui oprate_con">$!audit_status</td>
+        #end
+      </tr>
+     #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+        <input name="status" type="hidden" id="status" value="$!status" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+    </div>   
+  </div>
+  <div class="fenye">
+    </div>
+  </form>
+</div>
+</body>
+</html>

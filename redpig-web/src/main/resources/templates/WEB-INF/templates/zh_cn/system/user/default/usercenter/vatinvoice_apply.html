@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>增票资质 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!cdnServer/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script src="$!cdnServer/resources/js/ajaxfileupload.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script src="$!cdnServer/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery.validator.addMethod("photo_vali_img1", function(value, element){
+		var val = jQuery("#va_img1").val();
+		if(val){return true;}else{return false;}
+});
+jQuery.validator.addMethod("photo_vali_img2", function(value, element){
+		var val = jQuery("#va_img2").val();
+		if(val){return true;}else{return false;}
+});
+jQuery.validator.addMethod("photo_vali_img3", function(value, element){
+		var val = jQuery("#va_img3").val();
+		if(val){return true;}else{return false;}
+});
+jQuery.validator.addMethod("photo_vali_img4", function(value, element){
+		var val = jQuery("#va_img4").val();
+		if(val){return true;}else{return false;}
+});
+jQuery.validator.addMethod("textinput", function(value, element) {
+	var chrnum = /^[\u0391-\uFFE5A-Za-z0-9\s()_-]+$/;
+		return this.optional(element) || (chrnum.test(value));
+});
+jQuery.validator.addMethod("isTel", function(value,element) {   
+        var length = value.length;   
+        var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;   
+        var tel = /^(\d{3,4}-?)?\d{7,9}$/g;       
+        return this.optional(element) || tel.test(value) || (length==11 && mobile.test(value));   
+});
+jQuery(document).ready(function(){
+	var val = "$!obj";
+	jQuery(".zpzz_none a").click(function(){
+			var id =jQuery(this).attr("id");
+			if("remove"!=id){
+			jQuery(".zpzz_none a").attr("class","gray_btn");
+			jQuery(this).attr("class","red_btn");
+			}
+			if(id=="add"||id=="edit"){
+				jQuery("#add").hide();
+				jQuery(".zpzz_infro").hide();
+				jQuery(".zpzz_tb").show();
+				}
+			if(id=="list"){
+				jQuery(".zpzz_tb").hide();
+				jQuery(".zpzz_infro").show();
+				}
+	});
+	jQuery("#re_add").click(function(){
+			jQuery("#va_add").hide();
+			jQuery("#add").show();
+			if(val){
+				jQuery(".zpzz_none a").attr("class","gray_btn");
+				jQuery("#list").attr("class","red_btn");
+				jQuery("#va_info").show();
+			}
+	});
+	jQuery("#theForm").validate({
+    rules:{
+	  companyName:{required :true,textinput:true},
+	  registerAddress:{required:true,textinput:true},
+	  taxpayerCode:{required:true,digits:true},
+	  registerPhone:{required:true,digits:true,isTel:true},
+	  registerbankName:{required:true,textinput:true},
+	  registerbankAccount:{required:true,digits:true},
+	  img1:{photo_vali_img1:true},
+	  img2:{photo_vali_img2:true},
+	  img3:{photo_vali_img3:true},
+	  img4:{photo_vali_img4:true}
+	 },
+	messages:{
+	  companyName:{required:"公司名称不能为空",textinput:"公司名称不允许特殊字符"},
+	  registerAddress:{required:"注册地址不能为空",textinput:"注册地址不允许特殊字符"},
+	  taxpayerCode:{required:"纳税人识别码不能为空",digits:"纳税人识别码只能为数字"},
+	  registerPhone:{required:"注册电话不能为空",digits:"注册电话只能为数字",isTel:"请输入正确的电话"},
+	  registerbankName:{required:"开户银行不能为空",textinput:"开户银行不允许特殊字符"},
+	  registerbankAccount:{required:"开户银行账号不能为空",digits:"开户银行账号只能为数字"},
+	  img1:{photo_vali_img1:"营业执照副本不能为空"},
+	  img2:{photo_vali_img2:"税务登记证不能为空"},
+	  img3:{photo_vali_img3:"一般纳税人证明不能为空"},
+	  img4:{photo_vali_img4:"银行开户许可证不能为空"}
+	},
+	submitHandler:function(){
+		var params=jQuery("#theForm").serialize();
+  		var url = '$!webPath/buyer/vatinvoice_save';
+ 		jQuery.ajax({type:'POST',url:url,data:params,
+			  success:function(data){
+				  if(data=="true"){
+	                          jQuery("#theForm")[0].reset();
+							  showDialog("msg_info","","增票资质保存成功！",0,"succeed",2,function(){window.location.href="$!webPath/buyer/vatinvoice_apply"});		
+				  }else{
+					showDialog("msg_info","","保存失败！请确认您是登陆状态或者信息已经审核通过！",0,"error",2);  
+				  }
+		     }																																		    });
+	}
+	})
+//上传图片预览
+var upload_goods_img_mark = false;
+jQuery("li").change(function(){
+	var img_val = jQuery(this).children("input").val();
+	var img_id = jQuery(this).children("input").attr("id");
+	var img_name = jQuery(this).children("input").attr("name");
+	if(img_val!=""){
+	upload_goods_img_mark = true;	
+	jQuery.ajaxFileUpload({
+                        url:'$!webPath/buyer/vatinvoice_photo_load?img_name='+img_name,
+                        fileElementId:[img_id], 
+                        fileFilter:"$!imageSuffix1",
+                        dataType: 'json',
+                        success: function(data){	
+							if(data){						
+							jQuery("#"+img_id).parent().find("img").attr("src",data.img_url);
+							jQuery("#"+img_id).parent().find(".error").hide();
+							jQuery("#"+img_id).parent().find("input").show();
+							jQuery("#big_va_"+img_name).attr("src",data.img_url);
+							jQuery("#va_"+img_name).val(data.id);
+							jQuery("#photo_va_load").hide();
+							jQuery("#photo_va_su").show();
+							jQuery("#photo_va_su").fadeOut(3000);							
+							}else{
+							jQuery("#"+img_id).parent().find("img").attr("src","$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png");
+							jQuery("#va_"+img_name).val("");
+							jQuery("#photo_va_load").hide();
+							jQuery("#photo_va_fail").show();
+							jQuery("#photo_va_fail").fadeOut(3000);		
+							}
+							jQuery("#photo_va_load").hide();
+						},
+				 })	 
+		   }
+	});
+jQuery(document).ajaxStart(function() {
+		if(upload_goods_img_mark){
+			jQuery("#photo_va_load").show(); 
+			upload_goods_img_mark = false;
+		}
+});		
+});
+ function div_show(obj){
+		var color_id=arguments[0];
+		var length =jQuery(".big_center_right_list ul").length;
+		var target=jQuery(".big_center_right_list ul");
+		if(length==0){
+			target=jQuery(".big_center_right_list ul");
+			}
+			jQuery(".big_center_right_list ul").hide().attr("show","false");
+			target.show().attr("show","true");
+			var index = jQuery(".pro_imgbox a[class='zoomThumbActive this']").index();
+			jQuery(".big_center_right_list li").removeClass("this");
+			jQuery(".big_center_right_list li").eq(obj).addClass("this");
+			var src = jQuery(".big_center_right_list ul[show='true'] li").eq(obj).find("img").attr("src");
+			jQuery(".big_center_right_list ul[show='true'] li").eq(obj).find("img").parent().addClass("this");
+			jQuery(".img_big_center_img_center img").attr("src",src);
+			jQuery(".product_details_img_big_bg").fadeIn();
+			jQuery(".product_details_img_big_center").fadeIn();		
+}
+function div_switch(num){
+		var index = eval(jQuery(".big_center_right_list  ul[show='true'] li[class='this']").index() + num);
+		if(index==jQuery(".big_center_right_list  ul[show='true'] li").size()){
+			index=0;
+		}
+		jQuery(".big_center_right_list  ul[show='true'] li").removeClass("this");
+		jQuery(".big_center_right_list  ul[show='true'] li").eq(index).addClass("this");
+		var src = jQuery(".big_center_right_list  ul[show='true'] li").eq(index).find("img").attr("src");
+		jQuery(".img_big_center_img_center img").attr("src",src);
+	  }
+function div_click(obj){
+		  jQuery(".big_center_right_list  ul[show='true'] li").removeClass("this");
+		  jQuery(obj).addClass("this");
+		  var src = jQuery(obj).find("img").attr("src");
+		  jQuery(".img_big_center_img_center img").attr("src",src);
+	  }
+	  function div_close(){
+		  jQuery(".product_details_img_big_bg").fadeOut();
+		  jQuery(".product_details_img_big_center").fadeOut();
+	  }
+
+</script>
+</head>
+<body>
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="usercenter"> $!httpInclude.include("/buyer/nav?op=vatinvoice_apply")
+<div class="usercenter_right">
+    <div class="myorder"><h4><span class="myorder_fright"></span><strong>增票认证</strong></h4></div>
+    <div class="illustrate">
+        我们会在一个工作日内完成审核工作。
+        <p>1）注意有效增值税发票开票资质仅为一个。</p>
+        <p>2）发票常见问题查看<a class="blue" target="_blank" href="$!webPath/doc?mark=vatinvoice">增票资质帮助。</a></p>
+	</div>
+    <div class="user_explain">
+        <h3>增税发放说明</h3>
+        #if(!$!obj)
+        <div class="user_explain_box"> &nbsp;&nbsp;&nbsp;登录个人中心->账号管理->增票资质->点击"添加增票资质"按钮-> 填写资质信息->上传加盖公章的有效证件扫描件->点击"提交"。 </div>
+        #else
+        <div class="user_explain_box"> &nbsp;&nbsp;&nbsp;
+		增票资质修改流程：点击"修改"按钮->填写资质信息->点击提交</div>
+		<div class="user_explain_box"> &nbsp;&nbsp;&nbsp;
+		重新提交新资质修改流程：点击"删除"按钮->点击"确定"->点击"添加增票资质"按钮->填写资质信息->上传加盖公章的有效证件扫描件
+ </div>
+ #end
+    </div>
+    <form action="$!webPath/buyer/vatinvoice_save" method="post" name="theForm" id="theForm" enctype="multipart/form-data">
+    <input type="hidden" name="id" id="id" value="$!obj.id">
+    <input type="hidden" name="va_img1" id="va_img1" value="$!obj.tax_reg_card.id">
+    <input type="hidden" name="va_img2" id="va_img2" value="$!obj.tax_general_card.id">
+    <input type="hidden" name="va_img3" id="va_img3" value="$!obj.user_license.id">
+    <input type="hidden" name="va_img4" id="va_img4" value="$!obj.bank_permit_image.id">
+    <div class="zpzz">
+    	<div class="zpzz_none">
+        您的增票资质：
+        #if(!$!obj)<span class="hui2">未添加</span>
+        #else
+        #if($!obj.status==0)
+        <span class="red">未审核</span>
+        #end
+        #if($!obj.status==1)
+        <span class="green">审核通过</span>
+        #end
+        #if($!obj.status==2)
+        <span class="red">审核未通过</span>
+        #end
+        #end
+        #if(!$!obj)
+        <a href="javascript:void(0);" class="red_btn" id="add">添加增票资质</a>
+        #else
+        <a class="red_btn" href="javascript:void(0);" id="list">增票资质信息</a>
+        #if($!obj.status!=1)
+        <a class="gray_btn" href="javascript:void(0);" id="edit">修改</a>
+        #end
+        <a class="gray_btn" href="javascript:void(0);" id="remove" onclick="showDialog('msg_info','','确定要删除增票资质信息吗?',1,'warning',3,function(){window.location.href='$!webPath/buyer/vatinvoice_del?id=$!obj.id'});">删除</a>
+        #end
+        </div>
+        <div class="zpzz_box">
+        <div class="zpzz_tb" id="va_add" style="display:none">
+            <table class="user_base_table" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="20%" align="right">单位名称：</td>
+                    <td><input type="text" class="base_txt" name="companyName" id="companyName" value="$!obj.companyName"></td>
+                </tr>
+                <tr>
+                    <td align="right">注册地址：</td>
+                    <td><input type="text" class="base_txt" name="registerAddress" id="registerAddress" value="$!obj.registerAddress"></td>
+                </tr>
+                <tr>
+                    <td align="right">纳税人识别码：</td>
+                    <td><input type="text" class="base_txt" name="taxpayerCode" id="taxpayerCode" value="$!obj.taxpayerCode"></td>
+                </tr>
+                <tr>
+                    <td align="right">注册电话：</td>
+                    <td><input type="text" class="base_txt" name="registerPhone" id="registerPhone" value="$!obj.registerPhone"></td>
+                </tr>
+                <tr>
+                    <td align="right">开户银行：</td>
+                    <td><input type="text" class="base_txt" name="registerbankName" id="registerbankName" value="$!obj.registerbankName"></td>
+                </tr>
+                <tr>
+                    <td align="right">开户银行账户：</td>
+                    <td><input type="text" class="base_txt"  name="registerbankAccount" id="registerbankAccount" value="$!obj.registerbankAccount"></td>
+                </tr>
+                <tr>
+                    <td align="right" valign="top">请上传增值税发票资料：</td>
+                    <td>
+                    	<p class="hui2"><span class="rem"><span class="red">单击证书对应位置上传图片</span>(上传需加盖公章，仅支持$!imageSuffix1文件)</span>
+                        <span id="photo_va_load" style="display:none" class="img"><img src="$!cdnServer/resources/style/common/images/wait.gif"/>正在上传...</span>
+                        <span id="photo_va_su" style="display:none" class="img"><b class="green">上传成功！</b></span>         
+                        <span id="photo_va_fail" style="display:none" class="img"><b class="red">上传失败！</b></span>
+                        </p>
+                        <ul class="pictrue">
+                        	<li>
+                            	<input class="file" name="img1" id="ph1" type="file">
+                                <span class="img"><img  #if($!obj.tax_reg_card) src="$!imageWebServer/$!obj.tax_reg_card.path/$!obj.tax_reg_card.name" #else src= "$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end>
+                            	</span><span class="word">营业执照副本</span>
+                                <span class="word bg"></span>
+                                <p><a class="blue" href="javascript:void(0);" onclick="div_show(0)">查看大图</a></p>
+                           </li>
+                            <li><input class="file" name="img2" id="ph2" type="file"><span class="img"><img  #if($!obj.tax_general_card) src="$!imageWebServer/$!obj.tax_general_card.path/$!obj.tax_general_card.name" #else  src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end></span><span class="word">税务登记证</span><span class="word bg"></span><p><a class="blue" href="javascript:void(0);" onclick="div_show(1)">查看大图</a></p>
+                            </li>
+                            <li><input class="file" name="img3" id="ph3" type="file" value=""><span class="img"><img  #if($!obj.user_license) src="$!imageWebServer/$!obj.user_license.path/$!obj.user_license.name" #else  src= "$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end></span><span class="word">一般纳税人证明</span><span class="word bg"></span><p><a class="blue" href="javascript:void(0);" onclick="div_show(2)">查看大图</a></p>
+                           </li>
+                            <li><input class="file" name="img4" id="ph4" type="file" value=""><span class="img"><img  #if($!obj.bank_permit_image) src="$!imageWebServer/$!obj.bank_permit_image.path/$!obj.bank_permit_image.name" #else
+src= "$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end></span><span class="word">银行开户许可证</span><span class="word bg"></span><p><a class="blue" href="javascript:void(0);" onclick="div_show(3)">查看大图</a></p>
+                          </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                	<td align="right">&nbsp;</td>
+                    <td>
+                    <input name="button" class="red_btn" type="submit" value="提交" class="save" />
+                    <a class="gray_btn" href="javascript:void(0);" id="re_add">取消</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        #if($!obj)
+        <div class="zpzz_infro" id="va_info" style="display:block">
+        	<h3 class="hd">增票资质信息
+            </h3>
+            <ul class="bd">
+                #if($!obj.status==2)
+                <li><span class="red">审核备注：$!obj.remark</span></li>
+                #end
+                <li>单位名称：$!obj.companyName</li>
+                <li>纳税人识别码：$!obj.taxpayerCode</li>
+                <li>注册地址：$!obj.registerAddress</li>
+                <li>注册电话：$!obj.registerPhone</li>
+                <li>开户银行：$!obj.registerbankName</li>
+                <li>银行账户：$!obj.registerbankAccount</li>
+            </ul>
+            <ul class="pictrue">
+                        	<li><span class="img">
+                            <img  #if($!obj.tax_reg_card) src="$!imageWebServer/$!obj.tax_reg_card.path/$!obj.tax_reg_card.name" #else src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end>
+                            </span><span class="word">营业执照副本</span> <p><a class="blue" href="javascript:void(0);" onclick="div_show(0)">查看大图</a></p>
+                            </li>
+                            <li><span class="img"><img  #if($!obj.tax_general_card) src="$!imageWebServer/$!obj.tax_general_card.path/$!obj.tax_general_card.name" #else src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end></span><span class="word">税务登记证</span> <p><a class="blue" href="javascript:void(0);" onclick="div_show(1)">查看大图</a></p>
+                           </li>
+                            <li><span class="img"><img  #if($!obj.user_license) src="$!imageWebServer/$!obj.user_license.path/$!obj.user_license.name" #else src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end></span><span class="word">一般纳税人证明</span> <p><a class="blue" href="javascript:void(0);" onclick="div_show(2)">查看大图</a></p>
+                           </li>
+                            <li><span class="img"><img  #if($!obj.bank_permit_image) src="$!imageWebServer/$!obj.bank_permit_image.path/$!obj.bank_permit_image.name" #else src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end></span><span class="word">银行开户许可证</span> <p><a class="blue" href="javascript:void(0);" onclick="div_show(3)">查看大图</a></p>
+                           </li>
+                        </ul>
+        </div>
+        #end
+        </div>
+    </div>
+    </form>
+</div>
+  </div>
+  $!httpInclude.include("/footer") </div>
+<div id="contant"> </div>
+      <!--弹出 start -->
+      <div class="product_details_img_big_bg"  style="display:none;"></div>
+      <div class="product_details_img_big_center" style="display:none;">
+       	<div class="img_big_center_close"><a href="javascript:void(0)" onclick="div_close()">x</a></div>
+      	
+        <div class="img_big_center_img">
+            <div class="img_big_center_left"><a href="javascript:void(0)" onclick="div_switch('-1')"></a></div>
+            <div class="img_big_center_img_center"><img src="$!big_img"/></div>
+            <div class="img_big_center_right"><a href="javascript:void(0)" onclick="div_switch('+1')"></a></div>
+        </div>
+        <div class="big_center_right" style="display:none">
+            <div class="big_center_right_list">
+               <ul style="display:none" color_id="main_img" id="main_img_show">
+                	<li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img1"#if($!obj.tax_reg_card) src="$!imageWebServer/$!obj.tax_reg_card.path/$!{obj.tax_reg_card.name}" #else src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end /><p class="name">个体营业执照</p></li>
+                    <li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img2" #if($!obj.tax_general_card) src="$!imageWebServer/$!obj.tax_general_card.path/$!{obj.tax_general_card.name}" #else src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end /><p class="name">个体营业执照</p></li>
+                    <li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img3" #if($!obj.user_license) src="$!imageWebServer/$!obj.user_license.path/$!{obj.user_license.name}" #else  src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end /><p class="name">个体营业执照</p></li>
+                    <li onclick="div_click(this)" style="cursor:pointer"><img id="big_va_img4" #if($!obj.bank_permit_image) src="$!imageWebServer/$!obj.bank_permit_image.path/$!{obj.bank_permit_image.name}" #else src="$!cdnServer/resources/style/system/front/default/images/usercenter/pic.png" #end /><p class="name">个体营业执照</p></li>
+                </ul>
+            </div>
+            <div>
+            </div>            
+        </div>
+      </div>
+</body>
+</html>

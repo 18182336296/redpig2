@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.ExpressCompanyMapper">
+	 
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.ExpressCompany">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="company_mark" property="company_mark" jdbcType="VARCHAR"/>
+		<result column="company_sequence" property="company_sequence" jdbcType="INTEGER"/>
+		<result column="company_type" property="company_type" jdbcType="VARCHAR"/>
+		<result column="company_status" property="company_status" jdbcType="INTEGER"/>
+		<result column="company_template" property="company_template" jdbcType="VARCHAR"/>
+		<result column="company_template_width" property="company_template_width" jdbcType="INTEGER"/>
+		<result column="company_template_heigh" property="company_template_heigh" jdbcType="INTEGER"/>
+		<result column="company_template_offset" property="company_template_offset" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.ExpressCompany">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="company_name" property="company_name" jdbcType="VARCHAR"/>
+		<result column="company_mark" property="company_mark" jdbcType="VARCHAR"/>
+		<result column="company_sequence" property="company_sequence" jdbcType="INTEGER"/>
+		<result column="company_type" property="company_type" jdbcType="VARCHAR"/>
+		<result column="company_status" property="company_status" jdbcType="INTEGER"/>
+		<result column="company_template" property="company_template" jdbcType="VARCHAR"/>
+		<result column="company_template_width" property="company_template_width" jdbcType="INTEGER"/>
+		<result column="company_template_heigh" property="company_template_heigh" jdbcType="INTEGER"/>
+		<result column="company_template_offset" property="company_template_offset" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,company_name,company_mark,company_sequence,company_type,company_status,company_template,company_template_width,company_template_heigh,company_template_offset
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="company_name != null">and company_name = #{company_name,jdbcType=VARCHAR}</if>
+		<if test="company_mark != null">and company_mark = #{company_mark,jdbcType=VARCHAR}</if>
+		<if test="company_sequence != null">and company_sequence = #{company_sequence,jdbcType=INTEGER}</if>
+		<if test="company_type != null">and company_type = #{company_type,jdbcType=VARCHAR}</if>
+		<if test="company_status != null">and company_status = #{company_status,jdbcType=INTEGER}</if>
+		<if test="company_template != null">and company_template = #{company_template,jdbcType=VARCHAR}</if>
+		<if test="company_template_width != null">and company_template_width = #{company_template_width,jdbcType=INTEGER}</if>
+		<if test="company_template_heigh != null">and company_template_heigh = #{company_template_heigh,jdbcType=INTEGER}</if>
+		<if test="company_template_offset != null">and company_template_offset = #{company_template_offset,jdbcType=VARCHAR}</if>
+		<if test="redPigId != null">and id != #{redPigId,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		company_name= #{company_name},
+		company_mark= #{company_mark},
+		company_sequence= #{company_sequence},
+		company_type= #{company_type},
+		company_status= #{company_status},
+		company_template= #{company_template},
+		company_template_width= #{company_template_width},
+		company_template_heigh= #{company_template_heigh},
+		company_template_offset= #{company_template_offset},</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.ExpressCompany" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_express_company 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.ExpressCompany" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_express_company obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+			</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="queryByNotId" resultType="java.lang.Integer" parameterType="map">
+		select
+			count(1)
+		from redpigmall_express_company obj 
+		<where>
+			<include refid="whereStatement"/> 
+		</where>
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.ExpressCompany" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_express_company obj 
+		<where>
+			1 = 1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<insert id="save" parameterType="com.redpigmall.domain.ExpressCompany" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into redpigmall_express_company(
+			addTime,
+			deleteStatus,
+			company_name,
+			company_mark,
+			company_sequence,
+			company_type,
+			company_status,
+			company_template,
+			company_template_width,
+			company_template_heigh,
+			company_template_offset
+		)
+		values(
+			#{addTime,jdbcType=TIMESTAMP},
+			#{deleteStatus,jdbcType=INTEGER},
+			#{company_name,jdbcType=VARCHAR},
+			#{company_mark,jdbcType=VARCHAR},
+			#{company_sequence,jdbcType=INTEGER},
+			#{company_type,jdbcType=VARCHAR},
+			#{company_status,jdbcType=INTEGER},
+			#{company_template,jdbcType=VARCHAR},
+			#{company_template_width,jdbcType=INTEGER},
+			#{company_template_heigh,jdbcType=INTEGER},
+			#{company_template_offset,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="update" parameterType="com.redpigmall.domain.ExpressCompany">
+		update redpigmall_express_company 
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from redpigmall_express_company where id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")"> 
+            #{item}
+        </foreach>
+	</delete>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_express_company obj 
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="selectCountByNotId" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_express_company obj 
+		where 1 = 1
+		<include refid="whereStatement"/> 
+		<if test="currentPage !=null and pageSize !=null"> 
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.ExpressCompany" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_express_company(addTime,deleteStatus,company_name,company_mark,company_sequence,company_type,company_status,company_template,company_template_width,company_template_heigh,company_template_offset)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{company_name,jdbcType=VARCHAR},#{company_mark,jdbcType=VARCHAR},#{company_sequence,jdbcType=INTEGER},#{company_type,jdbcType=VARCHAR},#{company_status,jdbcType=INTEGER},#{company_template,jdbcType=VARCHAR},#{company_template_width,jdbcType=INTEGER},#{company_template_heigh,jdbcType=INTEGER},#{company_template_offset,jdbcType=VARCHAR}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.ExpressCompany">
+		update redpigmall_express_company
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_express_company where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_express_company where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.ExpressCompany" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_express_company obj 
+		<where>
+			1 = 1
+			<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.ExpressCompany" resultMap="BaseResultMap2" parameterType="map">
+		select
+		<include refid="Base_Column_List"/> 
+		from redpigmall_express_company obj 
+		where 1=1 
+		<include refid="whereStatement"/> 
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.ExpressCompany" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_express_company
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_express_company where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

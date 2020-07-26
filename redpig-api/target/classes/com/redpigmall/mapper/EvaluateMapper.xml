@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.EvaluateMapper">
+	 
+	
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.Evaluate">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_num" property="goods_num" jdbcType="INTEGER"/>
+		<result column="goods_price" property="goods_price" jdbcType="VARCHAR"/>
+		<result column="goods_spec" property="goods_spec" jdbcType="VARCHAR"/>
+		<result column="evaluate_type" property="evaluate_type" jdbcType="VARCHAR"/>
+		<result column="evaluate_buyer_val" property="evaluate_buyer_val" jdbcType="INTEGER"/>
+		<result column="description_evaluate" property="description_evaluate" jdbcType="DECIMAL"/>
+		<result column="service_evaluate" property="service_evaluate" jdbcType="DECIMAL"/>
+		<result column="ship_evaluate" property="ship_evaluate" jdbcType="DECIMAL"/>
+		<result column="evaluate_info" property="evaluate_info" jdbcType="VARCHAR"/>
+		<result column="evaluate_status" property="evaluate_status" jdbcType="INTEGER"/>
+		<result column="evaluate_admin_info" property="evaluate_admin_info" jdbcType="VARCHAR"/>
+		<result column="evaluate_photos" property="evaluate_photos" jdbcType="VARCHAR"/>
+		<result column="reply" property="reply" jdbcType="VARCHAR"/>
+		<result column="reply_status" property="reply_status" jdbcType="INTEGER"/>
+		<result column="addeva_status" property="addeva_status" jdbcType="INTEGER"/>
+		<result column="addeva_info" property="addeva_info" jdbcType="VARCHAR"/>
+		<result column="addeva_photos" property="addeva_photos" jdbcType="VARCHAR"/>
+		<result column="addeva_time" property="addeva_time" jdbcType="TIMESTAMP"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+		<association property="evaluate_goods" column="evaluate_goods_id" select="com.redpigmall.dao.GoodsMapper.selectByPrimaryKey"/>
+		<association property="of" column="of_id" select="com.redpigmall.dao.OrderFormMapper.selectByPrimaryKey"/>
+		<association property="evaluate_user" column="evaluate_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.Evaluate">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="goods_num" property="goods_num" jdbcType="INTEGER"/>
+		<result column="goods_price" property="goods_price" jdbcType="VARCHAR"/>
+		<result column="goods_spec" property="goods_spec" jdbcType="VARCHAR"/>
+		<result column="evaluate_type" property="evaluate_type" jdbcType="VARCHAR"/>
+		<result column="evaluate_buyer_val" property="evaluate_buyer_val" jdbcType="INTEGER"/>
+		<result column="description_evaluate" property="description_evaluate" jdbcType="DECIMAL"/>
+		<result column="service_evaluate" property="service_evaluate" jdbcType="DECIMAL"/>
+		<result column="ship_evaluate" property="ship_evaluate" jdbcType="DECIMAL"/>
+		<result column="evaluate_info" property="evaluate_info" jdbcType="VARCHAR"/>
+		<result column="evaluate_status" property="evaluate_status" jdbcType="INTEGER"/>
+		<result column="evaluate_admin_info" property="evaluate_admin_info" jdbcType="VARCHAR"/>
+		<result column="evaluate_photos" property="evaluate_photos" jdbcType="VARCHAR"/>
+		<result column="reply" property="reply" jdbcType="VARCHAR"/>
+		<result column="reply_status" property="reply_status" jdbcType="INTEGER"/>
+		<result column="addeva_status" property="addeva_status" jdbcType="INTEGER"/>
+		<result column="addeva_info" property="addeva_info" jdbcType="VARCHAR"/>
+		<result column="addeva_photos" property="addeva_photos" jdbcType="VARCHAR"/>
+		<result column="addeva_time" property="addeva_time" jdbcType="TIMESTAMP"/>
+		<result column="userName" property="userName" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		id,addTime,deleteStatus,evaluate_goods_id,goods_num,goods_price,goods_spec,of_id,evaluate_type,evaluate_buyer_val,description_evaluate,service_evaluate,ship_evaluate,evaluate_info,evaluate_user_id,evaluate_status,evaluate_admin_info,evaluate_photos,reply,reply_status,addeva_status,addeva_info,addeva_photos,addeva_time,userName
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="goods_num != null">and goods_num = #{goods_num,jdbcType=INTEGER}</if>
+		<if test="goods_price != null">and goods_price = #{goods_price,jdbcType=VARCHAR}</if>
+		<if test="goods_spec != null">and goods_spec = #{goods_spec,jdbcType=VARCHAR}</if>
+		<if test="evaluate_type != null">and evaluate_type = #{evaluate_type,jdbcType=VARCHAR}</if>
+		<if test="evaluate_buyer_val != null">and evaluate_buyer_val = #{evaluate_buyer_val,jdbcType=INTEGER}</if>
+		<if test="description_evaluate != null">and description_evaluate = #{description_evaluate,jdbcType=DECIMAL}</if>
+		<if test="service_evaluate != null">and service_evaluate = #{service_evaluate,jdbcType=DECIMAL}</if>
+		<if test="ship_evaluate != null">and ship_evaluate = #{ship_evaluate,jdbcType=DECIMAL}</if>
+		<if test="evaluate_info != null">and evaluate_info = #{evaluate_info,jdbcType=VARCHAR}</if>
+		<if test="evaluate_status != null">and evaluate_status = #{evaluate_status,jdbcType=INTEGER}</if>
+		
+		<if test="evaluate_status_less_than != null">and evaluate_status <![CDATA[ < ]]> #{evaluate_status_less_than,jdbcType=TIMESTAMP}</if>
+		
+		<if test="evaluate_admin_info != null">and evaluate_admin_info = #{evaluate_admin_info,jdbcType=VARCHAR}</if>
+		<if test="evaluate_photos != null">and evaluate_photos = #{evaluate_photos,jdbcType=VARCHAR}</if>
+		<if test="evaluate_photos != null and evaluate_photos == -1">and evaluate_photos is null or evaluate_photos='' </if>
+		<if test="evaluate_photos_no != null">and evaluate_photos != #{evaluate_photos_no,jdbcType=VARCHAR}</if>
+		<if test="evaluate_photos_no != null and evaluate_photos_no==-1">and evaluate_photos is not null or evaluate_photos !=''</if>
+		
+		<if test="reply != null">and reply = #{reply,jdbcType=VARCHAR}</if>
+		<if test="reply_status != null">and reply_status = #{reply_status,jdbcType=INTEGER}</if>
+		<if test="addeva_status != null">and addeva_status = #{addeva_status,jdbcType=INTEGER}</if>
+		<if test="addeva_info != null">and addeva_info = #{addeva_info,jdbcType=VARCHAR}</if>
+		<if test="addeva_photos != null">and addeva_photos = #{addeva_photos,jdbcType=VARCHAR}</if>
+		<if test="addeva_time != null">and addeva_time = #{addeva_time,jdbcType=TIMESTAMP}</if>
+		<if test="userName != null">and userName = #{userName,jdbcType=VARCHAR}</if>
+		<if test="addTime_equal_greater_than!=null">and addTime <![CDATA[ >= ]]> #{addTime_equal_greater_than,jdbcType=TIMESTAMP}</if>
+		<if test="addTime_equal_less_than!=null">and addTime <![CDATA[ <= ]]> #{addTime_equal_greater_than,jdbcType=TIMESTAMP}</if>
+		<if test="evaluate_goods_id !=null">and evaluate_goods_id = #{evaluate_goods_id,jdbcType=BIGINT}</if>
+		<if test="of_id != null">and of_id = #{of_id,jdbcType=BIGINT}</if>
+		<if test="evaluate_user_id != null">and evaluate_user_id = #{evaluate_user_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		<if test="evaluate_goods == null or evaluate_goods.id == null">evaluate_goods_id = null,</if>
+		<if test="evaluate_goods != null and evaluate_goods.id != null">evaluate_goods_id = #{evaluate_goods.id,jdbcType=BIGINT},</if>
+		goods_num= #{goods_num},
+		goods_price= #{goods_price},
+		goods_spec= #{goods_spec},
+		<if test="of == null or of.id == null">of_id = null,</if>
+		<if test="of != null and of.id != null">of_id = #{of.id,jdbcType=BIGINT},</if>
+		evaluate_type= #{evaluate_type},
+		evaluate_buyer_val= #{evaluate_buyer_val},
+		description_evaluate= #{description_evaluate},
+		service_evaluate= #{service_evaluate},
+		ship_evaluate= #{ship_evaluate},
+		evaluate_info= #{evaluate_info},
+		<if test="evaluate_user == null or evaluate_user.id == null">evaluate_user_id = null,</if>
+		<if test="evaluate_user != null and evaluate_user.id != null">evaluate_user_id = #{evaluate_user.id,jdbcType=BIGINT},</if>
+		evaluate_status= #{evaluate_status},
+		evaluate_admin_info= #{evaluate_admin_info},
+		evaluate_photos= #{evaluate_photos},
+		reply= #{reply},
+		reply_status= #{reply_status},
+		addeva_status= #{addeva_status},
+		addeva_info= #{addeva_info},
+		addeva_photos= #{addeva_photos},
+		addeva_time= #{addeva_time},
+		userName= #{userName},
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_evaluate 
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap" parameterType="map">
+		select
+			obj.*
+		from redpigmall_evaluate obj 
+		
+		<if test="store_id!=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			join 
+				redpigmall_store goods_store 
+			on 
+				(goods_store.id = evaluate_goods.goods_store_id 
+					and 
+				 goods_store.id=#{store_id,jdbcType=BIGINT}
+				)
+		</if>
+		<if test="evaluate_goods_goods_name_like !=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			and 
+				evaluate_goods.goods_name like CONCAT('%',#{evaluate_goods_goods_name_like},'%')
+		</if>
+		<if test="evaluate_user_userName !=null">
+			join 
+				redpigmall_user evaluate_user 
+			on 
+				evaluate_user.id=obj.evaluate_user_id
+			and 
+				evaluate_user.userName=#{evaluate_user_userName,jdbcType=VARCHAR}
+		</if>
+		<if test="evaluate_goods_goods_type !=null">
+			join redpigmall_goods goods on obj.evaluate_goods_id = goods.id and goods.goods_type=#{evaluate_goods_goods_type,jdbcType=INTEGER}
+		</if>
+		
+		<if test="evaluate_goods_goods_store_id !=null">
+			JOIN redpigmall_goods evg ON obj.evaluate_goods_id = evg.id
+			JOIN redpigmall_store st ON evg.goods_store_id = st.id and st.id=#{evaluate_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_evaluate obj 
+
+		<if test="store_id!=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			join 
+				redpigmall_store goods_store 
+			on 
+				(goods_store.id = evaluate_goods.goods_store_id 
+					and 
+				 goods_store.id=#{store_id,jdbcType=BIGINT}
+				)
+		</if>
+		<if test="evaluate_goods_goods_name_like !=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			and 
+				evaluate_goods.goods_name like CONCAT('%',#{evaluate_goods_goods_name_like},'%')
+		</if>
+		<if test="evaluate_user_userName !=null">
+			join 
+				redpigmall_user evaluate_user 
+			on 
+				evaluate_user.id=obj.evaluate_user_id
+			and 
+				evaluate_user.userName=#{evaluate_user_userName,jdbcType=VARCHAR}
+		</if>
+		<if test="evaluate_goods_goods_type !=null">
+			join redpigmall_goods goods on obj.evaluate_goods_id = goods.id and goods.goods_type=#{evaluate_goods_goods_type,jdbcType=INTEGER}
+		</if>
+		
+		<if test="evaluate_goods_goods_store_id !=null">
+			JOIN redpigmall_goods evg ON obj.evaluate_goods_id = evg.id
+			JOIN redpigmall_store st ON evg.goods_store_id = st.id and st.id=#{evaluate_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		
+		where 1=1
+		<include refid="whereStatement"/> 
+	</select>
+	<delete id="delete" parameterType="com.redpigmall.domain.Evaluate">
+		delete from redpigmall_evaluate where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteEvaluates" parameterType="java.util.List">
+		delete from redpigmall_evaluate where id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")"> 
+            #{item.id}
+        </foreach>
+	</delete>
+	<select id="getEvaluateGoodsByGoodsId" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_evaluate
+		where
+			evaluate_goods_id = #{evaluate_goods_id,jdbcType=BIGINT}
+	</select>
+	<select id="getOfByOrderFormId" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_evaluate
+		where
+			of_id = #{of_id,jdbcType=BIGINT}
+	</select>
+	<select id="getEvaluateUserByUserId" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_evaluate
+		where
+			evaluate_user_id = #{evaluate_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap" parameterType="map">
+		SELECT obj.* FROM redpigmall_evaluate obj
+		<if test="store_id!=null">
+			JOIN redpigmall_goods evaluate_goods ON evaluate_goods.id=obj.evaluate_goods_id
+			JOIN redpigmall_store goods_store ON 
+				(goods_store.id = evaluate_goods.goods_store_id and goods_store.id=#{store_id,jdbcType=BIGINT} )
+		</if>
+		<if test="evaluate_goods_goods_name_like !=null">
+			JOIN redpigmall_goods evaluate_goods ON evaluate_goods.id=obj.evaluate_goods_id
+			AND evaluate_goods.goods_name LIKE CONCAT('%',#{evaluate_goods_goods_name_like},'%')
+		</if>
+		<if test="evaluate_user_userName !=null">
+			JOIN redpigmall_user evaluate_user ON evaluate_user.id=obj.evaluate_user_id
+			AND evaluate_user.userName=#{evaluate_user_userName,jdbcType=VARCHAR}
+		</if>
+		<if test="evaluate_goods_goods_type !=null">
+			join redpigmall_goods goods on obj.evaluate_goods_id = goods.id and goods.goods_type=#{evaluate_goods_goods_type,jdbcType=INTEGER}
+		</if>
+		<if test="evaluate_goods_goods_store_id !=null">
+			JOIN redpigmall_goods evg ON obj.evaluate_goods_id = evg.id
+			JOIN redpigmall_store st ON evg.goods_store_id = st.id and st.id=#{evaluate_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.Evaluate" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_evaluate(addTime,deleteStatus,goods_num,goods_price,goods_spec,evaluate_type,evaluate_buyer_val,description_evaluate,service_evaluate,ship_evaluate,evaluate_info,evaluate_status,evaluate_admin_info,evaluate_photos,reply,reply_status,addeva_status,addeva_info,addeva_photos,addeva_time,userName,evaluate_goods_id,of_id,evaluate_user_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{goods_num,jdbcType=INTEGER},#{goods_price,jdbcType=VARCHAR},#{goods_spec,jdbcType=VARCHAR},#{evaluate_type,jdbcType=VARCHAR},#{evaluate_buyer_val,jdbcType=INTEGER},#{description_evaluate,jdbcType=DECIMAL},#{service_evaluate,jdbcType=DECIMAL},#{ship_evaluate,jdbcType=DECIMAL},#{evaluate_info,jdbcType=VARCHAR},#{evaluate_status,jdbcType=INTEGER},#{evaluate_admin_info,jdbcType=VARCHAR},#{evaluate_photos,jdbcType=VARCHAR},#{reply,jdbcType=VARCHAR},#{reply_status,jdbcType=INTEGER},#{addeva_status,jdbcType=INTEGER},#{addeva_info,jdbcType=VARCHAR},#{addeva_photos,jdbcType=VARCHAR},#{addeva_time,jdbcType=TIMESTAMP},#{userName,jdbcType=VARCHAR},#{evaluate_goods.id,jdbcType=BIGINT},#{of.id,jdbcType=BIGINT},#{evaluate_user.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.Evaluate">
+		update redpigmall_evaluate
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_evaluate where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_evaluate where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.*
+		from redpigmall_evaluate obj
+		<if test="store_id!=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			join 
+				redpigmall_store goods_store 
+			on 
+				(goods_store.id = evaluate_goods.goods_store_id 
+					and 
+				 goods_store.id=#{store_id,jdbcType=BIGINT}
+				)
+		</if>
+		<if test="evaluate_goods_goods_name_like !=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			and 
+				evaluate_goods.goods_name like CONCAT('%',#{evaluate_goods_goods_name_like},'%')
+		</if>
+		<if test="evaluate_user_userName !=null">
+			join 
+				redpigmall_user evaluate_user 
+			on 
+				evaluate_user.id=obj.evaluate_user_id
+			and 
+				evaluate_user.userName=#{evaluate_user_userName,jdbcType=VARCHAR}
+		</if>
+		<if test="evaluate_goods_goods_type !=null">
+			join redpigmall_goods goods on obj.evaluate_goods_id = goods.id and goods.goods_type=#{evaluate_goods_goods_type,jdbcType=INTEGER}
+		</if>
+		<if test="evaluate_goods_goods_store_id !=null">
+			JOIN redpigmall_goods evg ON obj.evaluate_goods_id = evg.id
+			JOIN redpigmall_store st ON evg.goods_store_id = st.id and st.id=#{evaluate_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap2" parameterType="map">
+		select
+			obj.*
+		from redpigmall_evaluate obj 
+		<if test="store_id!=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			join 
+				redpigmall_store goods_store 
+			on 
+				(goods_store.id = evaluate_goods.goods_store_id 
+					and 
+				 goods_store.id=#{store_id,jdbcType=BIGINT}
+				)
+		</if>
+		<if test="evaluate_goods_goods_name_like !=null">
+			join 
+				redpigmall_goods evaluate_goods 
+			on 
+				evaluate_goods.id=obj.evaluate_goods_id
+			and 
+				evaluate_goods.goods_name like CONCAT('%',#{evaluate_goods_goods_name_like},'%')
+		</if>
+		<if test="evaluate_user_userName !=null">
+			JOIN redpigmall_user evaluate_user ON evaluate_user.id = obj.evaluate_user_id
+			AND evaluate_user.userName = #{evaluate_user_userName,jdbcType=VARCHAR}
+		</if>
+		<if test="evaluate_goods_goods_type !=null">
+			join redpigmall_goods goods on obj.evaluate_goods_id = goods.id and goods.goods_type=#{evaluate_goods_goods_type,jdbcType=INTEGER}
+		</if>
+		<if test="evaluate_goods_goods_store_id !=null">
+			JOIN redpigmall_goods evg ON obj.evaluate_goods_id = evg.id
+			JOIN redpigmall_store st ON evg.goods_store_id = st.id and st.id=#{evaluate_goods_goods_store_id,jdbcType=BIGINT}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+		<choose>
+			<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+			<otherwise>
+					order by obj.addTime desc
+			</otherwise>
+		</choose>
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.Evaluate" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_evaluate
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_evaluate where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

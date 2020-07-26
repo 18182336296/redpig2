@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>类目 - $!config.title</title>
+<link href="$!cdnServer/resources/style/system/front/default/css/weixin.css" rel="stylesheet" type="text/css" />
+<script src="$!cdnServer/resources/js/wap/jquery-1.10.2.min.js"></script>
+<script src="$!cdnServer/resources/js/wap/iscroll-lite.js"></script>
+<style>
+#wrapper2 {
+	position:absolute;
+	z-index: 1;
+	top:2.1rem;
+	bottom:50px;
+	left:0%;
+	width: 23%;
+	background: #eee;
+	overflow: hidden;
+
+}
+#scroller2 ul li{ width:100%;}
+#scroller2 {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+.bottom_nav{ z-index:100;}
+</style>
+</head>
+
+<body class="index_bg" style="overflow:hidden;-webkit-tap-highlight-color:rgba(0,0,0,0); background:#fff">
+<div class="phone_hd"><a class="back" href="javascript:history.go(-1);"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/back.png" width="25" height="25" /></a>类目<a class="menu home" href="$!webPath/wap/index"><img src="$!cdnServer/resources/style/system/front/default/images/weixin/home.png" width="25" height="25" /></a></div>
+
+<div class="pop_nav" style=" width:100%; position:inherit;">
+  <div class="pop_nav_left"  id="wrapper2">
+  <div id="scroller2">
+    <ul>
+     #foreach($gc in $!gcs)
+      <li  #if($!velocityCount==1) class="this" #end>
+      <a href="javascript:void(0);" onclick="show_children_class('$!gc.id',this);" #if($!velocityCount==1) status='1' #else status='0' #end>
+      #if($!gc.recommend==false) 
+         #set($s_ccs=$!showClassTools.getSecondSclist($!gc.id,"2"))
+         #if($!s_ccs.size()>0)
+         #foreach($sgc in $!s_ccs)
+         #if($!velocityCount<3)
+         $!sgc.showName #if($!s_ccs.size()!=$!{velocityCount})、#end
+         #end
+         #end
+         #end
+      #else
+      	$!gc.showName
+      #end
+      </a>
+      </li>
+     #end
+     <li></li>  
+    </ul>
+    </div>
+  </div>
+  <div id="wrapper" style="bottom: 56px;">
+    <div id="scroller">
+    #if($!sc)
+      <ul id="pulli_$!{sc.id}">
+      #foreach($gc in $!sc.childs)
+      #if($!velocityCount<3)
+        <li class="pli">
+          <div class="pop_item">
+            <h2>$!gc.showName</h2>
+            <ul>
+            #foreach($gc2 in $!showClassTools.getSclist($!gc.id))
+              <li> <a href="javascript:void(0);" onClick="window.location.href='$!webPath/wap/class_items?gc_id=$!{gc2.id}'">
+                <div class="pop_item_img"> #if($!gc2.wx_icon) #set($wx_img=$!imageTools.queryImg($!gc2.wx_icon))<img src="$!imageWebServer/$!wx_img.path/$!wx_img.name"> #end</div>
+                <b class="pop_item_name">$!gc2.className</b> </a> </li>
+            #end 
+            </ul>
+          </div>
+        </li>
+        #end
+      #end
+      </ul>
+	#end
+    #foreach($gc in $!gcs)
+    	#if($!velocityCount>1)
+       <ul id="pulli_$!{gc.id}" style="display:none">
+       
+       </ul>
+       #end
+     #end
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var myScroll = new IScroll('#wrapper', {
+		scrollbars: false,
+		mouseWheel: true,
+		interactiveScrollbars: true,
+		shrinkScrollbars: 'scale',
+		click: true,
+		fadeScrollbars: true
+});
+var child_load=0;
+function show_children_class(id,arg){
+	var status = jQuery(arg).attr('status');
+	jQuery("#scroller2 ul li").removeClass("this");
+	jQuery(arg).parent().addClass("this");
+	if(status=='0'&&child_load==0){
+		jQuery.ajax({type:'POST',
+	              url:'$!webPath/wap/goodsclass',
+				  data:{"type":"index","id":id},
+				 beforeSend:function(){
+				 child_load==1;
+				 jQuery("ul[id^=pulli_]").hide();
+				},
+			   success:function(data){
+				 jQuery("#pulli_"+id).html(data).show();
+			   child_load==0;
+			    jQuery(arg).attr('status','1');
+				myScroll.refresh();
+			   }
+	    });
+	}else if(status=='1'){
+		jQuery("ul[id^=pulli_]").hide();
+ 		 jQuery("#pulli_"+id).show();
+		 myScroll.refresh();
+	}
+}
+var myScroll2 = new IScroll('#wrapper2', {
+		scrollbars: false,
+		mouseWheel: true,
+		interactiveScrollbars: true,
+		shrinkScrollbars: 'scale',
+		click: true,
+		fadeScrollbars: true
+});
+</script>
+</body>
+</html>

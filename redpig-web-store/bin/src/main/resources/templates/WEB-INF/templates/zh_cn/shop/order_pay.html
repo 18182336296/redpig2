@@ -1,0 +1,522 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>选择支付方式 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+#if($!config.website_ico)
+<link rel="shortcut icon" href="$!imageWebServer/$!config.website_ico.path/$!config.website_ico.name" type="image/x-icon"/>
+#end
+<link href="$!cdnServer/resources/style/system/front/default/css/public.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!cdnServer/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!cdnServer/resources/js/jquery-1.6.2.js"></script>
+<script src="$!cdnServer/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+<script>
+//返回当前页面高度
+function order_pay(){	
+ 
+  var state=jQuery("input[type=radio][name=payType][value=balance]").attr("checked");
+#if($!user.pay_password)
+ if(state=="checked"){
+	 var pay_password=jQuery("#pay_password").val();
+	 if(pay_password==""){
+		 jQuery("#pay_password").parent().parent().find("em").html("支付密码不能为空");
+		 }else{
+	 jQuery.post("$!webPath/buyer/verify_pay_password",{"pay_password":pay_password},function(data){
+		 if(data=="ok"){
+  			 back_block();
+			 jQuery("#theForm").submit();
+			 }else{
+				 jQuery("#pay_password").parent().parent().find("em").html("");
+				 jQuery("#pay_password").parent().parent().find("em").html("支付密码输入错误");
+				 }
+		 })
+		 }
+	 }else{
+		  back_block();
+		  jQuery("#theForm").submit();
+		 }
+#else
+ back_block();
+jQuery("#theForm").submit();
+		 
+#end
+  //jQuery('#theForm').submit();
+}
+window.onscroll=function(){
+  var h=document.body.scrollHeight;
+  var top= document.documentElement.scrollTop;
+  top=top+(h-top)/2;
+  jQuery(".white_content").css("top",top);
+}
+
+function back_block(){
+  var h=document.body.scrollHeight;
+    var document_h = jQuery(document).height();
+  var top= document.documentElement.scrollTop;
+  if(document_h>h){
+	  h = document_h;
+	  }
+  top=top+(h-top)/2;
+  jQuery('.black_overlay').css("height",h);
+  jQuery(".white_content").css("top",top);
+  jQuery('#pay_overlay').show();
+	}
+jQuery(document).ready(function(){
+//控制余额显示
+	jQuery("#p").click(function(e) {
+		var type=jQuery(this).attr("type");
+		if(type=="s"){
+			jQuery(this).html("显示金额");
+			jQuery(this).attr("type","h");
+			
+			}else{
+				jQuery(this).html("隐藏金额");
+			jQuery(this).attr("type","s");
+				}
+		jQuery("#m").toggle();
+    });
+	//控制密码状态
+	jQuery("input[name=payType][type=radio]").click(function(e) {
+	if(jQuery(this).attr("value")!="balance"){
+		jQuery("#pay_password").parent().parent().find("em").html("");
+		jQuery("#pay_password").val("");
+		jQuery("#pay_password").attr("disabled","disabled");
+		}else{
+			jQuery("#pay_password").removeAttr("disabled");
+			}
+    });
+   //jQuery(":radio[value=$!of.payment_mark]").attr("checked",true);
+});
+
+</script>
+<style>
+.no_password { height: 25px; line-height: 25px; width: 340px; float: left; margin-top: 19px; font-size: 14px; }
+.no_password a { color: #f00; padding: 2px 5px; border: 1px solid #f00; margin: 0 10px; border-radius: 2px; }
+.no_password a:Hover { color: #fff; padding: 2px 5px; border: 1px solid #f00; background:#f00; margin: 0 10px; border-radius: 2px; }
+</style>
+</head><body>
+<!--普通商品支付方式显示-->
+#if($!{from}=="order" || $!{from}=="goodsCart")
+$!httpInclude.include("/top")
+<div class="main">
+  <div class="shopping_cart"> $!httpInclude.include("/goods_cart_head?op=pay")
+    <form action="$!webPath/order_pay" method="post" target="_blank" id="theForm">
+      <div class="shopping_payfor">
+        <div class="shopping_payfor_top"> <span class="shopping_payfor_topleft"></span> #if($!{from}=="goodsCart")
+          <!--来源购物车-->
+          <ul class="orderul">
+            <li class="shopping_payfor_title">订单提交成功</li>
+            <li class="order_box"> <span class="order_box_cont">应付金额：¥$!{all_of_price}</span> </li>
+            <li class="order_hui">您的订单已成功生成，请选择以下支付方式进行支付</li>
+            #if($!order.order_cat!=2)
+            <li class="order_bottom">您可以在用户中心<a href="$!webPath/buyer/order">“我的订单”</a>查看订单</li>
+            #end
+          </ul>
+          #else
+          <!--来源订单中心-->
+          <ul class="orderul">
+            <li class="order_hui">您的订单已成功生成，选择您想用的支付方式进行支付</li>
+            <li class="order_box"><span class="order_box_cont">
+              <p>订单编号：<b>$!{order.order_id}</b></p>
+              <p>应付金额：<b>¥$!{all_of_price}</b></p>
+              </span></li>
+            <li class="order_bottom">您可以在用户中心<a href="$!webPath/buyer/order">“我的订单”</a>查看订单</li>
+          </ul>
+          #end </div>
+        <div class="shopping_payfor_bottom">
+          <h3 class="shopping_payfor_h3">您可以选择的付款方式<i>请您在提交订单后<b>$!config.auto_order_cancel</b>小时内完成支付，否则订单自动取消。<b>（预售商品除外）</b></i></h3>
+          <div class="shopping_payfor_bmbox"> #set($alipay_install=$!paymentTools.queryShopPayment("alipay").get("install"))
+            #set($paypal_install=$!paymentTools.queryShopPayment("paypal").get("install"))
+            #set($tenpay_install=$!paymentTools.queryShopPayment("tenpay").get("install"))
+            #set($wx_install=$!paymentTools.queryShopPayment("wx_pay").get("install"))
+            #set($chinabank_install=$!paymentTools.queryShopPayment("chinabank").get("install"))
+            #set($bill_install=$!paymentTools.queryShopPayment("bill").get("install"))
+            #set($unionpay_install=$!paymentTools.queryShopPayment("unionpay").get("install"))
+            #if($!alipay_install==true||$!paypal_install==true||$!tenpay_install==true||$!chinabank_install==true||$!bill_install==true || $!unionpay_install==true ||$!wx_install==true)
+            <h4>在线支付</h4>
+            <ul>
+              #if($!alipay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="alipay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/alipay.jpg" /></span> </label>
+                <p></p>
+              </li>
+              #end
+             #if($!wx_install==true)
+            <li>
+            <label>
+              <input name="payType" type="radio" value="wx_pay" checked="checked" />
+              <span><img src="$!cdnServer/resources/style/common/images/payment/wx_pay.jpg" width="115" height="41" /></span>
+              </label>
+              <p></p>
+            </li>
+            #end
+              #if($!paypal_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="paypal" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/paypal.jpg" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!tenpay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="tenpay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/tenpay.jpg" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!chinabank_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="chinabank" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/chinabank.jpg" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!bill_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="bill" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/bill.jpg" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!unionpay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="unionpay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/unionpay.png" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+            </ul>
+            #end
+            
+            #set($install=$!paymentTools.queryShopPayment("balance").get("install")) 
+            #if($!install==true)
+            <h4>预存款支付</h4>
+            <ul>
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="balance" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/balance.jpg" /></span> </label>
+                <p></p>
+              </li>
+            </ul>
+            
+            #if($!user.pay_password)
+            <div class="shopping_payfor_bmbox_password" id="pay" style="display:"> <em></em> <i>请输入支付密码：</i> <span>
+              <input type="password" name="pay_password"  id="pay_password" disabled="disabled" />
+              </span> <b><a type="s" id="p" href="javascript:void(0);">隐藏余额</a></b> <strong id="m">账户余额：￥$!user.availableBalance</strong> </div>
+            #else
+            <div class="no_password"> 还没设置支付密码<a href="$!webPath/buyer/account_pay_password" target="_blank">立即设置</a> </div>
+            <!--<span id="pay" style="display:">支付密码：<input  type="password" name="pay_password" id="pay_password"/ ><b></b></span>-->
+            #end
+            
+            
+            #end </div>
+        </div>
+        <div class="shopping_payfor_next">
+          <input name="" type="button"  value="确认支付" onclick="order_pay();" style="cursor:pointer;"/>
+          <input name="order_id" type="hidden" id="order_id" value="$!{order.id}" />
+        </div>
+      </div>
+    </form>
+  </div>
+  $!httpInclude.include("/footer") </div>
+<div style="display:none;" id="pay_overlay">
+  <div class="white_content"> <a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close">X</a>
+    <div class="white_box">
+      <h1>支付提醒</h1>
+      <dl class="white_dl">
+        <dt></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/order_finish?order_id=$!{order.id}">已经完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+#end
+<!--生活团购支付方式显示-->
+#if($!{from}=="grouplife")
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="shopping_cart">
+    <div class="shopping_step">
+      <ul class="shopping_step_ul">
+        <li class="shopping_step_a"><span></span><i></i><strong>1.提交订单</strong></li>
+        <li class="shopping_step_bthis"><span></span><i></i><strong>2.完成付款</strong></li>
+      </ul>
+    </div>
+    <form action="$!webPath/order_pay" method="post" target="_blank" id="theForm">
+      <div class="shopping_payfor">
+        <div class="shopping_payfor_top"> <span class="shopping_payfor_topleft"></span>
+          <ul class="orderul">
+            <li class="shopping_payfor_title">订单提交成功</li>
+            <li class="order_hui">您的订单已成功生成，选择您想用的支付方式进行支付</li>
+            <li class="order_bottom">您可以在用户中心<a href="$!webPath/buyer/group">“生活购订单”</a>中查看订单</li>
+            <li class="order_box"><span class="order_box_cont">
+              <p>应付金额：<b>¥$!{all_of_price}</b></p>
+              </span></li>
+            #if($!order.order_cat!=2)
+            <li class="order_bottom">您可以在用户中心<a href="$!webPath/buyer/order">“我的订单”</a>查看订单</li>
+            #end
+          </ul>
+        </div>
+        <div class="shopping_payfor_bottom">
+          <h3 class="shopping_payfor_h3">您可以选择的付款方式</h3>
+          <div class="shopping_payfor_bmbox"> #set($alipay_install=$!paymentTools.queryShopPayment("alipay").get("install"))
+            #set($paypal_install=$!paymentTools.queryShopPayment("paypal").get("install"))
+            #set($tenpay_install=$!paymentTools.queryShopPayment("tenpay").get("install"))
+            #set($chinabank_install=$!paymentTools.queryShopPayment("chinabank").get("install"))
+            #set($bill_install=$!paymentTools.queryShopPayment("bill").get("install"))
+            #set($unionpay_install=$!paymentTools.queryShopPayment("unionpay").get("install"))
+            #if($!alipay_install==true||$!paypal_install==true||$!tenpay_install==true||$!chinabank_install==true||$!bill_install==true || $!unionpay_install==true)
+            <h4>在线支付</h4>
+            <ul>
+              #if($!alipay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="alipay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/alipay.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!paypal_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="paypal" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/paypal.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!tenpay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="tenpay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/tenpay.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!chinabank_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="chinabank" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/chinabank.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!bill_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="bill" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/bill.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!unionpay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="unionpay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/unionpay.png" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+            </ul>
+            #end
+            #set($install=$!paymentTools.queryShopPayment("balance").get("install")) 
+            #if($!install==true)
+            <h4>预存款支付</h4>
+            <ul>
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="balance" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/balance.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+            </ul>
+            #if($!user.pay_password)
+            <div class="shopping_payfor_bmbox_password" id="pay" style="display:"> <em></em> <i>请输入支付密码：</i> <span>
+              <input type="password" name="pay_password"  id="pay_password" disabled="disabled" />
+              </span> <b><a type="s" id="p" href="javascript:void(0);">隐藏余额</a></b> <strong id="m">账户余额：￥$!user.availableBalance</strong> </div>
+            #else
+            <div class="no_password"> 还没设置支付密码<a href="$!webPath/buyer/account_pay_password">立即设置</a> </div>
+            <!--<span id="pay" style="display:">支付密码：<input  type="password" name="pay_password" id="pay_password"/ ><b></b></span>-->
+            #end
+            #end </div>
+        </div>
+        <div class="shopping_payfor_next">
+          <input name="" type="button"  value="确认支付" onclick="order_pay();" style="cursor:pointer;"/>
+          <input name="order_id" type="hidden" id="order_id" value="$!{order.id}" />
+        </div>
+      </div>
+    </form>
+  </div>
+  $!httpInclude.include("/footer") </div>
+<div style="display:none;" id="pay_overlay">
+  <div class="white_content"> <a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close">X</a>
+    <div class="white_box">
+      <h1>支付提醒</h1>
+      <dl class="white_dl">
+        <dt></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/order_finish?order_id=$!{order.id}">已经完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+#end
+<!--积分商品支付方式显示页面-->
+#if($!{from}=="integralGoods")
+$!httpInclude.include("/top")
+$!httpInclude.include("/head")
+$!httpInclude.include("/nav1")
+<div class="main">
+  <div class="index">
+    <div class="index2">
+      <div class="inte_step">
+        <div class="stepcenter"> <span class="inte_step1a"></span> <span class="inte_step2"></span> <span class="inte_step3a"></span> </div>
+      </div>
+    </div>
+  </div>
+  <div class="shopping_cart">
+    <form action="$!webPath/integral/order_pay" method="post" target="_blank" id="theForm">
+      <div class="shopping_payfor">
+        <div class="shopping_payfor_top"> <span class="shopping_payfor_topleft"></span>
+          <ul class="orderul">
+            <li class="shopping_payfor_title">订单提交成功</li>
+            <li class="order_hui">您的订单已成功生成，选择您想用的支付方式进行支付</li>
+            <li class="order_box"><span class="order_box_cont">
+              <p>订单编号：<b>$!{obj.igo_order_sn}</b></p>
+              <p>应付金额：<b>¥$!{obj.igo_trans_fee}</b></p>
+              </span></li>
+            <li class="order_bottom">您可以在用户中心<a href="$!webPath/buyer/integral_order_list">“我的订单”</a>查看订单</li>
+          </ul>
+        </div>
+        <div class="shopping_payfor_bottom">
+          <h3 class="shopping_payfor_h3">您可以选择的付款方式</h3>
+          <div class="shopping_payfor_bmbox"> #set($alipay_install=$!paymentTools.queryShopPayment("alipay").get("install"))
+            #set($paypal_install=$!paymentTools.queryShopPayment("paypal").get("install"))
+            #set($tenpay_install=$!paymentTools.queryShopPayment("tenpay").get("install"))
+            #set($chinabank_install=$!paymentTools.queryShopPayment("chinabank").get("install"))
+            #set($bill_install=$!paymentTools.queryShopPayment("bill").get("install"))
+            #set($unionpay_install=$!paymentTools.queryShopPayment("unionpay").get("install"))
+            #if($!alipay_install==true||$!paypal_install==true||$!tenpay_install==true||$!chinabank_install==true||$!bill_install==true || $!unionpay_install==true)
+            <h4>在线支付</h4>
+            <ul>
+              #if($!alipay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="alipay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/alipay.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!paypal_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="paypal" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/paypal.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!tenpay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="tenpay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/tenpay.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!chinabank_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="chinabank" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/chinabank.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!bill_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="bill" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/bill.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+              #if($!unionpay_install==true)
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="unionpay" checked="checked" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/unionpay.png" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+              #end
+            </ul>
+            #end
+            #set($install=$!paymentTools.queryShopPayment("balance").get("install")) 
+            #if($!install==true)
+            <h4>预存款支付</h4>
+            <ul>
+              <li>
+                <label>
+                  <input name="payType" type="radio" value="balance" />
+                  <span><img src="$!cdnServer/resources/style/common/images/payment/balance.jpg" width="115" height="41" /></span> </label>
+                <p></p>
+              </li>
+            </ul>
+            #if($!user.pay_password)
+            <div class="shopping_payfor_bmbox_password" id="pay" style="display:"> <em></em> <i>请输入支付密码：</i> <span>
+              <input type="password" name="pay_password"  id="pay_password" disabled="disabled" />
+              </span> <b><a type="s" id="p" href="javascript:void(0);">隐藏余额</a></b> <strong id="m">账户余额：￥$!user.availableBalance</strong> </div>
+            #else
+            <div class="no_password"> 还没设置支付密码<a href="$!webPath/buyer/account_pay_password">立即设置</a> </div>
+            <!--<span id="pay" style="display:">支付密码：<input  type="password" name="pay_password" id="pay_password"/ ><b></b></span>-->
+            #end
+            #end </div>
+        </div>
+        <div class="shopping_payfor_next">
+          <input name="integral_order_id" type="hidden" id="integral_order_id" value="$!{obj.id}" />
+          <input name="" type="button" value="下一步" onclick="order_pay();"/>
+        </div>
+      </div>
+    </form>
+  </div>
+  $!httpInclude.include("/footer") </div>
+<div style="display:none;" id="pay_overlay">
+  <div class="white_content"> <a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close">X</a>
+    <div class="white_box">
+      <h1>支付提醒</h1>
+      <dl class="white_dl">
+        <dt></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/integral/order_finish?order_id=$!{obj.id}">已经完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+#end
+</body>
+</html>

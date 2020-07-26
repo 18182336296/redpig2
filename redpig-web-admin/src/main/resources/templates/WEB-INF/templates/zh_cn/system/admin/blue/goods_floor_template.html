@@ -1,0 +1,546 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="zh"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+
+<style type="text/css">
+body {
+_behavior: url($!imageWebServer/shop/templates/default/css/csshover.htc);
+}
+</style>
+<link rel="shortcut icon" href="$!webPath/favicon.ico">
+<link href="$!imageWebServer/shop/templates/default/css/base.css" rel="stylesheet" type="text/css">
+<link href="$!imageWebServer/shop/templates/default/css/home_header.css" rel="stylesheet" type="text/css">
+<link href="$!imageWebServer/shop/templates/default/css/home_login.css" rel="stylesheet" type="text/css">
+<link href="$!imageWebServer/shop/resource/font/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<!--[if IE 7]>
+  <link rel="stylesheet" href="$!imageWebServer/shop/resource/font/font-awesome/css/font-awesome-ie7.min.css">
+<![endif]-->
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="$!imageWebServer/data/resource/js/html5shiv.js"></script>
+      <script src="$!imageWebServer/data/resource/js/respond.min.js"></script>
+<![endif]-->
+<!--[if IE 6]>
+<script src="$!imageWebServer/data/resource/js/IE6_PNG.js"></script>
+<script>
+DD_belatedPNG.fix('.pngFix');
+</script>
+<script>
+// <![CDATA[
+if((window.navigator.appName.toUpperCase().indexOf("MICROSOFT")>=0)&&(document.execCommand))
+try{
+document.execCommand("BackgroundImageCache", false, true);
+   }
+catch(e){}
+// ]]>
+</script>
+<![endif]-->
+<script>
+var COOKIE_PRE = '0A72_';var _CHARSET = 'utf-8';var SITEURL = '$!webPath/shop';var SHOP_SITE_URL = '$!webPath/shop';var RESOURCE_SITE_URL = '$!imageWebServer/data/resource';var RESOURCE_SITE_URL = '$!imageWebServer/data/resource';var SHOP_TEMPLATES_URL = '$!imageWebServer/shop/templates/default';
+</script>
+<script src="$!imageWebServer/data/resource/js/jquery.js"></script>
+<script src="$!imageWebServer/data/resource/js/common.js" charset="utf-8"></script>
+<script src="$!imageWebServer/data/resource/js/jquery-ui/jquery.ui.js"></script>
+<script src="$!imageWebServer/data/resource/js/jquery.validation.min.js"></script>
+<script src="$!imageWebServer/data/resource/js/jquery.masonry.js"></script>
+<script src="$!imageWebServer/data/resource/js/dialog/dialog.js" id="dialog_js" charset="utf-8"></script>
+<link href="$!imageWebServer/data/resource/js/dialog/dialog.css" rel="stylesheet" type="text/css">
+<script src="$!cdnServer/resources/js/jquery.shop.common.js"></script>
+
+<script type="text/javascript">
+var PRICE_FORMAT = '&yen;%s';
+$(function(){
+	//首页左侧分类菜单
+	$(".category ul.menu").find("li").each(
+		function() {
+			$(this).hover(
+				function() {
+				    var cat_id = $(this).attr("cat_id");
+					var menu = $(this).find("div[cat_menu_id='"+cat_id+"']");
+					menu.show();
+					$(this).addClass("hover");					
+					var menu_height = menu.height();
+					if (menu_height < 60) menu.height(80);
+					menu_height = menu.height();
+					var li_top = $(this).position().top;
+					$(menu).css("top",-li_top + 38);
+				},
+				function() {
+					$(this).removeClass("hover");
+				    var cat_id = $(this).attr("cat_id");
+					$(this).find("div[cat_menu_id='"+cat_id+"']").hide();
+				}
+			);
+		}
+	);
+	$(".head-user-menu dl").hover(function() {
+		$(this).addClass("hover");
+	},
+	function() {
+		$(this).removeClass("hover");
+	});
+	$('.head-user-menu .my-mall').mouseover(function(){// 最近浏览的商品
+		load_history_information();
+		$(this).unbind('mouseover');
+	});
+	$('.head-user-menu .my-cart').mouseover(function(){// 运行加载购物车
+		load_cart_information();
+		$(this).unbind('mouseover');
+	});
+	$('#button').click(function(){
+	    if ($('#keyword').val() == '') {
+		    return false;
+	    }
+	});
+    });
+
+$(function(){
+	//search
+	var act = "index";
+	if (act == "store_list"){
+		$("#search").children('ul').children('li:eq(1)').addClass("current");
+		$("#search").children('ul').children('li:eq(0)').removeClass("current");
+		}
+	$("#search").children('ul').children('li').click(function(){
+		$(this).parent().children('li').removeClass("current");
+		$(this).addClass("current");
+		$('#search_act').attr("value",$(this).attr("act"));
+		$('#keyword').attr("placeholder",$(this).attr("title"));
+	});
+	$("#keyword").blur();
+
+});
+</script>
+</head>
+<body>
+<!-- PublicTopLayout Begin -->
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+
+<script type="text/javascript">
+//返回顶部
+backTop=function (btnId){
+	var btn=document.getElementById(btnId);
+	var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+	window.onscroll=set;
+	btn.onclick=function (){
+		btn.style.opacity="0.5";
+		window.onscroll=null;
+		this.timer=setInterval(function(){
+		    scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+			scrollTop-=Math.ceil(scrollTop*0.1);
+			if(scrollTop==0) clearInterval(btn.timer,window.onscroll=set);
+			if (document.documentElement.scrollTop > 0) document.documentElement.scrollTop=scrollTop;
+			if (document.body.scrollTop > 0) document.body.scrollTop=scrollTop;
+		},10);
+	};
+	function set(){
+	    scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+	    btn.style.opacity=scrollTop?'1':"0.5";
+	}
+};
+backTop('gotop');
+//动画显示边条内容区域
+$(function() {
+    ncToolbar();
+    $(window).resize(function() {
+        ncToolbar();
+    });
+    function ncToolbar() {
+        if ($(window).width() >= 1240) {
+            $('#appBarTabs >.variation').show();
+        } else {
+            $('#appBarTabs >.variation').hide();
+        }
+    }
+    $('#appBarTabs').hover(
+        function() {
+            $('#appBarTabs >.variation').show();
+        }, 
+        function() {
+            ncToolbar();
+        }
+    );
+    $("#compare").click(function(){
+    	if ($("#content-compare").css('right') == '-210px') {
+ 		   loadCompare(false);
+ 		   $('#content-cart').animate({'right': '-210px'});
+  		   $("#content-compare").animate({right:'35px'});
+    	} else {
+    		$(".close").click();
+    		$(".chat-list").css("display",'none');
+        }
+	});
+    $("#rtoolbar_cart").click(function(){
+        if ($("#content-cart").css('right') == '-210px') {
+         	$('#content-compare').animate({'right': '-210px'});
+    		$("#content-cart").animate({right:'35px'});
+    		if (!$("#rtoolbar_cartlist").html()) {
+    			$("#rtoolbar_cartlist").load('index.php?act=cart&op=ajax_load&type=html');
+    		}
+        } else {
+        	$(".close").click();
+        	$(".chat-list").css("display",'none');
+        }
+	});
+	$(".close").click(function(){
+		$(".content-box").animate({right:'-210px'});
+      });
+
+	$(".quick-menu dl").hover(function() {
+		$(this).addClass("hover");
+	},
+	function() {
+		$(this).removeClass("hover");
+	});
+
+    // 右侧bar用户信息
+    $('div[nctype="a-barUserInfo"]').click(function(){
+        $('div[nctype="barUserInfo"]').toggle();
+    });
+    // 右侧bar登录
+    $('div[nctype="a-barLoginBox"]').click(function(){
+        $('div[nctype="barLoginBox"]').toggle();
+        document.getElementById('codeimage').src='$!imageWebServer/shop/index.php?act=seccode&op=makecode&nchash=c93636e5&t=' + Math.random();
+    });
+    $('a[nctype="close-barLoginBox"]').click(function(){
+        $('div[nctype="barLoginBox"]').toggle();
+    });
+         $('#rtoobar_cart_count').html(1).show();
+    });
+</script>
+
+
+<!--//zmr>v92-->
+  
+<!-- PublicHeadLayout Begin -->
+<!-- 顶部广告展开效果-->
+<!-- 顶部广告展开效果-->
+
+<!-- PublicHeadLayout End -->
+
+<!-- publicNavLayout Begin -->
+
+<div class="nch-breadcrumb-layout">
+  </div>
+<link href="$!imageWebServer/shop/templates/default/css/index.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="$!imageWebServer/shop/resource/js/home_index.js" charset="utf-8"></script>
+<!--[if IE 6]>
+<script type="text/javascript" src="$!imageWebServer/data/resource/js/ie6.js" charset="utf-8"></script>
+<![endif]-->
+<script type="text/javascript">
+var uid = window.location.href.split("#V3");
+var  fragment = uid[1];
+if(fragment){
+	if (fragment.indexOf("V3") == 0) {document.cookie='uid=0';}
+else {document.cookie='uid='+uid[1];}
+	}
+
+</script>
+<style type="text/css">
+.category { display: block !important; }
+</style>
+<div class="clear"></div>
+
+<!-- HomeFocusLayout Begin-->
+
+<!--HomeFocusLayout End-->
+
+
+
+<!--StandardLayout Begin--> 
+
+
+<div class="home-standard-layout wrapper style-brown">
+  <div class="left-sidebar">
+    <div class="title">
+      	  <div class="txt-type">
+                <span>$!{obj.gf_sequence}</span>                        
+                <h2 title="$!{obj.gf_name}">$!{obj.gf_name}</h2>
+				<a href="javascript:void(0);"  
+          						dialog_uri="$!webPath/goods_floor_class?id=$!{obj.id}" 
+          						dialog_title="编辑分类" dialog_width="620" dialog_height="100" dialog_top="100"  
+          						dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a>
+          </div>
+    </div>
+    
+    <div class="left-ads" style="position:relative;">
+      		$!gf_tools.generic_adv("$!url","$!obj.gf_left_adv")
+			<div style="position:absolute;width:100px;height:100px;z-indent:2;left:0;top:0;">
+			<a href="javascript:void(0);"  
+            		dialog_uri="$!webPath/goods_floor_left_adv?id=$!obj.id" 
+            		dialog_title="编辑199*180广告信息" dialog_width="630" dialog_height="100" dialog_top="100"  
+            		dialog_id="goods_floor_left_adv">编辑</a>
+			</div>
+    </div>
+    
+    <div class="recommend-classes">
+      <ul>
+      	#foreach($gc in $gf_tools.generic_gf_gc("$!obj.gf_gc_list"))
+	        #foreach($c_gc in $gc.childs)
+	        <li><a href="$!config.indexUrl/store_goods_list_$!{c_gc.id}" title="$!c_gc.className" target="_blank">$!c_gc.className</a></li>
+			#end
+        #end
+	  </ul>
+    </div>
+  </div>
+  
+  <div class="middle-layout">
+    <ul class="tabs-nav">
+     #foreach($info in $obj.childs)
+        <li #if($!{velocityCount}==1) class="tabs-selected" #end>
+        	<i class="arrow"></i><h3>$!{info.gf_name}|
+			<a href="javascript:void(0);"  
+                		dialog_uri="$!webPath/goods_floor_gc_items?id=$!{info.id}" 
+                		dialog_title="编辑【$!{info.gf_name}】楼层商品" 
+                		dialog_width="658" dialog_height="100" dialog_top="100"  dialog_id="goods_floor_cat" 
+                		class="floor_edit_a"> 编辑</a> 
+        	</h3>
+        </li>
+		
+     #end
+    </ul>
+    #foreach($info in $obj.childs)
+	    #if($!{velocityCount}>1)
+	    <div class="tabs-panel middle-goods-list  tabs-hide ">
+	    #else
+	    <div class="tabs-panel middle-goods-list">
+	    #end
+         <ul>
+              #foreach($goods in $gf_tools.generic_goods("$!info.gf_gc_goods"))
+              #if($!goods)
+	              #if($!goods.goods_main_photo)               
+	              	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	              #else
+	              	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	              #end
+              
+              	#set($goods_url="$!config.indexUrl/items_$!{goods.id}")
+	              #if($!config.second_domain_open)
+	              	#set($goods_url="http://$!{goods.goods_store.store_second_domain}.$!{domainPath}/items_$!{goods.id}")
+	              #end
+              
+             <li style="opacity: 0.9;">
+                <dl>
+                  <dt class="goods-name">
+                  <a target="_blank" href="$!goods_url" title="$!{goods.goods_name}">
+                  	$!{goods.goods_name}
+                  </a>
+                  </dt>
+                  <dd class="goods-thumb">
+                  	<a target="_blank" href="$!goods_url">
+                  	<img src="$!img" alt="$!{goods.goods_name}">
+                  	</a></dd>
+                  <dd class="goods-price"><em>￥$!{goods.goods_current_price}</em>
+                    <span class="original">￥$!{goods.goods_price}</span></dd>
+                </dl>
+              </li>
+              #end
+              #end
+       </ul>
+   </div>
+   #end
+	</div>
+   
+   
+  <div class="right-sidebar">
+    <div class="title">
+<a href="javascript:void(0);"  
+              		dialog_uri="$!webPath/goods_floor_list_items?id=$!obj.id" 
+              		dialog_title="编辑列表信息" dialog_width="658" dialog_height="100" dialog_top="100"  
+              		dialog_id="goods_floor_cat" class="floor_edit_a"> 编辑</a>
+    </div>
+    #set($map=$!gf_tools.generic_goods_list("$!obj.gf_list_goods"))
+    <div class="recommend-brand">
+      <ul>
+        
+        #if($!map.get("goods1"))
+        	#set($goods=$!map.get("goods1"))
+	        #if($!goods.goods_main_photo)                   
+	        	#set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+	        #else
+	        	#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+	        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title='$!CommUtil.substring("$!goods.goods_name",15)' target="_blank">
+          	<img src="$!img" alt='$!CommUtil.substring("$!goods.goods_name",15)'></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods2"))
+        #set($goods=$!map.get("goods2"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods3"))
+        #set($goods=$!map.get("goods3"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods4"))
+        #set($goods=$!map.get("goods4"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods5"))
+        #set($goods=$!map.get("goods5"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods6"))
+        #set($goods=$!map.get("goods6"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods7"))
+        #set($goods=$!map.get("goods7"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods8"))
+        #set($goods=$!map.get("goods8"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods9"))
+        #set($goods=$!map.get("goods9"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+        #if($!map.get("goods10"))
+        #set($goods=$!map.get("goods10"))
+        #if($!goods.goods_main_photo)                   
+        #set($img="$!imageWebServer/$!{goods.goods_main_photo.path}/$!{goods.goods_main_photo.name}_small.$!{goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        <li style="opacity: 1;">
+          <a href="$!webPath/items_$!{goods.id}" title="$!CommUtil.substring("$!goods.goods_name",15)" target="_blank">
+          	<img src="$!img" alt="$!CommUtil.substring("$!goods.goods_name",15)"></a>
+        </li>
+        #end
+        
+                                          </ul>
+    </div>
+    <div class="right-side-focus" style="position:relative;">
+        	  	$!gf_tools.generic_adv("$!url","$!obj.gf_right_adv")
+    <div style="position:absolute;width:100px;height:100px;z-indent:2;left:0;top:0;">
+			<a href="javascript:void(0);"  
+            		dialog_uri="$!webPath/goods_floor_right_adv?id=$!obj.id" 
+            		dialog_title="编辑199*180广告信息" dialog_width="630" dialog_height="100" dialog_top="100"  
+            		dialog_id="goods_floor_left_adv">编辑</a>
+			</div>
+    
+    
+    <div class="pagination">
+    	<span style="opacity: 1;"></span>
+    </div>
+    <div class="arrow pre" style="opacity: 0;"></div>
+    <div class="arrow next" style="opacity: 0;"></div>
+    </div>
+  </div>
+</div>
+
+
+
+ 
+<!--StandardLayout End-->
+
+<div class="footer-line"></div>
+<!--首页底部保障开始-->
+<!--首页底部保障结束-->
+<!--StandardLayout Begin-->
+<div class="nav_Sidebar" style="display: none;">
+<a class="nav_Sidebar_1 current" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon-hover.png&quot;);"></a>
+<a class="nav_Sidebar_2" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon.png&quot;);"></a>
+<a class="nav_Sidebar_3" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon.png&quot;);"></a>
+<a class="nav_Sidebar_4" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon.png&quot;);"></a>
+<a class="nav_Sidebar_5" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon.png&quot;);"></a>
+<a class="nav_Sidebar_6" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon.png&quot;);"></a> 
+<a class="nav_Sidebar_7" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon.png&quot;);"></a>
+<a class="nav_Sidebar_8" href="javascript:;" style="background-image: url(&quot;$!imageWebServer/shop/templates/default/images/home-nav-icon.png&quot;);"></a>
+</div>
+<!--StandardLayout End-->
+
+<script type="text/javascript" src="$!imageWebServer/data/resource/js/jquery.cookie.js"></script>
+<link href="$!imageWebServer/data/resource/js/perfect-scrollbar.min.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="$!imageWebServer/data/resource/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="$!imageWebServer/data/resource/js/qtip/jquery.qtip.min.js"></script>
+<link href="$!imageWebServer/data/resource/js/qtip/jquery.qtip.min.css" rel="stylesheet" type="text/css">
+<!-- 对比 -->
+<script src="$!imageWebServer/shop/resource/js/compare.js"></script>
+<script type="text/javascript">
+$(function(){
+	// Membership card
+	$('[nctype="mcard"]').membershipCard({type:'shop'});
+});
+</script>
+
+
+</body></html>

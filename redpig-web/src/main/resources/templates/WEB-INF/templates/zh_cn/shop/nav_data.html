@@ -1,0 +1,63 @@
+
+<dd class="left_menu_dd" style="display:none" id="child_$!sc.id">
+  #set($adv_map=$!showClassTools.query_sc_advert_colony($!sc.id,"$!webPath","$!imageWebServer"))
+  #set($scbsrc=$!showClassTools.getscbrandsrc($!sc.id,"6"))
+  <div class="left_menu_con #if($!{scbsrc.size()}>0)this #end" id="left_menu_con_$!{sc.id}" > <span class="left_menu_sp">
+    <div class="left_menu_con_center">
+     #set($scb=$!showClassTools.getscbrand($!sc.id))
+      #if($!scb.size()>0)
+      <div class="menu_con_right_top">
+        <dl>
+          <dt> 
+          	#foreach($map in $scb) 
+          		<span><a target="_blank" href="$!webPath/brand_goods_$!{map.get('id')}">$!{map.get('name')}</a></span> 
+          	#end 
+          </dt>
+        </dl>
+      </div>
+      #end
+      
+      <div class="left_menu_con_center_left">
+       #foreach($scc in $sc.childs)
+	        #if($!scc.display==true)
+		        <dl>
+		          <dt><b> > </b><a 
+		                       #if($!scc.show_type=="0")
+		                       #if($!scc.url=="")
+		                       href="$!webPath/store_goods_list?sc_id=$!{scc.id}" 
+		                       #else
+		                       href="$!scc.url" 
+		                       #end
+		                       #end
+		                      	 #if($!scc.show_type=="1") href="$!webPath/channel/index_$!{scc.channel_id}" #end target="_blank">$!scc.showName</a></dt>
+		          <dd>
+		          #foreach($gc2 in $!showClassTools.getSclist($!scc.id)) 
+		          	<a target="_blank" href="$!webPath/store_goods_list_$!{gc2.id}">$!gc2.className</a> 
+		          #end 
+		          </dd>
+		        </dl>
+	        #end
+        #end 
+     </div>
+    </div>
+    </span>
+    
+    <!--右侧图片+品牌LOGO -->
+    <div class="right_menu_con_right_img">
+      <!--品牌LOGO -->
+      <div class="right_menu_con_right_img_nav"> 
+        #if($!scbsrc.size()>0)
+        #foreach($map in $scbsrc) 
+        	<span><a href="$!webPath/brand_goods_$!{map.id}" target="_blank">$!{map.name}</a><img src="$!imageWebServer/$!{map.src}" /></span> 
+        #end 
+      #end
+       </div>
+       
+      <!--右侧图片-->
+      #if($!adv_map.get('advert_img')!="" && $!adv_map.get('advert_img')!='null')
+      #set($adv_url=$!adv_map.get('advert_url'))
+      <div class="right_menu_con_right_img_c"> <i><a #if($!{adv_url}!="") href="$!adv_map.get('advert_url')" target="_blank" #else href="javascript:void(0);" #end><img src="$!adv_map.get('advert_img')"/></a></i> </div>
+      #end 
+      </div>
+  </div>
+</dd>

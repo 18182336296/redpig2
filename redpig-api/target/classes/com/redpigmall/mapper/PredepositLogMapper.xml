@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.redpigmall.dao.PredepositLogMapper">
+     
+    
+	<resultMap id="BaseResultMap" type="com.redpigmall.domain.PredepositLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="pd_log_amount" property="pd_log_amount" jdbcType="DECIMAL"/>
+		<result column="pd_type" property="pd_type" jdbcType="VARCHAR"/>
+		<result column="pd_op_type" property="pd_op_type" jdbcType="VARCHAR"/>
+		<result column="pd_log_info" property="pd_log_info" jdbcType="VARCHAR"/>
+		<association property="pd_log_user" column="pd_log_user_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="pd_log_admin" column="pd_log_admin_id" select="com.redpigmall.dao.UserMapper.selectByPrimaryKey"/>
+		<association property="predeposit" column="predeposit_id" select="com.redpigmall.dao.PredepositMapper.selectByPrimaryKey"/>
+	</resultMap>
+	<resultMap id="BaseResultMap2" type="com.redpigmall.domain.PredepositLog">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP"/>
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER"/>
+		<result column="pd_log_amount" property="pd_log_amount" jdbcType="DECIMAL"/>
+		<result column="pd_type" property="pd_type" jdbcType="VARCHAR"/>
+		<result column="pd_op_type" property="pd_op_type" jdbcType="VARCHAR"/>
+		<result column="pd_log_info" property="pd_log_info" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!--database table column names-->
+	<sql id="Base_Column_List">
+		obj.id,obj.addTime,obj.deleteStatus,obj.pd_log_user_id,obj.pd_log_amount,obj.pd_type,pd_op_type,obj.pd_log_admin_id,obj.pd_log_info,obj.predeposit_id
+	</sql>
+	<sql id="whereStatement">
+		<if test="id != null">and obj.id = #{id,jdbcType=BIGINT}</if>
+		<if test="addTime != null">and addTime = #{addTime,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_more_than_equal != null">and addTime <![CDATA[ >= ]]> #{add_Time_more_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="add_Time_less_than_equal != null">and addTime <![CDATA[ <= ]]> #{add_Time_less_than_equal,jdbcType=TIMESTAMP}</if>
+		<if test="deleteStatus != null">and deleteStatus = #{deleteStatus,jdbcType=INTEGER}</if>
+		<if test="pd_log_amount != null">and pd_log_amount = #{pd_log_amount,jdbcType=DECIMAL}</if>
+		<if test="pd_type != null">and pd_type = #{pd_type,jdbcType=VARCHAR}</if>
+		<if test="pd_op_type != null">and pd_op_type = #{pd_op_type,jdbcType=VARCHAR}</if>
+		<if test="pd_log_info != null">and pd_log_info = #{pd_log_info,jdbcType=VARCHAR}</if>
+		<if test="pd_log_user_id != null">and pd_log_user_id = #{pd_log_user_id,jdbcType=BIGINT}</if>
+		<if test="pd_log_admin_id != null">and pd_log_admin_id = #{pd_log_admin_id,jdbcType=BIGINT}</if>
+		<if test="predeposit_id != null">and predeposit_id = #{predeposit_id,jdbcType=BIGINT}</if>
+	</sql>
+	<sql id="ifStatement">
+		<if test="pd_log_user == null or pd_log_user.id == null">pd_log_user_id = null,</if>
+		<if test="pd_log_user != null and pd_log_user.id != null">pd_log_user_id = #{pd_log_user.id,jdbcType=BIGINT},</if>
+		pd_log_amount= #{pd_log_amount},
+		pd_type= #{pd_type},
+		pd_op_type= #{pd_op_type},
+		<if test="pd_log_admin == null or pd_log_admin.id == null">pd_log_admin_id = null,</if>
+		<if test="pd_log_admin != null and pd_log_admin.id != null">pd_log_admin_id = #{pd_log_admin.id,jdbcType=BIGINT},</if>
+		pd_log_info= #{pd_log_info},
+		<if test="predeposit != null and predeposit.id != null">predeposit_id = #{predeposit.id,jdbcType=BIGINT},</if>
+		<if test="predeposit == null or predeposit.id == null">predeposit_id = null,</if>
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/> 
+		from redpigmall_predeposit_log obj
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPageList" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap" parameterType="map">
+		select obj.*
+		from redpigmall_predeposit_log obj 
+		<if test="pd_log_user_userName !=null">
+			join redpigmall_user u on u.id = obj.pd_log_user_id and u.userName=#{pd_log_user_userName,jdbcType=VARCHAR}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from redpigmall_predeposit_log obj 
+		<if test="pd_log_user_userName !=null">
+			join redpigmall_user u on u.id = obj.pd_log_user_id and u.userName=#{pd_log_user_userName,jdbcType=VARCHAR}
+		</if>
+		where 1 = 1  
+		<include refid="whereStatement"/> 
+	</select>
+	<select id="getPdLogUserByUserId" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_log obj
+		where
+			pd_log_user_id = #{pd_log_user_id,jdbcType=BIGINT}
+	</select>
+	<select id="getPdLogAdminByUserId" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_log obj
+		where
+			pd_log_admin_id = #{pd_log_admin_id,jdbcType=BIGINT}
+	</select>
+	<select id="getPredepositByPredepositId" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select 
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_log obj
+		where
+			predeposit_id= #{predeposit_id,jdbcType=BIGINT}
+	</select>
+	<select id="queryPages" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_log obj 
+		<if test="pd_log_user_userName !=null">
+			join redpigmall_user u on u.id = obj.pd_log_user_id and u.userName=#{pd_log_user_userName,jdbcType=VARCHAR}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<insert id="saveEntity" parameterType="com.redpigmall.domain.PredepositLog" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+	insert into redpigmall_predeposit_log(addTime,deleteStatus,pd_log_amount,pd_type,pd_op_type,pd_log_info,pd_log_user_id,pd_log_admin_id,predeposit_id)
+	 values(#{addTime,jdbcType=TIMESTAMP},#{deleteStatus,jdbcType=INTEGER},#{pd_log_amount,jdbcType=DECIMAL},#{pd_type,jdbcType=VARCHAR},#{pd_op_type,jdbcType=VARCHAR},#{pd_log_info,jdbcType=VARCHAR},#{pd_log_user.id,jdbcType=BIGINT},#{pd_log_admin.id,jdbcType=BIGINT},#{predeposit.id,jdbcType=BIGINT}
+	)</insert>
+	<update id="updateById" parameterType="com.redpigmall.domain.PredepositLog">
+		update redpigmall_predeposit_log
+		<set>
+			<include refid="ifStatement"/>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteById" parameterType="java.lang.Long">
+			delete from redpigmall_predeposit_log where id=#{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="batchDeleteByIds" parameterType="java.util.List">
+		delete from redpigmall_predeposit_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="queryPagesWithNoRelations" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_predeposit_log obj 		
+		<if test="pd_log_user_userName !=null">
+			join redpigmall_user u on u.id = obj.pd_log_user_id and u.userName=#{pd_log_user_userName,jdbcType=VARCHAR}
+		</if>
+		<where>
+			1=1
+			<include refid="whereStatement"/>
+			<choose>
+				<when test="orderBy != null and orderType != null">
+					order by ${orderBy} ${orderType}
+				</when>
+				<otherwise>
+					order by obj.addTime desc
+				</otherwise>
+			</choose>
+		</where>
+		<if test="currentPage !=null and pageSize !=null">
+			limit #{currentPage},#{pageSize} 
+		</if>
+	</select>
+	<select id="queryPageListWithNoRelations" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap2" parameterType="map">
+		select
+		obj.*
+		from redpigmall_predeposit_log obj 
+		<if test="pd_log_user_userName !=null">
+			join redpigmall_user u on u.id = obj.pd_log_user_id and u.userName=#{pd_log_user_userName,jdbcType=VARCHAR}
+		</if>
+		where 1=1 
+		<include refid="whereStatement"/> 
+				order by obj.addTime desc
+		<if test="currentPage !=null and pageSize !=null"> 
+				limit #{currentPage},#{pageSize} 
+			</if>
+	</select>
+	<select id="selectObjByProperty" resultType="com.redpigmall.domain.PredepositLog" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List"/>
+		from redpigmall_predeposit_log obj
+		where 1 = 1 
+		<if test="operation_property != null and operation_symbol !=null and operation_value !=null">
+				and ${operation_property} <![CDATA[ ${operation_symbol} ]]>#{operation_value}
+		</if>
+	</select>
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from redpigmall_predeposit_log where id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+</mapper>

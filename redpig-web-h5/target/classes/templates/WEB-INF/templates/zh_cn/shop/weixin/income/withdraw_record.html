@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>提现记录</title>
+    	<link href="$!cdnServer/resources/yingerMall/css/mui.min.css" rel="stylesheet"/>
+    	<link rel="stylesheet" href="$!cdnServer/resources/yingerMall/css/common.css" />
+	</head>
+	<body style="background-color: #fff;">
+		<header class="mui-bar mui-bar-nav mui-common-bar">
+			<a class="mui-icon mui-action-back mui-pull-left mui-icon-back-black"></a>
+			<h1 class="mui-title">提现记录</h1>
+		</header>
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<ul class="mui-table-view cum-table-view">
+					<li class="mui-table-view-cell cum-table-view-cell">
+						<div class="record-cell-box">
+							<div class="mui-clearfix">
+								<span class="mui-pull-left record-name">提现</span>
+								<span class="mui-pull-right record-price">+100</span>
+							</div>
+							<div class="mui-clearfix">
+								<span class="mui-pull-left record-deli">余额:<span class="record-deli">300</span></span>
+								<span class="mui-pull-right cum-time">2018/05/23 12:00</span>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell cum-table-view-cell">
+						<div class="record-cell-box">
+							<div class="mui-clearfix">
+								<span class="mui-pull-left record-name">提现</span>
+								<span class="mui-pull-right record-price">+100</span>
+							</div>
+							<div class="mui-clearfix">
+								<span class="mui-pull-left record-deli">余额:<span class="record-deli">300</span></span>
+								<span class="mui-pull-right cum-time">2018/05/23 12:00</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+				
+			</div>
+		</div>
+		
+	    <script src="$!cdnServer/resources/yingerMall/js/mui.min.js"></script>
+		<script>
+	    	mui.init({
+			    pullRefresh : {
+			        container:"#pullrefresh",//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+			        down: {//下拉刷新
+						callback: pulldownRefresh
+					},
+					up: {//上拉加载更多
+						auto:true,//可选,默认false.自动上拉加载一次
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+			    }
+			});
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 1500);
+			}
+			var count = 0;//用来判断数据是否已经加载完整
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					ajaxData();
+				}, 1500);
+			}
+			function ajaxData(){
+				//这里的数据应该是请求ajax获取，暂时用死数据
+				var data = [{id:1},{id:2},{id:3},{id:4}];
+				count++;
+				
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh((count > 10)); //参数为true代表没有更多数据了。
+				var table = document.body.querySelector('.mui-table-view');
+				var cells = document.body.querySelectorAll('.mui-table-view-cell');
+				for (var i = 0; i < data.length; i++) {
+					var li = document.createElement('li');
+					li.className = 'mui-table-view-cell cum-table-view-cell';
+					li.innerHTML = '<div class="record-cell-box">'+
+							'<div class="mui-clearfix">'+
+								'<span class="mui-pull-left record-name">提现</span>'+
+								'<span class="mui-pull-right record-price">+100</span>'+
+							'</div>'+
+							'<div class="mui-clearfix">'+
+								'<span class="mui-pull-left record-deli">余额:<span class="record-deli">300</span></span>'+
+								'<span class="mui-pull-right cum-time">2018/05/23 12:00</span>'+
+							'</div>'+
+						'</div>'
+					table.appendChild(li);
+				}
+				
+				
+			}
+	    </script>
+	</body>
+</html>
